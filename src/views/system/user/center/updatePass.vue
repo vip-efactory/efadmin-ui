@@ -1,15 +1,15 @@
 <template>
   <div style="display: inline-block">
-    <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :title="title" append-to-body width="500px" @close="cancel">
+    <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :before-close="cancel" :title="title" append-to-body width="500px" @close="cancel">
       <el-form ref="form" :model="form" :rules="rules" size="small" label-width="88px">
-        <el-form-item label="旧密码" prop="oldPassword">
-          <el-input v-model="form.oldPassword" type="password" auto-complete="on" style="width: 370px;"/>
+        <el-form-item label="旧密码" prop="oldPass">
+          <el-input v-model="form.oldPass" type="password" auto-complete="on" style="width: 370px;" />
         </el-form-item>
-        <el-form-item label="新密码" prop="password">
-          <el-input v-model="form.password" type="password" auto-complete="on" style="width: 370px;"/>
+        <el-form-item label="新密码" prop="newPass">
+          <el-input v-model="form.newPass" type="password" auto-complete="on" style="width: 370px;" />
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPass">
-          <el-input v-model="form.confirmPass" type="password" auto-complete="on" style="width: 370px;"/>
+          <el-input v-model="form.confirmPass" type="password" auto-complete="on" style="width: 370px;" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -21,14 +21,13 @@
 </template>
 
 <script>
-  import store from '@/store'
-  import { updatePass } from '@/api/user'
-
-  export default {
+import store from '@/store'
+import { updatePass } from '@/api/system/user'
+export default {
   data() {
     const confirmPass = (rule, value, callback) => {
       if (value) {
-        if (this.form.password !== value) {
+        if (this.form.newPass !== value) {
           callback(new Error('两次输入的密码不一致'))
         } else {
           callback()
@@ -38,12 +37,12 @@
       }
     }
     return {
-      loading: false, dialog: false, title: '修改密码', form: { oldPassword: '', password: '', confirmPass: '' },
+      loading: false, dialog: false, title: '修改密码', form: { oldPass: '', newPass: '', confirmPass: '' },
       rules: {
-        oldPassword: [
+        oldPass: [
           { required: true, message: '请输入旧密码', trigger: 'blur' }
         ],
-        password: [
+        newPass: [
           { required: true, message: '请输入新密码', trigger: 'blur' },
           { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
         ],
@@ -85,7 +84,7 @@
     resetForm() {
       this.dialog = false
       this.$refs['form'].resetFields()
-      this.form = { oldPassword: '', password: '', confirmPass: '' }
+      this.form = { oldPass: '', newPass: '', confirmPass: '' }
     }
   }
 }
