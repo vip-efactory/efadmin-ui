@@ -1,5 +1,5 @@
-import { initData, download } from '@/api/data'
-import { parseTime, downloadFile } from '@/utils/index'
+import { download, initData } from '@/api/data'
+import { downloadFile, parseTime } from '@/utils/index'
 import Vue from 'vue'
 
 /**
@@ -26,17 +26,22 @@ function CRUD(options) {
     // Form 表单
     form: {},
     // 重置表单
-    defaultForm: () => {},
+    defaultForm: () => {
+    },
     // 排序规则，默认 id 降序， 支持多字段排序 ['id,desc', 'createTime,asc']
     sort: ['id,desc'],
     // 等待时间
     time: 50,
     // CRUD Method
     crudMethod: {
-      add: (form) => {},
-      delete: (id) => {},
-      edit: (form) => {},
-      get: (id) => {}
+      add: (form) => {
+      },
+      delete: (id) => {
+      },
+      edit: (form) => {
+      },
+      get: (id) => {
+      }
     },
     // 主页操作栏显示哪些按钮
     optShow: {
@@ -126,17 +131,25 @@ function CRUD(options) {
       return new Promise((resolve, reject) => {
         crud.loading = true
         // 请求数据
-        initData(crud.url, crud.getQueryParams()).then(data => {
-          crud.page.total = data.data.totalCount
-          crud.data = data.data.content
-          crud.resetDataStatus()
-          // time 毫秒后显示表格
-          setTimeout(() => {
+        initData(crud.url, crud.getQueryParams()).then(r => {
+          // http通信正常，检查业务逻辑是否正常
+          if (r.code === 0) { // 业务逻辑正常
+            const data = r.data
+            crud.page.total = data.totalCount
+            crud.data = data.content
+            crud.resetDataStatus()
+            // time 毫秒后显示表格
+            setTimeout(() => {
+              crud.loading = false
+              callVmHook(crud, CRUD.HOOK.afterRefresh)
+            }, crud.time)
+            resolve(data)
+          } else { // 业务逻辑不正常
             crud.loading = false
-            callVmHook(crud, CRUD.HOOK.afterRefresh)
-          }, crud.time)
-          resolve(data)
-        }).catch(err => {
+            crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+            console.error(r.toString())
+          }
+        }).catch(err => { // 此处的错误为Http错误通信码
           crud.loading = false
           reject(err)
         })
@@ -244,12 +257,23 @@ function CRUD(options) {
       if (!callVmHook(crud, CRUD.HOOK.beforeSubmit)) {
         return
       }
-      crud.crudMethod.add(crud.form).then(() => {
-        crud.status.add = CRUD.STATUS.NORMAL
-        crud.resetForm()
-        crud.addSuccessNotify()
-        callVmHook(crud, CRUD.HOOK.afterSubmit)
-        crud.toQuery()
+      crud.crudMethod.add(crud.form).then(r => {
+        if (r.code === 0) {
+          crud.status.add = CRUD.STATUS.NORMAL
+          crud.resetForm()
+          crud.addSuccessNotify()
+          callVmHook(crud, CRUD.HOOK.afterSubmit)
+          crud.toQuery()
+        } else if (r.code === 1020400) {
+          // 显示所有的检查出错的信息
+          Object.keys(r.data).forEach(function(key) {
+            console.info(key + '-----------' + r.data[key])
+            crud.notify(r.data[key], CRUD.NOTIFICATION_TYPE.ERROR)
+          })
+        } else {
+          // 总的校验信息
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+        }
       }).catch(() => {
         callVmHook(crud, CRUD.HOOK.afterAddError)
       })
@@ -261,13 +285,24 @@ function CRUD(options) {
       if (!callVmHook(crud, CRUD.HOOK.beforeSubmit)) {
         return
       }
-      crud.crudMethod.edit(crud.form).then(() => {
-        crud.status.edit = CRUD.STATUS.NORMAL
-        crud.getDataStatus(crud.form.id).edit = CRUD.STATUS.NORMAL
-        crud.editSuccessNotify()
-        crud.resetForm()
-        callVmHook(crud, CRUD.HOOK.afterSubmit)
-        crud.refresh()
+      crud.crudMethod.edit(crud.form).then(r => {
+        if (r.code === 0) {
+          crud.status.edit = CRUD.STATUS.NORMAL
+          crud.getDataStatus(crud.form.id).edit = CRUD.STATUS.NORMAL
+          crud.editSuccessNotify()
+          crud.resetForm()
+          callVmHook(crud, CRUD.HOOK.afterSubmit)
+          crud.refresh()
+        } else if (r.code === 1020400) {
+          // 显示所有的检查出错的信息
+          Object.keys(r.data).forEach(function(key) {
+            console.info(key + '-----------' + r.data[key])
+            crud.notify(r.data[key], CRUD.NOTIFICATION_TYPE.ERROR)
+          })
+        } else {
+          // 总的校验信息
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+        }
       }).catch(() => {
         callVmHook(crud, CRUD.HOOK.afterEditError)
       })
@@ -388,6 +423,7 @@ function CRUD(options) {
      */
     resetDataStatus() {
       const dataStatus = {}
+
       function resetStatus(datas) {
         datas.forEach(e => {
           dataStatus[e.id] = {
@@ -399,6 +435,7 @@ function CRUD(options) {
           }
         })
       }
+
       resetStatus(crud.data)
       crud.dataStatus = dataStatus
     },
@@ -430,7 +467,9 @@ function CRUD(options) {
      */
     selectChange(selection, row) {
       // 如果selection中存在row代表是选中，否则是取消选中
-      if (selection.find(val => { return val.id === row.id })) {
+      if (selection.find(val => {
+        return val.id === row.id
+      })) {
         if (row.children) {
           row.children.forEach(val => {
             crud.findVM('presenter').$refs['table'].toggleRowSelection(val, true)
@@ -558,6 +597,7 @@ function presenter(crud) {
       }
     }
   }
+
   return {
     inject: ['crud'],
     beforeCreate() {
