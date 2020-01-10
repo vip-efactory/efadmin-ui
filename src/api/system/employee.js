@@ -16,13 +16,6 @@ export function del(ids) {
   })
 }
 
-export function delById(id) {
-  return request({
-    url: 'api/employee/' + id,
-    method: 'delete'
-  })
-}
-
 export function edit(data) {
   return request({
     url: 'api/employee',
@@ -31,4 +24,4 @@ export function edit(data) {
   })
 }
 
-export default { add, edit, del, delById }
+export default { add, edit, del }

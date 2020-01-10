@@ -330,14 +330,19 @@ function CRUD(options) {
       if (!delAll) {
         dataStatus.delete = CRUD.STATUS.PROCESSING
       }
-      return crud.crudMethod.del(ids).then(() => {
-        if (delAll) {
-          crud.delAllLoading = false
-        } else dataStatus.delete = CRUD.STATUS.PREPARED
-        crud.dleChangePage(1)
-        crud.delSuccessNotify()
-        callVmHook(crud, CRUD.HOOK.afterDelete, data)
-        crud.refresh()
+      return crud.crudMethod.del(ids).then(r => {
+        if (r.code === 0) { // 接口正常处理
+          if (delAll) {
+            crud.delAllLoading = false
+          } else dataStatus.delete = CRUD.STATUS.PREPARED
+          crud.dleChangePage(1)
+          crud.delSuccessNotify()
+          callVmHook(crud, CRUD.HOOK.afterDelete, data)
+          crud.refresh()
+        } else { // 处理出错！
+          // 显示错误信息
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+        }
       }).catch(() => {
         if (delAll) {
           crud.delAllLoading = false

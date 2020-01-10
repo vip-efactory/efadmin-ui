@@ -9,7 +9,7 @@ export default {
   name: 'Github',
   methods: {
     click() {
-      window.open('https://github.com/elunez/eladmin', '_blank')
+      window.open('https://github.com/vip-efactory/efadmin-ui', '_blank')
     }
   }
 }

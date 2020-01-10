@@ -15,8 +15,8 @@
       <!--表单组件-->
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-          <el-form-item label="主键">
-            <el-input v-model="form.id" style="width: 370px;" />
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="form.name" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="住址">
             <el-input v-model="form.address" style="width: 370px;" />
@@ -36,9 +36,6 @@
           <el-form-item label="身份证号码">
             <el-input v-model="form.idNumber" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="form.name" style="width: 370px;" />
-          </el-form-item>
           <el-form-item label="手机号">
             <el-input v-model="form.phone" style="width: 370px;" />
           </el-form-item>
@@ -54,18 +51,6 @@
           <el-form-item label="备注">
             <el-input v-model="form.remark" :rows="3" type="textarea" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="创建时间">
-            <el-date-picker v-model="form.createTime" type="datetime" style="width: 370px;" />
-          </el-form-item>
-          <el-form-item label="创建人">
-            <el-input v-model="form.creatorNum" style="width: 370px;" />
-          </el-form-item>
-          <el-form-item label="更新时间">
-            <el-date-picker v-model="form.updateTime" type="datetime" style="width: 370px;" />
-          </el-form-item>
-          <el-form-item label="更新人">
-            <el-input v-model="form.updaterNum" style="width: 370px;" />
-          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -75,7 +60,7 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column v-if="columns.visible('id')" prop="id" label="主键" />
+        <el-table-column v-if="columns.visible('name')" prop="name" label="姓名" />
         <el-table-column v-if="columns.visible('address')" prop="address" label="住址" />
         <el-table-column v-if="columns.visible('avatar')" prop="avatar" label="头像" />
         <el-table-column v-if="columns.visible('birthday')" prop="birthday" label="生日">
@@ -86,7 +71,6 @@
         <el-table-column v-if="columns.visible('code')" prop="code" label="编码" />
         <el-table-column v-if="columns.visible('email')" prop="email" label="邮箱" />
         <el-table-column v-if="columns.visible('idNumber')" prop="idNumber" label="身份证号码" />
-        <el-table-column v-if="columns.visible('name')" prop="name" label="姓名" />
         <el-table-column v-if="columns.visible('phone')" prop="phone" label="手机号" />
         <el-table-column v-if="columns.visible('status')" prop="status" label="状态">
           <template slot-scope="scope">
