@@ -40,10 +40,12 @@ export default {
   },
   mounted() {
     getChartData().then(res => {
-      this.chartData.visitsData = res.visitsData
-      this.chartData.ipData = res.ipData
-      this.weekDays = res.weekDays
-      this.initChart()
+      if (res.code === 0) {
+        this.chartData.visitsData = res.data.visitsData
+        this.chartData.ipData = res.data.ipData
+        this.weekDays = res.data.weekDays
+        this.initChart()
+      }
     })
     if (this.autoResize) {
       this.__resizeHandler = debounce(() => {
