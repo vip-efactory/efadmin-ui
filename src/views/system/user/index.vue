@@ -358,13 +358,17 @@ export default {
       const params = { sort: sort }
       if (this.deptName) { params['name'] = this.deptName }
       getDepts(params).then(res => {
-        this.deptDatas = res.content
+        if (res.code === 0) {
+          this.deptDatas = res.data.content
+        }
       })
     },
     // 获取弹窗内部门数据
     getDepts() {
       getDepts({ enabled: true }).then(res => {
-        this.depts = res.content
+        if (res.code === 0) {
+          this.depts = res.data.content
+        }
       })
     },
     // 切换部门
@@ -395,13 +399,17 @@ export default {
     // 获取弹窗内角色数据
     getRoles() {
       getAll().then(res => {
-        this.roles = res
+        if (res.code === 0) {
+          this.roles = res.data
+        }
       }).catch(() => { })
     },
     // 获取弹窗内岗位数据
     getJobs(id) {
       getAllJob(id).then(res => {
-        this.jobs = res.content
+        if (res.code === 0) {
+          this.jobs = res.data.content
+        }
       }).catch(() => { })
     },
     // 点击部门搜索对应的岗位
@@ -412,7 +420,9 @@ export default {
     // 获取权限级别
     getRoleLevel() {
       getLevel().then(res => {
-        this.level = res.level
+        if (res.code === 0) {
+          this.level = res.data.level
+        }
       }).catch(() => { })
     },
     checkboxT(row, rowIndex) {
