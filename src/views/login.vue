@@ -83,8 +83,8 @@ export default {
   methods: {
     getCode() {
       getCodeImg().then(res => {
-        this.codeUrl = res.img
-        this.loginForm.uuid = res.uuid
+        this.codeUrl = res.data.img
+        this.loginForm.uuid = res.data.uuid
       })
     },
     getCookie() {
@@ -124,7 +124,7 @@ export default {
             Cookies.remove('password')
             Cookies.remove('rememberMe')
           }
-          this.$store.dispatch('Login', user).then(() => {
+          this.$store.dispatch('Login', user).then(r => {
             this.loading = false
             this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {

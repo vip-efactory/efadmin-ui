@@ -109,11 +109,11 @@
 
 <script>
 import crudEmployee from '@/api/system/employee'
-import CRUD, { presenter, header, form, crud } from '@crud/ejpaCrud'
+import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
-import pagination from '@crud/ejpaPagination'
+import pagination from '@crud/Pagination'
 
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '员工信息', url: 'api/employee/page', sort: 'id,desc', crudMethod: { ...crudEmployee }})

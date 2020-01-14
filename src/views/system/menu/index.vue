@@ -184,10 +184,12 @@ export default {
     // 新增与编辑前做的操作
     [CRUD.HOOK.afterToCU](crud, form) {
       crudMenu.getMenusTree().then(res => {
-        this.menus = []
-        const menu = { id: 0, label: '顶级类目', children: [] }
-        menu.children = res
-        this.menus.push(menu)
+        if (res.code === 0) {
+          this.menus = []
+          const menu = { id: 0, label: '顶级类目', children: [] }
+          menu.children = res.data
+          this.menus.push(menu)
+        }
       })
     },
     // 选中图标
