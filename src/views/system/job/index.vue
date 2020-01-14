@@ -96,13 +96,15 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        crud.crudMethod.edit(data).then(() => {
-          crud.notify(this.dict.label.job_status[val] + '成功', 'success')
-        }).catch(err => {
-          data.enabled = !data.enabled
-          console.log(err.data.message)
-        })
+      }).then(r => {
+        if (r.code === 0) {
+          crud.crudMethod.edit(data).then(() => {
+            crud.notify(this.dict.label.job_status[val] + '成功', 'success')
+          }).catch(err => {
+            data.enabled = !data.enabled
+            console.log(err.data.message)
+          })
+        }
       }).catch(() => {
         data.enabled = !data.enabled
       })

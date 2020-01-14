@@ -164,8 +164,10 @@ export default {
   created() {
     this.getMenus()
     crudRoles.getLevel().then(data => {
-      this.level = data.level
-      console.log(this.level)
+      if (data.code === 0) {
+        this.level = data.data.level
+        console.log(this.level)
+      }
     })
     this.$nextTick(() => {
       this.crud.toQuery()
@@ -222,7 +224,9 @@ export default {
     // 获取所有菜单
     getMenus() {
       getMenusTree().then(res => {
-        this.menus = res
+        if (res.code === 0) {
+          this.menus = res.data
+        }
       })
     },
     // 触发单选
@@ -257,9 +261,11 @@ export default {
         role.menus.push(menu)
       })
       crudRoles.editMenu(role).then(res => {
-        this.crud.notify('保存成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
-        this.menuLoading = false
-        this.update()
+        if (res.code === 0) {
+          this.crud.notify('保存成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.menuLoading = false
+          this.update()
+        }
       }).catch(err => {
         this.menuLoading = false
         console.log(err.response.data.message)
@@ -269,10 +275,12 @@ export default {
     update() {
       // 无刷新更新 表格数据
       crudRoles.get(this.currentId).then(res => {
-        for (let i = 0; i < this.crud.data.length; i++) {
-          if (res.id === this.crud.data[i].id) {
-            this.crud.data[i] = res
-            break
+        if (res.code === 0) {
+          for (let i = 0; i < this.crud.data.length; i++) {
+            if (res.data.id === this.crud.data[i].id) {
+              this.crud.data[i] = res.data
+              break
+            }
           }
         }
       })
@@ -280,7 +288,9 @@ export default {
     // 获取部门数据
     getDepts() {
       getDepts({ enabled: true }).then(res => {
-        this.depts = res.content
+        if (res.code === 0) {
+          this.depts = res.data.content
+        }
       })
     },
     // 如果数据权限为自定义则获取部门数据

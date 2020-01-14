@@ -124,7 +124,9 @@ export default {
   methods: {
     [CRUD.HOOK.beforeToCU]() {
       getDepts({ enabled: true }).then(res => {
-        this.depts = res.content
+        if (res.code === 0) {
+          this.depts = res.data.content
+        }
       })
     },
     // 提交前的验证

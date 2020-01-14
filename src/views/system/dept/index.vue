@@ -118,7 +118,9 @@ export default {
       form.enabled = `${form.enabled}`
       // 获取所有部门
       crudDept.getDepts({ enabled: true }).then(res => {
-        this.depts = res.content
+        if (res.code === 0) {
+          this.depts = res.data.content
+        }
       })
     },
     // 提交前的验证
@@ -138,13 +140,17 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        crudDept.edit(data).then(res => {
-          this.crud.notify(this.dict.label.dept_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
-        }).catch(err => {
-          data.enabled = !data.enabled
-          console.log(err.response.data.message)
-        })
+      }).then(r => {
+        if (r.code === 0) {
+          crudDept.edit(data).then(res => {
+            if (res.code === 0) {
+              this.crud.notify(this.dict.label.dept_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+            }
+          }).catch(err => {
+            data.enabled = !data.enabled
+            console.log(err.response.data.message)
+          })
+        }
       }).catch(() => {
         data.enabled = !data.enabled
       })

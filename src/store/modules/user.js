@@ -49,8 +49,10 @@ const user = {
     GetInfo({ commit }) {
       return new Promise((resolve, reject) => {
         getInfo().then(res => {
-          setUserInfo(res, commit)
-          resolve(res)
+          if (res.code === 0) {
+            setUserInfo(res.data, commit)
+            resolve(res.data)
+          }
         }).catch(error => {
           reject(error)
         })
@@ -60,8 +62,10 @@ const user = {
     LogOut({ commit }) {
       return new Promise((resolve, reject) => {
         logout().then(res => {
-          logOut(commit)
-          resolve()
+          if (res.code === 0) {
+            logOut(commit)
+            resolve()
+          }
         }).catch(error => {
           logOut(commit)
           reject(error)

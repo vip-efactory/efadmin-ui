@@ -61,17 +61,19 @@ export default {
         if (valid) {
           this.loading = true
           updatePass(this.form).then(res => {
-            this.resetForm()
-            this.$notify({
-              title: '密码修改成功，请重新登录',
-              type: 'success',
-              duration: 1500
-            })
-            setTimeout(() => {
-              store.dispatch('LogOut').then(() => {
-                location.reload() // 为了重新实例化vue-router对象 避免bug
+            if (res.code === 0) {
+              this.resetForm()
+              this.$notify({
+                title: '密码修改成功，请重新登录',
+                type: 'success',
+                duration: 1500
               })
-            }, 1500)
+              setTimeout(() => {
+                store.dispatch('LogOut').then(() => {
+                  location.reload() // 为了重新实例化vue-router对象 避免bug
+                })
+              }, 1500)
+            }
           }).catch(err => {
             this.loading = false
             console.log(err.response.data.message)
