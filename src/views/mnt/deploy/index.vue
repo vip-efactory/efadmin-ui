@@ -218,10 +218,14 @@ export default {
     },
     initSelect() {
       crudDeploy.getApps().then(res => {
-        this.apps = res.content
+        if (res.code === 0) {
+          this.apps = res.data.content
+        }
       })
       crudDeploy.getServers().then(res => {
-        this.servers = res.content
+        if (res.code === 0) {
+          this.servers = res.data.content
+        }
       })
     }
   }

@@ -80,12 +80,14 @@ export default {
   methods: {
     toGen(tableName) {
       // 生成代码
-      generator(tableName, 0).then(data => {
-        this.$notify({
-          title: '生成成功',
-          type: 'success',
-          duration: 2500
-        })
+      generator(tableName, 0).then(r => {
+        if (r.code === 0) {
+          this.$notify({
+            title: '生成成功',
+            type: 'success',
+            duration: 2500
+          })
+        }
       })
     },
     toDownload(tableName) {
@@ -100,10 +102,12 @@ export default {
         tables.push(val.tableName)
       })
       this.syncLoading = true
-      sync(tables).then(() => {
-        this.crud.refresh()
-        this.crud.notify('同步成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
-        this.syncLoading = false
+      sync(tables).then(r => {
+        if (r.code === 0) {
+          this.crud.refresh()
+          this.crud.notify('同步成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.syncLoading = false
+        }
       }).then(() => {
         this.syncLoading = false
       })

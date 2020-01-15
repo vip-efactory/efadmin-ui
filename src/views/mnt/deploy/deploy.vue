@@ -84,14 +84,16 @@ export default {
       this.joinIp()
       add(this.form)
         .then(res => {
-          this.resetForm()
-          this.$notify({
-            title: '添加成功',
-            type: 'success',
-            duration: 2500
-          })
-          this.loading = false
-          this.$parent.init()
+          if (res.code === 0) {
+            this.resetForm()
+            this.$notify({
+              title: '添加成功',
+              type: 'success',
+              duration: 2500
+            })
+            this.loading = false
+            this.$parent.init()
+          }
         })
         .catch(err => {
           this.loading = false
@@ -102,14 +104,16 @@ export default {
       this.joinIp()
       edit(this.form)
         .then(res => {
-          this.resetForm()
-          this.$notify({
-            title: '修改成功',
-            type: 'success',
-            duration: 2500
-          })
-          this.loading = false
-          this.$parent.init()
+          if (res.code === 0) {
+            this.resetForm()
+            this.$notify({
+              title: '修改成功',
+              type: 'success',
+              duration: 2500
+            })
+            this.loading = false
+            this.$parent.init()
+          }
         })
         .catch(err => {
           this.loading = false
@@ -128,10 +132,15 @@ export default {
     },
     initSelect() {
       getApps().then(res => {
-        this.apps = res.content
+        if (res.code === 0) {
+          this.apps = res.data.content
+        }
+
       })
       getServers().then(res => {
-        this.servers = res.content
+        if (res.code === 0) {
+          this.servers = res.data.content
+        }
       })
     },
     handleSuccess(response, file, fileList) {

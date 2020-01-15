@@ -171,9 +171,11 @@ export default {
     sync() {
       this.syncLoading = true
       crudPic.sync().then(res => {
-        this.crud.notify('同步成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
-        this.crud.toQuery()
-        this.syncLoading = false
+        if (res.code === 0) {
+          this.crud.notify('同步成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.toQuery()
+          this.syncLoading = false
+        }
       })
     }
   }

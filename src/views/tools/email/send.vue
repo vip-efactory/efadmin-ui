@@ -111,12 +111,14 @@ export default {
           if (sub) { return false }
           this.loading = true
           send(this.form).then(res => {
-            this.$notify({
-              title: '发送成功',
-              type: 'success',
-              duration: 2500
-            })
-            this.loading = false
+            if (res.code === 0) {
+              this.$notify({
+                title: '发送成功',
+                type: 'success',
+                duration: 2500
+              })
+              this.loading = false
+            }
           }).catch(err => {
             this.loading = false
             console.log(err.response.data.message)

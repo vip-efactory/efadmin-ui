@@ -256,8 +256,10 @@ export default {
     saveColumnConfig() {
       this.columnLoading = true
       save(this.data).then(res => {
-        this.notify('保存成功', 'success')
-        this.columnLoading = false
+        if (res.code === 0){
+          this.notify('保存成功', 'success')
+          this.columnLoading = false
+        }
       }).catch(err => {
         this.columnLoading = false
         console.log(err.response.data.message)
@@ -268,10 +270,12 @@ export default {
         if (valid) {
           this.configLoading = true
           update(this.form).then(res => {
-            this.notify('保存成功', 'success')
-            this.form = res
-            this.form.cover = this.form.cover.toString()
-            this.configLoading = false
+            if (res.code === 0) {
+              this.notify('保存成功', 'success')
+              this.form = res.data
+              this.form.cover = this.form.cover.toString()
+              this.configLoading = false
+            }
           }).catch(err => {
             this.configLoading = false
             console.log(err.response.data.message)
@@ -281,10 +285,12 @@ export default {
     },
     sync() {
       this.syncLoading = true
-      sync([this.tableName]).then(() => {
-        this.init()
-        this.notify('同步成功', 'success')
-        this.syncLoading = false
+      sync([this.tableName]).then(r => {
+        if (r.code === 0) {
+          this.init()
+          this.notify('同步成功', 'success')
+          this.syncLoading = false
+        }
       }).then(() => {
         this.syncLoading = false
       })
@@ -292,15 +298,19 @@ export default {
     toGen() {
       this.genLoading = true
       save(this.data).then(res => {
-        this.notify('保存成功', 'success')
-        // 生成代码
-        generator(this.tableName, 0).then(data => {
-          this.genLoading = false
-          this.notify('生成成功', 'success')
-        }).catch(err => {
-          this.genLoading = false
-          console.log(err.response.data.message)
-        })
+        if (res.code === 0) {
+          this.notify('保存成功', 'success')
+          // 生成代码
+          generator(this.tableName, 0).then(r => {
+            if (r.code === 0) {
+              this.genLoading = false
+              this.notify('生成成功', 'success')
+            }
+          }).catch(err => {
+            this.genLoading = false
+            console.log(err.response.data.message)
+          })
+        }
       }).catch(err => {
         this.genLoading = false
         console.log(err.response.data.message)

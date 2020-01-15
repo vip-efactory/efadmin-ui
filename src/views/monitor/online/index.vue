@@ -104,14 +104,16 @@ export default {
         })
       } else ids.push(key)
       this.delLoading = true
-      del(ids).then(() => {
-        this.delLoading = false
-        if (this.$refs[index]) {
-          this.$refs[index].doClose()
+      del(ids).then(r => {
+        if (r.code === 0) {
+          this.delLoading = false
+          if (this.$refs[index]) {
+            this.$refs[index].doClose()
+          }
+          this.crud.dleChangePage(1)
+          this.crud.delSuccessNotify()
+          this.crud.toQuery()
         }
-        this.crud.dleChangePage(1)
-        this.crud.delSuccessNotify()
-        this.crud.toQuery()
       }).catch(() => {
         this.delLoading = false
         if (this.$refs[index]) {

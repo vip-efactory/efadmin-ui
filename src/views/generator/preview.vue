@@ -20,8 +20,10 @@ export default {
   created() {
     this.height = document.documentElement.clientHeight - 180 + 'px'
     const tableName = this.$route.params.tableName
-    generator(tableName, 1).then(data => {
-      this.data = data
+    generator(tableName, 1).then(r => {
+      if (r.code === 0) {
+        this.data = r.data
+      }
     }).catch(() => {
       this.$router.go(-1)
     })

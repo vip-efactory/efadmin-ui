@@ -66,7 +66,9 @@ export default {
   methods: {
     init() {
       get().then(res => {
-        this.form = res
+        if (res.code === 0) {
+          this.form = res.data
+        }
       })
     },
     doSubmit() {
@@ -74,12 +76,14 @@ export default {
         if (valid) {
           this.loading = true
           update(this.form).then(res => {
-            this.$notify({
-              title: '修改成功',
-              type: 'success',
-              duration: 2500
-            })
-            this.loading = false
+            if (res.code === 0) {
+              this.$notify({
+                title: '修改成功',
+                type: 'success',
+                duration: 2500
+              })
+              this.loading = false
+            }
           }).catch(err => {
             this.loading = false
             console.log(err.response.data.message)

@@ -86,12 +86,14 @@ export default {
   methods: {
     delMethod(id) {
       this.delLoading = true
-      del([id]).then(() => {
-        this.delLoading = false
-        this.$refs[id].doClose()
-        this.crud.dleChangePage(1)
-        this.crud.delSuccessNotify()
-        this.crud.toQuery()
+      del([id]).then(r => {
+        if (r.code === 0) {
+          this.delLoading = false
+          this.$refs[id].doClose()
+          this.crud.dleChangePage(1)
+          this.crud.delSuccessNotify()
+          this.crud.toQuery()
+        }
       }).catch(() => {
         this.delLoading = false
         this.$refs[id].doClose()

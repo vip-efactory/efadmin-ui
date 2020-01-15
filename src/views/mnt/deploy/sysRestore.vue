@@ -101,10 +101,12 @@ export default {
         this.submitLoading = true
         reducte(JSON.stringify(this.data[this.radio]))
           .then(res => {
-            this.dialog = false
-            this.submitLoading = false
-            this.appNames = ''
-            this.$parent.crud.toQuery()
+            if (res.code === 0) {
+              this.dialog = false
+              this.submitLoading = false
+              this.appNames = ''
+              this.$parent.crud.toQuery()
+            }
           })
           .catch(err => {
             this.submitLoading = false

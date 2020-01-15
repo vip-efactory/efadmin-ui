@@ -168,8 +168,10 @@ export default {
       // 先打开一个空的新窗口，再请求
       this.newWin = window.open()
       crudQiNiu.download(id).then(res => {
-        this.downloadLoading = false
-        this.url = res.url
+        if (res.code === 0) {
+          this.downloadLoading = false
+          this.url = res.data.url
+        }
       }).catch(err => {
         this.downloadLoading = false
         console.log(err.response.data.message)
@@ -179,14 +181,16 @@ export default {
     synchronize() {
       this.icon = 'el-icon-loading'
       crudQiNiu.sync().then(res => {
-        this.icon = 'el-icon-refresh'
-        this.$message({
-          showClose: true,
-          message: '数据同步成功',
-          type: 'success',
-          duration: 1500
-        })
-        this.crud.toQuery()
+        if (res.code === 0) {
+          this.icon = 'el-icon-refresh'
+          this.$message({
+            showClose: true,
+            message: '数据同步成功',
+            type: 'success',
+            duration: 1500
+          })
+          this.crud.toQuery()
+        }
       }).catch(err => {
         this.icon = 'el-icon-refresh'
         console.log(err.response.data.message)

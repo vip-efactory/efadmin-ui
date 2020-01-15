@@ -83,10 +83,12 @@ export default {
       }).then(() => {
         this.crud.delAllLoading = true
         delAllInfo().then(res => {
-          this.crud.delAllLoading = false
-          this.crud.dleChangePage(1)
-          this.crud.delSuccessNotify()
-          this.crud.toQuery()
+          if (res.code === 0) {
+            this.crud.delAllLoading = false
+            this.crud.dleChangePage(1)
+            this.crud.delSuccessNotify()
+            this.crud.toQuery()
+          }
         }).catch(err => {
           this.crud.delAllLoading = false
           console.log(err.response.data.message)
