@@ -59,14 +59,16 @@ export default {
       return new Promise((resolve, reject) => {
         this.loading = true
         // 请求数据
-        initData(this.url, this.getQueryParame()).then(data => {
-          this.total = data.totalElements
-          this.data = data.content
-          // time 毫秒后显示表格
-          setTimeout(() => {
-            this.loading = false
-          }, this.time)
-          resolve(data)
+        initData(this.url, this.getQueryParame()).then(r => {
+          if (r.code === 0) {
+            this.total = r.data.totalCount
+            this.data = r.data.content
+            // time 毫秒后显示表格
+            setTimeout(() => {
+              this.loading = false
+            }, this.time)
+            resolve(r.data)
+          }
         }).catch(err => {
           this.loading = false
           reject(err)
@@ -162,13 +164,15 @@ export default {
         return
       }
       this.delLoading = true
-      this.crudMethod.del(id).then(() => {
-        this.delLoading = false
-        this.$refs[id].doClose()
-        this.dleChangePage()
-        this.delSuccessNotify()
-        this.afterDelMethod()
-        this.init()
+      this.crudMethod.del(id).then(r => {
+        if (r.code === 0) {
+          this.delLoading = false
+          this.$refs[id].doClose()
+          this.dleChangePage()
+          this.delSuccessNotify()
+          this.afterDelMethod()
+          this.init()
+        }
       }).catch(() => {
         this.delLoading = false
         this.$refs[id].doClose()
@@ -197,15 +201,17 @@ export default {
       for (let i = 0; i < data.length; i++) {
         ids.push(data[i].id)
       }
-      this.crudMethod.delAll(ids).then(() => {
-        this.delAllLoading = false
-        this.dleChangePage(ids.length)
-        this.init()
-        this.$notify({
-          title: '删除成功',
-          type: 'success',
-          duration: 2500
-        })
+      this.crudMethod.delAll(ids).then(r => {
+        if (r.code === 0) {
+          this.delAllLoading = false
+          this.dleChangePage(ids.length)
+          this.init()
+          this.$notify({
+            title: '删除成功',
+            type: 'success',
+            duration: 2500
+          })
+        }
       }).catch(() => {
         this.delAllLoading = false
       })
@@ -243,12 +249,14 @@ export default {
      * 新增方法
      */
     addMethod() {
-      this.crudMethod.add(this.form).then(() => {
-        this.addSuccessNotify()
-        this.loading = false
-        this.afterAddMethod()
-        this.cancel()
-        this.init()
+      this.crudMethod.add(this.form).then(r => {
+        if (r.code === 0) {
+          this.addSuccessNotify()
+          this.loading = false
+          this.afterAddMethod()
+          this.cancel()
+          this.init()
+        }
       }).catch(() => {
         this.loading = false
         this.afterAddErrorMethod()
@@ -266,12 +274,14 @@ export default {
      * 通用的编辑方法
      */
     editMethod() {
-      this.crudMethod.edit(this.form).then(() => {
-        this.editSuccessNotify()
-        this.loading = false
-        this.afterEditMethod()
-        this.cancel()
-        this.init()
+      this.crudMethod.edit(this.form).then(r => {
+        if (r.code === 0) {
+          this.editSuccessNotify()
+          this.loading = false
+          this.afterEditMethod()
+          this.cancel()
+          this.init()
+        }
       }).catch(() => {
         this.loading = false
       })

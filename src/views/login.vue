@@ -127,10 +127,10 @@ export default {
             Cookies.remove('rememberMe')
           }
           this.$store.dispatch('Login', user).then(r => {
-            if (r.code === 0) {
+            // if (r.code === 0) {
               this.loading = false
               this.$router.push({ path: this.redirect || '/' })
-            }
+            // }
           }).catch(() => {
             this.loading = false
             this.getCode()
