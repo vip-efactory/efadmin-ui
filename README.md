@@ -11,17 +11,15 @@ ELADMIN 前端源码
 
 |     |   后端源码  |   前端源码  |
 |---  |--- | --- |
-|  github   |  https://github.com/elunez/eladmin   |  https://github.com/elunez/eladmin-web   |
-|  码云   |  https://gitee.com/elunez/eladmin   |  https://gitee.com/elunez/eladmin-web   |
+|  github   |  https://github.com/vip-efactory/efadmin   |  https://github.com/vip-efactory/efadmin-ui   |
 
-#### 开发文档
-[https://docs.auauz.net/#/](https://docs.auauz.net/#/)
-
-#### 前端模板
-
-初始模板基于： [https://github.com/PanJiaChen/vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
-
-模板文档： [https://panjiachen.github.io/vue-element-admin-site/zh/guide/](https://panjiachen.github.io/vue-element-admin-site/zh/guide/)
+#### 待处理事项
+```
+1.列表头支持排序；
+2.部分面包屑不支持跳转的问题
+3.请求响应的异常处理
+4.监控中心及支持警告通知
+```
 
 #### Build Setup
 ``` bash
@@ -37,6 +35,6 @@ npm run build
 
 #### 反馈交流
 
-- QQ交流群：891137268
+- QQ交流群：601693868
 
 
