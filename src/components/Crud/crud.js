@@ -29,7 +29,7 @@ function CRUD(options) {
     defaultForm: () => {
     },
     // 排序规则，默认 id 降序， 支持多字段排序 ['id,desc', 'createTime,asc']
-    sort: ['id,desc'],
+    sort: ['createTime,desc'],
     // 等待时间
     time: 50,
     // CRUD Method
@@ -393,6 +393,42 @@ function CRUD(options) {
     // 选择改变
     selectionChangeHandler(val) {
       crud.selections = val
+    },
+    removeArrayItem(array, val) {
+      const index = array.indexOf(val)
+      if (index > -1) {
+        array.splice(index, 1)
+      }
+    },
+    // 单击列头触发后端排序
+    doTitleOrder(column) {
+      // 设定排序参数,支持多字段排序
+      // if (column.order != null) {
+      //   if (column.order.indexOf('descending') > -1) {
+      //     crud.sort.push(column.prop + ',desc')
+      //     crud.removeArrayItem(crud.sort, column.prop + ',asc')
+      //   } else if (column.order.indexOf('ascending') > -1) {
+      //     crud.sort.push(column.prop + ',asc')
+      //     crud.removeArrayItem(crud.sort, column.prop + ',desc')
+      //   }
+      // } else {
+      //   crud.removeArrayItem(crud.sort, column.prop + ',asc')
+      //   crud.removeArrayItem(crud.sort, column.prop + ',desc')
+      // }
+
+      // 单个字段排序
+      // 清除旧排序
+      crud.sort=[]
+      if (column.order != null) {
+        if (column.order.indexOf('descending') > -1) {
+          crud.sort.push(column.prop + ',desc')
+        } else if (column.order.indexOf('ascending') > -1) {
+          crud.sort.push(column.prop + ',asc')
+        }
+      }
+      // 调用分页接口
+      crud.page.page = 1
+      crud.refresh()
     },
     /**
      * 重置查询参数

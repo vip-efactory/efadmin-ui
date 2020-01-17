@@ -22,12 +22,12 @@
       <crudOperation :permission="permission" />
     </div>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%" @selection-change="crud.selectionChangeHandler">
+    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('appName')" prop="appName" label="应用名称" />
-      <el-table-column v-if="columns.visible('ip')" prop="ip" label="部署IP" />
-      <el-table-column v-if="columns.visible('deployUser')" prop="deployUser" label="部署人员" />
-      <el-table-column v-if="columns.visible('deployDate')" prop="deployDate" label="部署时间">
+      <el-table-column v-if="columns.visible('appName')" prop="appName" label="应用名称" sortable="custom" />
+      <el-table-column v-if="columns.visible('ip')" prop="ip" label="部署IP" sortable="custom" />
+      <el-table-column v-if="columns.visible('deployUser')" prop="deployUser" label="部署人员" sortable="custom" />
+      <el-table-column v-if="columns.visible('deployDate')" prop="deployDate" label="部署时间" sortable="custom" >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.deployDate) }}</span>
         </template>

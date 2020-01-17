@@ -17,7 +17,7 @@
       </crudOperation>
     </div>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
+    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -30,19 +30,19 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('username')" prop="username" label="用户名" />
-      <el-table-column v-if="columns.visible('requestIp')" prop="requestIp" label="IP" />
-      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" label="IP来源" />
-      <el-table-column v-if="columns.visible('description')" prop="description" label="描述" />
-      <el-table-column v-if="columns.visible('browser')" prop="browser" label="浏览器" />
-      <el-table-column v-if="columns.visible('time')" prop="time" label="请求耗时" align="center">
+      <el-table-column v-if="columns.visible('username')" prop="username" label="用户名" sortable="custom" />
+      <el-table-column v-if="columns.visible('requestIp')" prop="requestIp" label="IP" sortable="custom" />
+      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" label="IP来源" sortable="custom" />
+      <el-table-column v-if="columns.visible('description')" prop="description" label="描述" sortable="custom" />
+      <el-table-column v-if="columns.visible('browser')" prop="browser" label="浏览器" sortable="custom" />
+      <el-table-column v-if="columns.visible('time')" prop="time" label="请求耗时" align="center" sortable="custom">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.time <= 300">{{ scope.row.time }}ms</el-tag>
           <el-tag v-else-if="scope.row.time <= 1000" type="warning">{{ scope.row.time }}ms</el-tag>
           <el-tag v-else type="danger">{{ scope.row.time }}ms</el-tag>
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" width="180px">
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" width="180px" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>

@@ -46,13 +46,13 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%" @selection-change="crud.selectionChangeHandler">
+    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" prop="name" label="名称" />
-      <el-table-column v-if="columns.visible('ip')" prop="ip" label="IP" />
-      <el-table-column v-if="columns.visible('port')" prop="port" label="端口" />
-      <el-table-column v-if="columns.visible('account')" prop="account" label="账号" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期">
+      <el-table-column v-if="columns.visible('name')" prop="name" label="名称" sortable="custom" />
+      <el-table-column v-if="columns.visible('ip')" prop="ip" label="IP" sortable="custom" />
+      <el-table-column v-if="columns.visible('port')" prop="port" label="端口" sortable="custom" />
+      <el-table-column v-if="columns.visible('account')" prop="account" label="账号" sortable="custom" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom" >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>

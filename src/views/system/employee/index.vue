@@ -58,41 +58,41 @@
         </div>
       </el-dialog>
       <!--表格渲染-->
-      <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
+      <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
         <el-table-column type="selection" width="55" />
-        <el-table-column v-if="columns.visible('name')" prop="name" label="姓名" />
-        <el-table-column v-if="columns.visible('address')" prop="address" label="住址" />
+        <el-table-column v-if="columns.visible('name')" prop="name" label="姓名" sortable="custom"/>
+        <el-table-column v-if="columns.visible('address')" prop="address" label="住址" sortable="custom" />
         <el-table-column v-if="columns.visible('avatar')" prop="avatar" label="头像" />
-        <el-table-column v-if="columns.visible('birthday')" prop="birthday" label="生日">
+        <el-table-column v-if="columns.visible('birthday')" prop="birthday" label="生日" sortable="custom">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.birthday) }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('code')" prop="code" label="编码" />
-        <el-table-column v-if="columns.visible('email')" prop="email" label="邮箱" />
-        <el-table-column v-if="columns.visible('idNumber')" prop="idNumber" label="身份证号码" />
-        <el-table-column v-if="columns.visible('phone')" prop="phone" label="手机号" />
-        <el-table-column v-if="columns.visible('status')" prop="status" label="状态">
+        <el-table-column v-if="columns.visible('code')" prop="code" label="编码" sortable="custom" />
+        <el-table-column v-if="columns.visible('email')" prop="email" label="邮箱" sortable="custom" />
+        <el-table-column v-if="columns.visible('idNumber')" prop="idNumber" label="身份证号码" sortable="custom"  />
+        <el-table-column v-if="columns.visible('phone')" prop="phone" label="手机号" sortable="custom"/>
+        <el-table-column v-if="columns.visible('status')" prop="status" label="状态" sortable="custom">
           <template slot-scope="scope">
             {{ dict.label.user_status[scope.row.status] }}
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('deptId')" prop="deptId" label="部门" />
-        <el-table-column v-if="columns.visible('jobId')" prop="jobId" label="岗位" />
-        <el-table-column v-if="columns.visible('remark')" prop="remark" label="备注" />
-        <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建时间">
+        <el-table-column v-if="columns.visible('deptId')" prop="deptId" label="部门" sortable="custom"/>
+        <el-table-column v-if="columns.visible('jobId')" prop="jobId" label="岗位" sortable="custom" />
+        <el-table-column v-if="columns.visible('remark')" prop="remark" label="备注" sortable="custom" />
+        <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建时间" sortable="custom">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.createTime) }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('creatorNum')" prop="creatorNum" label="创建人" />
-        <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" label="更新时间">
+        <el-table-column v-if="columns.visible('creatorNum')" prop="creatorNum" label="创建人" sortable="custom"/>
+        <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" label="更新时间" sortable="custom">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.updateTime) }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('updaterNum')" prop="updaterNum" label="更新人" />
-        <el-table-column v-permission="['admin','employee:edit','employee:del']" label="操作" width="150px" align="center">
+        <el-table-column v-if="columns.visible('updaterNum')" prop="updaterNum" label="更新人" sortable="custom" />
+        <el-table-column v-permission="['admin','employee:edit','employee:del']" label="操作" width="150px" align="center" >
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
@@ -116,7 +116,7 @@ import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '员工信息', url: 'api/employee/page', sort: 'id,desc', crudMethod: { ...crudEmployee }})
+const defaultCrud = CRUD({ title: '员工信息', url: 'api/employee/page', crudMethod: { ...crudEmployee }})
 const defaultForm = { id: null, address: null, avatar: null, birthday: null, code: null, email: null, idNumber: null, name: null, phone: null, status: null, deptId: null, jobId: null, remark: null, createTime: null, creatorNum: null, updateTime: null, updaterNum: null }
 export default {
   name: 'Employee',

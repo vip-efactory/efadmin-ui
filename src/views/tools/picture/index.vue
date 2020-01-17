@@ -64,11 +64,11 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
+    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('filename')" width="200" prop="filename" label="文件名" />
-      <el-table-column v-if="columns.visible('username')" prop="username" label="上传者" />
-      <el-table-column v-if="columns.visible('url')" ref="table" :show-overflow-tooltip="true" prop="url" label="缩略图">
+      <el-table-column v-if="columns.visible('filename')" width="200" prop="filename" label="文件名" sortable="custom" />
+      <el-table-column v-if="columns.visible('username')" prop="username" label="上传者" sortable="custom" />
+      <el-table-column v-if="columns.visible('url')" ref="table" :show-overflow-tooltip="true" prop="url" label="缩略图" sortable="custom" >
         <template slot-scope="{row}">
           <el-image
             :src="row.url"
@@ -80,9 +80,9 @@
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('size')" prop="size" label="文件大小" />
-      <el-table-column v-if="columns.visible('height')" prop="height" label="高度" />
-      <el-table-column v-if="columns.visible('width')" prop="width" label="宽度" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期">
+      <el-table-column v-if="columns.visible('height')" prop="height" label="高度" sortable="custom" />
+      <el-table-column v-if="columns.visible('width')" prop="width" label="宽度" sortable="custom" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>

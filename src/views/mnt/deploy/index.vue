@@ -96,11 +96,11 @@
     <fForm ref="sysRestore" :key="times" :app-name="appName" />
     <dForm ref="deploy" />
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row stripe style="width: 100%" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange">
+    <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row stripe style="width: 100%" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('app.name')" prop="app.name" label="应用名称" />
-      <el-table-column v-if="columns.visible('servers')" prop="servers" label="服务器列表" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="部署日期">
+      <el-table-column v-if="columns.visible('app.name')" prop="app.name" label="应用名称" sortable="custom" />
+      <el-table-column v-if="columns.visible('servers')" prop="servers" label="服务器列表" sortable="custom" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="部署日期" sortable="custom" >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>

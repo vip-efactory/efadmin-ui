@@ -31,9 +31,9 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
+    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('state')" prop="state" label="状态" width="50px">
+      <el-table-column v-if="columns.visible('state')" prop="state" label="状态" width="50px" sortable="custom">
         <template slot-scope="scope">
           <el-tag
             :type="scope.row.state === '1' ? 'success' : 'info'"
@@ -44,11 +44,11 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('name')" prop="name" label="名称" />
-      <el-table-column v-if="columns.visible('address')" prop="address" label="地址" />
-      <el-table-column v-if="columns.visible('port')" prop="port" label="端口" width="80px" align="center" />
-      <el-table-column v-if="columns.visible('cpuRate')" :formatter="formatCpuRate" prop="cpuRate" label="CPU使用率" width="100px" align="center" />
-      <el-table-column v-if="columns.visible('cpuCore')" prop="cpuCore" label="CPU内核数" width="100px" align="center" />
+      <el-table-column v-if="columns.visible('name')" prop="name" label="名称" sortable="custom"/>
+      <el-table-column v-if="columns.visible('address')" prop="address" label="地址" sortable="custom"/>
+      <el-table-column v-if="columns.visible('port')" prop="port" label="端口" width="80px" align="center" sortable="custom"/>
+      <el-table-column v-if="columns.visible('cpuRate')" :formatter="formatCpuRate" prop="cpuRate" label="CPU使用率" width="100px" align="center" sortable="custom"/>
+      <el-table-column v-if="columns.visible('cpuCore')" prop="cpuCore" label="CPU内核数" width="100px" align="center" sortable="custom"/>
       <el-table-column v-if="columns.visible('memTotal')" prop="memTotal" label="物理内存" align="center">
         <template slot-scope="scope">
           <el-row>
