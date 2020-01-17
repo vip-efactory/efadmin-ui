@@ -68,7 +68,7 @@
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('filename')" width="200" prop="filename" label="文件名" sortable="custom" />
       <el-table-column v-if="columns.visible('username')" prop="username" label="上传者" sortable="custom" />
-      <el-table-column v-if="columns.visible('url')" ref="table" :show-overflow-tooltip="true" prop="url" label="缩略图" sortable="custom" >
+      <el-table-column v-if="columns.visible('url')" ref="table" :show-overflow-tooltip="true" prop="url" label="缩略图">
         <template slot-scope="{row}">
           <el-image
             :src="row.url"
