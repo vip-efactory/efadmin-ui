@@ -88,6 +88,9 @@ export default {
             this.crud.dleChangePage(1)
             this.crud.delSuccessNotify()
             this.crud.toQuery()
+          } else {
+            this.crud.delAllLoading = false
+            crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         }).catch(err => {
           this.crud.delAllLoading = false

@@ -61,6 +61,8 @@ export default {
       get().then(res => {
         if (res.code === 0) {
           this.form = res.data
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -76,6 +78,8 @@ export default {
                 duration: 2500
               })
               this.loading = false
+            } else {
+              crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
             }
           }).catch(err => {
             this.loading = false

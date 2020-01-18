@@ -38,6 +38,8 @@ const user = {
             // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js
             commit('SET_LOAD_MENUS', true)
             resolve()
+          } else {
+            crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         }).catch(error => {
           reject(error)
@@ -52,6 +54,8 @@ const user = {
           if (res.code === 0) {
             setUserInfo(res.data, commit)
             resolve(res.data)
+          } else {
+            crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         }).catch(error => {
           reject(error)
@@ -65,6 +69,8 @@ const user = {
           if (res.code === 0) {
             logOut(commit)
             resolve()
+          } else {
+            crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         }).catch(error => {
           logOut(commit)

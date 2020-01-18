@@ -93,6 +93,9 @@ export default {
             })
             this.loading = false
             this.$parent.init()
+          } else {
+            this.loading = false
+            crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         })
         .catch(err => {
@@ -113,6 +116,9 @@ export default {
             })
             this.loading = false
             this.$parent.init()
+          } else {
+            this.loading = false
+            crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         })
         .catch(err => {
@@ -134,12 +140,15 @@ export default {
       getApps().then(res => {
         if (res.code === 0) {
           this.apps = res.data.content
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
-
       })
       getServers().then(res => {
         if (res.code === 0) {
           this.servers = res.data.content
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },

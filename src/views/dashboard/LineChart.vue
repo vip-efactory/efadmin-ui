@@ -45,6 +45,8 @@ export default {
         this.chartData.ipData = res.data.ipData
         this.weekDays = res.data.weekDays
         this.initChart()
+      } else {
+        crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
       }
     })
     if (this.autoResize) {

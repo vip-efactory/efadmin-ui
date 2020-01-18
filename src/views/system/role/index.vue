@@ -63,11 +63,11 @@
           </div>
           <el-table ref="table" v-loading="crud.loading" highlight-current-row style="width: 100%;" :data="crud.data" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
             <el-table-column :selectable="checkboxT" type="selection" width="55" />
-            <el-table-column v-if="columns.visible('name')" prop="name" label="名称" sortable="custom"/>
-            <el-table-column v-if="columns.visible('dataScope')" prop="dataScope" label="数据权限" sortable="custom"/>
-            <el-table-column v-if="columns.visible('permission')" prop="permission" label="角色权限" sortable="custom"/>
-            <el-table-column v-if="columns.visible('level')" prop="level" label="角色级别" sortable="custom"/>
-            <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" label="描述" sortable="custom"/>
+            <el-table-column v-if="columns.visible('name')" prop="name" label="名称" sortable="custom" />
+            <el-table-column v-if="columns.visible('dataScope')" prop="dataScope" label="数据权限" sortable="custom" />
+            <el-table-column v-if="columns.visible('permission')" prop="permission" label="角色权限" sortable="custom" />
+            <el-table-column v-if="columns.visible('level')" prop="level" label="角色级别" sortable="custom" />
+            <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" label="描述" sortable="custom" />
             <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" width="135px" prop="createTime" label="创建日期" sortable="custom">
               <template slot-scope="scope">
                 <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -163,10 +163,12 @@ export default {
   },
   created() {
     this.getMenus()
-    crudRoles.getLevel().then(data => {
-      if (data.code === 0) {
-        this.level = data.data.level
+    crudRoles.getLevel().then(res => {
+      if (res.code === 0) {
+        this.level = res.data.level
         console.log(this.level)
+      } else {
+        crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
       }
     })
     this.$nextTick(() => {
@@ -226,6 +228,8 @@ export default {
       getMenusTree().then(res => {
         if (res.code === 0) {
           this.menus = res.data
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -265,6 +269,9 @@ export default {
           this.crud.notify('保存成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.menuLoading = false
           this.update()
+        } else {
+          this.menuLoading = false
+          this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(err => {
         this.menuLoading = false
@@ -282,6 +289,8 @@ export default {
               break
             }
           }
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -290,6 +299,8 @@ export default {
       getDepts({ enabled: true }).then(res => {
         if (res.code === 0) {
           this.depts = res.data.content
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },

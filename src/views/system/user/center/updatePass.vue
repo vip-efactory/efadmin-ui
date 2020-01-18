@@ -73,6 +73,8 @@ export default {
                   location.reload() // 为了重新实例化vue-router对象 避免bug
                 })
               }, 1500)
+            } else {
+              crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
             }
           }).catch(err => {
             this.loading = false

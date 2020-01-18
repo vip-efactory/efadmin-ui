@@ -256,9 +256,12 @@ export default {
     saveColumnConfig() {
       this.columnLoading = true
       save(this.data).then(res => {
-        if (res.code === 0){
+        if (res.code === 0) {
           this.notify('保存成功', 'success')
           this.columnLoading = false
+        } else {
+          this.columnLoading = false
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(err => {
         this.columnLoading = false
@@ -275,6 +278,9 @@ export default {
               this.form = res.data
               this.form.cover = this.form.cover.toString()
               this.configLoading = false
+            } else {
+              this.configLoading = false
+              crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
             }
           }).catch(err => {
             this.configLoading = false
@@ -290,6 +296,9 @@ export default {
           this.init()
           this.notify('同步成功', 'success')
           this.syncLoading = false
+        } else {
+          this.syncLoading = false
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).then(() => {
         this.syncLoading = false
@@ -305,11 +314,17 @@ export default {
             if (r.code === 0) {
               this.genLoading = false
               this.notify('生成成功', 'success')
+            } else {
+              this.genLoading = false
+              crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
             }
           }).catch(err => {
             this.genLoading = false
             console.log(err.response.data.message)
           })
+        } else {
+          this.genLoading = false
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(err => {
         this.genLoading = false

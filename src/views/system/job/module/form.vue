@@ -126,6 +126,8 @@ export default {
       getDepts({ enabled: true }).then(res => {
         if (res.code === 0) {
           this.depts = res.data.content
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },

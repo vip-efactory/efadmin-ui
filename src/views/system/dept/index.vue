@@ -120,6 +120,8 @@ export default {
       crudDept.getDepts({ enabled: true }).then(res => {
         if (res.code === 0) {
           this.depts = res.data.content
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -145,11 +147,15 @@ export default {
           crudDept.edit(data).then(res => {
             if (res.code === 0) {
               this.crud.notify(this.dict.label.dept_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+            } else {
+              crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
             }
           }).catch(err => {
             data.enabled = !data.enabled
             console.log(err.response.data.message)
           })
+        } else {
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         data.enabled = !data.enabled

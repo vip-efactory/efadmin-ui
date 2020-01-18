@@ -100,7 +100,7 @@
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('app.name')" prop="app.name" label="应用名称" sortable="custom" />
       <el-table-column v-if="columns.visible('servers')" prop="servers" label="服务器列表" sortable="custom" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="部署日期" sortable="custom" >
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="部署日期" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
@@ -220,11 +220,15 @@ export default {
       crudDeploy.getApps().then(res => {
         if (res.code === 0) {
           this.apps = res.data.content
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
       crudDeploy.getServers().then(res => {
         if (res.code === 0) {
           this.servers = res.data.content
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     }

@@ -27,7 +27,7 @@
       <el-table-column v-if="columns.visible('appName')" prop="appName" label="应用名称" sortable="custom" />
       <el-table-column v-if="columns.visible('ip')" prop="ip" label="部署IP" sortable="custom" />
       <el-table-column v-if="columns.visible('deployUser')" prop="deployUser" label="部署人员" sortable="custom" />
-      <el-table-column v-if="columns.visible('deployDate')" prop="deployDate" label="部署时间" sortable="custom" >
+      <el-table-column v-if="columns.visible('deployDate')" prop="deployDate" label="部署时间" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.deployDate) }}</span>
         </template>
@@ -93,6 +93,9 @@ export default {
           this.crud.dleChangePage(1)
           this.crud.delSuccessNotify()
           this.crud.toQuery()
+        } else {
+          this.delLoading = false
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         this.delLoading = false

@@ -66,6 +66,8 @@ export default {
         this.count.newVisits = res.data.newVisits
         this.count.recentIp = res.data.recentIp
         this.count.recentVisits = res.data.recentVisits
+      } else {
+        crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
       }
     })
   }

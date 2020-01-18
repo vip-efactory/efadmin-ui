@@ -189,6 +189,8 @@ export default {
           const menu = { id: 0, label: '顶级类目', children: [] }
           menu.children = res.data
           this.menus.push(menu)
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },

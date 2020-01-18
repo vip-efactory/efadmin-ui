@@ -70,13 +70,13 @@
       <el-table-column v-if="columns.visible('methodName')" :show-overflow-tooltip="true" prop="methodName" width="90px" label="执行方法" sortable="custom" />
       <el-table-column v-if="columns.visible('params')" :show-overflow-tooltip="true" prop="params" width="80px" label="参数" sortable="custom" />
       <el-table-column v-if="columns.visible('cronExpression')" :show-overflow-tooltip="true" prop="cronExpression" width="100px" label="cron表达式" sortable="custom" />
-      <el-table-column v-if="columns.visible('isPause')" :show-overflow-tooltip="true" prop="isPause" width="90px" label="状态" sortable="custom" >
+      <el-table-column v-if="columns.visible('isPause')" :show-overflow-tooltip="true" prop="isPause" width="90px" label="状态" sortable="custom">
         <template slot-scope="scope">
           <el-tag :type="scope.row.isPause ? 'warning' : 'success'">{{ scope.row.isPause ? '已暂停' : '运行中' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" label="描述" sortable="custom" />
-      <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" prop="createTime" label="创建日期" sortable="custom" >
+      <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" prop="createTime" label="创建日期" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
@@ -152,7 +152,11 @@ export default {
     // 执行
     execute(id) {
       crudJob.execution(id).then(res => {
-        this.crud.notify('执行成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+        if (res.code === 0) {
+          this.crud.notify('执行成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+        }
       }).catch(err => {
         console.log(err.response.data.message)
       })
@@ -160,20 +164,29 @@ export default {
     // 改变状态
     updateStatus(id, status) {
       crudJob.updateIsPause(id).then(res => {
-        this.crud.toQuery()
-        this.crud.notify(status + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+        if (res.code === 0) {
+          this.crud.toQuery()
+          this.crud.notify(status + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+        }
       }).catch(err => {
         console.log(err.response.data.message)
       })
     },
     delMethod(id) {
       this.delLoading = true
-      crudJob.del([id]).then(() => {
-        this.delLoading = false
-        this.$refs[id].doClose()
-        this.crud.dleChangePage(1)
-        this.crud.delSuccessNotify()
-        this.crud.toQuery()
+      crudJob.del([id]).then(res => {
+        if (res.code === 0) {
+          this.delLoading = false
+          this.$refs[id].doClose()
+          this.crud.dleChangePage(1)
+          this.crud.delSuccessNotify()
+          this.crud.toQuery()
+        } else {
+          this.delLoading = false
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+        }
       }).catch(() => {
         this.delLoading = false
         this.$refs[id].doClose()

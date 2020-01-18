@@ -93,6 +93,9 @@ export default {
                 window.clearInterval(_this.timer)
               }
             }, 1000)
+          } else {
+            this.codeLoading = false
+            crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         }).catch(err => {
           this.resetForm()
@@ -106,14 +109,19 @@ export default {
         if (valid) {
           this.loading = true
           updateEmail(this.form).then(res => {
-            this.loading = false
-            this.resetForm()
-            this.$notify({
-              title: '邮箱修改成功',
-              type: 'success',
-              duration: 1500
-            })
-            store.dispatch('GetInfo').then(() => {})
+            if (res.code === 0) {
+              this.loading = false
+              this.resetForm()
+              this.$notify({
+                title: '邮箱修改成功',
+                type: 'success',
+                duration: 1500
+              })
+              store.dispatch('GetInfo').then(() => {})
+            } else {
+              this.loading = false
+              crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+            }
           }).catch(err => {
             this.loading = false
             console.log(err.response.data.message)

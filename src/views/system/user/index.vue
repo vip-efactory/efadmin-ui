@@ -144,11 +144,11 @@
         <!--表格渲染-->
         <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
           <el-table-column :selectable="checkboxT" type="selection" width="55" />
-          <el-table-column v-if="columns.visible('username')" :show-overflow-tooltip="true" prop="username" label="用户名" sortable="custom"/>
-          <el-table-column v-if="columns.visible('nickName')" :show-overflow-tooltip="true" prop="nickName" label="昵称" sortable="custom"/>
-          <el-table-column v-if="columns.visible('sex')" prop="sex" label="性别" sortable="custom"/>
-          <el-table-column v-if="columns.visible('phone')" :show-overflow-tooltip="true" prop="phone" width="100" label="电话" sortable="custom"/>
-          <el-table-column v-if="columns.visible('email')" :show-overflow-tooltip="true" width="125" prop="email" label="邮箱" sortable="custom"/>
+          <el-table-column v-if="columns.visible('username')" :show-overflow-tooltip="true" prop="username" label="用户名" sortable="custom" />
+          <el-table-column v-if="columns.visible('nickName')" :show-overflow-tooltip="true" prop="nickName" label="昵称" sortable="custom" />
+          <el-table-column v-if="columns.visible('sex')" prop="sex" label="性别" sortable="custom" />
+          <el-table-column v-if="columns.visible('phone')" :show-overflow-tooltip="true" prop="phone" width="100" label="电话" sortable="custom" />
+          <el-table-column v-if="columns.visible('email')" :show-overflow-tooltip="true" width="125" prop="email" label="邮箱" sortable="custom" />
           <el-table-column v-if="columns.visible('dept')" :show-overflow-tooltip="true" width="110" prop="dept" label="部门 / 岗位" sortable="custom">
             <template slot-scope="scope">
               <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
@@ -360,6 +360,8 @@ export default {
       getDepts(params).then(res => {
         if (res.code === 0) {
           this.deptDatas = res.data.content
+        } else {
+          this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -368,6 +370,8 @@ export default {
       getDepts({ enabled: true }).then(res => {
         if (res.code === 0) {
           this.depts = res.data.content
+        } else {
+          this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -388,7 +392,11 @@ export default {
         type: 'warning'
       }).then(() => {
         crudUser.edit(data).then(res => {
-          this.crud.notify(this.dict.label.user_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+          if (res.code === 0) {
+            this.crud.notify(this.dict.label.user_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+          } else {
+            this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          }
         }).catch(() => {
           data.enabled = !data.enabled
         })
@@ -401,6 +409,8 @@ export default {
       getAll().then(res => {
         if (res.code === 0) {
           this.roles = res.data
+        } else {
+          this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => { })
     },
@@ -409,6 +419,8 @@ export default {
       getAllJob(id).then(res => {
         if (res.code === 0) {
           this.jobs = res.data.content
+        } else {
+          this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => { })
     },
@@ -422,6 +434,8 @@ export default {
       getLevel().then(res => {
         if (res.code === 0) {
           this.level = res.data.level
+        } else {
+          this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => { })
     },

@@ -68,6 +68,9 @@ export default {
               this.loading = false
             }, this.time)
             resolve(r.data)
+          } else {
+            this.loading = false
+            crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         }).catch(err => {
           this.loading = false
@@ -172,6 +175,9 @@ export default {
           this.delSuccessNotify()
           this.afterDelMethod()
           this.init()
+        } else {
+          this.loading = false
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         this.delLoading = false
@@ -211,6 +217,9 @@ export default {
             type: 'success',
             duration: 2500
           })
+        } else {
+          this.delAllLoading = false
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         this.delAllLoading = false
@@ -256,6 +265,9 @@ export default {
           this.afterAddMethod()
           this.cancel()
           this.init()
+        } else {
+          this.loading = false
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         this.loading = false
@@ -281,6 +293,9 @@ export default {
           this.afterEditMethod()
           this.cancel()
           this.init()
+        } else {
+          this.loading = false
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         this.loading = false

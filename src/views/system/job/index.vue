@@ -8,7 +8,7 @@
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" prop="name" label="名称" sortable="custom"/>
+      <el-table-column v-if="columns.visible('name')" prop="name" label="名称" sortable="custom" />
       <el-table-column v-if="columns.visible('dept')" prop="dept" label="所属部门" sortable="custom">
         <template slot-scope="scope">
           <div>{{ scope.row.deptSuperiorName ? scope.row.deptSuperiorName + ' / ' : '' }}{{ scope.row.dept.name }}</div>
@@ -104,6 +104,8 @@ export default {
             data.enabled = !data.enabled
             console.log(err.data.message)
           })
+        } else {
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         data.enabled = !data.enabled

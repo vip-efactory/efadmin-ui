@@ -22,6 +22,8 @@ export default class Dict {
             Vue.set(this.dict.dict[n], d.value, d)
             Vue.set(this.dict.label[n], d.value, d.label)
           })
+        } else {
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }))
     })

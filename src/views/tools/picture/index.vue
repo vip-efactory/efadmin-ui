@@ -175,6 +175,9 @@ export default {
           this.crud.notify('同步成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.crud.toQuery()
           this.syncLoading = false
+        } else {
+          this.syncLoading = false
+          this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     }

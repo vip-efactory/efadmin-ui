@@ -46,6 +46,7 @@ import { encrypt } from '@/utils/rsaEncrypt'
 import Config from '@/settings'
 import { getCodeImg } from '@/api/login'
 import Cookies from 'js-cookie'
+import { crud } from '../components/Crud/crud'
 export default {
   name: 'Login',
   data() {
@@ -86,6 +87,8 @@ export default {
         if (res.code === 0) {
           this.codeUrl = res.data.img
           this.loginForm.uuid = res.data.uuid
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -128,8 +131,8 @@ export default {
           }
           this.$store.dispatch('Login', user).then(r => {
             // if (r.code === 0) {
-              this.loading = false
-              this.$router.push({ path: this.redirect || '/' })
+            this.loading = false
+            this.$router.push({ path: this.redirect || '/' })
             // }
           }).catch(() => {
             this.loading = false

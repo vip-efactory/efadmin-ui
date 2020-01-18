@@ -67,8 +67,10 @@ export default {
             url = 'aliPay/toPayAsPC'
           }
           toAliPay(url, this.form).then(res => {
+            // if (res.code === 0) {
             this.loading = false
             this.url = res
+            // }
           }).catch(err => {
             this.loading = false
             console.log(err.response.data.message)

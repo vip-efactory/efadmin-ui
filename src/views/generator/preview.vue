@@ -23,6 +23,8 @@ export default {
     generator(tableName, 1).then(r => {
       if (r.code === 0) {
         this.data = r.data
+      } else {
+        crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
       }
     }).catch(() => {
       this.$router.go(-1)

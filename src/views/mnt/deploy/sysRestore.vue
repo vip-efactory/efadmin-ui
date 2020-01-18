@@ -106,6 +106,9 @@ export default {
               this.submitLoading = false
               this.appNames = ''
               this.$parent.crud.toQuery()
+            } else {
+              this.submitLoading = false
+              this.$notify.error({ message: res.msg })
             }
           })
           .catch(err => {

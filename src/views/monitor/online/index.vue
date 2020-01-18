@@ -23,12 +23,12 @@
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('userName')" prop="userName" label="用户名" sortable="custom"/>
-      <el-table-column v-if="columns.visible('nickName')" prop="nickName" label="用户昵称" sortable="custom"/>
-      <el-table-column v-if="columns.visible('job')" prop="job" label="岗位" sortable="custom"/>
-      <el-table-column v-if="columns.visible('ip')" prop="ip" label="登录IP" sortable="custom"/>
-      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" label="登录地点" sortable="custom"/>
-      <el-table-column v-if="columns.visible('browser')" prop="browser" label="浏览器" sortable="custom"/>
+      <el-table-column v-if="columns.visible('userName')" prop="userName" label="用户名" sortable="custom" />
+      <el-table-column v-if="columns.visible('nickName')" prop="nickName" label="用户昵称" sortable="custom" />
+      <el-table-column v-if="columns.visible('job')" prop="job" label="岗位" sortable="custom" />
+      <el-table-column v-if="columns.visible('ip')" prop="ip" label="登录IP" sortable="custom" />
+      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" label="登录地点" sortable="custom" />
+      <el-table-column v-if="columns.visible('browser')" prop="browser" label="浏览器" sortable="custom" />
       <el-table-column v-if="columns.visible('loginTime')" prop="loginTime" label="登录时间" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.loginTime) }}</span>
@@ -113,6 +113,9 @@ export default {
           this.crud.dleChangePage(1)
           this.crud.delSuccessNotify()
           this.crud.toQuery()
+        } else {
+          this.delLoading = false
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         this.delLoading = false

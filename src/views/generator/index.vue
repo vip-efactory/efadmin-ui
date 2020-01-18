@@ -87,6 +87,8 @@ export default {
             type: 'success',
             duration: 2500
           })
+        } else {
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -107,6 +109,9 @@ export default {
           this.crud.refresh()
           this.crud.notify('同步成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.syncLoading = false
+        } else {
+          this.syncLoading = false
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).then(() => {
         this.syncLoading = false

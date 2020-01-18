@@ -30,11 +30,11 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('username')" prop="username" label="用户名" sortable="custom"/>
-      <el-table-column v-if="columns.visible('requestIp')" prop="requestIp" label="IP" sortable="custom"/>
-      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" label="IP来源"  sortable="custom"/>
-      <el-table-column v-if="columns.visible('description')" prop="description" label="描述"  sortable="custom"/>
-      <el-table-column v-if="columns.visible('browser')" prop="browser" label="浏览器"  sortable="custom"/>
+      <el-table-column v-if="columns.visible('username')" prop="username" label="用户名" sortable="custom" />
+      <el-table-column v-if="columns.visible('requestIp')" prop="requestIp" label="IP" sortable="custom" />
+      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" label="IP来源" sortable="custom" />
+      <el-table-column v-if="columns.visible('description')" prop="description" label="描述" sortable="custom" />
+      <el-table-column v-if="columns.visible('browser')" prop="browser" label="浏览器" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -85,8 +85,10 @@ export default {
     info(id) {
       this.dialog = true
       getErrDetail(id).then(res => {
-        if(res.code === 0) {
+        if (res.code === 0) {
           this.errorInfo = res.data.exception
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -103,6 +105,9 @@ export default {
             this.crud.dleChangePage(1)
             this.crud.delSuccessNotify()
             this.crud.toQuery()
+          } else {
+            this.crud.delAllLoading = false
+            crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         }).catch(err => {
           this.crud.delAllLoading = false
