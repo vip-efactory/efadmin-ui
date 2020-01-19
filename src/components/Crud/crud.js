@@ -95,6 +95,8 @@ function CRUD(options) {
       // 总数据条数
       total: 0
     },
+    // 高级搜索弹框
+    show:false,
     // 整体loading
     loading: true,
     // 导出的 Loading
@@ -122,6 +124,12 @@ function CRUD(options) {
     toQuery() {
       crud.page.page = 1
       crud.refresh()
+    },
+    // 高级搜索
+    dialogSearch() {
+      console.log(crud);
+      crud.show = true;
+      console.log(crud.show);
     },
     // 刷新
     refresh() {
