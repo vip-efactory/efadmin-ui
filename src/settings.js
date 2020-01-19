@@ -46,5 +46,14 @@ module.exports = {
   /**
    * 备案号
    */
-  caseNumber: '皖ICP备 XXXXXXX号'
+  caseNumber: '皖ICP备 XXXXXXX号',
+  /**
+   * 国际化区域,空则默认:zh_CN,即中文简体环境
+   */
+  LocaleKey: 'Locale',
+
+  /**
+   * @description Locale在Cookie中存储的天数，默认1年,只是语言环境时间长也不会有什么风险!
+   */
+  LocaleCookieExpires: 365
 }

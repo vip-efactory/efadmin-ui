@@ -3,6 +3,7 @@ import router from '@/router/routers'
 import { Notification, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken } from '@/utils/auth'
+import { getLocale } from '@/utils/locale'
 import Config from '@/settings'
 
 // 创建axios实例
@@ -18,6 +19,8 @@ service.interceptors.request.use(
       config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     config.headers['Content-Type'] = 'application/json'
+    // 携带国际化区域环境参数
+    config.headers['locale'] = getLocale()
     return config
   },
   error => {
