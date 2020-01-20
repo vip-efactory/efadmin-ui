@@ -18,20 +18,17 @@
 </template>
 
 <script>
-import { switchLocale } from '@/utils/locale'
 
 export default {
   computed: {
     language() {
-      return this.$store.getters.language
+      return this.$store.getters.locale
     }
   },
   methods: {
     handleSetLanguage(lang) {
-    // this.$i18n.locale = lang
-    // this.$store.dispatch('app/setLanguage', lang)
-    // 设定Cookie里的locale的值
-      switchLocale(lang)
+      this.$i18n.locale = lang
+      this.$store.dispatch('app/setLocale', lang)
       this.$message({
         message: 'Switch Language Success',
         type: 'success'

@@ -1,10 +1,9 @@
 import axios from 'axios'
 import router from '@/router/routers'
 import { Notification, MessageBox } from 'element-ui'
-import store from '../store'
 import { getToken } from '@/utils/auth'
-import { getLocale } from '@/utils/locale'
 import Config from '@/settings'
+import store from '@/store'
 
 // 创建axios实例
 const service = axios.create({
@@ -20,7 +19,7 @@ service.interceptors.request.use(
     }
     config.headers['Content-Type'] = 'application/json'
     // 携带国际化区域环境参数
-    config.headers['locale'] = getLocale()
+    config.headers['locale'] = store.getters.locale
     return config
   },
   error => {

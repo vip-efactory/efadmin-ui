@@ -3,6 +3,7 @@ const getters = {
   databaseUploadApi: state => state.api.databaseUploadApi,
   size: state => state.app.size,
   sidebar: state => state.app.sidebar,
+  locale: state => state.app.locale,
   device: state => state.app.device,
   token: state => state.user.token,
   visitedViews: state => state.tagsView.visitedViews,

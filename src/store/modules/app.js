@@ -1,4 +1,6 @@
 import Cookies from 'js-cookie'
+import { getLocale } from '@/lang/index'
+import Config from '@/settings'
 
 const state = {
   sidebar: {
@@ -6,6 +8,7 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
+  locale: getLocale(),
   size: Cookies.get('size') || 'small'
 }
 
@@ -27,6 +30,10 @@ const mutations = {
   TOGGLE_DEVICE: (state, device) => {
     state.device = device
   },
+  SET_LOCALE: (state, locale) => {
+    state.locale = locale
+    Cookies.set(Config.LocaleKey, locale, { expires: Config.LocaleCookieExpires })
+  },
   SET_SIZE: (state, size) => {
     state.size = size
     Cookies.set('size', size)
@@ -42,6 +49,9 @@ const actions = {
   },
   toggleDevice({ commit }, device) {
     commit('TOGGLE_DEVICE', device)
+  },
+  setLocale({ commit }, locale) {
+    commit('SET_LOCALE', locale)
   },
   setSize({ commit }, size) {
     commit('SET_SIZE', size)
