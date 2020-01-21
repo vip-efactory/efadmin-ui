@@ -12,7 +12,7 @@
         icon="el-icon-plus"
         @click="crud.toAdd"
       >
-        新增
+        {{ $t('crud.new') }}
       </el-button>
       <el-button
         v-if="crud.optShow.edit"
@@ -24,7 +24,7 @@
         :disabled="crud.selections.length !== 1"
         @click="crud.toEdit(crud.selections[0])"
       >
-        修改
+        {{ $t('crud.edit') }}
       </el-button>
       <el-button
         v-if="crud.optShow.del"
@@ -38,7 +38,7 @@
         :disabled="crud.selections.length === 0"
         @click="toDelete(crud.selections)"
       >
-        删除
+        {{ $t('crud.delete') }}
       </el-button>
       <el-button
         v-if="crud.optShow.download"
@@ -49,7 +49,9 @@
         type="warning"
         icon="el-icon-download"
         @click="crud.doExport"
-      >导出</el-button>
+      >
+        {{ $t('crud.export') }}
+      </el-button>
       <!--右侧-->
       <slot name="right" />
     </span>
@@ -86,7 +88,7 @@
           :indeterminate="allColumnsSelectedIndeterminate"
           @change="handleCheckAllChange"
         >
-          全选
+          {{ $t('crud.selectAll') }}
         </el-checkbox>
         <el-checkbox
           v-for="item in crud.props.tableColumns"
@@ -121,9 +123,9 @@ export default {
   },
   methods: {
     toDelete(datas) {
-      this.$confirm(`确认删除选中的${datas.length}条数据?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('crud.multiDeleteTipsStart') + `${datas.length}` + this.$t('crud.multiDeleteTipsEnd'), this.$t('crud.deleteWarn'), {
+        confirmButtonText: this.$t('crud.confirm'),
+        cancelButtonText: this.$t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         this.crud.delAllLoading = true
@@ -150,7 +152,7 @@ export default {
         selectedCount += this.crud.props.tableColumns[key].visible ? 1 : 0
       }
       if (selectedCount === 0) {
-        this.crud.notify('请至少选择一列', CRUD.NOTIFICATION_TYPE.WARNING)
+        this.crud.notify(this.$t('crud.selectAtLeastOne'), CRUD.NOTIFICATION_TYPE.WARNING)
         this.$nextTick(function() {
           item.visible = true
         })

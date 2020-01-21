@@ -1,6 +1,7 @@
 import { download, initData } from '@/api/data'
 import { downloadFile, parseTime } from '@/utils/index'
 import Vue from 'vue'
+import i18n from '../../lang'
 
 /**
  * CRUD配置
@@ -78,14 +79,14 @@ function CRUD(options) {
       },
       // 标题
       get title() {
-        return this.add > CRUD.STATUS.NORMAL ? `新增${crud.title}` : this.edit > CRUD.STATUS.NORMAL ? `编辑${crud.title}` : crud.title
+        return this.add > CRUD.STATUS.NORMAL ? i18n.t('crud.new' )+ `${crud.title}` : this.edit > CRUD.STATUS.NORMAL ? i18n.t('crud.edit') + `${crud.title}` : crud.title
       }
     },
     msg: {
-      submit: '提交成功',
-      add: '新增成功',
-      edit: '编辑成功',
-      del: '删除成功'
+      submit: i18n.t('crud.submitSuccess'),
+      add: i18n.t('crud.addSuccess'),
+      edit: i18n.t('crud.editSuccess'),
+      del: i18n.t('crud.delSuccess')
     },
     page: {
       // 页码
@@ -363,7 +364,7 @@ function CRUD(options) {
     doExport() {
       crud.downloadLoading = true
       download(crud.url + '/download', crud.getQueryParams()).then(result => {
-        downloadFile(result, crud.title + '数据', 'xlsx')
+        downloadFile(result, crud.title + i18n.t('crud.exportData'), 'xlsx')
         crud.downloadLoading = false
       }).catch(() => {
         crud.downloadLoading = false
