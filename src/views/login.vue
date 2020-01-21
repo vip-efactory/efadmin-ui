@@ -1,9 +1,11 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" label-position="left" label-width="0px" class="login-form">
-      <h3 class="title">
-        EF-ADMIN 后台管理系统
-      </h3>
+      <div class="title-container">
+        <h3 class="title">
+          {{ $t('login.title') }}
+        </h3>
+      </div>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" :placeholder="$t('login.username')">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
@@ -15,20 +17,24 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="code">
-        <el-input v-model="loginForm.code" auto-complete="off" placeholder="验证码" style="width: 63%" @keyup.enter.native="handleLogin">
+        <el-input v-model="loginForm.code" auto-complete="off" :placeholder="$t('login.verificationCode')" style="width: 63%" @keyup.enter.native="handleLogin">
           <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
         </el-input>
         <div class="login-code">
           <img :src="codeUrl" @click="getCode">
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
-        记住我
-      </el-checkbox>
+      <el-form-item>
+        <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;width: 90%">
+          {{ $t('login.rememberMe') }}
+        </el-checkbox>
+        <lang-select class="set-language" />
+      </el-form-item>
+
       <el-form-item style="width:100%;">
         <el-button :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           <span v-if="!loading">{{ $t('login.logIn') }}</span>
-          <span v-else>登 录 中...</span>
+          <span v-else>{{ $t('login.LoggingIn') }}</span>
         </el-button>
       </el-form-item>
     </el-form>
@@ -46,9 +52,11 @@ import { encrypt } from '@/utils/rsaEncrypt'
 import Config from '@/settings'
 import { getCodeImg } from '@/api/login'
 import Cookies from 'js-cookie'
+import LangSelect from '@/components/LangSelect'
 
 export default {
   name: 'Login',
+  components: { LangSelect },
   data() {
     return {
       codeUrl: '',

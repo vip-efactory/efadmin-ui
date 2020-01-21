@@ -73,13 +73,13 @@ export default {
     size: 'Global Size'
   },
   login: {
-    title: 'Login Form',
+    title: 'EFADMIN System Login',
     logIn: 'Login',
     username: 'Username',
     password: 'Password',
-    any: 'any',
-    thirdparty: 'Or connect with',
-    thirdpartyTips: 'Can not be simulated on local, so please combine you own business simulation! ! !'
+    rememberMe: 'Remember me',
+    verificationCode: 'Verification code',
+    LoggingIn: 'Logging In...'
   },
   documentation: {
     documentation: 'Documentation',
