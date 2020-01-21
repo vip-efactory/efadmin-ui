@@ -67,10 +67,14 @@ export default {
   navbar: {
     dashboard: 'Dashboard',
     github: 'Github',
-    logOut: 'Log Out',
-    profile: 'Profile',
+    fullScreen: 'Full Screen',
     theme: 'Theme',
-    size: 'Global Size'
+    size: 'Global Size',
+    switchLang: 'Switch Language',
+    projectDocs: 'Project Docs',
+    layoutSettings: 'Layout Settings',
+    profile: 'Profile',
+    logOut: 'Log Out'
   },
   login: {
     title: 'EFADMIN System Login',

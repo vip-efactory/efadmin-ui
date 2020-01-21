@@ -67,10 +67,14 @@ export default {
   navbar: {
     dashboard: '首页',
     github: '项目地址',
-    logOut: '退出登录',
-    profile: '个人中心',
+    fullScreen: '全屏缩放',
     theme: '换肤',
-    size: '布局大小'
+    size: '布局大小',
+    switchLang: '切换语言',
+    projectDocs: '项目文档',
+    layoutSettings: '布局设置',
+    profile: '个人中心',
+    logOut: '退出登录'
   },
   login: {
     title: 'EFADMIN 后台系统登录',

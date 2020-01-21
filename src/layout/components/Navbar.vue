@@ -8,19 +8,20 @@
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
 
-        <el-tooltip content="源码地址" effect="dark" placement="bottom">
+        <el-tooltip :content="$t('navbar.github')" effect="dark" placement="bottom">
           <Github class="right-menu-item hover-effect" />
         </el-tooltip>
 
-        <el-tooltip content="全屏缩放" effect="dark" placement="bottom">
+        <el-tooltip :content="$t('navbar.fullScreen')" effect="dark" placement="bottom">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />
         </el-tooltip>
 
-        <el-tooltip content="布局设置" effect="dark" placement="bottom">
+        <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
-
-        <lang-select class="right-menu-item hover-effect" />
+        <el-tooltip :content="$t('navbar.switchLang')" effect="dark" placement="left">
+          <lang-select class="right-menu-item hover-effect" />
+        </el-tooltip>
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -31,22 +32,22 @@
         <el-dropdown-menu slot="dropdown">
           <a target="_blank" href="https://docs.auauz.net/">
             <el-dropdown-item>
-              项目文档
+              {{ $t('navbar.projectDocs') }}
             </el-dropdown-item>
           </a>
           <span style="display:block;" @click="show = true">
             <el-dropdown-item>
-              布局设置
+              {{ $t('navbar.layoutSettings') }}
             </el-dropdown-item>
           </span>
           <router-link to="/user/center">
             <el-dropdown-item>
-              个人中心
+              {{ $t('navbar.profile') }}
             </el-dropdown-item>
           </router-link>
           <span style="display:block;" @click="open">
             <el-dropdown-item divided>
-              退出登录
+              {{ $t('navbar.logOut') }}
             </el-dropdown-item>
           </span>
         </el-dropdown-menu>
