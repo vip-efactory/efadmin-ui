@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '../layout/index'
+import i18n from '../lang/index'
 
 Vue.use(Router)
 
@@ -40,7 +41,7 @@ export const constantRouterMap = [
         path: 'dashboard',
         component: () => import('@/views/home'),
         name: 'Dashboard',
-        meta: { title: '首页', icon: 'index', affix: true, noCache: true }
+        meta: { title: i18n.t('navbar.dashboard'), icon: 'index', affix: true, noCache: true }
       }
     ]
   },
