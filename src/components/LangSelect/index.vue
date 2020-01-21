@@ -29,10 +29,12 @@ export default {
     handleSetLanguage(lang) {
       this.$i18n.locale = lang
       this.$store.dispatch('app/setLocale', lang)
-      this.$message({
-        message: 'Switch Language Success',
-        type: 'success'
-      })
+      // this.$message({
+      //   message: 'Switch Language Success',
+      //   type: 'success'
+      // })
+      // 刷新当前页面,否则后台的菜单信息不会变,
+      window.location.reload()
     }
   }
 }

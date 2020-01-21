@@ -1,30 +1,30 @@
 <template>
   <div class="drawer-container">
     <div>
-      <h3 class="drawer-title">系统布局设置</h3>
+      <h3 class="drawer-title">{{ $t('settings.title') }}</h3>
 
       <div class="drawer-item">
-        <span>主题颜色</span>
+        <span>{{ $t('settings.theme') }}</span>
         <theme-picker style="float: right;height: 26px;margin: -3px 8px 0 0;" @change="themeChange" />
       </div>
 
       <div class="drawer-item">
-        <span>显示标签</span>
+        <span>{{ $t('settings.tagsView') }}</span>
         <el-switch v-model="tagsView" class="drawer-switch" />
       </div>
 
       <div class="drawer-item">
-        <span>固定头部</span>
+        <span>{{ $t('settings.fixedHeader') }}</span>
         <el-switch v-model="fixedHeader" class="drawer-switch" />
       </div>
 
       <div class="drawer-item">
-        <span>显示LOGO</span>
+        <span>{{ $t('settings.sidebarLogo') }}</span>
         <el-switch v-model="sidebarLogo" class="drawer-switch" />
       </div>
 
       <div class="drawer-item">
-        <span>菜单UniqueOpened</span>
+        <span>{{ $t('settings.menuUniqueOpened') }}</span>
         <el-switch v-model="uniqueOpened" class="drawer-switch" />
       </div>
 
