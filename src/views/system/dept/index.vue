@@ -32,8 +32,11 @@
         <el-form-item v-if="form.pid !== 0" label="状态" prop="enabled">
           <el-radio v-for="item in dict.dept_status" :key="item.id" v-model="form.enabled" :label="item.value">{{ item.label }}</el-radio>
         </el-form-item>
-        <el-form-item v-if="form.pid !== 0" style="margin-bottom: 0;" label="上级部门" prop="pid">
+        <el-form-item v-if="form.pid !== 0" label="上级部门" prop="pid">
           <treeselect v-model="form.pid" :options="depts" style="width: 370px;" placeholder="选择上级类目" />
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" style="width: 370px;" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -56,6 +59,7 @@
           />
         </template>
       </el-table-column>
+      <el-table-column v-if="columns.visible('remark')" label="备注" prop="remark" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -86,7 +90,7 @@ import udOperation from '@crud/UD.operation'
 
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '部门', url: 'api/dept', crudMethod: { ...crudDept }})
-const defaultForm = { id: null, name: null, pid: 1, enabled: 'true' }
+const defaultForm = { id: null, name: null, pid: 1, enabled: 'true', remark: null }
 export default {
   name: 'Dept',
   components: { Treeselect, crudOperation, rrOperation, udOperation },
