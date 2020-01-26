@@ -49,6 +49,10 @@ export default {
     selectAtLeastOne: 'Please select at least one column',
     save: 'Save'
   },
+  bool: {
+    true: 'Yes',
+    false: 'No'
+  },
   // 组件的属性国际化
   // 基础实体BaseEntity的属性字段
   be: {
@@ -101,19 +105,26 @@ export default {
     menuAssignment: 'Menu Assignment'
   },
   menu: {
-    name: '菜单名称',
-    sort: '排序',
-    path: '路径',
-    component: '组件',
-    type: '类型',
-    permission: '权限',
-    componentName: '组件名',
-    icon: '图标',
-    cache: '是否缓存',
-    hidden: '是否隐藏',
-    pid: '上级菜单',
-    iFrame: '是否外链',
-    roles: '关联角色'
+    name: 'Menu Name',
+    sort: 'Sort',
+    path: 'Route',
+    component: 'Component',
+    type: 'Menu Type',
+    permission: 'Permission',
+    componentName: 'Component Name',
+    icon: 'Icon',
+    cache: 'Cache',
+    hidden: 'Display',
+    pid: 'Superior Menu',
+    iFrame: 'External link',
+    roles: 'Associated Role'
+  },
+  menuType: {
+    dir: 'Directory',
+    menu: 'Menu',
+    button: 'Button',
+    menuTitle: 'Menu Title',
+    btnName: 'Button Name'
   },
   dept: {
     name: '名称',

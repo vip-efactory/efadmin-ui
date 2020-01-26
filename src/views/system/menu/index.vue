@@ -21,16 +21,16 @@
       <crudOperation :permission="permission" />
     </div>
     <!--表单渲染-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="580px">
-      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="80px">
-        <el-form-item label="菜单类型" prop="type">
-          <el-radio-group v-model="form.type" size="mini" style="width: 178px">
-            <el-radio-button label="0">目录</el-radio-button>
-            <el-radio-button label="1">菜单</el-radio-button>
-            <el-radio-button label="2">按钮</el-radio-button>
+    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="670px">
+      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="120px">
+        <el-form-item :label="$t('menu.type')" prop="type">
+          <el-radio-group v-model="form.type" size="mini" style="width: 300px">
+            <el-radio-button label="0">{{ $t('menuType.dir') }}</el-radio-button>
+            <el-radio-button label="1">{{ $t('menuType.menu') }}</el-radio-button>
+            <el-radio-button label="2">{{ $t('menuType.button') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" label="菜单图标" prop="icon">
+        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.icon')" prop="icon">
           <el-popover
             placement="bottom-start"
             width="450"
@@ -44,95 +44,102 @@
             </el-input>
           </el-popover>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" label="外链菜单" prop="iframe">
+        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.iFrame')" prop="iframe">
           <el-radio-group v-model="form.iframe" size="mini">
-            <el-radio-button label="true">是</el-radio-button>
-            <el-radio-button label="false">否</el-radio-button>
+            <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
+            <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() === '1'" label="菜单缓存" prop="cache">
+        <el-form-item v-show="form.type.toString() === '1'" :label="$t('menu.cache')" prop="cache">
           <el-radio-group v-model="form.cache" size="mini">
-            <el-radio-button label="true">是</el-radio-button>
-            <el-radio-button label="false">否</el-radio-button>
+            <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
+            <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" label="菜单可见" prop="hidden">
+        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.hidden')" prop="hidden">
           <el-radio-group v-model="form.hidden" size="mini">
-            <el-radio-button label="false">是</el-radio-button>
-            <el-radio-button label="true">否</el-radio-button>
+            <el-radio-button label="false">{{ $t('bool.true') }}</el-radio-button>
+            <el-radio-button label="true">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" label="菜单标题" prop="name">
-          <el-input v-model="form.name" :style=" form.type.toString() === '0' ? 'width: 450px' : 'width: 178px'" placeholder="菜单标题" />
+        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menuType.menuTitle')" prop="name">
+          <el-input v-model="form.name" :style=" form.type.toString() === '0' ? 'width: 450px' : 'width: 178px'" :placeholder="$t('menuType.menuTitle')" />
         </el-form-item>
-        <el-form-item v-show="form.type.toString() === '2'" label="按钮名称" prop="name">
-          <el-input v-model="form.name" placeholder="按钮名称" style="width: 178px;" />
+        <el-form-item v-show="form.type.toString() === '2'" :label="$t('menuType.btnName')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('menuType.btnName')" style="width: 178px;" />
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '0'" label="权限标识" prop="permission">
-          <el-input v-model="form.permission" :disabled="form.iframe" placeholder="权限标识" style="width: 178px;" />
+        <el-form-item v-show="form.type.toString() !== '0'" :label="$t('menu.permission')" prop="permission">
+          <el-input v-model="form.permission" :disabled="form.iframe" :placeholder="$t('menu.permission')" style="width: 178px;" />
         </el-form-item>
-        <el-form-item v-if="form.type.toString() !== '2'" label="路由地址" prop="path">
-          <el-input v-model="form.path" placeholder="路由地址" style="width: 178px;" />
+        <el-form-item v-if="form.type.toString() !== '2'" :label="$t('menu.path')" prop="path">
+          <el-input v-model="form.path" :placeholder="$t('menu.path')" style="width: 178px;" />
         </el-form-item>
-        <el-form-item label="菜单排序" prop="sort">
-          <el-input-number v-model.number="form.sort" :min="0" :max="999" controls-position="right" style="width: 178px;" />
+        <el-form-item :label="$t('menu.sort')" prop="sort">
+          <el-input-number v-model.number="form.sort" :min="0" :max="999" controls-position="right" style="width: 140px;" />
         </el-form-item>
-        <el-form-item v-show="!form.iframe && form.type.toString() === '1'" label="组件名称" prop="componentName">
+        <el-form-item v-show="!form.iframe && form.type.toString() === '1'" :label="$t('menu.componentName')" prop="componentName">
           <el-input v-model="form.componentName" style="width: 178px;" placeholder="匹配组件内Name字段" />
         </el-form-item>
-        <el-form-item v-show="!form.iframe && form.type.toString() === '1'" label="组件路径" prop="component">
+        <el-form-item v-show="!form.iframe && form.type.toString() === '1'" :label="$t('menu.component')" prop="component">
           <el-input v-model="form.component" style="width: 178px;" placeholder="组件路径" />
         </el-form-item>
-        <el-form-item label="上级类目" prop="pid">
+        <el-form-item :label="$t('menu.pid')" prop="pid">
           <treeselect v-model="form.pid" :options="menus" style="width: 450px;" placeholder="选择上级类目" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">取消</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
       </div>
     </el-dialog>
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="id" @select="crud.selectChange" @select-all="crud.selectAllChange" @selection-change="crud.selectionChangeHandler">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" :show-overflow-tooltip="true" label="菜单名称" width="125px" prop="name" />
-      <el-table-column v-if="columns.visible('icon')" prop="icon" label="图标" align="center" width="60px">
+      <el-table-column v-if="columns.visible('name')" :show-overflow-tooltip="true" :label="$t('menu.name')" width="125px" prop="name" />
+      <el-table-column v-if="columns.visible('icon')" prop="icon" :label="$t('menu.icon')" align="center" width="60px">
         <template slot-scope="scope">
           <svg-icon :icon-class="scope.row.icon" />
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('sort')" prop="sort" align="center" label="排序">
+      <el-table-column v-if="columns.visible('sort')" prop="sort" align="center" :label="$t('menu.sort')">
         <template slot-scope="scope">
           {{ scope.row.sort }}
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('path')" :show-overflow-tooltip="true" prop="path" label="路由地址" />
-      <el-table-column v-if="columns.visible('permission')" :show-overflow-tooltip="true" prop="permission" label="权限标识" />
-      <el-table-column v-if="columns.visible('component')" :show-overflow-tooltip="true" prop="component" label="组件路径" />
-      <el-table-column v-if="columns.visible('iframe')" prop="iframe" label="外链" width="75px">
+      <el-table-column v-if="columns.visible('path')" :show-overflow-tooltip="true" prop="path" :label="$t('menu.path')" />
+      <el-table-column v-if="columns.visible('permission')" :show-overflow-tooltip="true" prop="permission" :label="$t('menu.permission')" />
+      <el-table-column v-if="columns.visible('component')" :show-overflow-tooltip="true" prop="component" :label="$t('menu.component')" />
+      <el-table-column v-if="columns.visible('iframe')" prop="iframe" :label="$t('menu.iFrame')" width="75px">
         <template slot-scope="scope">
-          <span v-if="scope.row.iframe">是</span>
-          <span v-else>否</span>
+          <!--若为true,显示对号-->
+          <i v-if="scope.row.iframe" class="el-icon-check" />
+<!--          <span v-if="scope.row.iframe">{{ $t('bool.true') }}</span>-->
+<!--          <span v-else>{{ $t('bool.false') }}</span>-->
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('cache')" prop="cache" label="缓存" width="75px">
+      <el-table-column v-if="columns.visible('cache')" prop="cache" :label="$t('menu.cache')" width="75px">
         <template slot-scope="scope">
-          <span v-if="scope.row.cache">是</span>
-          <span v-else>否</span>
+          <!--若为true,显示对号-->
+          <i v-if="scope.row.cache" class="el-icon-check" />
+<!--          <span v-if="scope.row.cache">{{ $t('bool.true') }}</span>-->
+<!--          <span v-else>{{ $t('bool.false') }}</span>-->
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('hidden')" prop="hidden" label="可见" width="75px">
+      <el-table-column v-if="columns.visible('hidden')" prop="hidden" :label="$t('menu.hidden')" width="75px">
         <template slot-scope="scope">
-          <span v-if="scope.row.hidden">否</span>
-          <span v-else>是</span>
+          <!--若为true,显示对号-->
+          <i v-if="scope.row.hidden" />
+          <i v-else class="el-icon-check" />
+<!--          <span v-if="scope.row.hidden">{{ $t('bool.false') }}</span>-->
+<!--          <span v-else>{{ $t('bool.true') }}</span>-->
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" width="135px">
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" width="135px">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-permission="['admin','menu:edit','menu:del']" label="操作" width="130px" align="center" fixed="right">
+      <el-table-column v-permission="['admin','menu:edit','menu:del']" :label="$t('be.operate')" width="130px" align="center" fixed="right">
         <template slot-scope="scope">
           <udOperation
             :data="scope.row"

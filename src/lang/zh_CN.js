@@ -49,6 +49,10 @@ export default {
     selectAtLeastOne: '请至少选择一列',
     save: '保存'
   },
+  bool: {
+    true: '是',
+    false: '否'
+  },
   // 组件的属性国际化
   // 基础实体BaseEntity的属性字段
   be: {
@@ -103,17 +107,24 @@ export default {
   menu: {
     name: '菜单名称',
     sort: '排序',
-    path: '路径',
-    component: '组件',
-    type: '类型',
-    permission: '权限',
+    path: '路由地址',
+    component: '组件路径',
+    type: '菜单类型',
+    permission: '权限标识',
     componentName: '组件名',
     icon: '图标',
     cache: '是否缓存',
-    hidden: '是否隐藏',
+    hidden: '是否可见',
     pid: '上级菜单',
     iFrame: '是否外链',
     roles: '关联角色'
+  },
+  menuType: {
+    dir: '目录',
+    menu: '菜单',
+    button: '按钮',
+    menuTitle: '菜单标题',
+    btnName: '按钮名称'
   },
   dept: {
     name: '名称',
