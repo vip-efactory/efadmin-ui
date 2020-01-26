@@ -1,6 +1,6 @@
 export default {
   login: {
-    title: 'EFADMIN System Login',
+    title: 'EF-ADMIN System Login',
     logIn: 'Login',
     username: 'Username',
     password: 'Password',
@@ -47,6 +47,106 @@ export default {
     multiDeleteTipsStart: 'Are you sure you want to delete the selected ',
     multiDeleteTipsEnd: ' data?',
     selectAtLeastOne: 'Please select at least one column'
+  },
+  // 组件的属性国际化
+  // 基础实体BaseEntity的属性字段
+  be: {
+    id: 'Primary key',
+    createTime: 'Creation Time',
+    updateTime: 'Update Time',
+    creatorNum: 'Founder',
+    updaterNum: 'Updater',
+    remark: 'Remark',
+    operate: 'Operate'
+  },
+  // 用户管理表
+  user: {
+    username: 'Username',
+    nickName: 'Nickname',
+    usercode: 'Usercode',
+    sex: 'Sex',
+    userAvatar: 'Profile picture',
+    email: 'Email',
+    phone: 'Phone',
+    enabled: 'Status',
+    password: 'Password',
+    lastPasswordResetTime: 'Last modified password time',
+    roles: 'Role',
+    job: 'Job',
+    dept: 'Department',
+    selectDept: 'Select department',
+    selectJob: 'Choose department first',
+    selectRole: 'Choose a role'
+  },
+  sex: {
+    male: 'Male',
+    female: 'Female'
+  },
+  userAvatar: {
+    realName: '真实姓名',
+    path: '路径',
+    size: '大小'
+  },
+  role: {
+    name: 'name',
+    dataScope: 'dataScope',
+    level: 'level',
+    remark: 'remark',
+    permission: 'permission',
+    users: 'users',
+    menus: 'menus',
+    depts: 'depts'
+  },
+  menu: {
+    name: '菜单名称',
+    sort: '排序',
+    path: '路径',
+    component: '组件',
+    type: '类型',
+    permission: '权限',
+    componentName: '组件名',
+    icon: '图标',
+    cache: '是否缓存',
+    hidden: '是否隐藏',
+    pid: '上级菜单',
+    iFrame: '是否外链',
+    roles: '关联角色'
+  },
+  dept: {
+    name: '名称',
+    enabled: '是否启用',
+    pid: '上级部门',
+    roles: '角色'
+  },
+  job: {
+    name: '职位名称',
+    sort: '排序',
+    enabled: '是否启用',
+    dept: '关联部门'
+  },
+  dict: {
+    name: '名称',
+    dictDetails: '关联明细'
+  },
+  dictDetail: {
+    label: '字典标签',
+    value: '字典值',
+    sort: '排序',
+    dict: '关联字典'
+  },
+  employee: {
+    name: '姓名',
+    idNumber: '身份证号',
+    sex: '性别',
+    code: '编码',
+    avatar: '头像',
+    email: '邮箱',
+    phone: '电话',
+    status: '状态',
+    birthday: '生日',
+    address: '地址',
+    job: '职位',
+    dept: '部门'
   },
   documentation: {
     documentation: 'Documentation',

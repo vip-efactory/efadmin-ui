@@ -69,31 +69,31 @@
           <crudOperation show="" :permission="permission" />
         </div>
         <!--表单渲染-->
-        <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="570px">
-          <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="66px">
-            <el-form-item label="用户名" prop="username">
+        <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="630px">
+          <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="96px">
+            <el-form-item :label="$t('user.username')" prop="username">
               <el-input v-model="form.username" />
             </el-form-item>
-            <el-form-item label="电话" prop="phone">
+            <el-form-item :label="$t('user.phone')" prop="phone">
               <el-input v-model.number="form.phone" />
             </el-form-item>
-            <el-form-item label="昵称" prop="nickName">
+            <el-form-item :label="$t('user.nickName')" prop="nickName">
               <el-input v-model="form.nickName" />
             </el-form-item>
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item :label="$t('user.email')" prop="email">
               <el-input v-model="form.email" />
             </el-form-item>
-            <el-form-item label="部门" prop="dept.id">
+            <el-form-item :label="$t('user.dept')" prop="dept.id">
               <treeselect
                 v-model="form.dept.id"
                 :options="depts"
                 style="width: 178px"
-                placeholder="选择部门"
+                :placeholder="$t('user.selectDept')"
                 @select="selectFun"
               />
             </el-form-item>
-            <el-form-item label="岗位" prop="job.id">
-              <el-select v-model="form.job.id" style="width: 178px" placeholder="请先选择部门">
+            <el-form-item :label="$t('user.job')" prop="job.id">
+              <el-select v-model="form.job.id" style="width: 178px" :placeholder="$t('user.selectJob')" :title="$t('user.selectJob')">
                 <el-option
                   v-for="(item, index) in jobs"
                   :key="item.name + index"
@@ -102,13 +102,13 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="性别">
+            <el-form-item :label="$t('user.sex')">
               <el-radio-group v-model="form.sex" style="width: 178px">
-                <el-radio label="男">男</el-radio>
-                <el-radio label="女">女</el-radio>
+                <el-radio label="男">{{ $t('sex.male') }}</el-radio>
+                <el-radio label="女">{{ $t('sex.female') }}</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="状态">
+            <el-form-item :label="$t('user.enabled')">
               <el-radio-group v-model="form.enabled" :disabled="form.id === user.id">
                 <el-radio
                   v-for="item in dict.user_status"
@@ -117,12 +117,12 @@
                 >{{ item.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item style="margin-bottom: 0;" label="角色" prop="roles">
+            <el-form-item style="margin-bottom: 0;" :label="$t('user.roles')" prop="roles">
               <el-select
                 v-model="form.roles"
                 style="width: 437px"
                 multiple
-                placeholder="请选择"
+                :placeholder="$t('user.selectRole')"
                 @remove-tag="deleteTag"
                 @change="changeRole"
               >
@@ -137,24 +137,24 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="text" @click="crud.cancelCU">取消</el-button>
-            <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+            <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+            <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
           </div>
         </el-dialog>
         <!--表格渲染-->
         <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
           <el-table-column :selectable="checkboxT" type="selection" width="55" />
-          <el-table-column v-if="columns.visible('username')" :show-overflow-tooltip="true" prop="username" label="用户名" sortable="custom" />
-          <el-table-column v-if="columns.visible('nickName')" :show-overflow-tooltip="true" prop="nickName" label="昵称" sortable="custom" />
-          <el-table-column v-if="columns.visible('sex')" prop="sex" label="性别" sortable="custom" />
-          <el-table-column v-if="columns.visible('phone')" :show-overflow-tooltip="true" prop="phone" width="100" label="电话" sortable="custom" />
-          <el-table-column v-if="columns.visible('email')" :show-overflow-tooltip="true" width="125" prop="email" label="邮箱" sortable="custom" />
-          <el-table-column v-if="columns.visible('dept')" :show-overflow-tooltip="true" width="110" prop="dept" label="部门 / 岗位" sortable="custom">
+          <el-table-column v-if="columns.visible('username')" :show-overflow-tooltip="true" prop="username" :label="$t('user.username')" sortable="custom" />
+          <el-table-column v-if="columns.visible('nickName')" :show-overflow-tooltip="true" prop="nickName" :label="$t('user.nickName')" sortable="custom" />
+          <el-table-column v-if="columns.visible('sex')" prop="sex" :label="$t('user.sex')" sortable="custom" />
+          <el-table-column v-if="columns.visible('phone')" :show-overflow-tooltip="true" prop="phone" width="100" :label="$t('user.phone')" sortable="custom" />
+          <el-table-column v-if="columns.visible('email')" :show-overflow-tooltip="true" width="125" prop="email" :label="$t('user.email')" sortable="custom" />
+          <el-table-column v-if="columns.visible('dept')" :show-overflow-tooltip="true" width="110" prop="dept" :label="$t('user.job')" sortable="custom">
             <template slot-scope="scope">
               <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
             </template>
           </el-table-column>
-          <el-table-column v-if="columns.visible('enabled')" label="状态" align="center" prop="enabled" sortable="custom">
+          <el-table-column v-if="columns.visible('enabled')" :label="$t('user.enabled')" align="center" prop="enabled" sortable="custom">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.enabled"
@@ -165,14 +165,14 @@
               />
             </template>
           </el-table-column>
-          <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" prop="createTime" width="140" label="创建日期" sortable="custom">
+          <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" prop="createTime" width="140" :label="$t('be.createTime')" sortable="custom">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
           <el-table-column
             v-permission="['admin','user:edit','user:del']"
-            label="操作"
+            :label="$t('be.operate')"
             width="125"
             align="center"
             fixed="right"

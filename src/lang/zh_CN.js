@@ -1,6 +1,6 @@
 export default {
   login: {
-    title: 'EFADMIN 后台系统登录',
+    title: 'EF-ADMIN 后台系统登录',
     logIn: '登录',
     username: '账号',
     password: '密码',
@@ -47,6 +47,106 @@ export default {
     multiDeleteTipsStart: '确认删除选中的',
     multiDeleteTipsEnd: '条数据?',
     selectAtLeastOne: '请至少选择一列'
+  },
+  // 组件的属性国际化
+  // 基础实体BaseEntity的属性字段
+  be: {
+    id: '主键',
+    createTime: '创建时间',
+    updateTime: '更新时间',
+    creatorNum: '创建人',
+    updaterNum: '更新人',
+    remark: '备注',
+    operate: '操作'
+  },
+  // 用户管理表
+  user: {
+    username: '用户名',
+    nickName: '昵称',
+    usercode: '用户编码',
+    sex: '性别',
+    userAvatar: '用户头像',
+    email: '邮箱',
+    phone: '电话',
+    enabled: '状态',
+    password: '密码',
+    lastPasswordResetTime: '最后修改密码时间',
+    roles: '角色',
+    job: '岗位',
+    dept: '部门',
+    selectDept: '选择部门',
+    selectJob: '请先选择部门',
+    selectRole: '选择角色'
+  },
+  sex: {
+    male: '男',
+    female: '女'
+  },
+  userAvatar: {
+    realName: '真实姓名',
+    path: '路径',
+    size: '大小'
+  },
+  role: {
+    name: 'name',
+    dataScope: 'dataScope',
+    level: 'level',
+    remark: 'remark',
+    permission: 'permission',
+    users: 'users',
+    menus: 'menus',
+    depts: 'depts'
+  },
+  menu: {
+    name: '菜单名称',
+    sort: '排序',
+    path: '路径',
+    component: '组件',
+    type: '类型',
+    permission: '权限',
+    componentName: '组件名',
+    icon: '图标',
+    cache: '是否缓存',
+    hidden: '是否隐藏',
+    pid: '上级菜单',
+    iFrame: '是否外链',
+    roles: '关联角色'
+  },
+  dept: {
+    name: '名称',
+    enabled: '是否启用',
+    pid: '上级部门',
+    roles: '角色'
+  },
+  job: {
+    name: '职位名称',
+    sort: '排序',
+    enabled: '是否启用',
+    dept: '关联部门'
+  },
+  dict: {
+    name: '名称',
+    dictDetails: '关联明细'
+  },
+  dictDetail: {
+    label: '字典标签',
+    value: '字典值',
+    sort: '排序',
+    dict: '关联字典'
+  },
+  employee: {
+    name: '姓名',
+    idNumber: '身份证号',
+    sex: '性别',
+    code: '编码',
+    avatar: '头像',
+    email: '邮箱',
+    phone: '电话',
+    status: '状态',
+    birthday: '生日',
+    address: '地址',
+    job: '职位',
+    dept: '部门'
   },
   documentation: {
     documentation: '文档',
