@@ -46,7 +46,8 @@ export default {
     deleteWarn: 'Warning',
     multiDeleteTipsStart: 'Are you sure you want to delete the selected ',
     multiDeleteTipsEnd: ' data?',
-    selectAtLeastOne: 'Please select at least one column'
+    selectAtLeastOne: 'Please select at least one column',
+    save: 'Save'
   },
   // 组件的属性国际化
   // 基础实体BaseEntity的属性字段
@@ -88,14 +89,16 @@ export default {
     size: '大小'
   },
   role: {
-    name: 'name',
-    dataScope: 'dataScope',
-    level: 'level',
-    remark: 'remark',
-    permission: 'permission',
+    name: 'Name',
+    dataScope: 'Data Scope',
+    level: 'Level',
+    remark: 'Remark',
+    permission: 'Permission',
     users: 'users',
     menus: 'menus',
-    depts: 'depts'
+    depts: 'depts',
+    roleList: 'Role List',
+    menuAssignment: 'Menu Assignment'
   },
   menu: {
     name: '菜单名称',

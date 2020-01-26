@@ -21,15 +21,15 @@
       <crudOperation :permission="permission" />
     </div>
     <!-- 表单渲染 -->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="520px">
-      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="80px">
-        <el-form-item label="角色名称" prop="name">
+    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="570px">
+      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="100px">
+        <el-form-item :label="$t('role.name')" prop="name">
           <el-input v-model="form.name" style="width: 145px;" />
         </el-form-item>
-        <el-form-item label="角色权限" prop="permission">
+        <el-form-item :label="$t('role.permission')" prop="permission">
           <el-input v-model="form.permission" style="width: 145px;" />
         </el-form-item>
-        <el-form-item label="数据范围" prop="dataScope">
+        <el-form-item :label="$t('role.dataScope')" prop="dataScope">
           <el-select v-model="form.dataScope" style="width: 145px" placeholder="请选择数据范围" @change="changeScope">
             <el-option
               v-for="item in dateScopes"
@@ -39,19 +39,19 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="角色级别" prop="level">
+        <el-form-item :label="$t('role.level')" prop="level">
           <el-input-number v-model.number="form.level" :min="1" controls-position="right" style="width: 145px;" />
         </el-form-item>
         <el-form-item v-if="form.dataScope === '自定义'" label="数据权限" prop="depts">
           <treeselect v-model="form.depts" :options="depts" multiple style="width: 380px" placeholder="请选择" />
         </el-form-item>
-        <el-form-item label="描述信息" prop="remark">
+        <el-form-item :label="$t('role.remark')" prop="remark">
           <el-input v-model="form.remark" style="width: 380px;" rows="5" type="textarea" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">取消</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
       </div>
     </el-dialog>
     <el-row :gutter="15">
@@ -59,21 +59,21 @@
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="17" style="margin-bottom: 10px">
         <el-card class="box-card" shadow="never">
           <div slot="header" class="clearfix">
-            <span class="role-span">角色列表</span>
+            <span class="role-span">{{ $t('role.roleList') }}</span>
           </div>
           <el-table ref="table" v-loading="crud.loading" highlight-current-row style="width: 100%;" :data="crud.data" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
             <el-table-column :selectable="checkboxT" type="selection" width="55" />
-            <el-table-column v-if="columns.visible('name')" prop="name" label="名称" sortable="custom" />
-            <el-table-column v-if="columns.visible('dataScope')" prop="dataScope" label="数据权限" sortable="custom" />
-            <el-table-column v-if="columns.visible('permission')" prop="permission" label="角色权限" sortable="custom" />
-            <el-table-column v-if="columns.visible('level')" prop="level" label="角色级别" sortable="custom" />
-            <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" label="描述" sortable="custom" />
-            <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" width="135px" prop="createTime" label="创建日期" sortable="custom">
+            <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('role.name')" sortable="custom" />
+            <el-table-column v-if="columns.visible('dataScope')" prop="dataScope" :label="$t('role.dataScope')" sortable="custom" />
+            <el-table-column v-if="columns.visible('permission')" prop="permission" :label="$t('role.permission')" sortable="custom" />
+            <el-table-column v-if="columns.visible('level')" prop="level" :label="$t('role.level')" sortable="custom" />
+            <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" :label="$t('role.remark')" sortable="custom" />
+            <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" width="135px" prop="createTime" :label="$t('be.createTime')" sortable="custom">
               <template slot-scope="scope">
                 <span>{{ parseTime(scope.row.createTime) }}</span>
               </template>
             </el-table-column>
-            <el-table-column v-permission="['admin','roles:edit','roles:del']" label="操作" width="130px" align="center" fixed="right">
+            <el-table-column v-permission="['admin','roles:edit','roles:del']" :label="$t('be.operate')" width="130px" align="center" fixed="right">
               <template slot-scope="scope">
                 <udOperation
                   v-if="scope.row.level >= level"
@@ -92,7 +92,7 @@
         <el-card class="box-card" shadow="never">
           <div slot="header" class="clearfix">
             <el-tooltip class="item" effect="dark" content="选择指定角色分配菜单" placement="top">
-              <span class="role-span">菜单分配</span>
+              <span class="role-span">{{ $t('role.menuAssignment') }}</span>
             </el-tooltip>
             <el-button
               v-permission="['admin','roles:edit']"
@@ -103,7 +103,7 @@
               style="float: right; padding: 6px 9px"
               type="primary"
               @click="saveMenu"
-            >保存</el-button>
+            >{{ $t('crud.save') }}</el-button>
           </div>
           <el-tree
             ref="menu"

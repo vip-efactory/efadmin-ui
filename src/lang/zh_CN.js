@@ -46,7 +46,8 @@ export default {
     deleteWarn: '提示',
     multiDeleteTipsStart: '确认删除选中的',
     multiDeleteTipsEnd: '条数据?',
-    selectAtLeastOne: '请至少选择一列'
+    selectAtLeastOne: '请至少选择一列',
+    save: '保存'
   },
   // 组件的属性国际化
   // 基础实体BaseEntity的属性字段
@@ -88,14 +89,16 @@ export default {
     size: '大小'
   },
   role: {
-    name: 'name',
-    dataScope: 'dataScope',
-    level: 'level',
-    remark: 'remark',
-    permission: 'permission',
+    name: '角色名称',
+    dataScope: '数据范围',
+    level: '级别',
+    remark: '备注',
+    permission: '角色权限',
     users: 'users',
     menus: 'menus',
-    depts: 'depts'
+    depts: 'depts',
+    roleList: '角色列表',
+    menuAssignment: '菜单分配'
   },
   menu: {
     name: '菜单名称',

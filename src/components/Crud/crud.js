@@ -79,7 +79,7 @@ function CRUD(options) {
       },
       // 标题
       get title() {
-        return this.add > CRUD.STATUS.NORMAL ? i18n.t('crud.new' )+ `${crud.title}` : this.edit > CRUD.STATUS.NORMAL ? i18n.t('crud.edit') + `${crud.title}` : crud.title
+        return this.add > CRUD.STATUS.NORMAL ? i18n.t('crud.new' )+ ` ${crud.title}` : this.edit > CRUD.STATUS.NORMAL ? i18n.t('crud.edit') + ` ${crud.title}` : crud.title
       }
     },
     msg: {
