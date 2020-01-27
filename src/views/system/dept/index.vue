@@ -24,31 +24,31 @@
       <crudOperation :permission="permission" />
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-        <el-form-item label="名称" prop="name">
+    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="520px">
+      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
+        <el-form-item :label="$t('dept.name')" prop="name">
           <el-input v-model="form.name" style="width: 370px;" />
         </el-form-item>
-        <el-form-item v-if="form.pid !== 0" label="状态" prop="enabled">
+        <el-form-item v-if="form.pid !== 0" :label="$t('dept.enabled')" prop="enabled">
           <el-radio v-for="item in dict.dept_status" :key="item.id" v-model="form.enabled" :label="item.value">{{ item.label }}</el-radio>
         </el-form-item>
-        <el-form-item v-if="form.pid !== 0" label="上级部门" prop="pid">
-          <treeselect v-model="form.pid" :options="depts" style="width: 370px;" placeholder="选择上级类目" />
+        <el-form-item v-if="form.pid !== 0" :label="$t('dept.pid')" prop="pid">
+          <treeselect v-model="form.pid" :options="depts" style="width: 370px;" :placeholder="$t('dept.selectSuperTips')" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
+        <el-form-item :label="$t('be.remark')" prop="remark">
           <el-input v-model="form.remark" style="width: 370px;" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">取消</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
       </div>
     </el-dialog>
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" default-expand-all :data="crud.data" row-key="id" @select="crud.selectChange" @select-all="crud.selectAllChange" @selection-change="crud.selectionChangeHandler">
       <el-table-column :selectable="checkboxT" type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" label="名称" prop="name" />
-      <el-table-column v-if="columns.visible('enabled')" label="状态" align="center" prop="enabled">
+      <el-table-column v-if="columns.visible('name')" :label="$t('dept.name')" prop="name" />
+      <el-table-column v-if="columns.visible('enabled')" :label="$t('dept.enabled')" align="center" prop="enabled">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.enabled"
@@ -59,19 +59,19 @@
           />
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('remark')" label="备注" prop="remark" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期">
+      <el-table-column v-if="columns.visible('remark')" :label="$t('be.remark')" prop="remark" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-permission="['admin','dept:edit','dept:del']" label="操作" width="130px" align="center" fixed="right">
+      <el-table-column v-permission="['admin','dept:edit','dept:del']" :label="$t('be.operate')" width="130px" align="center" fixed="right">
         <template slot-scope="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"
             :disabled-dle="scope.row.id === 1"
-            msg="确定删除吗,如果存在下级节点则一并删除，此操作不能撤销！"
+            :msg="$t('dept.deleteTips')"
           />
         </template>
       </el-table-column>
@@ -87,9 +87,10 @@ import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
+import i18n from "../../../lang";
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '部门', url: 'api/dept', crudMethod: { ...crudDept }})
+const defaultCrud = CRUD({ title: i18n.t('dept.TITLE'), url: 'api/dept', crudMethod: { ...crudDept }})
 const defaultForm = { id: null, name: null, pid: 1, enabled: 'true', remark: null }
 export default {
   name: 'Dept',

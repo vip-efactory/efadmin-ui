@@ -127,10 +127,13 @@ export default {
     btnName: 'Button Name'
   },
   dept: {
-    name: '名称',
-    enabled: '是否启用',
-    pid: '上级部门',
-    roles: '角色'
+    TITLE: 'Department',
+    name: 'Name',
+    enabled: 'Status',
+    pid: 'Higher office',
+    roles: '角色',
+    selectSuperTips: 'Select superior category',
+    deleteTips: 'Are you sure you want to delete it? If there are subordinate nodes, delete it together. This operation cannot be undone!'
   },
   job: {
     name: '职位名称',

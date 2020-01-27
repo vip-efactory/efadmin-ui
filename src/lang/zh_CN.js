@@ -127,10 +127,13 @@ export default {
     btnName: '按钮名称'
   },
   dept: {
+    TITLE: '部门',
     name: '名称',
-    enabled: '是否启用',
+    enabled: '状态',
     pid: '上级部门',
-    roles: '角色'
+    roles: '角色',
+    selectSuperTips: '选择上级类目',
+    deleteTips: '确定删除吗,如果存在下级节点则一并删除，此操作不能撤销！'
   },
   job: {
     name: '职位名称',
