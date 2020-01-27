@@ -66,6 +66,7 @@ export default {
   },
   // 用户管理表
   user: {
+    TITLE: '用户',
     username: '用户名',
     nickName: '昵称',
     usercode: '用户编码',
@@ -93,6 +94,7 @@ export default {
     size: '大小'
   },
   role: {
+    TITLE: '角色',
     name: '角色名称',
     dataScope: '数据范围',
     level: '级别',
@@ -105,6 +107,7 @@ export default {
     menuAssignment: '菜单分配'
   },
   menu: {
+    TITLE: '菜单',
     name: '菜单名称',
     sort: '排序',
     path: '路由地址',
@@ -136,12 +139,14 @@ export default {
     deleteTips: '确定删除吗,如果存在下级节点则一并删除，此操作不能撤销！'
   },
   job: {
+    TITLE: '岗位',
     name: '职位名称',
     sort: '排序',
-    enabled: '是否启用',
+    enabled: '状态',
     dept: '关联部门'
   },
   dict: {
+    TITLE: '字典',
     name: '名称',
     dictDetails: '关联明细'
   },
@@ -152,6 +157,7 @@ export default {
     dict: '关联字典'
   },
   employee: {
+    TITLE: '员工',
     name: '姓名',
     idNumber: '身份证号',
     sex: '性别',

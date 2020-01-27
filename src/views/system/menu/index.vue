@@ -161,9 +161,10 @@ import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
+import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '菜单', url: 'api/menus', crudMethod: { ...crudMenu }})
+const defaultCrud = CRUD({ title: i18n.t('menu.TITLE'), url: 'api/menus', crudMethod: { ...crudMenu }})
 const defaultForm = { id: null, name: null, sort: 999, path: null, component: null, componentName: null, iframe: false, roles: [], pid: 0, icon: null, cache: false, hidden: false, type: 0, permission: null }
 export default {
   name: 'Menu',

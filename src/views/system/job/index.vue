@@ -8,18 +8,18 @@
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" prop="name" label="名称" sortable="custom" />
-      <el-table-column v-if="columns.visible('dept')" prop="dept" label="所属部门" sortable="custom">
+      <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('job.name')" sortable="custom" />
+      <el-table-column v-if="columns.visible('dept')" prop="dept" :label="$t('job.dept')" sortable="custom">
         <template slot-scope="scope">
           <div>{{ scope.row.deptSuperiorName ? scope.row.deptSuperiorName + ' / ' : '' }}{{ scope.row.dept.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('sort')" prop="sort" label="排序" sortable="custom">
+      <el-table-column v-if="columns.visible('sort')" prop="sort" :label="$t('job.sort')" sortable="custom">
         <template slot-scope="scope">
           {{ scope.row.sort }}
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('status')" prop="status" label="状态" align="center" sortable="custom">
+      <el-table-column v-if="columns.visible('status')" prop="status" :label="$t('job.enabled')" align="center" sortable="custom">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.enabled"
@@ -29,7 +29,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom">
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
@@ -37,7 +37,7 @@
       <!--   编辑与删除   -->
       <el-table-column
         v-permission="['admin','job:edit','job:del']"
-        label="操作"
+        :label="$t('be.operate')"
         width="130px"
         align="center"
         fixed="right"
@@ -65,10 +65,11 @@ import CRUD, { presenter } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
 import udOperation from '@crud/UD.operation'
+import i18n from '../../../lang'
 
 // crud交由presenter持有
 const crud = CRUD({
-  title: '岗位',
+  title: i18n.t('job.TITLE'),
   url: 'api/job',
   sort: ['sort,asc', 'id,desc'],
   crudMethod: { ...crudJob }

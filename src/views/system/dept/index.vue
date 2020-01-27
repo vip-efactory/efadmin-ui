@@ -87,7 +87,7 @@ import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
-import i18n from "../../../lang";
+import i18n from '../../../lang'
 
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: i18n.t('dept.TITLE'), url: 'api/dept', crudMethod: { ...crudDept }})

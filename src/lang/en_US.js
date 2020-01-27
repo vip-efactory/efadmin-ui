@@ -66,6 +66,7 @@ export default {
   },
   // 用户管理表
   user: {
+    TITLE: 'User',
     username: 'Username',
     nickName: 'Nickname',
     usercode: 'Usercode',
@@ -93,6 +94,7 @@ export default {
     size: '大小'
   },
   role: {
+    TITLE: 'Role',
     name: 'Name',
     dataScope: 'Data Scope',
     level: 'Level',
@@ -105,6 +107,7 @@ export default {
     menuAssignment: 'Menu Assignment'
   },
   menu: {
+    TITLE: 'Menu',
     name: 'Menu Name',
     sort: 'Sort',
     path: 'Route',
@@ -136,12 +139,14 @@ export default {
     deleteTips: 'Are you sure you want to delete it? If there are subordinate nodes, delete it together. This operation cannot be undone!'
   },
   job: {
-    name: '职位名称',
-    sort: '排序',
-    enabled: '是否启用',
-    dept: '关联部门'
+    TITLE: 'Job',
+    name: 'Job name',
+    sort: 'Sort',
+    enabled: 'Status',
+    dept: 'Related department'
   },
   dict: {
+    TITLE: 'Dict',
     name: '名称',
     dictDetails: '关联明细'
   },
@@ -152,6 +157,7 @@ export default {
     dict: '关联字典'
   },
   employee: {
+    TITLE: 'Employee',
     name: '姓名',
     idNumber: '身份证号',
     sex: '性别',

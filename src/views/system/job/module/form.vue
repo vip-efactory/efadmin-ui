@@ -5,17 +5,17 @@
     :before-close="crud.cancelCU"
     :visible="crud.status.cu > 0"
     :title="crud.status.title"
-    width="500px"
+    width="610px"
   >
     <el-form
       ref="form"
       :model="form"
       :rules="rules"
       size="small"
-      label-width="80px"
+      label-width="160px"
     >
       <el-form-item
-        label="名称"
+        :label="$t('job.name')"
         prop="name"
       >
         <el-input
@@ -24,7 +24,7 @@
         />
       </el-form-item>
       <el-form-item
-        label="排序"
+        :label="$t('job.sort')"
         prop="sort"
       >
         <el-input-number
@@ -37,7 +37,7 @@
       </el-form-item>
       <el-form-item
         v-if="form.pid !== 0"
-        label="状态"
+        :label="$t('job.enabled')"
         prop="enabled"
       >
         <el-radio
@@ -50,7 +50,7 @@
         </el-radio>
       </el-form-item>
       <el-form-item
-        label="所属部门"
+        :label="$t('job.dept')"
         prop="dept.id"
         :rules="rules.dept"
       >
@@ -70,14 +70,14 @@
         type="text"
         @click="crud.cancelCU"
       >
-        取消
+        {{ $t('crud.cancel') }}
       </el-button>
       <el-button
         :loading="crud.cu === 2"
         type="primary"
         @click="crud.submitCU"
       >
-        确认
+        {{ $t('crud.confirm') }}
       </el-button>
     </div>
   </el-dialog>

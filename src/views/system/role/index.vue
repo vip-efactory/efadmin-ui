@@ -132,9 +132,10 @@ import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '角色', url: 'api/roles', sort: 'level,asc', crudMethod: { ...crudRoles }})
+const defaultCrud = CRUD({ title: i18n.t('role.TITLE'), url: 'api/roles', sort: 'level,asc', crudMethod: { ...crudRoles }})
 const defaultForm = { id: null, name: null, depts: [], remark: null, dataScope: '全部', level: 3, permission: null }
 export default {
   name: 'Role',
