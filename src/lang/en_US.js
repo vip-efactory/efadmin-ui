@@ -147,14 +147,21 @@ export default {
   },
   dict: {
     TITLE: 'Dict',
-    name: '名称',
-    dictDetails: '关联明细'
+    queryTips: 'Enter name or remark',
+    name: 'Dict name',
+    dictList: 'Dict List',
+    dictDetails: 'Dict Details',
+    deleteTips: 'This will delete the dictionary and the corresponding dictionary details. Are you sure you want to delete it?'
   },
   dictDetail: {
-    label: '字典标签',
-    value: '字典值',
-    sort: '排序',
-    dict: '关联字典'
+    TITLE: 'Dictionary Details',
+    queryTips: 'Enter dict label',
+    label: 'Dict label',
+    value: 'Dict value',
+    sort: 'Sort',
+    dict: 'Own dictionary',
+    clickViewDetail: 'Click on the dictionary for details',
+    deleteTips: 'Are you sure you want to delete this data?'
   },
   employee: {
     TITLE: 'Employee',

@@ -7,6 +7,7 @@ import {
   downloadFile
 } from '@/utils/index'
 import checkPermission from '@/utils/permission'
+import i18n from '../lang'
 
 export default {
   data() {
@@ -14,7 +15,7 @@ export default {
       // 表格数据
       data: [],
       // 排序规则，默认 id 降序， 支持多字段排序 ['id,desc', 'createTime,asc']
-      sort: ['id,desc'],
+      sort: ['createTime,desc'],
       // 页码
       page: 0,
       // 每页数据条数
@@ -343,7 +344,7 @@ export default {
      * 获取弹窗的标题
      */
     getFormTitle() {
-      return this.isAdd ? `新增${this.title}` : `编辑${this.title}`
+      return this.isAdd ? i18n.t('crud.new' ) + ` ${this.title}` : i18n.t('crud.edit') + ` ${this.title}`
     },
     /**
      * 通用导出

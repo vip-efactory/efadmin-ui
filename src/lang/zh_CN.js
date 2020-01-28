@@ -147,14 +147,21 @@ export default {
   },
   dict: {
     TITLE: '字典',
+    queryTips: '输入名称或者描述搜索',
     name: '名称',
-    dictDetails: '关联明细'
+    dictList: '字典列表',
+    dictDetails: '字典详情',
+    deleteTips: '此操作将删除字典与对应的字典详情，确定要删除吗？'
   },
   dictDetail: {
+    TITLE: '字典详情',
+    queryTips: '输入字典标签查询',
     label: '字典标签',
     value: '字典值',
     sort: '排序',
-    dict: '关联字典'
+    dict: '所属字典',
+    clickViewDetail: '点击字典查看详情',
+    deleteTips: '确定删除本条数据吗？'
   },
   employee: {
     TITLE: '员工',
