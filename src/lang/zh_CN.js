@@ -181,6 +181,23 @@ export default {
     job: '职位',
     dept: '部门'
   },
+  online: {
+    TITLE: '在线用户',
+    userName: '用户名',
+    nickName: '昵称',
+    job: '岗位',
+    browser: '浏览器',
+    ip: '登录IP',
+    address: '登录地点',
+    loginTime: '登录时间',
+    forceOut: '强退',
+    deleteTips: '确定强制退出该用户吗？',
+    deleteOk: '强退成功！',
+    deleteTitle: '提示',
+    deleteContentStart: '确认强退选中的',
+    deleteContentEnd: '个用户?',
+    allTableLikeSearch: '全表模糊搜索'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'

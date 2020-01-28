@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
-        <el-input v-model="query.filter" clearable size="small" placeholder="全表模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.filter" clearable size="small" :placeholder="$t('online.allTableLikeSearch')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation>
@@ -16,25 +16,25 @@
           :disabled="crud.selections.length === 0"
           @click="doDelete(crud.selections)"
         >
-          强退
+          {{ $t('online.forceOut') }}
         </el-button>
       </crudOperation>
     </div>
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('userName')" prop="userName" label="用户名" sortable="custom" />
-      <el-table-column v-if="columns.visible('nickName')" prop="nickName" label="用户昵称" sortable="custom" />
-      <el-table-column v-if="columns.visible('job')" prop="job" label="岗位" sortable="custom" />
-      <el-table-column v-if="columns.visible('ip')" prop="ip" label="登录IP" sortable="custom" />
-      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" label="登录地点" sortable="custom" />
-      <el-table-column v-if="columns.visible('browser')" prop="browser" label="浏览器" sortable="custom" />
-      <el-table-column v-if="columns.visible('loginTime')" prop="loginTime" label="登录时间" sortable="custom">
+      <el-table-column v-if="columns.visible('userName')" prop="userName" :label="$t('online.userName')" sortable="custom" />
+      <el-table-column v-if="columns.visible('nickName')" prop="nickName" :label="$t('online.nickName')" sortable="custom" />
+      <el-table-column v-if="columns.visible('job')" prop="job" :label="$t('online.job')" sortable="custom" />
+      <el-table-column v-if="columns.visible('ip')" prop="ip" :label="$t('online.ip')" sortable="custom" />
+      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" :label="$t('online.address')" sortable="custom" />
+      <el-table-column v-if="columns.visible('browser')" prop="browser" :label="$t('online.browser')" sortable="custom" />
+      <el-table-column v-if="columns.visible('loginTime')" prop="loginTime" :label="$t('online.loginTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.loginTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="100px" fixed="right">
+      <el-table-column :label="$t('be.operate')" width="100px" fixed="right">
         <template slot-scope="scope">
           <el-popover
             :ref="scope.$index"
@@ -42,12 +42,12 @@
             placement="top"
             width="180"
           >
-            <p>确定强制退出该用户吗？</p>
+            <p>{{ $t('online.deleteTips') }}</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="$refs[scope.$index].doClose()">取消</el-button>
-              <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.key, scope.$index)">确定</el-button>
+              <el-button size="mini" type="text" @click="$refs[scope.$index].doClose()">{{ $t('crud.cancel') }}</el-button>
+              <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.key, scope.$index)">{{ $t('crud.confirm') }}</el-button>
             </div>
-            <el-button slot="reference" size="mini" type="text">强退</el-button>
+            <el-button slot="reference" size="mini" type="text">{{ $t('online.forceOut') }}</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -63,9 +63,10 @@ import CRUD, { presenter, header, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ url: 'auth/online', title: '在线用户' })
+const defaultCrud = CRUD({ url: 'auth/online', title: i18n.t('online.TITLE') })
 export default {
   name: 'OnlineUser',
   components: { pagination, crudOperation, rrOperation },
@@ -77,7 +78,7 @@ export default {
     }
   },
   created() {
-    this.crud.msg.del = '强退成功！'
+    this.crud.msg.del = i18n.t('online.deleteOk')
     this.crud.optShow = {
       add: false,
       edit: false,
@@ -87,9 +88,9 @@ export default {
   },
   methods: {
     doDelete(datas) {
-      this.$confirm(`确认强退选中的${datas.length}个用户?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(i18n.t('online.deleteContentStart') + `${datas.length}` + i18n.t('online.deleteContentEnd'), i18n.t('online.deleteTitle'), {
+        confirmButtonText: i18n.t('crud.confirm'),
+        cancelButtonText: i18n.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         this.delMethod(datas)

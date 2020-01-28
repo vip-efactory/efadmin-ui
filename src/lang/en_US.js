@@ -181,6 +181,23 @@ export default {
     job: 'Job',
     dept: 'Department'
   },
+  online: {
+    TITLE: 'Online User',
+    userName: 'User name',
+    nickName: 'Nick name',
+    job: 'Job',
+    browser: 'Browser',
+    ip: 'Login IP',
+    address: 'Login address',
+    loginTime: 'Login time',
+    forceOut: 'Force Out',
+    deleteTips: 'Are you sure you want to force logout？',
+    deleteOk: 'Force out successfully!',
+    deleteTitle: 'Warning',
+    deleteContentStart: 'Confirm the ',
+    deleteContentEnd: ' users who are force out?',
+    allTableLikeSearch: 'Full table fuzzy search'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'
