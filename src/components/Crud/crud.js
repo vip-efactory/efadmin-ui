@@ -79,7 +79,7 @@ function CRUD(options) {
       },
       // 标题
       get title() {
-        return this.add > CRUD.STATUS.NORMAL ? i18n.t('crud.new' ) + ` ${crud.title}` : this.edit > CRUD.STATUS.NORMAL ? i18n.t('crud.edit') + ` ${crud.title}` : crud.title
+        return this.add > CRUD.STATUS.NORMAL ? i18n.t('crud.new') + ` ${crud.title}` : this.edit > CRUD.STATUS.NORMAL ? i18n.t('crud.edit') + ` ${crud.title}` : crud.title
       }
     },
     msg: {
@@ -97,7 +97,7 @@ function CRUD(options) {
       total: 0
     },
     // 高级搜索弹框
-    show:false,
+    show: false,
     // 整体loading
     loading: true,
     // 导出的 Loading
@@ -128,9 +128,9 @@ function CRUD(options) {
     },
     // 高级搜索
     dialogSearch() {
-      console.log(crud);
-      crud.show = true;
-      console.log(crud.show);
+      console.log(crud)
+      crud.show = true
+      console.log(crud.show)
     },
     // 刷新
     refresh() {
@@ -427,7 +427,7 @@ function CRUD(options) {
 
       // 单个字段排序
       // 清除旧排序
-      crud.sort=[]
+      crud.sort = []
       if (column.order != null) {
         if (column.order.indexOf('descending') > -1) {
           crud.sort.push(column.prop + ',desc')

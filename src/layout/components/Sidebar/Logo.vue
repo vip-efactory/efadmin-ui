@@ -15,6 +15,8 @@
 
 <script>
 import Logo from '@/assets/images/logo.png'
+import i18n from '../../../lang'
+
 export default {
   name: 'SidebarLogo',
   props: {
@@ -25,7 +27,7 @@ export default {
   },
   data() {
     return {
-      title: 'EFADMIN-后台管理',
+      title: i18n.t('sidebar.title'),
       logo: Logo
     }
   }

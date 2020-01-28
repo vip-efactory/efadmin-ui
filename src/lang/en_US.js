@@ -8,6 +8,9 @@ export default {
     verificationCode: 'Verification code',
     LoggingIn: 'Logging In...'
   },
+  sidebar: {
+    title: 'EF-ADMIN System'
+  },
   navbar: {
     dashboard: 'Dashboard',
     github: 'Github',

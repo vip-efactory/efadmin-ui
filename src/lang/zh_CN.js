@@ -8,6 +8,9 @@ export default {
     verificationCode: '验证码',
     LoggingIn: '登录中...'
   },
+  sidebar: {
+    title: 'EF-ADMIN 后台系统'
+  },
   navbar: {
     dashboard: '首页',
     github: '项目地址',
