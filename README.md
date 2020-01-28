@@ -33,6 +33,24 @@ npm run dev
 npm run build
 ```
 
+#### 项目图片展示
+![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/zh_Login.png)
+
+![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/switch_lang_Login.png)
+
+![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/en_Login.png)
+
+![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/zh_main.png)
+
+![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/en_main.png)
+
+![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/en_employee.png)
+
+![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/i18n_zh_api.png)
+
+![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/i18n_en_api.png)
+
+
 #### 反馈交流
 
 - QQ交流群：601693868
