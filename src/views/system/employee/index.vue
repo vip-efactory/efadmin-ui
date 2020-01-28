@@ -13,86 +13,82 @@
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
       <!--表单组件-->
-      <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
-        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-          <el-form-item label="姓名" prop="name">
+      <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="520px">
+        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
+          <el-form-item :label="$t('employee.name')" prop="name">
             <el-input v-model="form.name" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="住址">
+          <el-form-item :label="$t('employee.address')">
             <el-input v-model="form.address" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="头像">
+          <el-form-item :label="$t('employee.avatar')">
             <el-input v-model="form.avatar" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="生日">
+          <el-form-item :label="$t('employee.birthday')">
             <el-date-picker v-model="form.birthday" type="datetime" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="编码">
+          <el-form-item :label="$t('employee.code')">
             <el-input v-model="form.code" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="邮箱">
+          <el-form-item :label="$t('employee.email')">
             <el-input v-model="form.email" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="身份证号码">
+          <el-form-item :label="$t('employee.idNumber')">
             <el-input v-model="form.idNumber" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="手机号">
+          <el-form-item :label="$t('employee.phone')">
             <el-input v-model="form.phone" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="状态">
+          <el-form-item :label="$t('employee.status')">
             <el-input v-model="form.status" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="部门">
+          <el-form-item :label="$t('employee.dept')">
             <el-input v-model="form.deptId" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="岗位">
+          <el-form-item :label="$t('employee.job')">
             <el-input v-model="form.jobId" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="备注">
+          <el-form-item :label="$t('be.remark')">
             <el-input v-model="form.remark" :rows="3" type="textarea" style="width: 370px;" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button type="text" @click="crud.cancelCU">取消</el-button>
-          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+          <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
         </div>
       </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
         <el-table-column type="selection" width="55" />
-        <el-table-column v-if="columns.visible('name')" prop="name" label="姓名" sortable="custom"/>
-        <el-table-column v-if="columns.visible('address')" prop="address" label="住址" sortable="custom" />
-        <el-table-column v-if="columns.visible('avatar')" prop="avatar" label="头像" />
-        <el-table-column v-if="columns.visible('birthday')" prop="birthday" label="生日" sortable="custom">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.birthday) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="columns.visible('code')" prop="code" label="编码" sortable="custom" />
-        <el-table-column v-if="columns.visible('email')" prop="email" label="邮箱" sortable="custom" />
-        <el-table-column v-if="columns.visible('idNumber')" prop="idNumber" label="身份证号码" sortable="custom"  />
-        <el-table-column v-if="columns.visible('phone')" prop="phone" label="手机号" sortable="custom"/>
-        <el-table-column v-if="columns.visible('status')" prop="status" label="状态" sortable="custom">
+        <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('employee.name')" sortable="custom" />
+        <el-table-column v-if="columns.visible('address')" prop="address" :label="$t('employee.address')" sortable="custom" />
+        <el-table-column v-if="columns.visible('avatar')" prop="avatar" :label="$t('employee.avatar')" />
+        <el-table-column v-if="columns.visible('birthday')" prop="birthday" :label="$t('employee.birthday')" sortable="custom" />
+        <el-table-column v-if="columns.visible('code')" prop="code" :label="$t('employee.code')" sortable="custom" />
+        <el-table-column v-if="columns.visible('email')" prop="email" :label="$t('employee.email')" sortable="custom" />
+        <el-table-column v-if="columns.visible('idNumber')" prop="idNumber" :label="$t('employee.idNumber')" sortable="custom" />
+        <el-table-column v-if="columns.visible('phone')" prop="phone" :label="$t('employee.phone')" sortable="custom" />
+        <el-table-column v-if="columns.visible('status')" prop="status" :label="$t('employee.status')" sortable="custom">
           <template slot-scope="scope">
             {{ dict.label.user_status[scope.row.status] }}
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('deptId')" prop="deptId" label="部门" sortable="custom"/>
-        <el-table-column v-if="columns.visible('jobId')" prop="jobId" label="岗位" sortable="custom" />
-        <el-table-column v-if="columns.visible('remark')" prop="remark" label="备注" sortable="custom" />
-        <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建时间" sortable="custom">
+        <el-table-column v-if="columns.visible('deptId')" prop="deptId" :label="$t('employee.dept')" sortable="custom" />
+        <el-table-column v-if="columns.visible('jobId')" prop="jobId" :label="$t('employee.job')" sortable="custom" />
+        <el-table-column v-if="columns.visible('remark')" prop="remark" :label="$t('be.remark')" sortable="custom" />
+        <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.createTime) }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('creatorNum')" prop="creatorNum" label="创建人" sortable="custom"/>
-        <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" label="更新时间" sortable="custom">
+        <el-table-column v-if="columns.visible('creatorNum')" prop="creatorNum" :label="$t('be.creatorNum')" sortable="custom" />
+        <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" :label="$t('be.updateTime')" sortable="custom">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.updateTime) }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('updaterNum')" prop="updaterNum" label="更新人" sortable="custom" />
-        <el-table-column v-permission="['admin','employee:edit','employee:del']" label="操作" width="150px" align="center" >
+        <el-table-column v-if="columns.visible('updaterNum')" prop="updaterNum" :label="$t('be.updaterNum')" sortable="custom" />
+        <el-table-column v-permission="['admin','employee:edit','employee:del']" :label="$t('be.operate')" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
@@ -114,9 +110,10 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '员工信息', url: 'api/employee/page', crudMethod: { ...crudEmployee }})
+const defaultCrud = CRUD({ title: i18n.t('employee.TITLE'), url: 'api/employee/page', crudMethod: { ...crudEmployee }})
 const defaultForm = { id: null, address: null, avatar: null, birthday: null, code: null, email: null, idNumber: null, name: null, phone: null, status: null, deptId: null, jobId: null, remark: null, createTime: null, creatorNum: null, updateTime: null, updaterNum: null }
 export default {
   name: 'Employee',
