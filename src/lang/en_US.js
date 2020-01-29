@@ -215,6 +215,22 @@ export default {
     deleteTips: 'Are you sure you want to clear all operation logs?',
     deleteErrorTips: 'Are you sure you want to clear all exception logs?'
   },
+  server: {
+    TITLE: 'Service',
+    name: 'Name',
+    address: 'IP Address',
+    port: 'Port',
+    state: 'Status',
+    cpuRate: 'CPU usage',
+    cpuCore: 'CPU cores',
+    memTotal: 'Total memory',
+    memUsed: 'Memory usage',
+    diskTotal: 'Total disk',
+    diskUsed: 'Disk usage',
+    swapTotal: 'Total swap',
+    swapUsed: 'Swap usage',
+    sort: 'Sort'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'

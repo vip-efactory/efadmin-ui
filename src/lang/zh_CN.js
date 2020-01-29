@@ -215,6 +215,22 @@ export default {
     deleteTips: '确认清空所有操作日志吗?',
     deleteErrorTips: '确认清空所有异常日志吗?'
   },
+  server: {
+    TITLE: '服务',
+    name: '名称',
+    address: 'IP地址',
+    port: '访问端口',
+    state: '状态',
+    cpuRate: 'CPU使用率',
+    cpuCore: 'CPU内核数',
+    memTotal: '内存总数',
+    memUsed: '内存使用量',
+    diskTotal: '磁盘总量',
+    diskUsed: '磁盘使用量',
+    swapTotal: '交换区总量',
+    swapUsed: '交换区使用量',
+    sort: '排序'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'
