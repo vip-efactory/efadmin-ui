@@ -198,6 +198,23 @@ export default {
     deleteContentEnd: ' users who are force out?',
     allTableLikeSearch: 'Full table fuzzy search'
   },
+  log: {
+    username: 'User name',
+    description: 'Behavior description',
+    method: 'Request Method',
+    params: 'Request Params',
+    logType: 'Log type',
+    requestIp: 'Request IP',
+    address: 'Request location',
+    browser: 'Browser',
+    time: 'Request time-consuming',
+    exceptionDetail: 'Exception details',
+    viewDetail: 'View details',
+    clearLog: 'Clear',
+    deleteTitle: 'Warning',
+    deleteTips: 'Are you sure you want to clear all operation logs?',
+    deleteErrorTips: 'Are you sure you want to clear all exception logs?'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'

@@ -12,7 +12,7 @@
           :loading="crud.delAllLoading"
           @click="confirmDelAll()"
         >
-          清空
+          {{ $t('log.clearLog') }}
         </el-button> v-if="columns.visible('username')"
       </crudOperation>
     </div>
@@ -21,32 +21,32 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="请求方法">
+            <el-form-item :label="$t('log.method')" label-width="130px">
               <span>{{ props.row.method }}</span>
             </el-form-item>
-            <el-form-item label="请求参数">
+            <el-form-item :label="$t('log.params')" label-width="130px">
               <span>{{ props.row.params }}</span>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('username')" prop="username" label="用户名" sortable="custom" />
-      <el-table-column v-if="columns.visible('requestIp')" prop="requestIp" label="IP" sortable="custom" />
-      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" label="IP来源" sortable="custom" />
-      <el-table-column v-if="columns.visible('description')" prop="description" label="描述" sortable="custom" />
-      <el-table-column v-if="columns.visible('browser')" prop="browser" label="浏览器" sortable="custom" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom">
+      <el-table-column v-if="columns.visible('username')" prop="username" :label="$t('log.username')" sortable="custom" />
+      <el-table-column v-if="columns.visible('requestIp')" prop="requestIp" :label="$t('log.requestIp')" sortable="custom" />
+      <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" :label="$t('log.address')" sortable="custom" />
+      <el-table-column v-if="columns.visible('description')" prop="description" :label="$t('log.description')" sortable="custom" />
+      <el-table-column v-if="columns.visible('browser')" prop="browser" :label="$t('log.browser')" sortable="custom" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="异常详情" width="100px">
+      <el-table-column :label="$t('log.exceptionDetail')" width="120px">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="info(scope.row.id)">查看详情</el-button>
+          <el-button size="mini" type="text" @click="info(scope.row.id)">{{ $t('log.viewDetail') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="dialog" title="异常详情" append-to-body top="30px" width="85%">
+    <el-dialog :visible.sync="dialog" :title="$t('log.exceptionDetail')" append-to-body top="30px" width="85%">
       <pre v-highlightjs="errorInfo"><code class="java" /></pre>
     </el-dialog>
     <!--分页组件-->
@@ -60,6 +60,7 @@ import Search from './search'
 import CRUD, { presenter } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../../lang'
 
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '异常日志', url: 'api/logs/error' })
@@ -93,9 +94,9 @@ export default {
       })
     },
     confirmDelAll() {
-      this.$confirm(`确认清空所有异常日志吗?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(i18n.t('log.deleteErrorTips'), i18n.t('log.deleteTitle'), {
+        confirmButtonText: i18n.t('crud.confirm'),
+        cancelButtonText: i18n.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         this.crud.delAllLoading = true

@@ -198,6 +198,23 @@ export default {
     deleteContentEnd: '个用户?',
     allTableLikeSearch: '全表模糊搜索'
   },
+  log: {
+    username: '用户名',
+    description: '行为描述',
+    method: '请求方法',
+    params: '请求参数',
+    logType: '日志类型',
+    requestIp: '请求IP',
+    address: 'IP来源',
+    browser: '浏览器',
+    time: '请求耗时',
+    exceptionDetail: '异常详情',
+    viewDetail: '查看详情',
+    clearLog: '清空',
+    deleteTitle: '提示',
+    deleteTips: '确认清空所有操作日志吗?',
+    deleteErrorTips: '确认清空所有异常日志吗?'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'
