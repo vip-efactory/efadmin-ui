@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.name" clearable placeholder="输入名称搜索" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.name" clearable :placeholder="$t('mapp.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -13,8 +13,8 @@
           size="small"
           class="date-item"
           value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startDate')"
+          :end-placeholder="$t('common.endDate')"
         />
         <rrOperation :crud="crud" />
       </div>
@@ -28,53 +28,53 @@
           type="primary"
           icon="el-icon-plus"
           @click="copy"
-        >复制</el-button>
+        >{{ $t('mapp.copyBtn') }}</el-button>
       </crudOperation>
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="800px">
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
-        <el-form-item label="应用名称" prop="name">
-          <el-input v-model="form.name" style="width: 670px" placeholder="部署后的文件或者目录名称，用于备份" />
+    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="850px">
+      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="140px">
+        <el-form-item :label="$t('mapp.name')" prop="name">
+          <el-input v-model="form.name" style="width: 670px" :placeholder="$t('mapp.namePlaceholder')" />
         </el-form-item>
-        <el-form-item label="应用端口" prop="port">
-          <el-input-number v-model.number="form.port" placeholder="例如：8080" />
+        <el-form-item :label="$t('mapp.port')" prop="port">
+          <el-input-number v-model.number="form.port" :placeholder="$t('mapp.portPlaceholder')" />
         </el-form-item>
-        <el-form-item label="上传目录" prop="uploadPath">
-          <el-input v-model="form.uploadPath" style="width: 670px" placeholder="例如: /opt/upload" />
+        <el-form-item :label="$t('mapp.uploadPath')" prop="uploadPath">
+          <el-input v-model="form.uploadPath" style="width: 670px" :placeholder="$t('mapp.uploadPathPlaceholder')" />
         </el-form-item>
-        <el-form-item label="部署目录" prop="deployPath">
-          <el-input v-model="form.deployPath" style="width: 670px" placeholder="例如: /opt/app" />
+        <el-form-item :label="$t('mapp.deployPath')" prop="deployPath">
+          <el-input v-model="form.deployPath" style="width: 670px" :placeholder="$t('mapp.deployPathPlaceholder')" />
         </el-form-item>
-        <el-form-item label="备份目录" prop="backupPath">
-          <el-input v-model="form.backupPath" style="width: 670px" placeholder="例如: /opt/backup" />
+        <el-form-item :label="$t('mapp.backupPath')" prop="backupPath">
+          <el-input v-model="form.backupPath" style="width: 670px" :placeholder="$t('mapp.backupPathPlaceholder')" />
         </el-form-item>
-        <el-form-item label="部署脚本" prop="deployScript">
+        <el-form-item :label="$t('mapp.deployScript')" prop="deployScript">
           <el-input v-model="form.deployScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
         </el-form-item>
-        <el-form-item label="启动脚本" prop="startScript">
+        <el-form-item :label="$t('mapp.startScript')" prop="startScript">
           <el-input v-model="form.startScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">取消</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
       </div>
     </el-dialog>
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row style="width: 100%" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" prop="name" label="应用名称" sortable="custom"/>
-      <el-table-column v-if="columns.visible('port')" prop="port" label="端口号" sortable="custom"/>
-      <el-table-column v-if="columns.visible('uploadPath')" prop="uploadPath" label="上传目录" sortable="custom"/>
-      <el-table-column v-if="columns.visible('deployPath')" prop="deployPath" label="部署目录" sortable="custom"/>
-      <el-table-column v-if="columns.visible('backupPath')" prop="backupPath" label="备份目录" sortable="custom"/>
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom">
+      <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('mapp.name')" sortable="custom"/>
+      <el-table-column v-if="columns.visible('port')" prop="port" :label="$t('mapp.port')" sortable="custom"/>
+      <el-table-column v-if="columns.visible('uploadPath')" prop="uploadPath" :label="$t('mapp.uploadPath')" sortable="custom"/>
+      <el-table-column v-if="columns.visible('deployPath')" prop="deployPath" :label="$t('mapp.deployPath')" sortable="custom"/>
+      <el-table-column v-if="columns.visible('backupPath')" prop="backupPath" :label="$t('mapp.backupPath')" sortable="custom"/>
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-permission="['admin','app:edit','app:del']" label="操作" width="150px" align="center">
+      <el-table-column v-permission="['admin','app:edit','app:del']" :label="$t('be.operate')" width="150px" align="center">
         <template slot-scope="scope">
           <udOperation
             :data="scope.row"
@@ -95,8 +95,10 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../../lang'
+
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '应用', url: 'api/app', crudMethod: { ...crudApp }})
+const defaultCrud = CRUD({ title: i18n.t('mapp.TITLE'), url: 'api/app', crudMethod: { ...crudApp }})
 const defaultForm = { id: null, name: null, port: 8080, uploadPath: '/opt/upload', deployPath: '/opt/app', backupPath: '/opt/backup', startScript: null, deployScript: null }
 export default {
   name: 'App',
@@ -112,25 +114,25 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入应用名称', trigger: 'blur' }
+          { required: true, message: i18n.t('mapp.nameRequired'), trigger: 'blur' }
         ],
         port: [
-          { required: true, message: '请输入应用端口', trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.t('mapp.portRequired'), trigger: 'blur', type: 'number' }
         ],
         uploadPath: [
-          { required: true, message: '请输入上传目录', trigger: 'blur' }
+          { required: true, message: i18n.t('mapp.uploadPathRequired'), trigger: 'blur' }
         ],
         deployPath: [
-          { required: true, message: '请输入部署目录', trigger: 'blur' }
+          { required: true, message: i18n.t('mapp.deployPathRequired'), trigger: 'blur' }
         ],
         backupPath: [
-          { required: true, message: '请输入备份目录', trigger: 'blur' }
+          { required: true, message: i18n.t('mapp.backupPathRequired'), trigger: 'blur' }
         ],
         startScript: [
-          { required: true, message: '请输入启动脚本', trigger: 'blur' }
+          { required: true, message: i18n.t('mapp.startScriptRequired'), trigger: 'blur' }
         ],
         deployScript: [
-          { required: true, message: '请输入部署脚本', trigger: 'blur' }
+          { required: true, message: i18n.t('mapp.deployScriptRequired'), trigger: 'blur' }
         ]
       }
     }

@@ -252,7 +252,31 @@ export default {
     portRequired: 'Please enter the port',
     accountRequired: 'please enter user name',
     passwordRequired: 'Please enter the password',
-    searchPlaceholder:'Enter name or IP search'
+    searchPlaceholder: 'Enter name or IP search'
+  },
+  mapp: {
+    TITLE: 'Application',
+    name: 'App Name',
+    port: 'Port',
+    uploadPath: 'Upload directory',
+    deployPath: 'Deploy directory',
+    backupPath: 'Backup directory',
+    startScript: 'Startup script',
+    deployScript: 'Deploy script',
+    copyBtn: 'Copy',
+    searchPlaceholder: 'Enter name search',
+    nameRequired: 'Please enter the application name',
+    portRequired: 'Please enter the port',
+    uploadPathRequired: 'Please enter the upload directory',
+    deployPathRequired: 'Please enter the deploy directory',
+    backupPathRequired: 'Please enter the backup directory',
+    startScriptRequired: 'Please enter the startup script',
+    deployScriptRequired: 'Please enter the deploy script',
+    namePlaceholder: 'File or directory name after deployment for backup',
+    portPlaceholder: 'E.g: 8080',
+    uploadPathPlaceholder: 'E.g: /opt/upload',
+    deployPathPlaceholder: 'E.g: /opt/app',
+    backupPathPlaceholder: 'E.g: /opt/backup'
   },
   documentation: {
     documentation: 'Documentation',

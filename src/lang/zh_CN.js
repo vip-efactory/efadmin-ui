@@ -252,7 +252,31 @@ export default {
     portRequired: '请输入端口',
     accountRequired: '请输入用户名',
     passwordRequired: '请输入密码',
-    searchPlaceholder:'输入名称或IP搜索'
+    searchPlaceholder: '输入名称或IP搜索'
+  },
+  mapp: {
+    TITLE: '应用',
+    name: '应用名称',
+    port: '端口',
+    uploadPath: '上传目录',
+    deployPath: '部署目录',
+    backupPath: '备份目录',
+    startScript: '启动脚本',
+    deployScript: '部署脚本',
+    copyBtn: '复制',
+    searchPlaceholder: '输入名称搜索',
+    nameRequired: '请输入应用名称',
+    portRequired: '请输入端口',
+    uploadPathRequired: '请输入上传目录',
+    deployPathRequired: '请输入部署目录',
+    backupPathRequired: '请输入备份目录',
+    startScriptRequired: '请输入启动脚本',
+    deployScriptRequired: '请输入部署脚本',
+    namePlaceholder: '部署后的文件或者目录名称，用于备份',
+    portPlaceholder: '例如: 8080',
+    uploadPathPlaceholder: '例如: /opt/upload',
+    deployPathPlaceholder: '例如: /opt/app',
+    backupPathPlaceholder: '例如: /opt/backup'
   },
   documentation: {
     documentation: '文档',
