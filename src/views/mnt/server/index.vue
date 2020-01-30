@@ -41,8 +41,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">取消</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
       </div>
     </el-dialog>
     <!--表格渲染-->
@@ -52,7 +52,7 @@
       <el-table-column v-if="columns.visible('ip')" prop="ip" label="IP" sortable="custom" />
       <el-table-column v-if="columns.visible('port')" prop="port" label="端口" sortable="custom" />
       <el-table-column v-if="columns.visible('account')" prop="account" label="账号" sortable="custom" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom" >
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
@@ -125,11 +125,20 @@ export default {
           this.loading = true
           testServerConnect(this.form).then((res) => {
             this.loading = false
-            this.$notify({
-              title: res ? '连接成功' : '连接失败',
-              type: res ? 'success' : 'error',
-              duration: 2500
-            })
+            if (res.code === 0) {
+              this.$notify({
+                title: '连接成功',
+                type: 'success',
+                duration: 2500
+              })
+            } else {
+              this.$notify({
+                title: '连接失败',
+                type: 'error',
+                message: res.msg,
+                duration: 2500
+              })
+            }
           }).catch(() => {
             this.loading = false
           })
