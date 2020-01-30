@@ -56,6 +56,15 @@ export default {
     true: '是',
     false: '否'
   },
+  common: {
+    startDate: '开始日期',
+    endDate: '结束日期',
+    startTime: '开始时间',
+    endTime: '结束时间',
+    testConnect: '测试连接',
+    connectOK: '连接成功',
+    connectFailed: '连接失败'
+  },
   // 组件的属性国际化
   // 基础实体BaseEntity的属性字段
   be: {
@@ -230,6 +239,20 @@ export default {
     swapTotal: '交换区总量',
     swapUsed: '交换区使用量',
     sort: '排序'
+  },
+  mserver: {
+    TITLE: '服务器',
+    name: '名称',
+    ip: 'IP地址',
+    port: '端口',
+    account: '用户名',
+    password: '密码',
+    nameRequired: '请输入名称',
+    ipRequired: '请输入IP地址',
+    portRequired: '请输入端口',
+    accountRequired: '请输入用户名',
+    passwordRequired: '请输入密码',
+    searchPlaceholder:'输入名称或IP搜索'
   },
   documentation: {
     documentation: '文档',

@@ -56,6 +56,15 @@ export default {
     true: 'Yes',
     false: 'No'
   },
+  common: {
+    startDate: 'Start date',
+    endDate: 'End date',
+    startTime: 'Start time',
+    endTime: 'End time',
+    testConnect: 'Test connection',
+    connectOK: 'Connection succeeded',
+    connectFailed: 'Connection failed'
+  },
   // 组件的属性国际化
   // 基础实体BaseEntity的属性字段
   be: {
@@ -230,6 +239,20 @@ export default {
     swapTotal: 'Total swap',
     swapUsed: 'Swap usage',
     sort: 'Sort'
+  },
+  mserver: {
+    TITLE: 'Server',
+    name: 'Name',
+    ip: 'IP address',
+    port: 'Port',
+    account: 'Account',
+    password: 'Password',
+    nameRequired: 'Please enter a name',
+    ipRequired: 'Please enter the IP address',
+    portRequired: 'Please enter the port',
+    accountRequired: 'please enter user name',
+    passwordRequired: 'Please enter the password',
+    searchPlaceholder:'Enter name or IP search'
   },
   documentation: {
     documentation: 'Documentation',

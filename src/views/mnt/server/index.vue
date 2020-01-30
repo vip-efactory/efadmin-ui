@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.id" clearable placeholder="输入名称或IP搜索" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.id" clearable :placeholder="$t('mserver.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -13,31 +13,31 @@
           size="small"
           class="date-item"
           value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startDate')"
+          :end-placeholder="$t('common.endDate')"
         />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission" />
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="470px">
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="55px">
-        <el-form-item label="名称" prop="name">
+    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="550px">
+      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
+        <el-form-item :label="$t('mserver.name')" prop="name">
           <el-input v-model="form.name" style="width: 370px" />
         </el-form-item>
-        <el-form-item label="IP" prop="ip">
+        <el-form-item :label="$t('mserver.ip')" prop="ip">
           <el-input v-model="form.ip" style="width: 370px" />
         </el-form-item>
-        <el-form-item label="端口" prop="port">
+        <el-form-item :label="$t('mserver.port')" prop="port">
           <el-input-number v-model.number="form.port" controls-position="right" style="width: 370px;" />
         </el-form-item>
-        <el-form-item label="账号" prop="account">
+        <el-form-item :label="$t('mserver.account')" prop="account">
           <el-input v-model="form.account" style="width: 370px" />
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item :label="$t('mserver.password')" prop="password">
           <el-input v-model="form.password" type="password" style="width: 200px" />
-          <el-button :loading="loading" type="success" style="align: right;" @click="testConnectServer">测试连接</el-button>
+          <el-button :loading="loading" type="success" style="align: right;" @click="testConnectServer">{{ $t('common.testConnect') }}</el-button>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -48,16 +48,16 @@
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" prop="name" label="名称" sortable="custom" />
-      <el-table-column v-if="columns.visible('ip')" prop="ip" label="IP" sortable="custom" />
-      <el-table-column v-if="columns.visible('port')" prop="port" label="端口" sortable="custom" />
-      <el-table-column v-if="columns.visible('account')" prop="account" label="账号" sortable="custom" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom">
+      <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('mserver.name')" sortable="custom" />
+      <el-table-column v-if="columns.visible('ip')" prop="ip" :label="$t('mserver.ip')" sortable="custom" />
+      <el-table-column v-if="columns.visible('port')" prop="port" :label="$t('mserver.port')" sortable="custom" />
+      <el-table-column v-if="columns.visible('account')" prop="account" :label="$t('mserver.account')" sortable="custom" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-permission="['admin','serverDeploy:edit','serverDeploy:del']" label="操作" width="150px" align="center">
+      <el-table-column v-permission="['admin','serverDeploy:edit','serverDeploy:del']" :label="$t('be.operate')" width="150px" align="center">
         <template slot-scope="scope">
           <udOperation
             :data="scope.row"
@@ -81,8 +81,10 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../../lang'
+
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '服务器', url: 'api/serverDeploy', crudMethod: { ...crudServer }})
+const defaultCrud = CRUD({ title: i18n.t('mserver.TITLE'), url: 'api/serverDeploy', crudMethod: { ...crudServer }})
 const defaultForm = { id: null, name: null, ip: null, port: 22, account: 'root', password: null }
 export default {
   name: 'Server',
@@ -100,20 +102,20 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: i18n.t('mserver.nameRequired'), trigger: 'blur' }
         ],
         ip: [
-          { required: true, message: '请输入IP', trigger: 'blur' },
+          { required: true, message: i18n.t('mserver.ipRequired'), trigger: 'blur' },
           { validator: validateIP, trigger: 'change' }
         ],
         port: [
-          { required: true, message: '请输入端口', trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.t('mserver.portRequired'), trigger: 'blur', type: 'number' }
         ],
         account: [
-          { required: true, message: '请输入账号', trigger: 'blur' }
+          { required: true, message: i18n.t('mserver.accountRequired'), trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
+          { required: true, message: i18n.t('mserver.passwordRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -127,16 +129,16 @@ export default {
             this.loading = false
             if (res.code === 0) {
               this.$notify({
-                title: '连接成功',
+                title: i18n.t('common.connectOK'),
                 type: 'success',
                 duration: 2500
               })
             } else {
               this.$notify({
-                title: '连接失败',
+                title: i18n.t('common.connectFailed'),
                 type: 'error',
                 message: res.msg,
-                duration: 2500
+                duration: 5000
               })
             }
           }).catch(() => {
