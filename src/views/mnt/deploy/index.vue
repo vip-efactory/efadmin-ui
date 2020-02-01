@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.appName" clearable placeholder="输入应用名称查询" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.appName" clearable :placeholder="$t('deploy.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -13,8 +13,8 @@
           size="small"
           class="date-item"
           value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startDate')"
+          :end-placeholder="$t('common.endDate')"
         />
         <rrOperation :crud="crud" />
       </div>
@@ -28,7 +28,7 @@
             type="primary"
             icon="el-icon-upload"
             @click="sysRestore"
-          >系统还原
+          >{{ $t('deploy.systemRecovery') }}
           </el-button>
           <el-button
             v-permission="['admin','deploy:add']"
@@ -38,7 +38,7 @@
             type="primary"
             icon="el-icon-upload"
             @click="serverStatus"
-          >状态查询
+          >{{ $t('deploy.statusQuery') }}
           </el-button>
           <el-button
             v-permission="['admin','deploy:add']"
@@ -48,7 +48,7 @@
             type="success"
             icon="el-icon-upload"
             @click="startServer"
-          >启动
+          >{{ $t('deploy.start') }}
           </el-button>
           <el-button
             v-permission="['admin','deploy:add']"
@@ -58,7 +58,7 @@
             type="danger"
             icon="el-icon-upload"
             @click="stopServer"
-          >停止
+          >{{ $t('deploy.stop') }}
           </el-button>
           <el-button
             v-permission="['admin','deploy:add']"
@@ -68,28 +68,28 @@
             type="warning"
             icon="el-icon-upload"
             @click="deploy"
-          >一键部署
+          >{{ $t('deploy.oneKeyDeploy') }}
           </el-button>
         </template>
       </crudOperation>
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-        <el-form-item label="应用" prop="app.id">
-          <el-select v-model.number="form.app.id" placeholder="请选择" style="width: 370px">
+    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="520px">
+      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
+        <el-form-item :label="$t('deploy.appName')" prop="app.id">
+          <el-select v-model.number="form.app.id" :placeholder="$t('deploy.appNameRequired')" style="width: 370px">
             <el-option v-for="item in apps" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="服务器" prop="deploys">
-          <el-select v-model="form.deploys" multiple placeholder="请选择" style="width: 370px">
+        <el-form-item :label="$t('deploy.server')" prop="deploys">
+          <el-select v-model="form.deploys" multiple :placeholder="$t('deploy.serverRequired')" style="width: 370px">
             <el-option v-for="item in servers" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">取消</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
       </div>
     </el-dialog>
     <!--统还原组件-->
@@ -98,14 +98,14 @@
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row stripe style="width: 100%" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('app.name')" prop="app.name" label="应用名称" sortable="custom" />
-      <el-table-column v-if="columns.visible('servers')" prop="servers" label="服务器列表" sortable="custom" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="部署日期" sortable="custom">
+      <el-table-column v-if="columns.visible('app.name')" prop="app.name" :label="$t('deploy.appName')" sortable="custom" />
+      <el-table-column v-if="columns.visible('servers')" prop="servers" :label="$t('deploy.server')" sortable="custom" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('deploy.deployTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-permission="['admin','deploy:edit','deploy:del']" label="操作" width="150px" align="center">
+      <el-table-column v-permission="['admin','deploy:edit','deploy:del']" :label="$t('be.operate')" width="150px" align="center">
         <template slot-scope="scope">
           <udOperation
             :data="scope.row"
@@ -128,8 +128,10 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../../lang'
+
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '部署', url: 'api/deploy', crudMethod: { ...crudDeploy }})
+const defaultCrud = CRUD({ title: i18n.t('deploy.TITLE'), url: 'api/deploy', crudMethod: { ...crudDeploy }})
 const defaultForm = { id: null, app: { id: null }, deploys: [] }
 export default {
   components: { dForm, fForm, pagination, crudOperation, rrOperation, udOperation },
@@ -145,10 +147,10 @@ export default {
       },
       rules: {
         'app.id': [
-          { required: true, message: '应用不能为空', trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.t('deploy.appNameRequired'), trigger: 'blur', type: 'number' }
         ],
         deploys: [
-          { required: true, message: '服务器不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('deploy.serverRequired'), trigger: 'blur' }
         ]
       }
     }

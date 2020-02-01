@@ -278,6 +278,20 @@ export default {
     deployPathPlaceholder: 'E.g: /opt/app',
     backupPathPlaceholder: 'E.g: /opt/backup'
   },
+  deploy: {
+    TITLE: 'Deploy',
+    appName: 'App Name',
+    server: 'Server',
+    deployTime: 'Deploy Time',
+    appNameRequired: 'Please select an application name',
+    serverRequired: 'please select an server',
+    systemRecovery: 'System Restore',
+    statusQuery: 'Status Query',
+    start: 'Start',
+    stop: 'Stop',
+    oneKeyDeploy: 'One-click Deploy',
+    searchPlaceholder: 'Enter app name search'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'

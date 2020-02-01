@@ -278,6 +278,20 @@ export default {
     deployPathPlaceholder: '例如: /opt/app',
     backupPathPlaceholder: '例如: /opt/backup'
   },
+  deploy: {
+    TITLE: '部署',
+    appName: '应用名称',
+    server: '服务器',
+    deployTime: '部署时间',
+    appNameRequired: '请选择应用名称',
+    serverRequired: '请选择服务器',
+    systemRecovery: '系统还原',
+    statusQuery: '状态查询',
+    start: '启动',
+    stop: '停止',
+    oneKeyDeploy: '一键部署',
+    searchPlaceholder: '输入名称搜索'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'
