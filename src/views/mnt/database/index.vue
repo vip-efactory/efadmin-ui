@@ -132,7 +132,11 @@ export default {
           this.loading = true
           testDbConnect(this.form).then((res) => {
             this.loading = false
-            this.crud.notify(res ? '连接成功' : '连接失败', res ? 'success' : 'error')
+            if (res.code === 0) {
+              this.crud.notify(res.data ? i18n.t('common.connectOK') : i18n.t('common.connectFailed'), res.data ? 'success' : 'error')
+            } else {
+              this.crud.notify(res.msg, 'error')
+            }
           }).catch(() => {
             this.loading = false
           })

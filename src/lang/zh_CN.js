@@ -67,7 +67,8 @@ export default {
     endTime: '结束时间',
     testConnect: '测试连接',
     connectOK: '连接成功',
-    connectFailed: '连接失败'
+    connectFailed: '连接失败',
+    execOK: '执行成功'
   },
   // 组件的属性国际化
   // 基础实体BaseEntity的属性字段

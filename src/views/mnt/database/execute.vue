@@ -27,6 +27,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getToken } from '@/utils/auth'
+import i18n from '../../../lang'
+
 export default {
   props: {
     databaseInfo: {
@@ -58,7 +60,7 @@ export default {
     handleSuccess(response, file, fileList) {
       if (response === 'success') {
         this.$notify({
-          title: '执行成功',
+          title: i18n.t('common.execOK'),
           type: 'success',
           duration: 2500
         })
