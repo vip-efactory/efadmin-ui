@@ -292,6 +292,15 @@ export default {
     oneKeyDeploy: '一键部署',
     searchPlaceholder: '输入名称搜索'
   },
+  deployHistory: {
+    TITLE: '部署历史',
+    appName: '应用名称',
+    ip: '部署IP',
+    deployDate: '部署时间',
+    deployUser: '部署人员',
+    deployId: '部署编号',
+    searchPlaceholder: '输入搜索内容'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'

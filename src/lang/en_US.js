@@ -292,6 +292,15 @@ export default {
     oneKeyDeploy: 'One-click Deploy',
     searchPlaceholder: 'Enter app name search'
   },
+  deployHistory: {
+    TITLE: 'Deploy History',
+    appName: 'Application name',
+    ip: 'Deploy IP',
+    deployDate: 'Deploy date',
+    deployUser: 'Deploy user',
+    deployId: 'Deploy id',
+    searchPlaceholder: 'Enter search content'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'
