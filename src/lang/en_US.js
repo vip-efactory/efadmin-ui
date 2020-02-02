@@ -36,6 +36,7 @@ export default {
     export: 'Export',
     selectAll: 'Select All',
     search: 'Search',
+    fuzzySearch: 'Fuzzy search',
     resetSearch: 'Reset Search',
     advanceSearch: 'Advance Search',
     confirm: 'OK',
@@ -57,6 +58,9 @@ export default {
     false: 'No'
   },
   common: {
+    close: 'Close',
+    clickUpload: 'Click Upload',
+    dragFileUpload: 'Drag files here, or',
     startDate: 'Start date',
     endDate: 'End date',
     startTime: 'Start time',
@@ -300,6 +304,19 @@ export default {
     deployUser: 'Deploy user',
     deployId: 'Deploy id',
     searchPlaceholder: 'Enter search content'
+  },
+  db: {
+    TITLE: 'Database',
+    name: 'Database name',
+    jdbcUrl: 'JDBC link',
+    userName: 'DB user',
+    pwd: 'DB password',
+    execScript: 'Execute Script',
+    nameRequired: 'Please enter the database name',
+    jdbcUrlRequired: 'Please enter the JDBC address',
+    userNameRequired: 'Please enter the database username',
+    pwdRequired: 'Please enter the database password',
+    execSqlTips: 'After uploading, the system will automatically execute the SQL script'
   },
   documentation: {
     documentation: 'Documentation',

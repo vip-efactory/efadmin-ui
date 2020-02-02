@@ -1,5 +1,5 @@
 <template>
-  <el-dialog append-to-body :close-on-click-modal="false" :visible.sync="dialog" title="执行脚本" width="400px">
+  <el-dialog append-to-body :close-on-click-modal="false" :visible.sync="dialog" :title="$t('db.execScript')" width="420px">
     <el-form ref="form" :rules="rules" size="small">
       <el-upload
         :action="databaseUploadApi"
@@ -12,14 +12,14 @@
       >
         <i class="el-icon-upload" />
         <div class="el-upload__text">
-          将文件拖到此处，或
-          <em>点击上传</em>
+          {{ $t('common.dragFileUpload') }}
+          <em>{{ $t('common.clickUpload') }}</em>
         </div>
-        <div slot="tip" class="el-upload__tip">上传后，系统会自动执行SQL脚本</div>
+        <div slot="tip" class="el-upload__tip">{{ $t('db.execSqlTips') }}</div>
       </el-upload>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="cancel">关闭</el-button>
+      <el-button type="primary" @click="cancel">{{ $t('common.close') }}</el-button>
     </div>
   </el-dialog>
 </template>

@@ -36,6 +36,7 @@ export default {
     export: '导出',
     selectAll: '全选',
     search: '搜索',
+    fuzzySearch: '模糊搜索',
     resetSearch: '重置搜索',
     advanceSearch: '高级搜索',
     confirm: '确定',
@@ -57,6 +58,9 @@ export default {
     false: '否'
   },
   common: {
+    close: '关闭',
+    clickUpload: '点击上传',
+    dragFileUpload: '将文件拖到此处，或',
     startDate: '开始日期',
     endDate: '结束日期',
     startTime: '开始时间',
@@ -300,6 +304,19 @@ export default {
     deployUser: '部署人员',
     deployId: '部署编号',
     searchPlaceholder: '输入搜索内容'
+  },
+  db: {
+    TITLE: '数据库',
+    name: '数据库名称',
+    jdbcUrl: 'JDBC地址',
+    userName: '数据库用户名',
+    pwd: '数据库密码',
+    execScript: '执行脚本',
+    nameRequired: '请输入数据库名称',
+    jdbcUrlRequired: '请输入JDBC地址',
+    userNameRequired: '请输入数据库用户名',
+    pwdRequired: '请输入数据库密码',
+    execSqlTips: '上传后，系统会自动执行SQL脚本'
   },
   documentation: {
     documentation: '文档',
