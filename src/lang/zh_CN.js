@@ -60,6 +60,7 @@ export default {
   common: {
     close: '关闭',
     clickUpload: '点击上传',
+    success: '成功',
     dragFileUpload: '将文件拖到此处，或',
     startDate: '开始日期',
     endDate: '结束日期',
@@ -318,6 +319,27 @@ export default {
     userNameRequired: '请输入数据库用户名',
     pwdRequired: '请输入数据库密码',
     execSqlTips: '上传后，系统会自动执行SQL脚本'
+  },
+  task: {
+    TITLE: '定时任务',
+    jobName: '任务名称',
+    beanName: 'Bean名称',
+    methodName: '方法名称',
+    params: '方法参数',
+    cronExpression: 'cron表达式',
+    isPause: '已暂停',
+    logBtn: '日志',
+    searchPlaceholder: '输入任务名称搜索',
+    execBtn: '执行',
+    resumeBtn: '恢复',
+    pauseBtn: '暂停',
+    paused: '已暂停',
+    running: '运行中',
+    deleteTips: '确定停止并删除该任务吗？',
+    jobNameRequired: '请输入任务名称',
+    beanNameRequired: '请输入Bean名称',
+    methodNameRequired: '请输入方法名称',
+    cronExpressionRequired: '请输入cron表达式'
   },
   documentation: {
     documentation: '文档',

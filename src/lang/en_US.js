@@ -60,6 +60,7 @@ export default {
   common: {
     close: 'Close',
     clickUpload: 'Click Upload',
+    success: 'Succeed',
     dragFileUpload: 'Drag files here, or',
     startDate: 'Start date',
     endDate: 'End date',
@@ -318,6 +319,27 @@ export default {
     userNameRequired: 'Please enter the database username',
     pwdRequired: 'Please enter the database password',
     execSqlTips: 'After uploading, the system will automatically execute the SQL script'
+  },
+  task: {
+    TITLE: 'Timed Task',
+    jobName: 'Task name',
+    beanName: 'Bean name',
+    methodName: 'Method name',
+    params: 'Method params',
+    cronExpression: 'cron Expression',
+    isPause: 'Paused',
+    logBtn: 'Log',
+    searchPlaceholder: 'Enter task name search',
+    execBtn: 'Run',
+    resumeBtn: 'Resume',
+    pauseBtn: 'Pause',
+    paused: 'Paused',
+    running: 'Running',
+    deleteTips: 'Are you sure you want to stop and delete the task?',
+    jobNameRequired: 'Please enter the task name',
+    beanNameRequired: 'Please enter the bean name',
+    methodNameRequired: 'Please enter the method name',
+    cronExpressionRequired: 'Please enter the cron expression'
   },
   documentation: {
     documentation: 'Documentation',
