@@ -391,7 +391,21 @@ export default {
     autoUpdateTime: '自动更新时间',
     saveAndGenerate: '保存&生成',
     generateConfigure: '生成配置',
-    selectPlaceholder: '请选择'
+    selectPlaceholder: '请选择',
+    apiAliasTips: '接口的名称，用于控制器与接口文档中',
+    packTips: '项目包的名称，生成的代码放到哪个包里面',
+    moduleNameTips: '模块的名称，请选择项目中已存在的模块',
+    pathTips: '输入views文件夹下的目录，不存在即创建',
+    authorTips: '类上面的作者名称',
+    prefixTips: '默认不去除表前缀，可自定义',
+    coverTips: '谨防误操作，请慎重选择',
+    apiAliasRequired: '接口名称不能为空',
+    packRequired: '包路径不能为空',
+    moduleNameRequired: '模块名称不能为空',
+    pathRequired: '前端路径不能为空',
+    authorRequired: '作者名称不能为空',
+    coverRequired: '是否覆盖不能为空',
+    saveOK: '保存成功'
   },
   documentation: {
     documentation: '文档',

@@ -157,38 +157,38 @@
           <el-form ref="form" :model="form" :rules="rules" size="small" label-width="150px">
             <el-form-item :label="$t('genConfig.author')" prop="author">
               <el-input v-model="form.author" style="width: 40%" />
-              <span style="color: #C0C0C0;margin-left: 10px;">类上面的作者名称</span>
+              <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.authorTips') }}</span>
             </el-form-item>
             <el-form-item :label="$t('genConfig.moduleName')" prop="moduleName">
               <el-input v-model="form.moduleName" style="width: 40%" />
-              <span style="color: #C0C0C0;margin-left: 10px;">模块的名称，请选择项目中已存在的模块</span>
+              <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.moduleNameTips') }}</span>
             </el-form-item>
             <el-form-item :label="$t('genConfig.pack')" prop="pack">
               <el-input v-model="form.pack" style="width: 40%" />
-              <span style="color: #C0C0C0;margin-left: 10px;">项目包的名称，生成的代码放到哪个包里面</span>
+              <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.packTips') }}</span>
             </el-form-item>
             <el-form-item :label="$t('genConfig.apiAlias')" prop="apiAlias">
               <el-input v-model="form.apiAlias" style="width: 40%" />
-              <span style="color: #C0C0C0;margin-left: 10px;">接口的名称，用于控制器与接口文档中</span>
+              <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.apiAliasTips') }}</span>
             </el-form-item>
             <el-form-item :label="$t('genConfig.path')" prop="path">
               <el-input v-model="form.path" style="width: 40%" />
-              <span style="color: #C0C0C0;margin-left: 10px;">输入views文件夹下的目录，不存在即创建</span>
+              <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.pathTips') }}</span>
             </el-form-item>
             <!--            <el-form-item label="接口目录">-->
             <!--              <el-input v-model="form.apiPath" style="width: 40%" />-->
             <!--              <span style="color: #C0C0C0;margin-left: 10px;">Api存放路径[src/api]，为空则自动生成路径</span>-->
             <!--            </el-form-item>-->
             <el-form-item :label="$t('genConfig.prefix')" prop="prefix">
-              <el-input v-model="form.prefix" placeholder="默认不去除表前缀" style="width: 40%" />
-              <span style="color: #C0C0C0;margin-left: 10px;">默认不去除表前缀，可自定义</span>
+              <el-input v-model="form.prefix" :placeholder="$t('genConfig.prefixTips')" style="width: 40%" />
+              <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.prefixTips') }}</span>
             </el-form-item>
             <el-form-item :label="$t('genConfig.cover')" prop="cover">
               <el-radio-group v-model="form.cover" size="mini" style="width: 40%">
                 <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
                 <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
               </el-radio-group>
-              <span style="color: #C0C0C0;margin-left: 10px;">谨防误操作，请慎重选择</span>
+              <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.coverTips') }}</span>
             </el-form-item>
           </el-form>
         </el-card>
@@ -202,6 +202,8 @@ import crud from '@/mixins/crud'
 import { update, get } from '@/api/generator/genConfig'
 import { save, sync, generator } from '@/api/generator/generator'
 import { getDicts } from '@/api/system/dict'
+import i18n from '../../lang'
+
 export default {
   name: 'GeneratorConfig',
   components: {},
@@ -212,22 +214,22 @@ export default {
       form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: 'false', apiPath: '', prefix: '', apiAlias: null },
       rules: {
         author: [
-          { required: true, message: '作者不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('genConfig.authorRequired'), trigger: 'blur' }
         ],
         pack: [
-          { required: true, message: '包路径不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('genConfig.packRequired'), trigger: 'blur' }
         ],
         moduleName: [
-          { required: true, message: '包路径不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('genConfig.moduleNameRequired'), trigger: 'blur' }
         ],
         path: [
-          { required: true, message: '前端路径不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('genConfig.pathRequired'), trigger: 'blur' }
         ],
         apiAlias: [
-          { required: true, message: '接口名称不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('genConfig.apiAliasRequired'), trigger: 'blur' }
         ],
         cover: [
-          { required: true, message: '不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('genConfig.coverRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -274,7 +276,7 @@ export default {
           this.configLoading = true
           update(this.form).then(res => {
             if (res.code === 0) {
-              this.notify('保存成功', 'success')
+              this.notify(i18n.t('genConfig.saveOK'), 'success')
               this.form = res.data
               this.form.cover = this.form.cover.toString()
               this.configLoading = false
@@ -294,7 +296,7 @@ export default {
       sync([this.tableName]).then(r => {
         if (r.code === 0) {
           this.init()
-          this.notify('同步成功', 'success')
+          this.notify(i18n.t('codegen.syncOK'), 'success')
           this.syncLoading = false
         } else {
           this.syncLoading = false
@@ -308,12 +310,12 @@ export default {
       this.genLoading = true
       save(this.data).then(res => {
         if (res.code === 0) {
-          this.notify('保存成功', 'success')
+          this.notify(i18n.t('genConfig.saveOK'), 'success')
           // 生成代码
           generator(this.tableName, 0).then(r => {
             if (r.code === 0) {
               this.genLoading = false
-              this.notify('生成成功', 'success')
+              this.notify(i18n.t('codegen.generateOK'), 'success')
             } else {
               this.genLoading = false
               crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)

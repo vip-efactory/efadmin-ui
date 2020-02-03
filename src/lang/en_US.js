@@ -391,7 +391,21 @@ export default {
     autoUpdateTime: 'Automatic update time',
     saveAndGenerate: 'Save&Generate',
     generateConfigure: 'Generate Configure',
-    selectPlaceholder: 'Please choose'
+    selectPlaceholder: 'Please choose',
+    apiAliasTips: 'Interface name, used in controller and interface documentation',
+    packTips: 'The name of the project package, and in which package the generated code is placed',
+    moduleNameTips: 'The name of the module, please select a module that already exists in the project',
+    pathTips: 'Enter the directory under the views folder and create it if it does not exist',
+    authorTips: 'Author name above the class',
+    prefixTips: 'Table prefix is ​​not stripped by default, but can be customized',
+    coverTips: 'Beware of misuse, please choose carefully',
+    apiAliasRequired: 'Interface name cannot be empty',
+    packRequired: 'Package path cannot be empty',
+    moduleNameRequired: 'Module name cannot be empty',
+    pathRequired: 'Front end path cannot be empty',
+    authorRequired: 'Author name cannot be empty',
+    coverRequired: 'Cover cannot be empty',
+    saveOK: 'Save success'
   },
   documentation: {
     documentation: 'Documentation',
