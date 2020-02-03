@@ -347,6 +347,20 @@ export default {
     logExceptionDetails: 'Exception Details',
     viewExceptionDetails: 'View Details'
   },
+  codegen: {
+    TITLE: 'Code generation',
+    tableName: 'Table Name',
+    engine: 'Engine',
+    coding: 'Charset',
+    searchPlaceholder: 'Enter table name query',
+    synchronizeBtn:'Synchronize',
+    previewBtn: 'Preview',
+    downloadBtn: 'Download',
+    generateBtn: 'Generate',
+    syncTips: 'Use this function when the table fields in the database change',
+    syncOK: 'Successful synchronization',
+    generateOK: 'Generated successfully'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'

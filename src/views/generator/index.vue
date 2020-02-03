@@ -3,11 +3,11 @@
     <!--工具栏-->
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
-        <el-input v-model="query.name" clearable size="small" placeholder="请输入表名" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.name" clearable size="small" :placeholder="$t('codegen.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation>
-        <el-tooltip slot="right" class="item" effect="dark" content="数据库中表字段变动时使用该功能" placement="top-start">
+        <el-tooltip slot="right" class="item" effect="dark" :content="$t('codegen.syncTips')" placement="top-start">
           <el-button
             class="filter-item"
             size="mini"
@@ -16,36 +16,36 @@
             :loading="syncLoading"
             :disabled="crud.selections.length === 0"
             @click="sync"
-          >同步</el-button>
+          >{{ $t('codegen.synchronizeBtn') }}</el-button>
         </el-tooltip>
       </crudOperation>
     </div>
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('tableName')" :show-overflow-tooltip="true" prop="tableName" label="表名" />
-      <el-table-column v-if="columns.visible('engine')" :show-overflow-tooltip="true" prop="engine" label="数据库引擎" />
-      <el-table-column v-if="columns.visible('coding')" :show-overflow-tooltip="true" prop="coding" label="字符编码集" />
-      <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" label="备注" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期">
+      <el-table-column v-if="columns.visible('tableName')" :show-overflow-tooltip="true" prop="tableName" :label="$t('codegen.tableName')" />
+      <el-table-column v-if="columns.visible('engine')" :show-overflow-tooltip="true" prop="engine" :label="$t('codegen.engine')" />
+      <el-table-column v-if="columns.visible('coding')" :show-overflow-tooltip="true" prop="coding" :label="$t('codegen.coding')" />
+      <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" :label="$t('be.remark')" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="160px" align="center" fixed="right">
+      <el-table-column :label="$t('be.operate')" width="250px" align="center" fixed="right">
         <template slot-scope="scope">
           <el-button size="mini" style="margin-right: 2px" type="text">
             <router-link :to="'/sys-tools/generator/preview/' + scope.row.tableName">
-              预览
+              {{ $t('codegen.previewBtn') }}
             </router-link>
           </el-button>
-          <el-button size="mini" style="margin-left: -1px;margin-right: 2px" type="text" @click="toDownload(scope.row.tableName)">下载</el-button>
+          <el-button size="mini" style="margin-left: -1px;margin-right: 2px" type="text" @click="toDownload(scope.row.tableName)">{{ $t('codegen.downloadBtn') }}</el-button>
           <el-button size="mini" style="margin-left: -1px;margin-right: 2px" type="text">
             <router-link :to="'/sys-tools/generator/config/' + scope.row.tableName">
-              编辑
+              {{ $t('crud.edit') }}
             </router-link>
           </el-button>
-          <el-button type="text" style="margin-left: -1px" size="mini" @click="toGen(scope.row.tableName)">生成</el-button>
+          <el-button type="text" style="margin-left: -1px" size="mini" @click="toGen(scope.row.tableName)">{{ $t('codegen.generateBtn') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -62,6 +62,7 @@ import CRUD, { presenter, header } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../lang'
 
 // crud交由presenter持有
 const defaultCrud = CRUD({ url: 'api/generator/tables' })
@@ -83,7 +84,7 @@ export default {
       generator(tableName, 0).then(r => {
         if (r.code === 0) {
           this.$notify({
-            title: '生成成功',
+            title: i18n.t('codegen.generateOK'),
             type: 'success',
             duration: 2500
           })
@@ -107,7 +108,7 @@ export default {
       sync(tables).then(r => {
         if (r.code === 0) {
           this.crud.refresh()
-          this.crud.notify('同步成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(i18n.t('codegen.syncOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.syncLoading = false
         } else {
           this.syncLoading = false

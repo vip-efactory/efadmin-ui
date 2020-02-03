@@ -347,6 +347,20 @@ export default {
     logExceptionDetails: '异常详情',
     viewExceptionDetails: '查看详情'
   },
+  codegen: {
+    TITLE: '代码生成',
+    tableName: '表名称',
+    engine: '数据库引擎',
+    coding: '编码集',
+    searchPlaceholder: '输入表名查询',
+    synchronizeBtn:'同步',
+    previewBtn: '预览',
+    downloadBtn: '下载',
+    generateBtn: '生成',
+    syncTips: '数据库中表字段变动时使用该功能',
+    syncOK: '同步成功',
+    generateOK: '生成成功'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'
