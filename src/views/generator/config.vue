@@ -259,7 +259,7 @@ export default {
       this.columnLoading = true
       save(this.data).then(res => {
         if (res.code === 0) {
-          this.notify('保存成功', 'success')
+          this.notify(i18n.t('genConfig.saveOK'), 'success')
           this.columnLoading = false
         } else {
           this.columnLoading = false
