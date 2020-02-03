@@ -61,6 +61,7 @@ export default {
     close: 'Close',
     clickUpload: 'Click Upload',
     success: 'Succeed',
+    failure: 'Failure',
     dragFileUpload: 'Drag files here, or',
     startDate: 'Start date',
     endDate: 'End date',
@@ -322,6 +323,7 @@ export default {
   },
   task: {
     TITLE: 'Timed Task',
+    LOGTITLE: 'Execution log',
     jobName: 'Task name',
     beanName: 'Bean name',
     methodName: 'Method name',
@@ -339,7 +341,11 @@ export default {
     jobNameRequired: 'Please enter the task name',
     beanNameRequired: 'Please enter the bean name',
     methodNameRequired: 'Please enter the method name',
-    cronExpressionRequired: 'Please enter the cron expression'
+    cronExpressionRequired: 'Please enter the cron expression',
+    logState: 'Log Status',
+    logConsumeTime: 'Consume Time(ms)',
+    logExceptionDetails: 'Exception Details',
+    viewExceptionDetails: 'View Details'
   },
   documentation: {
     documentation: 'Documentation',

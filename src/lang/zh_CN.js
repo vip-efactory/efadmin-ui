@@ -61,6 +61,7 @@ export default {
     close: '关闭',
     clickUpload: '点击上传',
     success: '成功',
+    failure: '失败',
     dragFileUpload: '将文件拖到此处，或',
     startDate: '开始日期',
     endDate: '结束日期',
@@ -322,6 +323,7 @@ export default {
   },
   task: {
     TITLE: '定时任务',
+    LOGTITLE: '执行日志',
     jobName: '任务名称',
     beanName: 'Bean名称',
     methodName: '方法名称',
@@ -339,7 +341,11 @@ export default {
     jobNameRequired: '请输入任务名称',
     beanNameRequired: '请输入Bean名称',
     methodNameRequired: '请输入方法名称',
-    cronExpressionRequired: '请输入cron表达式'
+    cronExpressionRequired: '请输入cron表达式',
+    logState: '日志状态',
+    logConsumeTime: '执行耗时(毫秒)',
+    logExceptionDetails: '异常详情',
+    viewExceptionDetails: '查看详情'
   },
   documentation: {
     documentation: '文档',
