@@ -407,6 +407,22 @@ export default {
     coverRequired: '是否覆盖不能为空',
     saveOK: '保存成功'
   },
+  picture: {
+    TITLE: '图片',
+    filename: '文件名',
+    url: '缩略图',
+    size: '文件大小',
+    height: '高度',
+    width: '宽度',
+    delete: '删除地址',
+    username: '上传者',
+    md5Code: 'MD5',
+    uploadBtn: '上传',
+    synchronizeBtn: '同步',
+    syncOK: '同步成功',
+    syncTips: '使用同步功能需要在 https://sm.ms/login 中注册账号，并且在 application.yml 文件中修改 Secret Token',
+    searchPlaceholder: '输入文件名'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'

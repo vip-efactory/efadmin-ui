@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!--搜索-->
-        <el-input v-model="query.filename" clearable size="small" placeholder="输入文件名" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.filename" clearable size="small" :placeholder="$t('picture.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -13,8 +13,8 @@
           size="small"
           class="date-item"
           value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startDate')"
+          :end-placeholder="$t('common.endDate')"
         />
         <rrOperation :crud="crud" />
       </div>
@@ -28,8 +28,8 @@
           type="primary"
           icon="el-icon-upload"
           @click="dialog = true"
-        >上传</el-button>
-        <el-tooltip slot="right" class="item" effect="dark" content="使用同步功能需要在 https://sm.ms/login 中注册账号，并且在 application.yml 文件中修改 Secret Token" placement="top-start">
+        >{{ $t('picture.uploadBtn') }}</el-button>
+        <el-tooltip slot="right" class="item" effect="dark" :content="$t('picture.syncTips')" placement="top-start">
           <el-button
             v-permission="['admin','pictures:add']"
             class="filter-item"
@@ -38,7 +38,7 @@
             icon="el-icon-refresh"
             :loading="syncLoading"
             @click="sync"
-          >同步</el-button>
+          >{{ $t('picture.synchronizeBtn') }}</el-button>
         </el-tooltip>
       </crudOperation>
     </div>
@@ -60,15 +60,15 @@
         <img :src="dialogImageUrl" width="100%" alt="">
       </el-dialog>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="doSubmit">确认</el-button>
+        <el-button type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
       </div>
     </el-dialog>
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('filename')" width="200" prop="filename" label="文件名" sortable="custom" />
-      <el-table-column v-if="columns.visible('username')" prop="username" label="上传者" sortable="custom" />
-      <el-table-column v-if="columns.visible('url')" ref="table" :show-overflow-tooltip="true" prop="url" label="缩略图">
+      <el-table-column v-if="columns.visible('filename')" width="200" prop="filename" :label="$t('picture.filename')" sortable="custom" />
+      <el-table-column v-if="columns.visible('username')" prop="username" :label="$t('picture.username')" sortable="custom" />
+      <el-table-column v-if="columns.visible('url')" ref="table" :show-overflow-tooltip="true" prop="url" :label="$t('picture.url')">
         <template slot-scope="{row}">
           <el-image
             :src="row.url"
@@ -79,10 +79,10 @@
           />
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('size')" prop="size" label="文件大小" />
-      <el-table-column v-if="columns.visible('height')" prop="height" label="高度" sortable="custom" />
-      <el-table-column v-if="columns.visible('width')" prop="width" label="宽度" sortable="custom" />
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom">
+      <el-table-column v-if="columns.visible('size')" prop="size" :label="$t('picture.size')" />
+      <el-table-column v-if="columns.visible('height')" prop="height" :label="$t('picture.height')" sortable="custom" />
+      <el-table-column v-if="columns.visible('width')" prop="width" :label="$t('picture.width')" sortable="custom" />
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
@@ -101,9 +101,10 @@ import { getToken } from '@/utils/auth'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '图片', url: 'api/pictures', crudMethod: { ...crudPic }})
+const defaultCrud = CRUD({ title: i18n.t('picture.TITLE'), url: 'api/pictures', crudMethod: { ...crudPic }})
 export default {
   name: 'Pictures',
   components: { pagination, crudOperation, rrOperation },
@@ -172,7 +173,7 @@ export default {
       this.syncLoading = true
       crudPic.sync().then(res => {
         if (res.code === 0) {
-          this.crud.notify('同步成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(i18n.t('picture.syncOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.crud.toQuery()
           this.syncLoading = false
         } else {

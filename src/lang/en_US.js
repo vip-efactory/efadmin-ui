@@ -407,6 +407,22 @@ export default {
     coverRequired: 'Cover cannot be empty',
     saveOK: 'Save success'
   },
+  picture: {
+    TITLE: 'Picture',
+    filename: 'File name',
+    url: 'Thumbnail',
+    size: 'Size',
+    height: 'Height',
+    width: 'Width',
+    delete: 'Delete address',
+    username: 'Uploaded man',
+    md5Code: 'MD5',
+    uploadBtn: 'Upload',
+    synchronizeBtn: 'synchronize',
+    syncOK: 'Successful synchronization',
+    syncTips: 'To use the synchronization function, you need to register an account in https://sm.ms/login, and modify the Secret Token in the application.yml file',
+    searchPlaceholder: 'Enter file name'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'
