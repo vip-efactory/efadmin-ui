@@ -159,7 +159,7 @@ export default {
     }
   },
   computed: {
-    // 当是中文环境时显示中文,否则显示英文
+    // 当是中文环境时显示中文,否则显示英文,已知问题,手动切换cron的语言时控制台有警告!
     cronLocale: function() {
       return getLocale().indexOf('zh') > -1 ? 'cn' : 'en'
     }
