@@ -46,8 +46,15 @@
         <el-form-item :label="$t('task.params')">
           <el-input v-model="form.params" style="width: 460px;" />
         </el-form-item>
-        <el-form-item :label="$t('task.cronExpression')" prop="cronExpression">
-          <el-input v-model="form.cronExpression" style="width: 460px;" />
+        <el-form-item :label="$t('task.cronExpression')">
+          <template>
+            <div class="cron">
+              <el-popover v-model="cronPopover">
+                <cron :i18n="cronLocale" @change="changeCron" @close="cronPopover=false" />
+                <el-input slot="reference" v-model="form.cronExpression" placeholder="请输入定时策略" @click="cronPopover=true" />
+              </el-popover>
+            </div>
+          </template>
         </el-form-item>
         <el-form-item :label="$t('task.isPause')">
           <el-radio v-model="form.isPause" :label="false">{{ $t('bool.true') }}</el-radio>
@@ -116,14 +123,15 @@ import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
-import i18n from '../../../lang'
+import i18n, { getLocale } from '../../../lang'
+import { cron } from 'vue-cron'
 
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: i18n.t('task.TITLE'), url: 'api/jobs', crudMethod: { ...crudJob }})
 const defaultForm = { id: null, jobName: null, beanName: null, methodName: null, params: null, cronExpression: null, isPause: false, remark: null }
 export default {
   name: 'Timing',
-  components: { Log, pagination, crudOperation, rrOperation },
+  components: { Log, pagination, crudOperation, rrOperation, cron },
   mixins: [presenter(defaultCrud), header(), form(defaultForm), crud()],
   data() {
     return {
@@ -146,7 +154,14 @@ export default {
         cronExpression: [
           { required: true, message: i18n.t('task.cronExpressionRequired'), trigger: 'blur' }
         ]
-      }
+      },
+      cronPopover: false
+    }
+  },
+  computed: {
+    // 当是中文环境时显示中文,否则显示英文
+    cronLocale: function() {
+      return getLocale().indexOf('zh') > -1 ? 'cn' : 'en'
     }
   },
   methods: {
@@ -200,6 +215,9 @@ export default {
     },
     checkboxT(row, rowIndex) {
       return row.id !== 1
+    },
+    changeCron(val) {
+      this.form.cronExpression = val
     }
   }
 }
