@@ -6,7 +6,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.key" clearable size="small" placeholder="输入文件名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+        <el-input v-model="query.key" clearable size="small" :placeholder="$t('storage.qiniuSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
         <el-date-picker
           v-model="query.c"
           :default-time="['00:00:00','23:59:59']"
@@ -15,17 +15,17 @@
           size="small"
           class="date-item"
           value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startDate')"
+          :end-placeholder="$t('common.endDate')"
         />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission">
         <template slot="left">
           <!-- 上传 -->
-          <el-button class="filter-item" size="mini" type="primary" icon="el-icon-upload" @click="dialog = true">上传</el-button>
+          <el-button class="filter-item" size="mini" type="primary" icon="el-icon-upload" @click="dialog = true">{{ $t('storage.uploadBtn') }}</el-button>
           <!-- 同步 -->
-          <el-button :icon="icon" class="filter-item" size="mini" type="warning" @click="synchronize">同步</el-button>
+          <el-button :icon="icon" class="filter-item" size="mini" type="warning" @click="synchronize">{{ $t('storage.synchronizeBtn') }}</el-button>
           <!-- 配置 -->
           <el-button
             class="filter-item"
@@ -33,7 +33,7 @@
             type="success"
             icon="el-icon-s-tools"
             @click="doConfig"
-          >配置</el-button>
+          >{{ $t('storage.configBtn') }}</el-button>
         </template>
       </crudOperation>
       <!-- 文件上传 -->
@@ -48,26 +48,26 @@
           class="upload-demo"
           multiple
         >
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" style="display: block;" class="el-upload__tip">请勿上传违法文件，且文件不超过15M</div>
+          <el-button size="small" type="primary">{{ $t('storage.clickUpload') }}</el-button>
+          <div slot="tip" style="display: block;" class="el-upload__tip">{{ $t('storage.qiniuUploadTips') }}</div>
         </el-upload>
         <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="doSubmit">确认</el-button>
+          <el-button type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
         </div>
       </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column v-if="columns.visible('name')" prop="name" :show-overflow-tooltip="true" label="文件名">
+        <el-table-column v-if="columns.visible('name')" prop="name" :show-overflow-tooltip="true" :label="$t('storage.name')">
           <template slot-scope="scope">
             <a href="JavaScript:" class="el-link el-link--primary" target="_blank" type="primary" @click="download(scope.row.id)">{{ scope.row.key }}</a>
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('suffix')" :show-overflow-tooltip="true" prop="suffix" label="文件类型" @selection-change="crud.selectionChangeHandler" />
-        <el-table-column v-if="columns.visible('bucket')" prop="bucket" label="空间名称" />
-        <el-table-column v-if="columns.visible('size')" prop="size" label="文件大小" />
-        <el-table-column v-if="columns.visible('type')" prop="type" label="空间类型" />
-        <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" label="创建日期">
+        <el-table-column v-if="columns.visible('suffix')" :show-overflow-tooltip="true" prop="suffix" :label="$t('storage.suffix')" @selection-change="crud.selectionChangeHandler" />
+        <el-table-column v-if="columns.visible('bucket')" prop="bucket" :label="$t('storage.bucket')" />
+        <el-table-column v-if="columns.visible('size')" prop="size" :label="$t('storage.size')" />
+        <el-table-column v-if="columns.visible('type')" prop="type" :label="$t('storage.type')" />
+        <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" :label="$t('be.createTime')">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.updateTime) }}</span>
           </template>

@@ -1,19 +1,19 @@
 <template>
-  <el-dialog :visible.sync="dialog" :close-on-click-modal="false" title="七牛云配置" append-to-body width="580px">
-    <el-form ref="form" :model="form" :rules="rules" style="margin-top: 6px;" size="small" label-width="110px">
+  <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :title="$t('storage.qiniuConfigTitle')" append-to-body width="600px">
+    <el-form ref="form" :model="form" :rules="rules" style="margin-top: 6px;" size="small" label-width="120px">
       <el-form-item label="Access Key" prop="accessKey">
         <el-input v-model="form.accessKey" style="width: 95%" placeholder="accessKey，在安全中心，秘钥管理中查看" />
       </el-form-item>
       <el-form-item label="Secret Key" prop="secretKey">
         <el-input v-model="form.secretKey" type="password" style="width: 95%;" placeholder="secretKey，在安全中心，秘钥管理中查看" />
       </el-form-item>
-      <el-form-item label="空间名称" prop="bucket">
+      <el-form-item :label="$t('storage.bucket')" prop="bucket">
         <el-input v-model="form.bucket" style="width: 95%;" placeholder="存储空间名称作为唯一的 Bucket 识别符" />
       </el-form-item>
-      <el-form-item label="外链域名" prop="host">
+      <el-form-item :label="$t('storage.host')" prop="host">
         <el-input v-model="form.host" style="width: 95%;" placeholder="外链域名，可自定义，需在七牛云绑定" />
       </el-form-item>
-      <el-form-item label="存储区域" prop="port">
+      <el-form-item :label="$t('storage.zone')" prop="port">
         <el-select v-model="form.zone" placeholder="请选择存储区域">
           <el-option
             v-for="item in zones"
@@ -23,14 +23,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="空间类型" prop="host">
-        <el-radio v-model="form.type" label="公开">公开</el-radio>
-        <el-radio v-model="form.type" label="私有">私有</el-radio>
+      <el-form-item :label="$t('storage.bucketType')" prop="host">
+        <el-radio v-model="form.type" label="公开">{{ $t('storage.typePublic') }}</el-radio>
+        <el-radio v-model="form.type" label="私有">{{ $t('storage.typePrivate') }}</el-radio>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="dialog = false">取消</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button type="text" @click="dialog = false">{{ $t('crud.cancel') }}</el-button>
+      <el-button :loading="loading" type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
     </div>
   </el-dialog>
 </template>

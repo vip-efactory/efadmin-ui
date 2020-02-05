@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" clearable size="small" placeholder="输入内容模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.blurry" clearable size="small" :placeholder="$t('storage.localSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -13,8 +13,8 @@
           size="small"
           class="date-item"
           value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startDate')"
+          :end-placeholder="$t('common.endDate')"
         />
         <rrOperation :crud="crud" />
       </div>
@@ -28,18 +28,18 @@
           type="primary"
           icon="el-icon-upload"
           @click="crud.toAdd"
-        >上传
+        >{{ $t('storage.uploadBtn') }}
         </el-button>
       </crudOperation>
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.add ? '文件上传' : '编辑文件'" width="500px">
+    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.add ? $t('storage.fileUpload') : $t('storage.editFile')" width="500px">
       <el-form ref="form" :model="form" size="small" label-width="80px">
-        <el-form-item label="文件名">
+        <el-form-item :label="$t('storage.name')">
           <el-input v-model="form.name" style="width: 370px;" />
         </el-form-item>
         <!--   上传文件   -->
-        <el-form-item v-if="crud.status.add" label="上传">
+        <el-form-item v-if="crud.status.add" :label="$t('storage.uploadBtn')">
           <el-upload
             ref="upload"
             :limit="1"
@@ -50,26 +50,26 @@
             :on-error="handleError"
             :action="fileUploadApi + '?name=' + form.name"
           >
-            <div class="eladmin-upload"><i class="el-icon-upload" /> 添加文件</div>
-            <div slot="tip" class="el-upload__tip">可上传任意格式文件，且不超过100M</div>
+            <div class="eladmin-upload"><i class="el-icon-upload" /> {{ $t('storage.addFile') }}</div>
+            <div slot="tip" class="el-upload__tip">{{ $t('storage.localUploadTips') }}</div>
           </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">取消</el-button>
-        <el-button v-if="crud.status.add" :loading="loading" type="primary" @click="upload">确认</el-button>
-        <el-button v-else :loading="crud.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+        <el-button v-if="crud.status.add" :loading="loading" type="primary" @click="upload">{{ $t('crud.confirm') }}</el-button>
+        <el-button v-else :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
       </div>
     </el-dialog>
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" prop="name" label="文件名" sortable="custom">
+      <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('storage.name')" sortable="custom">
         <template slot-scope="scope">
           <el-popover
             :content="'file/' + scope.row.type + '/' + scope.row.realName"
             placement="top-start"
-            title="路径"
+            :title="$t('storage.path')"
             width="200"
             trigger="hover"
           >
@@ -85,7 +85,7 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('path')" prop="path" label="预览图">
+      <el-table-column v-if="columns.visible('path')" prop="path" :label="$t('storage.thumbnail')">
         <template slot-scope="{row}">
           <el-image
             :src=" baseApi + '/file/' + row.type + '/' + row.realName"
@@ -100,11 +100,11 @@
           </el-image>
         </template>
       </el-table-column>
-      <el-table-column v-if="columns.visible('suffix')" prop="suffix" label="文件类型" sortable="custom" />
-      <el-table-column v-if="columns.visible('type')" prop="type" label="类别" sortable="custom" />
-      <el-table-column v-if="columns.visible('size')" prop="size" label="大小" />
-      <el-table-column v-if="columns.visible('operate')" prop="operate" label="操作人" sortable="custom"/>
-      <el-table-column v-if="columns.visible('createTime')" prop="createTime" label="创建日期" sortable="custom">
+      <el-table-column v-if="columns.visible('suffix')" prop="suffix" :label="$t('storage.suffix')" sortable="custom" />
+      <el-table-column v-if="columns.visible('type')" prop="type" :label="$t('storage.type')" sortable="custom" />
+      <el-table-column v-if="columns.visible('size')" prop="size" :label="$t('storage.size')" />
+      <el-table-column v-if="columns.visible('operate')" prop="operate" :label="$t('storage.operate')" sortable="custom"/>
+      <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
@@ -123,6 +123,7 @@ import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../../../lang'
 
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '文件', url: 'api/localStorage', crudMethod: { ...crudFile }})
@@ -160,13 +161,13 @@ export default {
       isLt2M = file.size / 1024 / 1024 < 100
       if (!isLt2M) {
         this.loading = false
-        this.$message.error('上传文件大小不能超过 100MB!')
+        this.$message.error(i18n.t('storage.sizeLimit'))
       }
       this.form.name = file.name
       return isLt2M
     },
     handleSuccess(response, file, fileList) {
-      this.crud.notify('上传成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+      this.crud.notify(i18n.t('storage.uploadOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
       this.$refs.upload.clearFiles()
       this.crud.status.add = CRUD.STATUS.NORMAL
       this.crud.resetForm()

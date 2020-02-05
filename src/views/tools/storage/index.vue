@@ -1,9 +1,9 @@
 <template>
   <el-tabs v-model="activeName" style="padding-left: 8px;" @tab-click="tabClick">
-    <el-tab-pane label="本地存储" name="first">
+    <el-tab-pane :label="$t('storage.LOCAL_TITLE')" name="first">
       <Local ref="local" />
     </el-tab-pane>
-    <el-tab-pane label="七牛云存储" name="second">
+    <el-tab-pane :label="$t('storage.QINIU_TITLE')" name="second">
       <QiNiu ref="qiNiu" />
     </el-tab-pane>
   </el-tabs>
