@@ -445,6 +445,8 @@ function CRUD(options) {
      */
     resetQuery(toQuery = true) {
       const defaultQuery = JSON.parse(JSON.stringify(crud.defaultQuery))
+      // 清除所有的查询参数
+      crud.params = {}
       const query = crud.query
       Object.keys(query).forEach(key => {
         query[key] = defaultQuery[key]
