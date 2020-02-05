@@ -41,8 +41,8 @@
     <!--  底部  -->
     <div v-if="$store.state.settings.showFooter" id="el-login-footer">
       <span v-html="$store.state.settings.footerTxt" />
-      <span> ⋅ </span>
-      <a href="http://www.beian.miit.gov.cn" target="_blank">{{ $store.state.settings.caseNumber }}</a>
+      <span v-show="is_zh_CN"> ⋅ </span>
+      <a v-show="is_zh_CN" href="http://www.beian.miit.gov.cn" target="_blank">{{ $store.state.settings.caseNumber }}</a>
     </div>
   </div>
 </template>
@@ -53,6 +53,7 @@ import Config from '@/settings'
 import { getCodeImg } from '@/api/login'
 import Cookies from 'js-cookie'
 import LangSelect from '@/components/LangSelect'
+import { getLocale } from '../lang'
 
 export default {
   name: 'Login',
@@ -75,6 +76,12 @@ export default {
       },
       loading: false,
       redirect: undefined
+    }
+  },
+  computed: {
+    // 非中文环境不显示备案号信息
+    is_zh_CN: function() {
+      return getLocale().indexOf('zh') > -1
     }
   },
   watch: {
