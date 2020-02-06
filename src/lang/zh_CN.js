@@ -453,7 +453,18 @@ export default {
     bucketType: '空间类型',
     typePublic: '公开',
     typePrivate: '私有',
-    qiniuConfigTitle: '七牛云配置'
+    qiniuConfigTitle: '七牛云配置',
+    accessKeyRequired: '请输入accessKey',
+    secretKeyRequired: '请输入secretKey',
+    bucketRequired: '请输入空间名称',
+    zoneRequired: '请输入存储区域',
+    hostRequired: '请输入外链域名',
+    bucketTypeRequired: '请输入空间类型',
+    accessKeyPlaceholder: 'accessKey，在安全中心，秘钥管理中查看',
+    secretKeyPlaceholder: 'secretKey，在安全中心，秘钥管理中查看',
+    bucketPlaceholder: '存储空间名称作为唯一的 Bucket 识别符',
+    zonePlaceholder: '请选择存储区域',
+    hostPlaceholder: '外链域名，可自定义，需在七牛云绑定'
   },
   documentation: {
     documentation: '文档',

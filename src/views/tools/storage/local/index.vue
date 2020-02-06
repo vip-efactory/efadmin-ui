@@ -103,7 +103,7 @@
       <el-table-column v-if="columns.visible('suffix')" prop="suffix" :label="$t('storage.suffix')" sortable="custom" />
       <el-table-column v-if="columns.visible('type')" prop="type" :label="$t('storage.type')" sortable="custom" />
       <el-table-column v-if="columns.visible('size')" prop="size" :label="$t('storage.size')" />
-      <el-table-column v-if="columns.visible('operate')" prop="operate" :label="$t('storage.operate')" sortable="custom"/>
+      <el-table-column v-if="columns.visible('operate')" prop="operate" :label="$t('storage.operate')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>

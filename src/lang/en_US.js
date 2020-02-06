@@ -453,7 +453,18 @@ export default {
     bucketType: 'Bucket type',
     typePublic: 'Public',
     typePrivate: 'Private',
-    qiniuConfigTitle: 'Qiniu Cloud Configuration'
+    qiniuConfigTitle: 'Qiniu Cloud Configuration',
+    accessKeyRequired: 'Please enter the Access Key',
+    secretKeyRequired: 'Please enter the Secret Key',
+    bucketRequired: 'Please enter the Bucket',
+    zoneRequired: 'Please enter the Zone',
+    hostRequired: 'Please enter the Domain Name',
+    bucketTypeRequired: 'Please enter the Bucket Type',
+    accessKeyPlaceholder: 'accessKey, View in Security Center, Key Management',
+    secretKeyPlaceholder: 'secretKey, view in Security Center, Key Management',
+    bucketPlaceholder: 'Storage name as unique bucket identifier',
+    zonePlaceholder: 'Please select a storage area',
+    hostPlaceholder: 'Domain name, which can be customized and needs to be bound in Qiniu Cloud'
   },
   documentation: {
     documentation: 'Documentation',
