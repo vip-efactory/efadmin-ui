@@ -1,12 +1,12 @@
 <template>
   <el-tabs v-model="activeName" style="padding-left: 5px;">
-    <el-tab-pane label="邮箱配置" name="first">
+    <el-tab-pane :label="$t('email.EMAIL_CONFIG_TAB')" name="first">
       <Config />
     </el-tab-pane>
-    <el-tab-pane label="发送邮件" name="second">
+    <el-tab-pane :label="$t('email.EMAIL_SEND_TAB')" name="second">
       <Send />
     </el-tab-pane>
-    <el-tab-pane label="使用说明" name="third">
+    <el-tab-pane :label="$t('email.INSTRUCTIONS_TAB')" name="third">
       <div>
         <blockquote class="my-blockquote"> 邮件服务器配置</blockquote>
         <pre class="my-code">
