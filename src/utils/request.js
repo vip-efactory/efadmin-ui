@@ -4,6 +4,7 @@ import { Notification, MessageBox } from 'element-ui'
 import { getToken } from '@/utils/auth'
 import Config from '@/settings'
 import store from '@/store'
+import i18n from '../lang'
 
 // 创建axios实例
 const service = axios.create({
@@ -49,7 +50,7 @@ service.interceptors.response.use(
     } catch (e) {
       if (error.toString().indexOf('Error: timeout') !== -1) {
         Notification.error({
-          title: '网络请求超时',
+          title: i18n.t('sys.networkRequestTimeout'),
           duration: 5000
         })
         return Promise.reject(error)
@@ -58,11 +59,11 @@ service.interceptors.response.use(
     if (code) {
       if (code === 401) {
         MessageBox.confirm(
-          '登录状态已过期，您可以继续留在该页面，或者重新登录',
-          '系统提示',
+          `i18n.t('sys.reloginTips')`,
+          `i18n.t('sys.systemHint')`,
           {
-            confirmButtonText: '重新登录',
-            cancelButtonText: '取消',
+            confirmButtonText: i18n.t('sys.reloginBtn'),
+            cancelButtonText: i18n.t('crud.cancel'),
             type: 'warning'
           }
         ).then(() => {
@@ -83,7 +84,7 @@ service.interceptors.response.use(
       }
     } else {
       Notification.error({
-        title: '接口请求失败',
+        title: i18n.t('sys.interfaceRequestFailed'),
         duration: 5000
       })
     }

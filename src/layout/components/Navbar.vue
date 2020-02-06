@@ -66,6 +66,7 @@ import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import Avatar from '@/assets/images/avatar.png'
 import LangSelect from '@/components/LangSelect'
+import i18n from '../../lang'
 
 export default {
   components: {
@@ -107,9 +108,9 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     open() {
-      this.$confirm('确定注销并退出系统吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(i18n.t('sys.logoutTips'), i18n.t('sys.warningTitle'), {
+        confirmButtonText: i18n.t('crud.confirm'),
+        cancelButtonText: i18n.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         this.logout()

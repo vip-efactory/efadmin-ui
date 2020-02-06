@@ -1,4 +1,13 @@
 export default {
+  sys: {
+    networkRequestTimeout: '网络请求超时',
+    systemHint: '系统提示',
+    reloginTips: '登录状态已过期，您可以继续留在该页面，或者重新登录',
+    reloginBtn: '重新登录',
+    interfaceRequestFailed: '接口请求失败',
+    logoutTips: '确定注销并退出系统吗？',
+    warningTitle: '提示'
+  },
   login: {
     title: 'EF-ADMIN 后台系统登录',
     logIn: '登录',

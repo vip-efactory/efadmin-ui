@@ -1,4 +1,13 @@
 export default {
+  sys: {
+    networkRequestTimeout: 'Network request timeout',
+    systemHint: 'System Hint',
+    reloginTips: 'Login status has expired, you can stay on this page or login again',
+    reloginBtn: 'Login again',
+    interfaceRequestFailed: 'Interface request failed',
+    logoutTips: 'Are you sure you want to log out and exit the system?',
+    warningTitle: 'Warning'
+  },
   login: {
     title: 'EF-ADMIN System Login',
     logIn: 'Login',
