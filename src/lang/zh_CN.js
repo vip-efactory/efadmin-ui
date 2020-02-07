@@ -501,7 +501,18 @@ export default {
     emailSubjectRequired: '邮件主题不允许为空',
     mailToRequired: '收件人不允许为空',
     atLeastOneMailto: '请至少保留一位收件人',
-    sendOK: '发送成功'
+    sendOK: '发送成功',
+    helpServerConfigTitle: '邮件服务器配置',
+    helpMoreTitle: '更多帮助',
+    helpServerConfigTips: '\n' +
+      ' # 邮件服务器的SMTP地址，可选，默认为smtp\n' +
+      ' # 邮件服务器的SMTP端口，可选，默认465或者25\n' +
+      ' # 发件人（必须正确，否则发送失败）\n' +
+      ' # 用户名，默认为发件人邮箱前缀\n' +
+      ' # 密码（注意，某些邮箱需要为SMTP服务单独设置密码，如QQ和163等等）\n' +
+      ' # 是否开启ssl，默认开启',
+    moreHelpViewDoc: '更多帮助请查看文档：',
+    hutool: 'hutool工具包'
   },
   documentation: {
     documentation: '文档',

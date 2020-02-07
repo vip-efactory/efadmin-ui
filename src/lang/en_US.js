@@ -501,7 +501,18 @@ export default {
     emailSubjectRequired: 'Email subject cannot be empty',
     mailToRequired: 'Recipient is not allowed to be empty',
     atLeastOneMailto: 'Please keep at least one recipient',
-    sendOK: 'Sent successfully'
+    sendOK: 'Sent successfully',
+    helpServerConfigTitle: 'Mail Server Configuration',
+    helpMoreTitle: 'More Help',
+    helpServerConfigTips: '\n' +
+      ' # SMTP address of the mail server, optional, default is smtp\n' +
+      ' # SMTP port of the mail server, optional, default 465 or 25\n' +
+      ' # Sender (must be correct, otherwise sending failed)\n' +
+      ' # Username, default is the sender email prefix\n' +
+      ' # Password (note that some mailboxes require a separate password for the SMTP service, such as QQ and 163, etc.)\n' +
+      ' # Whether to enable ssl, which is enabled by default',
+    moreHelpViewDoc: 'Please check the documentation for more help：',
+    hutool: 'hutool toolkit'
   },
   documentation: {
     documentation: 'Documentation',

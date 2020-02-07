@@ -59,8 +59,8 @@ service.interceptors.response.use(
     if (code) {
       if (code === 401) {
         MessageBox.confirm(
-          `i18n.t('sys.reloginTips')`,
-          `i18n.t('sys.systemHint')`,
+          i18n.t('sys.reloginTips') + '',
+          i18n.t('sys.systemHint') + '',
           {
             confirmButtonText: i18n.t('sys.reloginBtn'),
             cancelButtonText: i18n.t('crud.cancel'),
