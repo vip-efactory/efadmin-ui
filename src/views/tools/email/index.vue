@@ -13,7 +13,7 @@
         {{ $t('email.helpServerConfigTips') }}
         </pre>
         <blockquote class="my-blockquote">{{ $t('email.helpMoreTitle') }}</blockquote>
-        <pre class="my-code">{{ $t('email.moreHelpViewDoc') }}<a style="color:#009688" href="http://hutool.mydoc.io/#text_319499" target="_black">{{ $t('email.hutool') }}</a></pre>
+        <pre class="my-code">{{ $t('email.moreHelpViewDoc') }}<a style="color:#009688" href="https://hutool.cn/docs/#/extra/%E9%82%AE%E4%BB%B6%E5%B7%A5%E5%85%B7-MailUtil" target="_black">{{ $t('email.hutool') }}</a></pre>
       </div>
     </el-tab-pane>
   </el-tabs>
