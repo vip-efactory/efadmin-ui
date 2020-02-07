@@ -514,6 +514,27 @@ export default {
     moreHelpViewDoc: '更多帮助请查看文档：',
     hutool: 'hutool工具包'
   },
+  aliPay: {
+    PAY_CONFIG_TAB: '参数配置',
+    PAY_TEST_TAB: '支付测试',
+    INSTRUCTIONS_TAB: '使用说明',
+    appId: '应用ID',
+    sysServiceProviderId: '商家账号',
+    privateKey: '商户私钥',
+    publicKey: '支付宝公钥',
+    signType: '签名方式',
+    gatewayUrl: '支付宝开放安全地址',
+    returnUrl: '回调地址',
+    notifyUrl: '异步通知',
+    commodityName: '商品名称',
+    commodityPrice: '商品价格',
+    commodityDesc: '商品描述',
+    toPayBtn: '去支付',
+    commodityNameRequired: '商品名称不能为空',
+    commodityPriceRequired: '商品价格不能为空',
+    commodityDescRequired: '商品描述不能为空',
+    priceRangeTips: '测试允许区间(0,5000]'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'

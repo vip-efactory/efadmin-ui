@@ -514,6 +514,27 @@ export default {
     moreHelpViewDoc: 'Please check the documentation for more help：',
     hutool: 'hutool toolkit'
   },
+  aliPay: {
+    PAY_CONFIG_TAB: 'Pay Parameter Configure',
+    PAY_TEST_TAB: 'Pay Test',
+    INSTRUCTIONS_TAB: 'Instructions',
+    appId: 'appID',
+    sysServiceProviderId: 'Merchant account',
+    privateKey: 'Merchant private key',
+    publicKey: 'Alipay public key',
+    signType: 'Signature method',
+    gatewayUrl: 'Alipay open secure address',
+    returnUrl: 'Callback address',
+    notifyUrl: 'Async notification',
+    commodityName: 'Commodity name',
+    commodityPrice: 'Commodity price',
+    commodityDesc: 'Commodity remark',
+    toPayBtn: 'To pay',
+    commodityNameRequired: 'Commodity name cannot be empty',
+    commodityPriceRequired: 'Commodity price cannot be empty',
+    commodityDescRequired: 'Commodity remark cannot be empty',
+    priceRangeTips: 'Test allowable range (0,5000]'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'

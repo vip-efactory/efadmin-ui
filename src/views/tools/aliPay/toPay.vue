@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-form ref="form" :model="form" :rules="rules" style="margin-top: 6px;" size="small" label-width="90px">
-      <el-form-item label="商品名称" prop="subject">
+    <el-form ref="form" :model="form" :rules="rules" style="margin-top: 6px;" size="small" label-width="170px">
+      <el-form-item :label="$t('aliPay.commodityName')" prop="subject">
         <el-input v-model="form.subject" style="width: 35%" />
       </el-form-item>
-      <el-form-item label="商品价格" prop="totalAmount">
+      <el-form-item :label="$t('aliPay.commodityPrice')" prop="totalAmount">
         <el-input v-model="form.totalAmount" style="width: 35%" />
-        <span style="color: #C0C0C0;margin-left: 10px;">测试允许区间(0,5000]</span>
+        <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.priceRangeTips') }}</span>
       </el-form-item>
-      <el-form-item label="商品描述" prop="body">
+      <el-form-item :label="$t('aliPay.commodityDesc')" prop="body">
         <el-input v-model="form.body" style="width: 35%" rows="8" type="textarea" />
       </el-form-item>
       <el-form-item label="">
-        <el-button :loading="loading" size="medium" type="primary" @click="doSubmit">去支付</el-button>
+        <el-button :loading="loading" size="medium" type="primary" @click="doSubmit">{{ $t('aliPay.toPayBtn') }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -20,6 +20,8 @@
 
 <script>
 import { toAliPay } from '@/api/tools/alipay'
+import i18n from '../../../lang'
+
 export default {
   data() {
     return {
@@ -29,13 +31,13 @@ export default {
       loading: false, form: { subject: '', totalAmount: '', body: '' },
       rules: {
         subject: [
-          { required: true, message: '商品名称不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('aliPay.commodityNameRequired'), trigger: 'blur' }
         ],
         totalAmount: [
-          { required: true, message: '商品价格不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('aliPay.commodityPriceRequired'), trigger: 'blur' }
         ],
         body: [
-          { required: true, message: '商品描述不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('aliPay.commodityDescRequired'), trigger: 'blur' }
         ]
       }
     }

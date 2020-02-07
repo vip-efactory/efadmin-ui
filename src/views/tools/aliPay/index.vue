@@ -1,12 +1,12 @@
 <template>
   <el-tabs v-model="activeName" style="padding-left: 5px;">
-    <el-tab-pane label="参数配置" name="first">
+    <el-tab-pane :label="$t('aliPay.PAY_CONFIG_TAB')" name="first">
       <Config />
     </el-tab-pane>
-    <el-tab-pane label="支付测试" name="second">
+    <el-tab-pane :label="$t('aliPay.PAY_TEST_TAB')" name="second">
       <ToPay />
     </el-tab-pane>
-    <el-tab-pane label="使用说明" name="third">
+    <el-tab-pane :label="$t('aliPay.INSTRUCTIONS_TAB')" name="third">
       <div>
         <blockquote class="my-blockquote">注意</blockquote>
         <pre class="my-code">
