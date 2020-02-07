@@ -533,7 +533,30 @@ export default {
     commodityNameRequired: 'Commodity name cannot be empty',
     commodityPriceRequired: 'Commodity price cannot be empty',
     commodityDescRequired: 'Commodity remark cannot be empty',
-    priceRangeTips: 'Test allowable range (0,5000]'
+    priceRangeTips: 'Test allowable range (0,5000]',
+    helpWarningTitle: 'Attention',
+    helpPaySettingsTitle: 'Pay Settings',
+    applyAddress: '\nThe parameters used in the test are sandbox environments and are for test use only. Application address:',
+    aliPayDevPlatform: 'Alipay development platform',
+    payTestTips: '\nFor payment testing, use\n' +
+      'Account：uuxesw9745@sandbox.com\n' +
+      'Password and pay password：111111',
+    codeRemark: '\n// Payment provides two interfaces，\n' +
+      '// PC and mobile phones, and use code recognition on the front end',
+    ifIsAndroid: 'Determine if it is an Android phone',
+    ifIsApple: 'Determine if it is an Apple phone',
+    appIdSpan: 'Application APPID, the receiving account is both the APPID corresponding Alipay account',
+    sysServiceProviderIdSpan: 'Merchant account',
+    privateKeySpan: 'Merchant private key, your PKCS8 format RSA2 private key',
+    publicKeySpan: 'Alipay public key',
+    returnUrlSpan: 'Address returned after order completion',
+    notifyUrlSpan: 'Payment result asynchronous notification address',
+    appIdRequired: 'Please enter appID',
+    sysServiceProviderIdRequired: 'Please enter the merchant account',
+    privateKeyRequired: 'Please enter the merchant private key',
+    publicKeyRequired: 'Please enter the Alipay public key',
+    returnUrlRequired: 'Please enter the callback address',
+    notifyUrlRequired: 'Please enter the asynchronous notification address'
   },
   documentation: {
     documentation: 'Documentation',

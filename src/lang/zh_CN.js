@@ -533,7 +533,30 @@ export default {
     commodityNameRequired: '商品名称不能为空',
     commodityPriceRequired: '商品价格不能为空',
     commodityDescRequired: '商品描述不能为空',
-    priceRangeTips: '测试允许区间(0,5000]'
+    priceRangeTips: '测试允许区间(0,5000]',
+    helpWarningTitle: '注意',
+    helpPaySettingsTitle: '支付设置',
+    applyAddress: '\n测试所用参数都是沙箱环境，仅供测试使用，申请地址：',
+    aliPayDevPlatform: '支付宝开发平台',
+    payTestTips: '\n如需付款测试，请使用\n' +
+      '账号：uuxesw9745@sandbox.com\n' +
+      '密码与支付密码：111111',
+    codeRemark: '\n// 支付提供两个接口，\n' +
+      '// PC端与手机端，并且在前端使用代码识别',
+    ifIsAndroid: '判断是否为Android手机',
+    ifIsApple: '判断是否为苹果手机',
+    appIdSpan: '应用APPID,收款账号既是APPID对应支付宝账号',
+    sysServiceProviderIdSpan: '商家账号',
+    privateKeySpan: '商户私钥，你的PKCS8格式RSA2私钥',
+    publicKeySpan: '支付宝公钥',
+    returnUrlSpan: '订单完成后返回的地址',
+    notifyUrlSpan: '支付结果异步通知地址',
+    appIdRequired: '请输入应用ID',
+    sysServiceProviderIdRequired: '请输入商家账号',
+    privateKeyRequired: '请输入商户私钥',
+    publicKeyRequired: '请输入支付宝公钥',
+    returnUrlRequired: '请输入回调地址',
+    notifyUrlRequired: '请输入异步通知地址'
   },
   documentation: {
     documentation: '文档',

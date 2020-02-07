@@ -2,27 +2,27 @@
   <el-form ref="form" :model="form" :rules="rules" style="margin-top: 6px;" size="small" label-width="170px">
     <el-form-item :label="$t('aliPay.appId')" prop="appId">
       <el-input v-model="form.appId" style="width: 40%" />
-      <span style="color: #C0C0C0;margin-left: 10px;">应用APPID,收款账号既是APPID对应支付宝账号</span>
+      <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.appIdSpan') }}</span>
     </el-form-item>
     <el-form-item :label="$t('aliPay.sysServiceProviderId')" prop="sysServiceProviderId">
       <el-input v-model="form.sysServiceProviderId" style="width: 40%;" />
-      <span style="color: #C0C0C0;margin-left: 10px;">商家账号</span>
+      <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.sysServiceProviderIdSpan') }}</span>
     </el-form-item>
     <el-form-item :label="$t('aliPay.privateKey')" prop="privateKey">
       <el-input v-model="form.privateKey" type="password" style="width: 40%;" />
-      <span style="color: #C0C0C0;margin-left: 10px;">商户私钥，你的PKCS8格式RSA2私钥</span>
+      <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.privateKeySpan') }}</span>
     </el-form-item>
     <el-form-item :label="$t('aliPay.publicKey')" prop="publicKey">
       <el-input v-model="form.publicKey" type="password" style="width: 40%;" />
-      <span style="color: #C0C0C0;margin-left: 10px;">支付宝公钥</span>
+      <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.publicKeySpan') }}</span>
     </el-form-item>
     <el-form-item :label="$t('aliPay.returnUrl')" prop="returnUrl">
       <el-input v-model="form.returnUrl" style="width: 40%;" />
-      <span style="color: #C0C0C0;margin-left: 10px;">订单完成后返回的地址</span>
+      <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.returnUrlSpan') }}</span>
     </el-form-item>
     <el-form-item :label="$t('aliPay.notifyUrl')" prop="notifyUrl">
       <el-input v-model="form.notifyUrl" style="width: 40%;" />
-      <span style="color: #C0C0C0;margin-left: 10px;">支付结果异步通知地址</span>
+      <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.notifyUrlSpan') }}</span>
     </el-form-item>
     <el-form-item label="">
       <el-button :loading="loading" size="medium" type="primary" @click="doSubmit">{{ $t('crud.save') }}</el-button>
@@ -42,22 +42,22 @@ export default {
       form: { appId: '', sysServiceProviderId: '', privateKey: '', publicKey: '', returnUrl: '', notifyUrl: '' },
       rules: {
         appId: [
-          { required: true, message: '请输入appID', trigger: 'blur' }
+          { required: true, message: i18n.t('aliPay.appIdRequired'), trigger: 'blur' }
         ],
         sysServiceProviderId: [
-          { required: true, message: '请输入商家账号', trigger: 'blur' }
+          { required: true, message: i18n.t('aliPay.sysServiceProviderIdRequired'), trigger: 'blur' }
         ],
         privateKey: [
-          { required: true, message: '商户私钥不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('aliPay.privateKeyRequired'), trigger: 'blur' }
         ],
         publicKey: [
-          { required: true, message: '支付宝公钥不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('aliPay.publicKeyRequired'), trigger: 'blur' }
         ],
         returnUrl: [
-          { required: true, message: '回调地址不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('aliPay.returnUrlRequired'), trigger: 'blur' }
         ],
         notifyUrl: [
-          { required: true, message: '回调地址不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('aliPay.notifyUrlRequired'), trigger: 'blur' }
         ]
       }
     }
