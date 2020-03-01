@@ -558,6 +558,16 @@ export default {
     returnUrlRequired: 'Please enter the callback address',
     notifyUrlRequired: 'Please enter the asynchronous notification address'
   },
+  advanceSearch: {
+    conditionType: 'Condition Type',
+    typeSingle: 'Single',
+    typeMulti: 'Multiple',
+    typeGroup: 'Group',
+    createCondition: 'Create Condition',
+    btnSearch: 'Search',
+    btnReset: 'Reset',
+    btnCancel: 'Cancel'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'

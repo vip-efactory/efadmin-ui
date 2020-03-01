@@ -558,6 +558,16 @@ export default {
     returnUrlRequired: '请输入回调地址',
     notifyUrlRequired: '请输入异步通知地址'
   },
+  advanceSearch: {
+    conditionType: '条件类型',
+    typeSingle: '单个',
+    typeMulti: '多个',
+    typeGroup: '分组',
+    createCondition: '构造条件',
+    btnSearch: '搜索',
+    btnReset: '重置',
+    btnCancel: '取消'
+  },
   documentation: {
     documentation: '文档',
     github: 'Github 地址'

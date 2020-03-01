@@ -2,17 +2,17 @@
 <template>
   <el-dialog :title="modalObj.title" :visible.sync="modalShow" width="60%" center :before-close="modalClose">
     <el-form :model="form">
-      <el-form-item label="条件类型" :label-width="formLabelWidth">
+      <el-form-item :label="$t('advanceSearch.conditionType')" :label-width="formLabelWidth">
         <template>
           <el-radio-group v-model="radio">
-            <el-radio :label="0">单个</el-radio>
-            <el-radio :label="1">多个</el-radio>
-            <el-radio :label="2">分组</el-radio>
+            <el-radio :label="0">{{ $t('advanceSearch.typeSingle') }}</el-radio>
+            <el-radio :label="1">{{ $t('advanceSearch.typeMulti') }}</el-radio>
+            <el-radio :label="2">{{ $t('advanceSearch.typeGroup') }}</el-radio>
           </el-radio-group>
         </template>
 <!--        <el-input v-model="form.name" autocomplete="off"></el-input>-->
       </el-form-item>
-      <el-form-item label="条件" :label-width="formLabelWidth">
+      <el-form-item :label="$t('advanceSearch.createCondition')" :label-width="formLabelWidth">
 <!--        <el-select v-model="form.region" placeholder="请选择活动区域">-->
 <!--          <el-option label="区域一" value="shanghai"></el-option>-->
 <!--          <el-option label="区域二" value="beijing"></el-option>-->
@@ -20,8 +20,9 @@
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="modalShow = false">取 消</el-button>
-      <el-button type="primary" @click="modalShow = false">确 定</el-button>
+      <el-button @click="modalShow = false">{{ $t('advanceSearch.btnCancel') }}</el-button>
+      <el-button @click="modalShow = false">{{ $t('advanceSearch.btnReset') }}</el-button>
+      <el-button type="primary" @click="modalShow = false">{{ $t('advanceSearch.btnSearch') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -48,7 +49,7 @@
           resource: '',
           desc: ''
         },
-        formLabelWidth: '120px',
+        formLabelWidth: '125px',
         radio: 0,
       }
     },
