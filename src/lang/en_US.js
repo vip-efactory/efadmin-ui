@@ -563,6 +563,7 @@ export default {
     nameLabel: 'Condition name',
     searchTypeLabel: 'Query mode',
     valLabel: 'Value',
+    val2Label: 'End value',
     orderLabel: 'Order',
     logicalTypeLabel: 'Satisfy mode',
     bracketsGroupLabel: 'Belonging group',

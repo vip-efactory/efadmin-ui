@@ -563,6 +563,7 @@ export default {
     nameLabel: '条件名称',
     searchTypeLabel: '查询方式',
     valLabel: '值',
+    val2Label: '结束值',
     orderLabel: '参数顺序',
     logicalTypeLabel: '满足状况',
     bracketsGroupLabel: '所属分组',
