@@ -1,6 +1,6 @@
 <!--高级搜索组件-->
 <template>
-  <el-dialog :title="modalObj.title" :visible.sync="modalShow" width="60%" center :before-close="modalClose">
+  <el-dialog :title="modalObj.title" :visible.sync="modalShow" width="70%" center :before-close="modalClose">
     <el-form :model="item">
       <el-form-item :label="$t('advanceSearch.globalTypeLabel')" :label-width="formLabelWidth">
         <template>
@@ -14,62 +14,86 @@
       </el-form-item>
       <!--  单个条件查询需要显示的字段开始 -->
       <el-form-item :label="$t('advanceSearch.nameLabel')" :label-width="formLabelWidth">
-        <el-select v-model="item.name" :title="$t('advanceSearch.nameTitle')">
-          <el-option label="备注" value="remark"></el-option>
-          <el-option label="创建时间" value="createTime"></el-option>
-          <el-option label="更新时间" value="updateTime"></el-option>
-          <el-option label="创建人" value="creatorNum"></el-option>
-          <el-option label="更新人" value="updaterNum"></el-option>
+        <el-select v-model="item.name" :title="$t('advanceSearch.nameTitle')" style="width: 190px;">
+          <el-option label="备注" value="remark" />
+          <el-option label="创建时间" value="createTime" />
+          <el-option label="更新时间" value="updateTime" />
+          <el-option label="创建人" value="creatorNum" />
+          <el-option label="更新人" value="updaterNum" />
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('advanceSearch.searchTypeLabel')" :label-width="formLabelWidth">
-        <el-select v-model="item.searchType" :title="$t('advanceSearch.searchTypeTitle')">
-          <el-option label="≈≈≈" value="0" :title="$t('advanceSearch.searchTypeTitle0')"></el-option>
-          <el-option label="=" value="1" :title="$t('advanceSearch.searchTypeTitle1')"></el-option>
-          <el-option label="a < x < b" value="2" :title="$t('advanceSearch.searchTypeTitle2')"></el-option>
-          <el-option label="!=" value="3" :title="$t('advanceSearch.searchTypeTitle3')"></el-option>
-          <el-option label="<" value="4" :title="$t('advanceSearch.searchTypeTitle4')"></el-option>
-          <el-option label="<=" value="5" :title="$t('advanceSearch.searchTypeTitle5')"></el-option>
-          <el-option label=">" value="6" :title="$t('advanceSearch.searchTypeTitle6')"></el-option>
-          <el-option label=">=" value="7" :title="$t('advanceSearch.searchTypeTitle7')"></el-option>
-          <el-option label="IS NULL" value="8" :title="$t('advanceSearch.searchTypeTitle8')"></el-option>
-          <el-option label="NOT NULL" value="9" :title="$t('advanceSearch.searchTypeTitle9')"></el-option>
-          <el-option label="≈==" value="10" :title="$t('advanceSearch.searchTypeTitle10')"></el-option>
-          <el-option label="==≈" value="11" :title="$t('advanceSearch.searchTypeTitle11')"></el-option>
+        <el-select v-model="item.searchType" :title="$t('advanceSearch.searchTypeTitle')" style="width: 190px;">
+          <el-option label="≈≈≈" value="0" :title="$t('advanceSearch.searchTypeTitle0')" />
+          <el-option label="=" value="1" :title="$t('advanceSearch.searchTypeTitle1')" />
+          <el-option label="a < x < b" value="2" :title="$t('advanceSearch.searchTypeTitle2')" />
+          <el-option label="!=" value="3" :title="$t('advanceSearch.searchTypeTitle3')" />
+          <el-option label="<" value="4" :title="$t('advanceSearch.searchTypeTitle4')" />
+          <el-option label="<=" value="5" :title="$t('advanceSearch.searchTypeTitle5')" />
+          <el-option label=">" value="6" :title="$t('advanceSearch.searchTypeTitle6')" />
+          <el-option label=">=" value="7" :title="$t('advanceSearch.searchTypeTitle7')" />
+          <el-option label="IS NULL" value="8" :title="$t('advanceSearch.searchTypeTitle8')" />
+          <el-option label="NOT NULL" value="9" :title="$t('advanceSearch.searchTypeTitle9')" />
+          <el-option label="≈==" value="10" :title="$t('advanceSearch.searchTypeTitle10')" />
+          <el-option label="==≈" value="11" :title="$t('advanceSearch.searchTypeTitle11')" />
         </el-select>
       </el-form-item>
       <!-- 类型为8和9是不需要值的 -->
       <el-form-item v-show="item.searchType != 8 && item.searchType != 9" :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
-        <el-input v-model="item.val" :title="$t('advanceSearch.val1Title')"></el-input>
-        <el-input v-show="item.searchType == 2" v-model="item.val2" :title="$t('advanceSearch.val2Title')"></el-input>
+        <el-input v-model="item.val" :title="$t('advanceSearch.val1Title')" style="width: 190px;" />
+        <el-input v-show="item.searchType == 2" v-model="item.val2" :title="$t('advanceSearch.val2Title')" style="width: 190px;" />
       </el-form-item>
       <!-- 单个条件查询需要显示的字段结束 -->
       <!-- 多个条件查询额外需要显示的字段开始 -->
       <el-form-item v-show="globalType != 0" :label="$t('advanceSearch.orderLabel')" :label-width="formLabelWidth">
-        <el-input v-model="item.order" width="120px" :title="$t('advanceSearch.orderTitle')"></el-input>
+        <el-input v-model.number="item.order" width="120px" :title="$t('advanceSearch.orderTitle')" style="width: 190px;" />
       </el-form-item>
       <el-form-item v-show="globalType != 0" :label="$t('advanceSearch.logicalTypeLabel')" :label-width="formLabelWidth">
         <el-select v-model="item.logicalType" :title="$t('advanceSearch.logicalTypeTitle')">
-          <el-option :label="$t('advanceSearch.andLabel')" value="1" :title="$t('advanceSearch.andTitle')"></el-option>
-          <el-option :label="$t('advanceSearch.orLabel')" value="0" :title="$t('advanceSearch.orTitle')"></el-option>
+          <el-option :label="$t('advanceSearch.andLabel')" value="1" :title="$t('advanceSearch.andTitle')" />
+          <el-option :label="$t('advanceSearch.orLabel')" value="0" :title="$t('advanceSearch.orTitle')" />
         </el-select>
       </el-form-item>
       <!-- 多个条件查询额外需要显示的字段结束 -->
       <!-- 分组条件查询额外需要显示的字段开始 -->
       <el-form-item v-show="globalType == 2" :label="$t('advanceSearch.bracketsGroupLabel')" :label-width="formLabelWidth">
         <el-select v-model="item.bracketsGroup" :title="$t('advanceSearch.bracketsGroupTitle')">
-          <el-option :label="$t('advanceSearch.GroupItemDefault')" value="DEFAULT_NO_GROUP" :title="$t('advanceSearch.defaultGroupTitle')"></el-option>
-          <el-option :label="$t('advanceSearch.GroupItemOther')" value="OTHER_GROUP" :title="$t('advanceSearch.otherGroupTitle')"></el-option>
+          <el-option :label="$t('advanceSearch.GroupItemDefault')" value="DEFAULT_NO_GROUP" :title="$t('advanceSearch.defaultGroupTitle')" />
+          <el-option :label="$t('advanceSearch.GroupItemOther')" value="OTHER_GROUP" :title="$t('advanceSearch.otherGroupTitle')" />
         </el-select>
       </el-form-item>
       <el-form-item v-show="globalType == 2" :label="$t('advanceSearch.logicalTypeGroupLabel')" :label-width="formLabelWidth">
         <el-select v-model="item.logicalTypeGroup" :title="$t('advanceSearch.logicalTypeGroupTitle')">
-          <el-option :label="$t('advanceSearch.andLabel')" value="1" :title="$t('advanceSearch.andTitle')"></el-option>
-          <el-option :label="$t('advanceSearch.orLabel')" value="0" :title="$t('advanceSearch.orTitle')"></el-option>
+          <el-option :label="$t('advanceSearch.andLabel')" value="1" :title="$t('advanceSearch.andTitle')" />
+          <el-option :label="$t('advanceSearch.orLabel')" value="0" :title="$t('advanceSearch.orTitle')" />
         </el-select>
       </el-form-item>
       <!-- 分组条件查询额外需要显示的字段结束 -->
     </el-form>
+
+    <el-table
+      :data="conditions.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+      style="width: 100%"
+    >
+      <el-table-column label="条件名称" prop="name" />
+      <el-table-column label="查询方式" prop="searchType" />
+      <el-table-column label="值" prop="val" />
+      <el-table-column label="结束值" prop="val2" />
+      <el-table-column label="条件前后顺序" prop="order" />
+      <el-table-column label="条件逻辑" prop="logicalType" />
+      <el-table-column label="归属组" prop="bracketsGroup" />
+      <el-table-column label="组逻辑" prop="logicalTypeGroup" />
+
+      <el-table-column align="right">
+        <template slot="header" slot-scope="scope">
+          <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
+        </template>
+        <template slot-scope="scope">
+          <el-button size="mini" type="danger" @click="handleItemDelete(scope.$index, scope.row)">Delete</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <div slot="footer" class="dialog-footer">
       <el-button @click="modalShow = false">{{ $t('advanceSearch.btnCancel') }}</el-button>
       <el-button @click="modalShow = false">{{ $t('advanceSearch.btnReset') }}</el-button>
@@ -80,7 +104,7 @@
 
 <script>
 export default {
-  name: "Modal",
+  name: 'Modal',
   props: {
     modalObj: Object,
     modalShow: Boolean
@@ -89,7 +113,7 @@ export default {
     return {
       inputVal: '',
       dataList: {},
-      queryParam: {currentPage: 1, pageSize: 20 },
+      queryParam: { currentPage: 1, pageSize: 20 },
       form: {
         name: '',
         region: '',
@@ -113,32 +137,46 @@ export default {
         logicalTypeGroup: '0'
       },
       formLabelWidth: '125px',
-      conditions: [] // 存放生成的条件集合
-    }
-  },
-  methods: {
-    modalClose() {
-      this.modalShow = false;
-    },
-    getData() {
-      let that = this;
-      that.queryParam[that.modalObj.condition] = that.inputVal;
-      that.$http.post(Global.baseUrl + that.modalObj.url, that.queryParam).then(function (resp) {
-        that.dataList = resp.data;
-      }).catch(function (e) {
-        console.log(e);
-      });
+      search: '', // 条件表里的条件搜索
+      conditions: [
+        { name: 'remark',
+          searchType: '0',
+          val: '测试',
+          val2: '',
+          order: 0,
+          logicalType: '0',
+          bracketsGroup: 'DEFAULT_NO_GROUP',
+          logicalTypeGroup: '0' }
+      ] // 存放生成的条件集合
     }
   },
   computed: {
     tableHeight() {
-      return document.body.clientHeight - 200;
+      return document.body.clientHeight - 200
     }
   },
-  //这个地方需要监听modalShow的变化,如果modalShow发生变化后,触发父组件对modal-show的更新
+  // 这个地方需要监听modalShow的变化,如果modalShow发生变化后,触发父组件对modal-show的更新
   watch: {
-    modalShow: function (val) {
-      this.$emit('update:modalShow', val);
+    modalShow: function(val) {
+      this.$emit('update:modalShow', val)
+    }
+  },
+  methods: {
+    modalClose() {
+      this.modalShow = false
+    },
+    getData() {
+      const that = this
+      that.queryParam[that.modalObj.condition] = that.inputVal
+      that.$http.post(Global.baseUrl + that.modalObj.url, that.queryParam).then(function(resp) {
+        that.dataList = resp.data
+      }).catch(function(e) {
+        console.log(e)
+      })
+    },
+    // 条件列表里的条件删除
+    handleItemDelete(index, row) {
+      console.log(index, row)
     }
   }
 }
