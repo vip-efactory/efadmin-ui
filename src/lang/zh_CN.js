@@ -602,6 +602,8 @@ export default {
     orTitle: '当前条件可不满足，逻辑意义为或',
     defaultGroupTitle: '使用默认组',
     otherGroupTitle: '使用其他组',
+    tbSearchPlaceholder: '输入关键字搜索',
+    btnAddItem: '加入条件区',
     btnSearch: '搜索',
     btnReset: '清除所有查询条件',
     btnCancel: '取消'
