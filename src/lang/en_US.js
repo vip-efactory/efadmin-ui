@@ -570,8 +570,8 @@ export default {
     logicalTypeGroupLabel: 'Group logic',
     andLabel: 'AND',
     orLabel: 'OR',
-    GroupItemDefault: 'Default group',
-    GroupItemOther: 'Other group',
+    GroupItemDefault: 'DEFAULT',
+    GroupItemOther: 'OTHER',
     typeSingle: 'Single',
     typeMulti: 'Multiple',
     typeGroup: 'Group',
@@ -602,8 +602,10 @@ export default {
     orTitle: 'The current conditions may not be met, the logical meaning is or',
     defaultGroupTitle: 'Use default group',
     otherGroupTitle: 'Use other group',
+    tbSearchPlaceholder: 'Enter keyword search',
+    btnAddItem: 'Add condition',
     btnSearch: 'Search',
-    btnReset: 'Clear all query conditions',
+    btnReset: 'Clear all conditions',
     btnCancel: 'Cancel'
   },
   documentation: {
