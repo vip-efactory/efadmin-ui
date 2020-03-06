@@ -208,7 +208,7 @@
     <div slot="footer" class="dialog-footer">
       <el-button @click="modalShow = false">{{ $t('advanceSearch.btnCancel') }}</el-button>
       <el-button type="danger" @click="handleItemsClear()">{{ $t('advanceSearch.btnReset') }}</el-button>
-      <el-button type="primary" @click="modalShow = false">{{ $t('advanceSearch.btnSearch') }}</el-button>
+      <el-button type="primary" @click="handleSearch()">{{ $t('advanceSearch.btnSearch') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -280,16 +280,6 @@ export default {
     modalClose() {
       this.modalShow = false
     },
-    getData() {
-      const that = this
-      that.queryParam[that.modalObj.condition] = that.inputVal
-      that.$http.post(Global.baseUrl + that.modalObj.url, that.queryParam).then(function(resp) {
-        that.dataList = resp.data
-      }).catch(function(e) {
-        console.log(e)
-      })
-    },
-
     // 对要加入列表的数据进行有效性检查
     handleItemChk(item) {
       // 条件名称不允许为空
@@ -347,6 +337,17 @@ export default {
     // 清除所有的查询条件
     handleItemsClear() {
       this.conditions = []
+    },
+    // 执行搜索
+    handleSearch() {
+      const that = this
+      console.log(that.toString())
+      that.queryParam[that.modalObj.condition] = that.inputVal
+      // that.$http.post(Global.baseUrl + that.modalObj.url, that.queryParam).then(function(resp) {
+      //   that.dataList = resp.data
+      // }).catch(function(e) {
+      //   console.log(e)
+      // })
     }
   }
 }
