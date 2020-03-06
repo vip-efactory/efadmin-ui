@@ -15,7 +15,10 @@ export default {
     password: 'Password',
     rememberMe: 'Remember me',
     verificationCode: 'Verification code',
-    LoggingIn: 'Logging In...'
+    LoggingIn: 'Logging In...',
+    usernameChk: 'Username can not be empty',
+    passwordChk: 'Password can not be empty',
+    verificationCodeChk: 'Verification code cannot be empty'
   },
   sidebar: {
     title: 'EF-ADMIN System'
@@ -603,6 +606,11 @@ export default {
     defaultGroupTitle: 'Use default group',
     otherGroupTitle: 'Use other group',
     tbSearchPlaceholder: 'Enter keyword search',
+    nameChk: 'Condition name cannot be empty！',
+    valueEmptyChk: 'Value cannot be empty!',
+    endValueEmptyChk: 'End value is not allowed to be empty!',
+    valGtVal2Chk: 'The start value should not be greater than the end value!',
+    singleItemChk: 'Single condition query does not allow adding multiple conditions!',
     btnAddItem: 'Add condition',
     btnSearch: 'Search',
     btnReset: 'Clear all conditions',

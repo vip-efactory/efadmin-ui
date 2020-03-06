@@ -15,7 +15,10 @@ export default {
     password: '密码',
     rememberMe: '记住我',
     verificationCode: '验证码',
-    LoggingIn: '登录中...'
+    LoggingIn: '登录中...',
+    usernameChk: '用户名不能为空',
+    passwordChk: '密码不能为空',
+    verificationCodeChk: '验证码名不能为空'
   },
   sidebar: {
     title: 'EF-ADMIN 后台系统'
@@ -603,6 +606,11 @@ export default {
     defaultGroupTitle: '使用默认组',
     otherGroupTitle: '使用其他组',
     tbSearchPlaceholder: '输入关键字搜索',
+    nameChk: '条件名称不允许为空！',
+    valueEmptyChk: '查询参数值不允许为空!',
+    endValueEmptyChk: '区间查询时结束值不允许为空!',
+    valGtVal2Chk: '开始值不应比结束值大!',
+    singleItemChk: '单条件查询不允许加入多个条件!',
     btnAddItem: '加入条件区',
     btnSearch: '搜索',
     btnReset: '清除所有查询条件',

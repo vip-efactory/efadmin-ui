@@ -3,7 +3,7 @@
   <el-dialog :title="modalObj.title" :visible.sync="modalShow" width="1000px" center :before-close="modalClose">
     <el-form :model="item">
       <el-row>
-        <el-col span="20">
+        <el-col :span="20">
           <el-form-item :label="$t('advanceSearch.globalTypeLabel')" :label-width="formLabelWidth">
             <template>
               <el-radio-group v-model="globalType">
@@ -20,7 +20,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col span="8">
+        <el-col :span="8">
           <!--  单个条件查询需要显示的字段开始 -->
           <el-form-item :label="$t('advanceSearch.nameLabel')" :label-width="formLabelWidth">
             <el-select v-model="item.name" :title="$t('advanceSearch.nameTitle')" style="width: 190px;">
@@ -32,25 +32,25 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col span="8">
+        <el-col :span="8">
           <el-form-item :label="$t('advanceSearch.searchTypeLabel')" :label-width="formLabelWidth">
             <el-select v-model="item.searchType" :title="$t('advanceSearch.searchTypeTitle')" style="width: 190px;">
-              <el-option label="≈≈≈" value="0" :title="$t('advanceSearch.searchTypeTitle0')" />
-              <el-option label="=" value="1" :title="$t('advanceSearch.searchTypeTitle1')" />
-              <el-option label="a < x < b" value="2" :title="$t('advanceSearch.searchTypeTitle2')" />
-              <el-option label="!=" value="3" :title="$t('advanceSearch.searchTypeTitle3')" />
-              <el-option label="<" value="4" :title="$t('advanceSearch.searchTypeTitle4')" />
-              <el-option label="<=" value="5" :title="$t('advanceSearch.searchTypeTitle5')" />
-              <el-option label=">" value="6" :title="$t('advanceSearch.searchTypeTitle6')" />
-              <el-option label=">=" value="7" :title="$t('advanceSearch.searchTypeTitle7')" />
-              <el-option label="IS NULL" value="8" :title="$t('advanceSearch.searchTypeTitle8')" />
-              <el-option label="NOT NULL" value="9" :title="$t('advanceSearch.searchTypeTitle9')" />
-              <el-option label="≈==" value="10" :title="$t('advanceSearch.searchTypeTitle10')" />
-              <el-option label="==≈" value="11" :title="$t('advanceSearch.searchTypeTitle11')" />
+              <el-option label="≈≈≈" :value="0" :title="$t('advanceSearch.searchTypeTitle0')" />
+              <el-option label="=" :value="1" :title="$t('advanceSearch.searchTypeTitle1')" />
+              <el-option label="a < x < b" :value="2" :title="$t('advanceSearch.searchTypeTitle2')" />
+              <el-option label="!=" :value="3" :title="$t('advanceSearch.searchTypeTitle3')" />
+              <el-option label="<" :value="4" :title="$t('advanceSearch.searchTypeTitle4')" />
+              <el-option label="<=" :value="5" :title="$t('advanceSearch.searchTypeTitle5')" />
+              <el-option label=">" :value="6" :title="$t('advanceSearch.searchTypeTitle6')" />
+              <el-option label=">=" :value="7" :title="$t('advanceSearch.searchTypeTitle7')" />
+              <el-option label="IS NULL" :value="8" :title="$t('advanceSearch.searchTypeTitle8')" />
+              <el-option label="NOT NULL" :value="9" :title="$t('advanceSearch.searchTypeTitle9')" />
+              <el-option label="≈==" :value="10" :title="$t('advanceSearch.searchTypeTitle10')" />
+              <el-option label="==≈" :value="11" :title="$t('advanceSearch.searchTypeTitle11')" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col span="8">
+        <el-col :span="8">
           <!-- 多个条件查询额外需要显示的字段 -->
           <el-form-item v-show="globalType != 0" :label="$t('advanceSearch.orderLabel')" :label-width="formLabelWidth">
             <el-input
@@ -63,7 +63,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col span="8">
+        <el-col :span="8">
           <!-- 类型为8和9是不需要值的 -->
           <el-form-item
             v-show="item.searchType != 8 && item.searchType != 9"
@@ -74,7 +74,7 @@
             <!--            <el-input v-show="item.searchType == 2" v-model="item.val2" :title="$t('advanceSearch.val2Title')" style="width: 190px;" />-->
           </el-form-item>
         </el-col>
-        <el-col span="8">
+        <el-col :span="8">
           <!-- 类型为8和9是不需要值的 -->
           <el-form-item
             v-show="item.searchType == 2"
@@ -89,7 +89,7 @@
             />
           </el-form-item>
         </el-col>
-        <el-col span="8">
+        <el-col :span="8">
           <!-- 多个条件查询额外需要显示的字段 -->
           <el-form-item
             v-show="globalType != 0"
@@ -97,8 +97,8 @@
             :label-width="formLabelWidth"
           >
             <el-select v-model="item.logicalType" :title="$t('advanceSearch.logicalTypeTitle')">
-              <el-option :label="$t('advanceSearch.andLabel')" value="1" :title="$t('advanceSearch.andTitle')" />
-              <el-option :label="$t('advanceSearch.orLabel')" value="0" :title="$t('advanceSearch.orTitle')" />
+              <el-option :label="$t('advanceSearch.andLabel')" :value="1" :title="$t('advanceSearch.andTitle')" />
+              <el-option :label="$t('advanceSearch.orLabel')" :value="0" :title="$t('advanceSearch.orTitle')" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -106,7 +106,7 @@
       <!-- 单个条件查询需要显示的字段结束 -->
       <el-row>
         <!-- 分组条件查询额外需要显示的字段开始 -->
-        <el-col span="8">
+        <el-col :span="8">
           <el-form-item
             v-show="globalType == 2"
             :label="$t('advanceSearch.bracketsGroupLabel')"
@@ -126,21 +126,21 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col span="8">
+        <el-col :span="8">
           <el-form-item
             v-show="globalType == 2"
             :label="$t('advanceSearch.logicalTypeGroupLabel')"
             :label-width="formLabelWidth"
           >
             <el-select v-model="item.logicalTypeGroup" :title="$t('advanceSearch.logicalTypeGroupTitle')">
-              <el-option :label="$t('advanceSearch.andLabel')" value="1" :title="$t('advanceSearch.andTitle')" />
-              <el-option :label="$t('advanceSearch.orLabel')" value="0" :title="$t('advanceSearch.orTitle')" />
+              <el-option :label="$t('advanceSearch.andLabel')" :value="1" :title="$t('advanceSearch.andTitle')" />
+              <el-option :label="$t('advanceSearch.orLabel')" :value="0" :title="$t('advanceSearch.orTitle')" />
             </el-select>
           </el-form-item>
         </el-col>
         <!-- 分组条件查询额外需要显示的字段结束 -->
         <el-col>
-          <el-col span="8">
+          <el-col :span="8">
             <el-form-item label=" " :label-width="formLabelWidth">
               <el-button size="mini" type="primary" @click="handleItemAdd(item)">{{ $t('advanceSearch.btnAddItem') }}</el-button>
             </el-form-item>
@@ -196,11 +196,11 @@
       </el-table-column>
 
       <el-table-column align="right" fixed="right" width="120">
-        <template slot="header" slot-scope="scope">
+        <template slot="header">
           <el-input v-model="search" size="mini" :placeholder="$t('advanceSearch.tbSearchPlaceholder')" />
         </template>
         <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="handleItemDelete(scope.$index, scope.row)">Delete</el-button>
+          <el-button size="mini" type="danger" @click="handleItemDelete(scope.$index, scope.row)">X</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -214,6 +214,8 @@
 </template>
 
 <script>
+import i18n from '../../lang'
+
 export default {
   name: 'Modal',
   props: {
@@ -239,13 +241,13 @@ export default {
       // 每个条件拥有的属性,详见：https://github.com/vip-efactory/ejpa-example/blob/master/docs/%E5%85%B3%E4%BA%8E%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD.md
       item: {
         name: '',
-        searchType: '0',
+        searchType: 0,
         val: '',
         val2: '',
         order: 0,
-        logicalType: '0',
+        logicalType: 0,
         bracketsGroup: 'DEFAULT_NO_GROUP',
-        logicalTypeGroup: '0'
+        logicalTypeGroup: 0
       },
       formLabelWidth: '125px',
       search: '', // 条件表里的条件搜索
@@ -291,29 +293,29 @@ export default {
     // 对要加入列表的数据进行有效性检查
     handleItemChk(item) {
       // 条件名称不允许为空
-      if (item.name == '') {
-        this.$message('条件名称不允许为空！', 'warning')
+      if (item.name === '') {
+        this.$message(i18n.t('advanceSearch.nameChk'), 'warning')
         return false
       }
       // 不是非空查询的时候，不允许值为空
-      if (item.searchType != 8 && item.searchType != 9 && item.val == '') {
-        this.$message('请输入查询参数值!', 'warning')
+      if (item.searchType !== 8 && item.searchType !== 9 && item.val === '') {
+        this.$message(i18n.t('advanceSearch.valueEmptyChk'), 'warning')
         return false
       }
       // 如果是范围查询，开始值不能比结束值小！！
-      if (item.searchType == 2) {
-        if (item.val2 == '') {
-          this.$message('区间查询时结束值不允许为空!', 'warning')
+      if (item.searchType === 2) {
+        if (item.val2 === '') {
+          this.$message(i18n.t('advanceSearch.endValueEmptyChk'), 'warning')
           return false
         } else if (item.val > item.val2) {
-          this.$message('开始值不应比结束值大！', 'warning')
+          this.$message(i18n.t('advanceSearch.valGtVal2Chk'), 'warning')
           return false
         }
       }
 
       // 检查是否为单条件查询
-      if (this.globalType == 0 && this.conditions.length > 0) {
-        this.$message('单条件查询不允许加入多个条件!', 'warning')
+      if (this.globalType === 0 && this.conditions.length > 0) {
+        this.$message(i18n.t('advanceSearch.singleItemChk'), 'warning')
         return false
       }
 
@@ -328,13 +330,13 @@ export default {
         // 然后重置初始化条件
         this.item = {
           name: '',
-          searchType: '0',
+          searchType: 0,
           val: '',
           val2: '',
           order: 0,
-          logicalType: '0',
+          logicalType: 0,
           bracketsGroup: 'DEFAULT_NO_GROUP',
-          logicalTypeGroup: '0'
+          logicalTypeGroup: 0
         }
       }
     },

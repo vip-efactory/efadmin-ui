@@ -54,6 +54,7 @@ import { getCodeImg } from '@/api/login'
 import Cookies from 'js-cookie'
 import LangSelect from '@/components/LangSelect'
 import { getLocale } from '../lang'
+import i18n from '../lang'
 
 export default {
   name: 'Login',
@@ -70,9 +71,9 @@ export default {
         uuid: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
-        password: [{ required: true, trigger: 'blur', message: '密码不能为空' }],
-        code: [{ required: true, trigger: 'change', message: '验证码不能为空' }]
+        username: [{ required: true, trigger: 'blur', message: i18n.t('login.usernameChk') }],
+        password: [{ required: true, trigger: 'blur', message: i18n.t('login.passwordChk') }],
+        code: [{ required: true, trigger: 'change', message: i18n.t('login.verificationCodeChk') }]
       },
       loading: false,
       redirect: undefined
