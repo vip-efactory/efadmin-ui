@@ -251,18 +251,7 @@ export default {
       },
       formLabelWidth: '125px',
       search: '', // 条件表里的条件搜索
-      conditions: [
-        {
-          name: 'remark',
-          searchType: '0',
-          val: '测试',
-          val2: '',
-          order: 0,
-          logicalType: '0',
-          bracketsGroup: 'DEFAULT_NO_GROUP',
-          logicalTypeGroup: '0'
-        }
-      ] // 存放生成的条件集合
+      conditions: [] // 存放生成的条件集合
     }
   },
   computed: {
@@ -316,7 +305,6 @@ export default {
       // 加入列表前检查是否合法
       if (this.handleItemChk(item)) {
         this.conditions.push(item) // 将条件push到数组的最后面
-
         // 然后重置初始化条件
         this.item = {
           name: '',
@@ -336,18 +324,18 @@ export default {
     },
     // 清除所有的查询条件
     handleItemsClear() {
-      this.conditions = []
+      this.conditions = [] // 清除当前对话框里的查询条件
+      let crud = this.$parent.crud
+      crud.adSearchConditions = [] // 清空crud里面的保存的高级查询条件！
     },
     // 执行搜索
     handleSearch() {
-      const that = this
-      console.log(that.toString())
-      that.queryParam[that.modalObj.condition] = that.inputVal
-      // that.$http.post(Global.baseUrl + that.modalObj.url, that.queryParam).then(function(resp) {
-      //   that.dataList = resp.data
-      // }).catch(function(e) {
-      //   console.log(e)
-      // })
+      const crud = this.$parent.crud
+      // 将处理后的条件数据，赋予父组件的crud.adSearchConditions属性
+      crud.adSearchConditions = this.conditions
+      crud.doAdvanceSearch() // 触发查询请求
+      // 关闭对话框
+      this.modalClose()
     }
   }
 }

@@ -24,6 +24,8 @@ function CRUD(options) {
     query: {},
     // 查询数据的参数
     params: {},
+    // 高级查询的参数集合,使用Post方法传递的data
+    adSearchConditions: [],
     // Form 表单
     form: {},
     // 重置表单
@@ -371,19 +373,48 @@ function CRUD(options) {
       })
     },
     /**
+     * 执行高级搜索
+     */
+    doAdvanceSearch() {
+      crud.loading = true
+      // 请求数据
+      crud.crudMethod.search(crud.getQueryParams()).then(r => {
+        // http通信正常，检查业务逻辑是否正常
+        if (r.code === 0) { // 业务逻辑正常
+          const data = r.data
+          crud.page.total = data.totalCount
+          crud.data = data.content
+          crud.resetDataStatus()
+          // time 毫秒后显示表格
+          setTimeout(() => {
+            crud.loading = false
+            callVmHook(crud, CRUD.HOOK.afterRefresh)
+          }, crud.time)
+        } else { // 业务逻辑不正常
+          crud.loading = false
+          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          console.error(r.toString())
+        }
+      }).catch(err => { // 此处的错误为Http错误通信码
+        crud.loading = false
+        crud.notify(err.toString(), CRUD.NOTIFICATION_TYPE.ERROR)
+      })
+    },
+    /**
      * 获取查询参数
      */
-    getQueryParams: function() {
+    getQueryParams() {
       return {
         page: crud.page.page - 1,
         size: crud.page.size,
+        conditions: crud.adSearchConditions,
         sort: crud.sort,
         ...crud.query,
         ...crud.params
       }
     },
     // 当前页改变
-    pageChangeHandler(e) {
+    pageChangeHandler(e){
       crud.page.page = e
       crud.refresh()
     },
