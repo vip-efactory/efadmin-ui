@@ -37,16 +37,17 @@
             <el-select v-model="item.searchType" :title="$t('advanceSearch.searchTypeTitle')" style="width: 190px;">
               <el-option label="≈≈≈" :value="0" :title="$t('advanceSearch.searchTypeTitle0')" />
               <el-option label="=" :value="1" :title="$t('advanceSearch.searchTypeTitle1')" />
-              <el-option label="a < x < b" :value="2" :title="$t('advanceSearch.searchTypeTitle2')" />
+              <el-option label="a &lt; x &lt; b" :value="2" :title="$t('advanceSearch.searchTypeTitle2')" />
               <el-option label="!=" :value="3" :title="$t('advanceSearch.searchTypeTitle3')" />
-              <el-option label="<" :value="4" :title="$t('advanceSearch.searchTypeTitle4')" />
-              <el-option label="<=" :value="5" :title="$t('advanceSearch.searchTypeTitle5')" />
-              <el-option label=">" :value="6" :title="$t('advanceSearch.searchTypeTitle6')" />
-              <el-option label=">=" :value="7" :title="$t('advanceSearch.searchTypeTitle7')" />
+              <el-option label=" < " :value="4" :title="$t('advanceSearch.searchTypeTitle4')" />
+              <el-option label=" <= " :value="5" :title="$t('advanceSearch.searchTypeTitle5')" />
+              <el-option label=" > " :value="6" :title="$t('advanceSearch.searchTypeTitle6')" />
+              <el-option label=" >= " :value="7" :title="$t('advanceSearch.searchTypeTitle7')" />
               <el-option label="IS NULL" :value="8" :title="$t('advanceSearch.searchTypeTitle8')" />
               <el-option label="NOT NULL" :value="9" :title="$t('advanceSearch.searchTypeTitle9')" />
               <el-option label="≈==" :value="10" :title="$t('advanceSearch.searchTypeTitle10')" />
               <el-option label="==≈" :value="11" :title="$t('advanceSearch.searchTypeTitle11')" />
+              <el-option label="∈" :value="12" :title="$t('advanceSearch.searchTypeTitle12')" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -159,17 +160,18 @@
       <el-table-column :label="$t('advanceSearch.searchTypeLabel')" width="100">
         <template slot-scope="scope">
           <span v-if="scope.row.searchType == 0">{{ '≈≈≈' }}</span>
-          <span v-else-if="scope.row.searchType == 1">{{ '=' }}</span>
-          <span v-else-if="scope.row.searchType == 2">{{ 'a < x < b' }}</span>
-          <span v-else-if="scope.row.searchType == 3">{{ '!=' }}</span>
-          <span v-else-if="scope.row.searchType == 4">{{ '<' }}</span>
-          <span v-else-if="scope.row.searchType == 5">{{ '<=' }}</span>
-          <span v-else-if="scope.row.searchType == 6">{{ '>' }}</span>
-          <span v-else-if="scope.row.searchType == 7">{{ '>=' }}</span>
+          <span v-else-if="scope.row.searchType == 1">{{ ' = ' }}</span>
+          <span v-else-if="scope.row.searchType == 2">{{ ' a &lt; x &lt; b ' }}</span>
+          <span v-else-if="scope.row.searchType == 3">{{ ' != ' }}</span>
+          <span v-else-if="scope.row.searchType == 4">{{ ' &lt; ' }}</span>
+          <span v-else-if="scope.row.searchType == 5">{{ ' &le; ' }}</span>
+          <span v-else-if="scope.row.searchType == 6">{{ ' > ' }}</span>
+          <span v-else-if="scope.row.searchType == 7">{{ ' >= ' }}</span>
           <span v-else-if="scope.row.searchType == 8">{{ 'IS NULL' }}</span>
           <span v-else-if="scope.row.searchType == 9">{{ 'NOT NULL' }}</span>
           <span v-else-if="scope.row.searchType == 10">{{ '≈==' }}</span>
           <span v-else-if="scope.row.searchType == 11">{{ '==≈' }}</span>
+          <span v-else-if="scope.row.searchType == 12">{{ ' ∈ ' }}</span>
           <span v-else>{{ '' }}</span>
         </template>
       </el-table-column>

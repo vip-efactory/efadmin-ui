@@ -601,6 +601,7 @@ export default {
     searchTypeTitle9: '非空值',
     searchTypeTitle10: '左模糊查询',
     searchTypeTitle11: '右模糊查询',
+    searchTypeTitle12: '包含于(IN)查询,例如:年龄值为{34,36,40,45}的数据',
     andTitle: '必须满足本条件，逻辑意义为与',
     orTitle: '当前条件可不满足，逻辑意义为或',
     defaultGroupTitle: '使用默认组',

@@ -601,6 +601,7 @@ export default {
     searchTypeTitle9: 'Non-null',
     searchTypeTitle10: 'Left fuzzy query',
     searchTypeTitle11: 'Right fuzzy query',
+    searchTypeTitle12: 'Contained in (IN) queries, such as: age value is one of {34,36,40,45}',
     andTitle: 'Must meet this condition, the logical meaning is and',
     orTitle: 'The current conditions may not be met, the logical meaning is or',
     defaultGroupTitle: 'Use default group',
