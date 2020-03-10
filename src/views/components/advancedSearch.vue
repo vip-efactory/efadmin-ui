@@ -1,6 +1,6 @@
 <!--高级搜索组件-->
 <template>
-  <el-dialog :title="modalObj.title" :visible.sync="showAdSearchDialog" width="1000px" center :before-close="modalClose">
+  <el-dialog v-dialogDrag :title="modalObj.title" :visible.sync="showAdSearchDialog" width="1000px" center :before-close="modalClose">
     <el-form :model="item">
       <el-row>
         <el-col :span="20">

@@ -12,7 +12,8 @@ import 'mavon-editor/dist/css/index.css'
 import i18n from './lang' // internationalization
 // 数据字典
 import dict from './components/Dict'
-
+// 引入Dialog可拖拽，注意文件所在目录。
+import './utils/dialog-drag.js';
 // 权限指令
 import permission from './components/Permission'
 import './assets/styles/element-variables.scss'
