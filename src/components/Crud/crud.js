@@ -416,7 +416,7 @@ function CRUD(options) {
       }
     },
     // 当前页改变
-    pageChangeHandler(e){
+    pageChangeHandler(e) {
       crud.page.page = e
       crud.refresh()
     },

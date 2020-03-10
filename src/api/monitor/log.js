@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+// 高级搜索
+export function search(data) {
+  return request({
+    url: 'api/logs/advanced/query',
+    method: 'post',
+    data
+  })
+}
+
 export function getErrDetail(id) {
   return request({
     url: 'api/logs/error/' + id,
@@ -20,3 +29,5 @@ export function delAllInfo() {
     method: 'delete'
   })
 }
+
+export default { search }

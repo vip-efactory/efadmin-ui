@@ -57,13 +57,15 @@
 <script>
 import { getErrDetail, delAllError } from '@/api/monitor/log'
 import Search from './search'
+import crudLog from '@/api/monitor/log'
 import CRUD, { presenter } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '异常日志', url: 'api/logs/error' })
+const adSearchFields = new Map([['username', i18n.t('log.username')], ['requestIp', i18n.t('log.requestIp')], ['address', i18n.t('log.address')], ['description', i18n.t('log.description')], ['browser', i18n.t('log.browser')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: '异常日志', url: 'api/logs/error', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
 export default {
   name: 'ErrorLog',
   components: { Search, crudOperation, pagination },
@@ -89,7 +91,7 @@ export default {
         if (res.code === 0) {
           this.errorInfo = res.data.exception
         } else {
-          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          this.$notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       })
     },
@@ -108,7 +110,7 @@ export default {
             this.crud.toQuery()
           } else {
             this.crud.delAllLoading = false
-            crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+            this.$notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
         }).catch(err => {
           this.crud.delAllLoading = false

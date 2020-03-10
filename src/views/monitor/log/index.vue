@@ -55,14 +55,17 @@
 
 <script>
 import Search from './search'
+import crudLog from '@/api/monitor/log'
 import { delAllInfo } from '@/api/monitor/log'
-import CRUD, { presenter } from '@crud/crud'
+import CRUD, { presenter, crud } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
+
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '日志', url: 'api/logs' })
+const adSearchFields = new Map([['username', i18n.t('log.username')], ['requestIp', i18n.t('log.requestIp')], ['address', i18n.t('log.address')], ['description', i18n.t('log.description')], ['browser', i18n.t('log.browser')], ['time', i18n.t('log.time')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: '日志', url: 'api/logs', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
 export default {
   name: 'Log',
   components: { Search, crudOperation, pagination },
@@ -74,6 +77,15 @@ export default {
       del: false,
       download: true
     }
+    // this.crud.getQueryParams = {
+    //   page: this.crud.page.page - 1,
+    //   size: this.crud.page.size,
+    //   conditions: this.crud.adSearchConditions,
+    //   logType: 'INFO', // 添加额外的查询参数
+    //   sort: this.crud.sort,
+    //   ...crud.query,
+    //   ...crud.params
+    // }
   },
   methods: {
     confirmDelAll() {
