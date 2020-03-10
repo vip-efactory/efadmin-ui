@@ -1,6 +1,6 @@
 <!--高级搜索组件-->
 <template>
-  <el-dialog :title="modalObj.title" :visible.sync="modalShow" width="1000px" center :before-close="modalClose">
+  <el-dialog :title="modalObj.title" :visible.sync="showAdSearchDialog" width="1000px" center :before-close="modalClose">
     <el-form :model="item">
       <el-row>
         <el-col :span="20">
@@ -24,11 +24,7 @@
           <!--  单个条件查询需要显示的字段开始 -->
           <el-form-item :label="$t('advanceSearch.nameLabel')" :label-width="formLabelWidth">
             <el-select v-model="item.name" :title="$t('advanceSearch.nameTitle')" style="width: 190px;">
-              <el-option label="备注" value="remark" />
-              <el-option label="创建时间" value="createTime" />
-              <el-option label="更新时间" value="updateTime" />
-              <el-option label="创建人" value="creatorNum" />
-              <el-option label="更新人" value="updaterNum" />
+              <el-option v-for="field in adSearchFields" :key="field[0]" :label="field[1]" :value="field[0]" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -208,7 +204,7 @@
     </el-table>
 
     <div slot="footer" class="dialog-footer">
-      <el-button @click="modalShow = false">{{ $t('advanceSearch.btnCancel') }}</el-button>
+      <el-button @click="showAdSearchDialog = false">{{ $t('advanceSearch.btnCancel') }}</el-button>
       <el-button type="danger" @click="handleItemsClear()">{{ $t('advanceSearch.btnReset') }}</el-button>
       <el-button type="primary" @click="handleSearch()">{{ $t('advanceSearch.btnSearch') }}</el-button>
     </div>
@@ -221,24 +217,11 @@ import i18n from '../../lang'
 export default {
   name: 'Modal',
   props: {
-    modalObj: Object,
-    modalShow: Boolean
+    modalObj: Object
   },
   data() {
     return {
-      inputVal: '',
-      dataList: {},
-      queryParam: { currentPage: 1, pageSize: 20 },
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
+      adSearchFields: this.$parent.crud.adSearchFields,
       globalType: 0, // 全局类型，0 单个条件;1 多条件; 2 分组
       // 每个条件拥有的属性,详见：https://github.com/vip-efactory/ejpa-example/blob/master/docs/%E5%85%B3%E4%BA%8E%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD.md
       item: {
@@ -259,17 +242,26 @@ export default {
   computed: {
     tableHeight() {
       return document.body.clientHeight - 200
+    },
+    showAdSearchDialog: { // 控制高级搜索框的显示和隐藏 参考https://blog.csdn.net/qq_34119437/article/details/85319066
+      get: function() {
+        return this.$parent.crud.showAdSearchDialog
+      },
+      set: function() {
+        this.$parent.crud.showAdSearchDialog = false
+      }
     }
   },
-  // 这个地方需要监听modalShow的变化,如果modalShow发生变化后,触发父组件对modal-show的更新
+  // 这个地方需要监听showAdSearchDialog的变化,如果showAdSearchDialog发生变化后,触发父组件对showAdSearchDialog的更新
   watch: {
-    modalShow: function(val) {
-      this.$emit('update:modalShow', val)
+    showAdSearchDialog: function(val) {
+      this.$emit('update:showAdSearchDialog', val)
     }
   },
   methods: {
+    // 关闭高级搜索框
     modalClose() {
-      this.modalShow = false
+      this.showAdSearchDialog = false
     },
     // 对要加入列表的数据进行有效性检查
     handleItemChk(item) {
@@ -327,7 +319,7 @@ export default {
     // 清除所有的查询条件
     handleItemsClear() {
       this.conditions = [] // 清除当前对话框里的查询条件
-      let crud = this.$parent.crud
+      const crud = this.$parent.crud
       crud.adSearchConditions = [] // 清空crud里面的保存的高级查询条件！
     },
     // 执行搜索

@@ -24,6 +24,8 @@ function CRUD(options) {
     query: {},
     // 查询数据的参数
     params: {},
+    // 需要高级搜索的字段信息
+    adSearchFields: new Map(),
     // 高级查询的参数集合,使用Post方法传递的data
     adSearchConditions: [],
     // Form 表单
@@ -99,7 +101,7 @@ function CRUD(options) {
       total: 0
     },
     // 高级搜索弹框
-    show: false,
+    showAdSearchDialog: false,
     // 整体loading
     loading: true,
     // 导出的 Loading
@@ -130,9 +132,9 @@ function CRUD(options) {
     },
     // 高级搜索
     dialogSearch() {
-      console.log(crud)
-      crud.show = true
-      console.log(crud.show)
+      // console.log(crud)
+      crud.showAdSearchDialog = true // 显示高级搜索弹框
+      // console.log(crud.show)
     },
     // 刷新
     refresh() {
