@@ -327,7 +327,7 @@ export default {
       const crud = this.$parent.crud
       // 将处理后的条件数据，赋予父组件的crud.adSearchConditions属性
       crud.adSearchConditions = this.conditions
-      crud.doAdvanceSearch() // 触发查询请求
+      crud.toQuery() // 触发查询请求
       // 关闭对话框
       this.modalClose()
     }

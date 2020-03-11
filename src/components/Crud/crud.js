@@ -143,8 +143,13 @@ function CRUD(options) {
       }
       return new Promise((resolve, reject) => {
         crud.loading = true
-        // 请求数据
-        initData(crud.url, crud.getQueryParams()).then(r => {
+        // 判断是否存在高级查询的条件，有则走高级查询的接口
+        let method = 'get'
+        if (crud.adSearchConditions.length > 0) {
+          method = 'post' // 走高级搜索的接口
+        }
+        // 请求数据,
+        initData(crud.url, crud.getQueryParams(), method).then(r => {
           // http通信正常，检查业务逻辑是否正常
           if (r.code === 0) { // 业务逻辑正常
             const data = r.data
@@ -375,34 +380,6 @@ function CRUD(options) {
       })
     },
     /**
-     * 执行高级搜索
-     */
-    doAdvanceSearch() {
-      crud.loading = true
-      // 请求数据
-      crud.crudMethod.search(crud.getQueryParams()).then(r => {
-        // http通信正常，检查业务逻辑是否正常
-        if (r.code === 0) { // 业务逻辑正常
-          const data = r.data
-          crud.page.total = data.totalCount
-          crud.data = data.content
-          crud.resetDataStatus()
-          // time 毫秒后显示表格
-          setTimeout(() => {
-            crud.loading = false
-            callVmHook(crud, CRUD.HOOK.afterRefresh)
-          }, crud.time)
-        } else { // 业务逻辑不正常
-          crud.loading = false
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-          console.error(r.toString())
-        }
-      }).catch(err => { // 此处的错误为Http错误通信码
-        crud.loading = false
-        crud.notify(err.toString(), CRUD.NOTIFICATION_TYPE.ERROR)
-      })
-    },
-    /**
      * 获取查询参数
      */
     getQueryParams() {
@@ -480,6 +457,7 @@ function CRUD(options) {
       const defaultQuery = JSON.parse(JSON.stringify(crud.defaultQuery))
       // 清除所有的查询参数
       crud.params = {}
+      crud.adSearchConditions = [] // 清空crud里面的保存的高级查询条件！
       const query = crud.query
       Object.keys(query).forEach(key => {
         query[key] = defaultQuery[key]
