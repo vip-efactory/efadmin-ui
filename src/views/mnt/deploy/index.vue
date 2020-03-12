@@ -131,7 +131,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('deploy.TITLE'), url: 'api/deploy', crudMethod: { ...crudDeploy }})
+const defaultCrud = CRUD({ title: i18n.t('deploy.TITLE'), url: 'api/deploy/page', crudMethod: { ...crudDeploy }})
 const defaultForm = { id: null, app: { id: null }, deploys: [] }
 export default {
   components: { dForm, fForm, pagination, crudOperation, rrOperation, udOperation },

@@ -104,7 +104,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('picture.TITLE'), url: 'api/pictures', crudMethod: { ...crudPic }})
+const defaultCrud = CRUD({ title: i18n.t('picture.TITLE'), url: 'api/pictures/page', crudMethod: { ...crudPic }})
 export default {
   name: 'Pictures',
   components: { pagination, crudOperation, rrOperation },

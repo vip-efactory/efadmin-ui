@@ -95,7 +95,7 @@ export default {
   methods: {
     // 获取数据前设置好接口地址
     beforeInit() {
-      this.url = 'api/dictDetail'
+      this.url = 'api/dictDetail/page'
       if (this.dictName) {
         this.params['dictName'] = this.dictName
       }

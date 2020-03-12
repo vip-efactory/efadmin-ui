@@ -84,7 +84,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('mserver.TITLE'), url: 'api/serverDeploy', crudMethod: { ...crudServer }})
+const defaultCrud = CRUD({ title: i18n.t('mserver.TITLE'), url: 'api/serverDeploy/page', crudMethod: { ...crudServer }})
 const defaultForm = { id: null, name: null, ip: null, port: 22, account: 'root', password: null }
 export default {
   name: 'Server',

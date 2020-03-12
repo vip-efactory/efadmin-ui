@@ -26,14 +26,14 @@ export function edit(data) {
 
 export function getApps() {
   return request({
-    url: 'api/app',
+    url: 'api/app/page',
     method: 'get'
   })
 }
 
 export function getServers() {
   return request({
-    url: 'api/serverDeploy',
+    url: 'api/serverDeploy/page',
     method: 'get'
   })
 }

@@ -7,7 +7,7 @@ export function get(dictName) {
     size: 9999
   }
   return request({
-    url: 'api/dictDetail',
+    url: 'api/dictDetail/page',
     method: 'get',
     params
   })

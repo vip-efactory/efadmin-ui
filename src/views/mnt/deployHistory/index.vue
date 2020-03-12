@@ -64,7 +64,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('deployHistory.TITLE'), url: 'api/deployHistory', crudMethod: { del }})
+const defaultCrud = CRUD({ title: i18n.t('deployHistory.TITLE'), url: 'api/deployHistory/page', crudMethod: { del }})
 export default {
   name: 'DeployHistory',
   components: { pagination, crudOperation, rrOperation },

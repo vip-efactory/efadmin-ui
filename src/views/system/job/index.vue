@@ -70,7 +70,7 @@ import i18n from '../../../lang'
 // crud交由presenter持有
 const crud = CRUD({
   title: i18n.t('job.TITLE'),
-  url: 'api/job',
+  url: 'api/job/page',
   sort: ['sort,asc', 'id,desc'],
   crudMethod: { ...crudJob }
 })

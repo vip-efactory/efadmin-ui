@@ -137,7 +137,7 @@ export default {
   methods: {
     // 获取数据前设置好接口地址
     beforeInit() {
-      this.url = 'api/dict'
+      this.url = 'api/dict/page'
       if (this.$refs.dictDetail) {
         this.$refs.dictDetail.data = []
         this.$refs.dictDetail.dictName = ''

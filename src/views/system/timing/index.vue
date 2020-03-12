@@ -127,7 +127,7 @@ import i18n, { getLocale } from '../../../lang'
 import { cron } from 'vue-cron'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('task.TITLE'), url: 'api/jobs', crudMethod: { ...crudJob }})
+const defaultCrud = CRUD({ title: i18n.t('task.TITLE'), url: 'api/jobs/page', crudMethod: { ...crudJob }})
 const defaultForm = { id: null, jobName: null, beanName: null, methodName: null, params: null, cronExpression: null, isPause: false, remark: null }
 export default {
   name: 'Timing',

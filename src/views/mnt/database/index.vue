@@ -92,7 +92,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('db.TITLE'), url: 'api/database', crudMethod: { ...crudDatabase }})
+const defaultCrud = CRUD({ title: i18n.t('db.TITLE'), url: 'api/database/page', crudMethod: { ...crudDatabase }})
 const defaultForm = { id: null, name: null, jdbcUrl: 'jdbc:mysql://', userName: null, pwd: null }
 export default {
   name: 'DataBase',
