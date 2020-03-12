@@ -64,11 +64,11 @@
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row style="width: 100%" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
       <el-table-column type="selection" width="55" />
-      <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('mapp.name')" sortable="custom"/>
-      <el-table-column v-if="columns.visible('port')" prop="port" :label="$t('mapp.port')" sortable="custom"/>
-      <el-table-column v-if="columns.visible('uploadPath')" prop="uploadPath" :label="$t('mapp.uploadPath')" sortable="custom"/>
-      <el-table-column v-if="columns.visible('deployPath')" prop="deployPath" :label="$t('mapp.deployPath')" sortable="custom"/>
-      <el-table-column v-if="columns.visible('backupPath')" prop="backupPath" :label="$t('mapp.backupPath')" sortable="custom"/>
+      <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('mapp.name')" sortable="custom" />
+      <el-table-column v-if="columns.visible('port')" prop="port" :label="$t('mapp.port')" sortable="custom" />
+      <el-table-column v-if="columns.visible('uploadPath')" prop="uploadPath" :label="$t('mapp.uploadPath')" sortable="custom" />
+      <el-table-column v-if="columns.visible('deployPath')" prop="deployPath" :label="$t('mapp.deployPath')" sortable="custom" />
+      <el-table-column v-if="columns.visible('backupPath')" prop="backupPath" :label="$t('mapp.backupPath')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
