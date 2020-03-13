@@ -24,6 +24,8 @@ function CRUD(options) {
     query: {},
     // 查询数据的参数
     params: {},
+    // 是否显示高级搜索按钮,有些场景不需要显示
+    showAdSearchBtn: true,
     // 需要高级搜索的字段信息
     adSearchFields: new Map(),
     // 高级查询的参数集合,使用Post方法传递的data

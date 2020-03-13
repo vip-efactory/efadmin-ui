@@ -68,11 +68,13 @@ import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
+const adSearchFields = new Map([['name', i18n.t('job.name')], ['sort', i18n.t('job.sort')], ['status', i18n.t('job.enabled')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
 const crud = CRUD({
   title: i18n.t('job.TITLE'),
   url: 'api/job/page',
   sort: ['sort,asc', 'id,desc'],
-  crudMethod: { ...crudJob }
+  crudMethod: { ...crudJob },
+  adSearchFields: adSearchFields
 })
 
 export default {

@@ -65,7 +65,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ url: 'api/generator/tables' })
+const defaultCrud = CRUD({ url: 'api/generator/tables', showAdSearchBtn: false })
 export default {
   name: 'GeneratorIndex',
   components: { pagination, crudOperation, rrOperation },

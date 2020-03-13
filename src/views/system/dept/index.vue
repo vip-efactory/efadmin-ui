@@ -90,7 +90,8 @@ import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('dept.TITLE'), url: 'api/dept', crudMethod: { ...crudDept }})
+const adSearchFields = new Map([['name', i18n.t('dept.name')], ['enabled', i18n.t('dept.enabled')], ['remark', i18n.t('be.remark')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.t('dept.TITLE'), url: 'api/dept/all', crudMethod: { ...crudDept }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, pid: 1, enabled: 'true', remark: null }
 export default {
   name: 'Dept',

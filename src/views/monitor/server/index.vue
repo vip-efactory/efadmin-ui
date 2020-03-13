@@ -109,7 +109,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('server.TITLE'), url: 'api/server/page', sort: 'sort,asc', crudMethod: { ...crudServer }})
+const adSearchFields = new Map([['name', i18n.t('server.name')], ['address', i18n.t('server.address')], ['port', i18n.t('server.port')], ['state', i18n.t('server.state')]]) // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.t('server.TITLE'), url: 'api/server/page', sort: 'sort,asc', crudMethod: { ...crudServer }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, address: 'localhost', name: null, ip: null, port: 8777, state: null, cpuRate: null, cpuCore: null, memTotal: null, memUsed: null, diskTotal: null, diskUsed: null, swapTotal: null, swapUsed: null, sort: 999 }
 export default {
   name: 'ServerMonitor',

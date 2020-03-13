@@ -113,16 +113,16 @@
         <template slot-scope="scope">
           <!--若为true,显示对号-->
           <i v-if="scope.row.iframe" class="el-icon-check" />
-<!--          <span v-if="scope.row.iframe">{{ $t('bool.true') }}</span>-->
-<!--          <span v-else>{{ $t('bool.false') }}</span>-->
+          <!--          <span v-if="scope.row.iframe">{{ $t('bool.true') }}</span>-->
+          <!--          <span v-else>{{ $t('bool.false') }}</span>-->
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('cache')" prop="cache" :label="$t('menu.cache')" width="75px">
         <template slot-scope="scope">
           <!--若为true,显示对号-->
           <i v-if="scope.row.cache" class="el-icon-check" />
-<!--          <span v-if="scope.row.cache">{{ $t('bool.true') }}</span>-->
-<!--          <span v-else>{{ $t('bool.false') }}</span>-->
+          <!--          <span v-if="scope.row.cache">{{ $t('bool.true') }}</span>-->
+          <!--          <span v-else>{{ $t('bool.false') }}</span>-->
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('hidden')" prop="hidden" :label="$t('menu.hidden')" width="75px">
@@ -130,8 +130,8 @@
           <!--若为true,显示对号-->
           <i v-if="scope.row.hidden" />
           <i v-else class="el-icon-check" />
-<!--          <span v-if="scope.row.hidden">{{ $t('bool.false') }}</span>-->
-<!--          <span v-else>{{ $t('bool.true') }}</span>-->
+          <!--          <span v-if="scope.row.hidden">{{ $t('bool.false') }}</span>-->
+          <!--          <span v-else>{{ $t('bool.true') }}</span>-->
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" width="135px">
@@ -164,7 +164,8 @@ import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('menu.TITLE'), url: 'api/menus', crudMethod: { ...crudMenu }})
+const adSearchFields = new Map([['name', i18n.t('menu.name')], ['sort', i18n.t('menu.sort')], ['path', i18n.t('menu.path')], ['permission', i18n.t('menu.permission')], ['component', i18n.t('menu.component')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.t('menu.TITLE'), url: 'api/menus/all', crudMethod: { ...crudMenu }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, sort: 999, path: null, component: null, componentName: null, iframe: false, roles: [], pid: 0, icon: null, cache: false, hidden: false, type: 0, permission: null }
 export default {
   name: 'Menu',

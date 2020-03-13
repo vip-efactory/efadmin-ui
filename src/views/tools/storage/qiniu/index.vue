@@ -88,9 +88,11 @@ import CRUD, { presenter, header, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
+import i18n from '../../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '七牛云文件', url: 'api/qiNiuContent/page', crudMethod: { ...crudQiNiu }})
+const adSearchFields = new Map([['name', i18n.t('storage.name')], ['suffix', i18n.t('storage.suffix')], ['type', i18n.t('storage.type')], ['bucket', i18n.t('storage.bucket')], ['updateTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: '七牛云文件', url: 'api/qiNiuContent/page', crudMethod: { ...crudQiNiu }, adSearchFields: adSearchFields })
 export default {
   components: { eForm, pagination, crudOperation, rrOperation },
   mixins: [presenter(defaultCrud), header(), crud()],

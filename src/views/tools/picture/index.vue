@@ -104,7 +104,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('picture.TITLE'), url: 'api/pictures/page', crudMethod: { ...crudPic }})
+const adSearchFields = new Map([['filename', i18n.t('picture.filename')], ['username', i18n.t('picture.username')], ['width', i18n.t('picture.width')], ['height', i18n.t('picture.height')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.t('picture.TITLE'), url: 'api/pictures/page', crudMethod: { ...crudPic }, adSearchFields: adSearchFields })
 export default {
   name: 'Pictures',
   components: { pagination, crudOperation, rrOperation },

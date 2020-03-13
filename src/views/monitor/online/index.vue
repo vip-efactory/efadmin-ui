@@ -66,7 +66,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ url: 'auth/online', title: i18n.t('online.TITLE') })
+const defaultCrud = CRUD({ url: 'auth/online', title: i18n.t('online.TITLE'), showAdSearchBtn: false })
 export default {
   name: 'OnlineUser',
   components: { pagination, crudOperation, rrOperation },
