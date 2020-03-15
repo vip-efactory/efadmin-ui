@@ -9,6 +9,7 @@
       <span v-html="$store.state.settings.footerTxt" />
       <span v-show="is_zh_CN"> ⋅ </span>
       <a v-show="is_zh_CN" href="http://www.beian.miit.gov.cn" target="_blank">{{ $store.state.settings.caseNumber }}</a>
+      <a v-show="is_zh_CN" href="https://jq.qq.com/?_wv=1027&k=5DTYJ3S" target="_blank" >QQ交流群:601693868</a>
     </div>
   </section>
 </template>
