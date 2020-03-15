@@ -7,7 +7,7 @@ export function getAllJob(deptId) {
     size: 9999
   }
   return request({
-    url: 'api/job',
+    url: 'api/job/page',
     method: 'get',
     params
   })

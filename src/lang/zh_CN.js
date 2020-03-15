@@ -59,10 +59,13 @@ export default {
     delSuccess: '删除成功',
     exportData: '数据',
     deleteTips: '确定删除本条数据吗？',
-    deleteWarn: '提示',
+    deleteWarn: '警告',
     multiDeleteTipsStart: '确认删除选中的',
     multiDeleteTipsEnd: '条数据?',
     selectAtLeastOne: '请至少选择一列',
+    dialogTitleHint: '提示',
+    thisOperate: '此操作将 \"',
+    continueTxt: ', 是否继续？',
     save: '保存'
   },
   bool: {
@@ -113,7 +116,20 @@ export default {
     dept: '部门',
     selectDept: '选择部门',
     selectJob: '请先选择部门',
-    selectRole: '选择角色'
+    selectRole: '选择角色',
+    userSearchPlaceholder: '输入名称或者邮箱搜索',
+    usernameEmptyChk: '请输入用户名',
+    usernameLengthRangeChk: '长度在 2 到 20 个字符',
+    nickNameEmptyChk: '请输入用户昵称',
+    nickNameLengthRangeChk: '长度在 2 到 20 个字符',
+    emailEmptyChk: '请输入邮箱地址',
+    emailFormatChk: '请输入正确的邮箱地址',
+    phoneEmptyChk: '请输入电话号码',
+    phoneFormatChk: '请输入正确的11位手机号码',
+    deptEmptyChk: '部门不能为空',
+    jobEmptyChk: '岗位不能为空',
+    rolesEmptyChk: '角色不能为空',
+    userAddOKMsg: '新增成功，默认密码：123456'
   },
   sex: {
     male: '男',
@@ -167,7 +183,8 @@ export default {
     pid: '上级部门',
     roles: '角色',
     selectSuperTips: '选择上级类目',
-    deleteTips: '确定删除吗,如果存在下级节点则一并删除，此操作不能撤销！'
+    deleteTips: '确定删除吗,如果存在下级节点则一并删除，此操作不能撤销！',
+    deptSearchPlaceholder: '输入部门名称搜索'
   },
   job: {
     TITLE: '岗位',

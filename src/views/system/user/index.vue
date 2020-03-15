@@ -8,7 +8,7 @@
             v-model="deptName"
             clearable
             size="small"
-            placeholder="输入部门名称搜索"
+            :placeholder="$t('dept.deptSearchPlaceholder')"
             prefix-icon="el-icon-search"
             class="filter-item"
             @input="getDeptDatas"
@@ -32,7 +32,7 @@
               v-model="query.blurry"
               clearable
               size="small"
-              placeholder="输入名称或者邮箱搜索"
+              :placeholder="$t('user.userSearchPlaceholder')"
               style="width: 200px;"
               class="filter-item"
               @keyup.enter.native="crud.toQuery"
@@ -45,14 +45,14 @@
               size="small"
               class="date-item"
               value-format="yyyy-MM-dd HH:mm:ss"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              :start-placeholder="$t('common.startTime')"
+              :end-placeholder="$t('common.endTime')"
             />
             <el-select
               v-model="query.enabled"
               clearable
               size="small"
-              placeholder="状态"
+              :placeholder="$t('user.enabled')"
               class="filter-item"
               style="width: 90px"
               @change="crud.toQuery"
@@ -224,9 +224,9 @@ export default {
     // 自定义验证
     const validPhone = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请输入电话号码'))
+        callback(new Error(i18n.t('user.phoneEmptyChk')))
       } else if (!isvalidPhone(value)) {
-        callback(new Error('请输入正确的11位手机号码'))
+        callback(new Error(i18n.t('user.phoneFormatChk')))
       } else {
         callback()
       }
@@ -241,21 +241,21 @@ export default {
         del: ['admin', 'user:del']
       },
       enabledTypeOptions: [
-        { key: 'true', display_name: '激活' },
-        { key: 'false', display_name: '锁定' }
+        { key: 'true', display_name: '激活(Active)' },
+        { key: 'false', display_name: '禁用(Disable)' }
       ],
       rules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          { required: true, message: i18n.t('user.usernameEmptyChk'), trigger: 'blur' },
+          { min: 2, max: 20, message: i18n.t('user.usernameLengthRangeChk'), trigger: 'blur' }
         ],
         nickName: [
-          { required: true, message: '请输入用户昵称', trigger: 'blur' },
-          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          { required: true, message: i18n.t('user.nickNameEmptyChk'), trigger: 'blur' },
+          { min: 2, max: 20, message: i18n.t('user.nickNameLengthRangeChk'), trigger: 'blur' }
         ],
         email: [
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+          { required: true, message: i18n.t('user.emailEmptyChk'), trigger: 'blur' },
+          { type: 'email', message: i18n.t('user.emailFormatChk'), trigger: 'blur' }
         ],
         phone: [
           { required: true, trigger: 'blur', validator: validPhone }
@@ -272,7 +272,7 @@ export default {
     this.$nextTick(() => {
       this.getDeptDatas()
       this.crud.toQuery()
-      this.crud.msg.add = '新增成功，默认密码：123456'
+      this.crud.msg.add = i18n.t('user.userAddOKMsg')
     })
   },
   mounted: function() {
@@ -334,19 +334,19 @@ export default {
     [CRUD.HOOK.afterValidateCU](crud) {
       if (!crud.form.dept.id) {
         this.$message({
-          message: '部门不能为空',
+          message: i18n.t('user.deptEmptyChk'),
           type: 'warning'
         })
         return false
       } else if (!crud.form.job.id) {
         this.$message({
-          message: '岗位不能为空',
+          message: i18n.t('user.jobEmptyChk'),
           type: 'warning'
         })
         return false
       } else if (this.roles.length === 0) {
         this.$message({
-          message: '角色不能为空',
+          message: i18n.t('user.rolesEmptyChk'),
           type: 'warning'
         })
         return false
@@ -388,14 +388,14 @@ export default {
     },
     // 改变状态
     changeEnabled(data, val) {
-      this.$confirm('此操作将 "' + this.dict.label.user_status[val] + '" ' + data.username + ', 是否继续？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(i18n.t('crud.thisOperate') + this.dict.label.user_status[val] + '" ' + data.username + i18n.t('crud.continueTxt'), i18n.t('crud.dialogTitleHint'), {
+        confirmButtonText: i18n.t('crud.confirm'),
+        cancelButtonText: i18n.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         crudUser.edit(data).then(res => {
           if (res.code === 0) {
-            this.crud.notify(this.dict.label.user_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+            this.crud.notify(this.dict.label.user_status[val] + i18n.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           } else {
             this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }

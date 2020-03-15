@@ -63,6 +63,9 @@ export default {
     multiDeleteTipsStart: 'Are you sure you want to delete the selected ',
     multiDeleteTipsEnd: ' data?',
     selectAtLeastOne: 'Please select at least one column',
+    dialogTitleHint: 'Tips',
+    thisOperate: 'This operation will \"',
+    continueTxt: ', Whether to continue?',
     save: 'Save'
   },
   bool: {
@@ -113,7 +116,20 @@ export default {
     dept: 'Department',
     selectDept: 'Select department',
     selectJob: 'Choose department first',
-    selectRole: 'Choose a role'
+    selectRole: 'Choose a role',
+    userSearchPlaceholder: 'Enter name/email search',
+    usernameEmptyChk: 'please enter Username',
+    usernameLengthRangeChk: '2 to 20 characters in length',
+    nickNameEmptyChk: 'Please enter Nickname',
+    nickNameLengthRangeChk: '2 to 20 characters in length',
+    emailEmptyChk: 'Please enter Email',
+    emailFormatChk: 'Please input the correct email',
+    phoneEmptyChk: 'Please enter your phone number',
+    phoneFormatChk: 'Please enter 11-digit mobile number',
+    deptEmptyChk: 'Department cannot be empty',
+    jobEmptyChk: 'Job cannot be empty',
+    rolesEmptyChk: 'Role cannot be empty',
+    userAddOKMsg: 'Added successfully, default password: 123456'
   },
   sex: {
     male: 'Male',
@@ -167,7 +183,8 @@ export default {
     pid: 'Higher office',
     roles: '角色',
     selectSuperTips: 'Select superior category',
-    deleteTips: 'Are you sure you want to delete it? If there are subordinate nodes, delete it together. This operation cannot be undone!'
+    deleteTips: 'Are you sure you want to delete it? If there are subordinate nodes, delete it together. This operation cannot be undone!',
+    deptSearchPlaceholder: 'Enter dept name search'
   },
   job: {
     TITLE: 'Job',
