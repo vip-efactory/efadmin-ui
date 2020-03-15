@@ -144,6 +144,7 @@ export default {
     TITLE: '角色',
     name: '角色名称',
     dataScope: '数据范围',
+    dataPermission: '数据权限',
     level: '级别',
     remark: '备注',
     permission: '角色权限',
@@ -151,7 +152,14 @@ export default {
     menus: 'menus',
     depts: 'depts',
     roleList: '角色列表',
-    menuAssignment: '菜单分配'
+    menuAssignment: '菜单分配',
+    searchPlaceholder: '输入名称或者描述搜索',
+    dataScopePlaceholder: '请选择数据范围',
+    selectPlaceholder: '请选择',
+    nameRequired: '请输入名称',
+    permissionRequired: '请输入权限',
+    customChk: '自定义数据权限不能为空',
+    menuTips: '选择指定角色分配菜单'
   },
   menu: {
     TITLE: '菜单',

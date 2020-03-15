@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" size="small" clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.blurry" size="small" clearable :placeholder="$t('role.searchPlaceholder')" :title="$t('role.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -13,16 +13,16 @@
           size="small"
           class="date-item"
           value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startTime')"
+          :end-placeholder="$t('common.endTime')"
         />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission" />
     </div>
     <!-- 表单渲染 -->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="570px">
-      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="100px">
+    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="630px">
+      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="130px">
         <el-form-item :label="$t('role.name')" prop="name">
           <el-input v-model="form.name" style="width: 145px;" />
         </el-form-item>
@@ -30,7 +30,7 @@
           <el-input v-model="form.permission" style="width: 145px;" />
         </el-form-item>
         <el-form-item :label="$t('role.dataScope')" prop="dataScope">
-          <el-select v-model="form.dataScope" style="width: 145px" placeholder="请选择数据范围" @change="changeScope">
+          <el-select v-model="form.dataScope" style="width: 145px" :placeholder="$t('role.dataScopePlaceholder')" @change="changeScope">
             <el-option
               v-for="item in dateScopes"
               :key="item"
@@ -42,11 +42,11 @@
         <el-form-item :label="$t('role.level')" prop="level">
           <el-input-number v-model.number="form.level" :min="1" controls-position="right" style="width: 145px;" />
         </el-form-item>
-        <el-form-item v-if="form.dataScope === '自定义'" label="数据权限" prop="depts">
-          <treeselect v-model="form.depts" :options="depts" multiple style="width: 380px" placeholder="请选择" />
+        <el-form-item v-if="form.dataScope === '自定义'" :label="$t('role.dataPermission')" prop="depts">
+          <treeselect v-model="form.depts" :options="depts" multiple style="width: 430px" :placeholder="$t('role.selectPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('role.remark')" prop="remark">
-          <el-input v-model="form.remark" style="width: 380px;" rows="5" type="textarea" />
+          <el-input v-model="form.remark" style="width: 430px;" rows="5" type="textarea" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -91,7 +91,7 @@
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="7">
         <el-card class="box-card" shadow="never">
           <div slot="header" class="clearfix">
-            <el-tooltip class="item" effect="dark" content="选择指定角色分配菜单" placement="top">
+            <el-tooltip class="item" effect="dark" :content="$t('role.menuTips')" placement="top">
               <span class="role-span">{{ $t('role.menuAssignment') }}</span>
             </el-tooltip>
             <el-button
@@ -155,10 +155,10 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: i18n.t('role.nameRequired'), trigger: 'blur' }
         ],
         permission: [
-          { required: true, message: '请输入权限', trigger: 'blur' }
+          { required: true, message: i18n.t('role.permissionRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -196,7 +196,7 @@ export default {
     [CRUD.HOOK.afterValidateCU](crud) {
       if (crud.form.dataScope === '自定义' && crud.form.depts.length === 0) {
         this.$message({
-          message: '自定义数据权限不能为空',
+          message: i18n.t('role.customChk'),
           type: 'warning'
         })
         return false
@@ -268,7 +268,7 @@ export default {
       })
       crudRoles.editMenu(role).then(res => {
         if (res.code === 0) {
-          this.crud.notify('保存成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(i18n.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.menuLoading = false
           this.update()
         } else {

@@ -144,6 +144,7 @@ export default {
     TITLE: 'Role',
     name: 'Name',
     dataScope: 'Data Scope',
+    dataPermission: 'Data permission',
     level: 'Level',
     remark: 'Remark',
     permission: 'Permission',
@@ -151,7 +152,14 @@ export default {
     menus: 'menus',
     depts: 'depts',
     roleList: 'Role List',
-    menuAssignment: 'Menu Assignment'
+    menuAssignment: 'Menu Assignment',
+    searchPlaceholder: 'Search by Name or Remark',
+    dataScopePlaceholder: 'Please select a data scope',
+    selectPlaceholder: 'Please choose',
+    nameRequired: 'Please enter Name',
+    permissionRequired: 'Please enter Permission',
+    customChk: 'Custom data permissions cannot be empty',
+    menuTips: 'Select the specified role assignment menu'
   },
   menu: {
     TITLE: 'Menu',
