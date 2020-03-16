@@ -175,7 +175,15 @@ export default {
     hidden: '是否可见',
     pid: '上级菜单',
     iFrame: '是否外链',
-    roles: '关联角色'
+    roles: '关联角色',
+    searchPlaceholder: '模糊搜索',
+    iconPlaceholder: '点击选择图标',
+    componentNamePlaceholder: '匹配组件内Name字段',
+    componentPlaceholder: '组件路径',
+    pidPlaceholder: '选择上级类目',
+    deleteWarn: '确定删除吗,如果存在下级节点则一并删除，此操作不能撤销!',
+    nameRequired: '请输入名称',
+    pathRequired: '请输入地址'
   },
   menuType: {
     dir: '目录',

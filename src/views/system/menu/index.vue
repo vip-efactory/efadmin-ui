@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" clearable size="small" placeholder="模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+        <el-input v-model="query.blurry" clearable size="small" :placeholder="$t('menu.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -38,7 +38,7 @@
             @show="$refs['iconSelect'].reset()"
           >
             <IconSelect ref="iconSelect" @selected="selected" />
-            <el-input slot="reference" v-model="form.icon" style="width: 450px;" placeholder="点击选择图标" readonly>
+            <el-input slot="reference" v-model="form.icon" style="width: 450px;" :placeholder="$t('menu.iconPlaceholder')" readonly>
               <svg-icon v-if="form.icon" slot="prefix" :icon-class="form.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
               <i v-else slot="prefix" class="el-icon-search el-input__icon" />
             </el-input>
@@ -78,13 +78,13 @@
           <el-input-number v-model.number="form.sort" :min="0" :max="999" controls-position="right" style="width: 140px;" />
         </el-form-item>
         <el-form-item v-show="!form.iframe && form.type.toString() === '1'" :label="$t('menu.componentName')" prop="componentName">
-          <el-input v-model="form.componentName" style="width: 178px;" placeholder="匹配组件内Name字段" />
+          <el-input v-model="form.componentName" style="width: 178px;" :placeholder="$t('menu.componentNamePlaceholder')" />
         </el-form-item>
         <el-form-item v-show="!form.iframe && form.type.toString() === '1'" :label="$t('menu.component')" prop="component">
-          <el-input v-model="form.component" style="width: 178px;" placeholder="组件路径" />
+          <el-input v-model="form.component" style="width: 178px;" :placeholder="$t('menu.componentPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('menu.pid')" prop="pid">
-          <treeselect v-model="form.pid" :options="menus" style="width: 450px;" placeholder="选择上级类目" />
+          <treeselect v-model="form.pid" :options="menus" style="width: 450px;" :placeholder="$t('menu.pidPlaceholder')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -144,7 +144,7 @@
           <udOperation
             :data="scope.row"
             :permission="permission"
-            msg="确定删除吗,如果存在下级节点则一并删除，此操作不能撤销！"
+            :msg="$t('menu.deleteWarn')"
           />
         </template>
       </el-table-column>
@@ -181,10 +181,10 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: i18n.t('menu.nameRequired'), trigger: 'blur' }
         ],
         path: [
-          { required: true, message: '请输入地址', trigger: 'blur' }
+          { required: true, message: i18n.t('menu.pathRequired'), trigger: 'blur' }
         ]
       }
     }

@@ -175,7 +175,15 @@ export default {
     hidden: 'Display',
     pid: 'Superior Menu',
     iFrame: 'External link',
-    roles: 'Associated Role'
+    roles: 'Associated Role',
+    searchPlaceholder: 'Fuzzy search',
+    iconPlaceholder: 'Click on the select icon',
+    componentNamePlaceholder: 'Match the Name field in the component',
+    componentPlaceholder: 'Component path',
+    pidPlaceholder: 'Select superior category',
+    deleteWarn: 'Are you sure you want to delete it? If there are subordinate nodes, delete it together. This operation cannot be undone!',
+    nameRequired: 'Please enter the Name/Title',
+    pathRequired: 'Please enter the Route'
   },
   menuType: {
     dir: 'Directory',
