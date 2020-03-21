@@ -95,9 +95,9 @@ export default {
   methods: {
     // 改变状态
     changeEnabled(data, val) {
-      this.$confirm('此操作将 "' + this.dict.label.job_status[val] + '" ' + data.name + '岗位, 是否继续？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(i18n.t('crud.thisOperate') + this.dict.label.job_status[val] + '" ' + data.name + i18n.t('crud.continueTxt'), i18n.t('crud.dialogTitleHint'), {
+        confirmButtonText: i18n.t('crud.confirm'),
+        cancelButtonText: i18n.t('crud.cancel'),
         type: 'warning'
       }).then(r => {
         if (r.code === 0) {

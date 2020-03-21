@@ -58,7 +58,7 @@
           v-model="form.dept.id"
           :options="depts"
           style="width: 370px"
-          placeholder="选择部门"
+          :placeholder="$t('job.deptSelectPlaceholder')"
         />
       </el-form-item>
     </el-form>
@@ -88,6 +88,7 @@ import CRUD, { form } from '@crud/crud'
 import { getDepts } from '@/api/system/dept'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import i18n from '../../../../lang'
 
 const defaultForm = {
   id: null,
@@ -112,12 +113,12 @@ export default {
       depts: [],
       rules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: i18n.t('job.nameRequired'), trigger: 'blur' }
         ],
         sort: [
-          { required: true, message: '请输入序号', trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.t('job.sortRequired'), trigger: 'blur', type: 'number' }
         ],
-        dept: { required: true, message: '所属部门不能为空', trigger: 'select' }
+        dept: { required: true, message: i18n.t('job.deptRequired'), trigger: 'select' }
       }
     }
   },
@@ -127,7 +128,10 @@ export default {
         if (res.code === 0) {
           this.depts = res.data.content
         } else {
-          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          this.$notify({
+            title: res.msg,
+            type: CRUD.NOTIFICATION_TYPE.ERROR
+          })
         }
       })
     },
@@ -135,7 +139,7 @@ export default {
     [CRUD.HOOK.afterValidateCU]() {
       if (!this.form.dept.id) {
         this.$notify({
-          title: '所属部门不能为空',
+          title: i18n.t('job.deptRequired'),
           type: 'warning'
         })
         return false

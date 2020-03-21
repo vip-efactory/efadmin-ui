@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <p class="warn-content">
-      Markdown 基于
+      {{ $t('editor.mdBaseOn') }}
       <el-link type="primary" href="https://github.com/hinesboy/mavonEditor" target="_blank">MavonEditor</el-link>
-      ，图片上传使用 <el-link type="primary" href="https://sm.ms/" target="_blank">SM.MS</el-link>
+      ，{{ $t('editor.imgUpUse') }} <el-link type="primary" href="https://sm.ms/" target="_blank">SM.MS</el-link>
     </p>
     <mavon-editor ref="md" :style="'height:' + height" @imgAdd="imgAdd" />
   </div>

@@ -4,8 +4,8 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.value" clearable placeholder="输入搜索内容" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <el-select v-model="query.type" clearable placeholder="类型" class="filter-item" style="width: 130px">
+        <el-input v-model="query.value" clearable :placeholder="$t('employee.simpleSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-select v-model="query.type" clearable :placeholder="$t('employee.simpleSearchField')" class="filter-item" style="width: 130px">
           <el-option v-for="item in queryTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
         </el-select>
         <rrOperation :crud="crud" />
@@ -130,11 +130,11 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '姓名不能为空', trigger: 'blur' }
+          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' }
         ]
       },
       queryTypeOptions: [
-        { key: 'id', display_name: '主键' }
+        { key: 'name', display_name: i18n.t('employee.name') }
       ]
     }
   },

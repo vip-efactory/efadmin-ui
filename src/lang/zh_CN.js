@@ -77,6 +77,8 @@ export default {
     clickUpload: '点击上传',
     success: '成功',
     failure: '失败',
+    enable: '启用',
+    disable: '禁用',
     dragFileUpload: '将文件拖到此处，或',
     startDate: '开始日期',
     endDate: '结束日期',
@@ -200,14 +202,21 @@ export default {
     roles: '角色',
     selectSuperTips: '选择上级类目',
     deleteTips: '确定删除吗,如果存在下级节点则一并删除，此操作不能撤销！',
-    deptSearchPlaceholder: '输入部门名称搜索'
+    deptSearchPlaceholder: '输入部门名称搜索',
+    nameRequired: '请输入部门名称',
+    pidChk: '上级部门不能为空'
   },
   job: {
     TITLE: '岗位',
     name: '职位名称',
     sort: '排序',
     enabled: '状态',
-    dept: '关联部门'
+    dept: '关联部门',
+    jobSearchPlaceholder: '输入岗位名称搜索',
+    nameRequired: '请输入名称',
+    sortRequired: '请输入序号',
+    deptRequired: '所属部门不能为空',
+    deptSelectPlaceholder: '请选择部门'
   },
   dict: {
     TITLE: '字典',
@@ -215,7 +224,8 @@ export default {
     name: '名称',
     dictList: '字典列表',
     dictDetails: '字典详情',
-    deleteTips: '此操作将删除字典与对应的字典详情，确定要删除吗？'
+    deleteTips: '此操作将删除字典与对应的字典详情，确定要删除吗？',
+    nameRequired: '请输入名称'
   },
   dictDetail: {
     TITLE: '字典详情',
@@ -225,7 +235,9 @@ export default {
     sort: '排序',
     dict: '所属字典',
     clickViewDetail: '点击字典查看详情',
-    deleteTips: '确定删除本条数据吗？'
+    deleteTips: '确定删除本条数据吗？',
+    labelRequired: '请输入字典标签',
+    sortRequired: '请输入序号'
   },
   employee: {
     TITLE: '员工',
@@ -240,7 +252,10 @@ export default {
     birthday: '生日',
     address: '地址',
     job: '职位',
-    dept: '部门'
+    dept: '部门',
+    simpleSearchPlaceholder: '请输入搜索内容',
+    simpleSearchField: '请选择搜索字段',
+    nameRequired: '姓名不能为空'
   },
   online: {
     TITLE: '在线用户',
@@ -260,6 +275,8 @@ export default {
     allTableLikeSearch: '全表模糊搜索'
   },
   log: {
+    TITLE: '日志',
+    ERROR_TITLE: '异常日志',
     username: '用户名',
     description: '行为描述',
     method: '请求方法',
@@ -274,7 +291,8 @@ export default {
     clearLog: '清空',
     deleteTitle: '提示',
     deleteTips: '确认清空所有操作日志吗?',
-    deleteErrorTips: '确认清空所有异常日志吗?'
+    deleteErrorTips: '确认清空所有异常日志吗?',
+    simpleSearchPlaceholder: '输入你要搜索的内容'
   },
   server: {
     TITLE: '服务',
@@ -290,7 +308,11 @@ export default {
     diskUsed: '磁盘使用量',
     swapTotal: '交换区总量',
     swapUsed: '交换区使用量',
-    sort: '排序'
+    sort: '排序',
+    simpleSearchPlaceholder: '输入名称或者服务地址',
+    nameRequired: '请输入名称',
+    addressRequired: '请输入IP地址',
+    portRequired: '请输入访问端口'
   },
   mserver: {
     TITLE: '服务器',
@@ -649,6 +671,15 @@ export default {
     btnSearch: '搜索',
     btnReset: '清除所有查询条件',
     btnCancel: '取消'
+  },
+  editor: {
+    baseOn: '富文本基于',
+    mdBaseOn: 'Markdown基于',
+    yamlBaseOn: 'Yaml编辑器基于',
+    themePreview: '主题预览地址',
+    imgUpUse: '图片上传使用',
+    contentLi1: '富文本中图片上传使用的是 SM.MS 图床：',
+    contentLi2: '更多帮助请查看官方文档：'
   },
   documentation: {
     documentation: '文档',

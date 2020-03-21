@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" clearable size="small" placeholder="输入名称或者服务地址" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.blurry" clearable size="small" :placeholder="$t('server.simpleSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission" />
@@ -125,13 +125,13 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: i18n.t('server.nameRequired'), trigger: 'blur' }
         ],
         address: [
-          { required: true, message: '请输入IP', trigger: 'blur' }
+          { required: true, message: i18n.t('server.addressRequired'), trigger: 'blur' }
         ],
         port: [
-          { required: true, message: '请输入访问端口', trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.t('server.portRequired'), trigger: 'blur', type: 'number' }
         ]
       }
     }

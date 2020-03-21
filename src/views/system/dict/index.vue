@@ -124,7 +124,7 @@ export default {
       form: { id: null, name: null, remark: null },
       rules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: i18n.t('dict.nameRequired'), trigger: 'blur' }
         ]
       }
     }

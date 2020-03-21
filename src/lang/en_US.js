@@ -77,6 +77,8 @@ export default {
     clickUpload: 'Click Upload',
     success: 'Succeed',
     failure: 'Failure',
+    enable: 'Enable',
+    disable: 'Disable',
     dragFileUpload: 'Drag files here, or',
     startDate: 'Start date',
     endDate: 'End date',
@@ -200,14 +202,21 @@ export default {
     roles: '角色',
     selectSuperTips: 'Select superior category',
     deleteTips: 'Are you sure you want to delete it? If there are subordinate nodes, delete it together. This operation cannot be undone!',
-    deptSearchPlaceholder: 'Enter dept name search'
+    deptSearchPlaceholder: 'Enter dept name search',
+    nameRequired: 'Please enter the department name',
+    pidChk: 'The Higher office cannot be empty'
   },
   job: {
     TITLE: 'Job',
     name: 'Job name',
     sort: 'Sort',
     enabled: 'Status',
-    dept: 'Related department'
+    dept: 'Related department',
+    jobSearchPlaceholder: 'Enter Job name search',
+    nameRequired: 'Please enter Job name',
+    sortRequired: 'Please enter the Sort',
+    deptRequired: 'Related department cannot be empty',
+    deptSelectPlaceholder: 'Please select a department'
   },
   dict: {
     TITLE: 'Dict',
@@ -215,7 +224,8 @@ export default {
     name: 'Dict name',
     dictList: 'Dict List',
     dictDetails: 'Dict Details',
-    deleteTips: 'This will delete the dictionary and the corresponding dictionary details. Are you sure you want to delete it?'
+    deleteTips: 'This will delete the dictionary and the corresponding dictionary details. Are you sure you want to delete it?',
+    nameRequired: 'Please enter Dict name'
   },
   dictDetail: {
     TITLE: 'Dictionary Details',
@@ -225,7 +235,9 @@ export default {
     sort: 'Sort',
     dict: 'Own dictionary',
     clickViewDetail: 'Click on the dictionary for details',
-    deleteTips: 'Are you sure you want to delete this data?'
+    deleteTips: 'Are you sure you want to delete this data?',
+    labelRequired: 'Please enter Dict label',
+    sortRequired: 'Please enter the Sort'
   },
   employee: {
     TITLE: 'Employee',
@@ -240,7 +252,10 @@ export default {
     birthday: 'Birthday',
     address: 'Address',
     job: 'Job',
-    dept: 'Department'
+    dept: 'Department',
+    simpleSearchPlaceholder: 'Enter search content',
+    simpleSearchField: 'Select a search field',
+    nameRequired: 'Name cannot be empty'
   },
   online: {
     TITLE: 'Online User',
@@ -260,6 +275,8 @@ export default {
     allTableLikeSearch: 'Full table fuzzy search'
   },
   log: {
+    TITLE: 'Log',
+    ERROR_TITLE: 'Exception Log',
     username: 'User name',
     description: 'Behavior description',
     method: 'Request Method',
@@ -274,7 +291,8 @@ export default {
     clearLog: 'Clear',
     deleteTitle: 'Warning',
     deleteTips: 'Are you sure you want to clear all operation logs?',
-    deleteErrorTips: 'Are you sure you want to clear all exception logs?'
+    deleteErrorTips: 'Are you sure you want to clear all exception logs?',
+    simpleSearchPlaceholder: 'Enter search content'
   },
   server: {
     TITLE: 'Service',
@@ -290,7 +308,11 @@ export default {
     diskUsed: 'Disk usage',
     swapTotal: 'Total swap',
     swapUsed: 'Swap usage',
-    sort: 'Sort'
+    sort: 'Sort',
+    simpleSearchPlaceholder: 'Enter name or IP address',
+    nameRequired: 'Please enter the Name',
+    addressRequired: 'Please enter the IP address',
+    portRequired: 'Please enter the Port'
   },
   mserver: {
     TITLE: 'Server',
@@ -649,6 +671,15 @@ export default {
     btnSearch: 'Search',
     btnReset: 'Clear all conditions',
     btnCancel: 'Cancel'
+  },
+  editor: {
+    baseOn: 'Rich text based on',
+    mdBaseOn: 'Markdown is based on ',
+    yamlBaseOn: 'Yaml editor is based on',
+    themePreview: 'Theme Preview Address ',
+    imgUpUse: 'Image upload use',
+    contentLi1: 'SM.MS image bed is used for image upload in rich text:',
+    contentLi2: 'For more help please check the official documentation:'
   },
   documentation: {
     documentation: 'Documentation',

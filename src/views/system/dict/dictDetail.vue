@@ -84,10 +84,10 @@ export default {
       form: { id: null, label: null, value: null, dict: { id: null }, sort: 999 },
       rules: {
         label: [
-          { required: true, message: '请输入字典标签', trigger: 'blur' }
+          { required: true, message: i18n.t('dictDetail.labelRequired'), trigger: 'blur' }
         ],
         sort: [
-          { required: true, message: '请输入序号', trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.t('dictDetail.sortRequired'), trigger: 'blur', type: 'number' }
         ]
       }
     }

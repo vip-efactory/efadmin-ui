@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.name" clearable size="small" placeholder="输入部门名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.name" clearable size="small" :placeholder="$t('dept.deptSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -13,10 +13,10 @@
           size="small"
           class="date-item"
           value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('common.startTime')"
+          :end-placeholder="$t('common.endTime')"
         />
-        <el-select v-model="query.enabled" clearable size="small" placeholder="状态" class="filter-item" style="width: 90px" @change="crud.toQuery">
+        <el-select v-model="query.enabled" clearable size="small" :placeholder="$t('dept.enabled')" class="filter-item" style="width: 90px" @change="crud.toQuery">
           <el-option v-for="item in enabledTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
         </el-select>
         <rrOperation :crud="crud" />
@@ -104,7 +104,7 @@ export default {
       depts: [],
       rules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: i18n.t('dept.nameRequired'), trigger: 'blur' }
         ]
       },
       permission: {
@@ -113,8 +113,8 @@ export default {
         del: ['admin', 'dept:del']
       },
       enabledTypeOptions: [
-        { key: 'true', display_name: '正常' },
-        { key: 'false', display_name: '禁用' }
+        { key: 'true', display_name: i18n.t('common.enable') },
+        { key: 'false', display_name: i18n.t('common.disable') }
       ]
     }
   },
@@ -135,7 +135,7 @@ export default {
     [CRUD.HOOK.afterValidateCU]() {
       if (!this.form.pid && this.form.id !== 1) {
         this.$message({
-          message: '上级部门不能为空',
+          message: i18n.t('dept.pidChk'),
           type: 'warning'
         })
         return false
@@ -144,9 +144,9 @@ export default {
     },
     // 改变状态
     changeEnabled(data, val) {
-      this.$confirm('此操作将 "' + this.dict.label.dept_status[val] + '" ' + data.name + '部门, 是否继续？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(i18n.t('crud.thisOperate') + this.dict.label.dept_status[val] + '" ' + data.name + i18n.t('crud.continueTxt'), i18n.t('crud.dialogTitleHint'), {
+        confirmButtonText: i18n.t('crud.confirm'),
+        cancelButtonText: i18n.t('crud.cancel'),
         type: 'warning'
       }).then(r => {
         if (r.code === 0) {

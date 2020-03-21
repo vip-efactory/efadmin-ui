@@ -4,7 +4,7 @@
       v-model="query.blurry"
       clearable
       size="small"
-      placeholder="请输入你要搜索的内容"
+      :placeholder="$t('log.simpleSearchPlaceholder')"
       style="width: 200px;"
       class="filter-item"
     />
@@ -16,8 +16,8 @@
       size="small"
       class="date-item"
       value-format="yyyy-MM-dd HH:mm:ss"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
+      :start-placeholder="$t('common.startTime')"
+      :end-placeholder="$t('common.endTime')"
     />
     <rrOperation
       :crud="crud"
