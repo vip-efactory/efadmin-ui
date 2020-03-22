@@ -21,6 +21,9 @@
 |---  |--- | --- |
 |  github   |  https://github.com/vip-efactory/efadmin   |  https://github.com/vip-efactory/efadmin-ui   |
 
+#### 体验地址
+http://efadmin.ddbin.com/  
+用户名密码：admin/123456
 
 #### Build Setup
 ``` bash
