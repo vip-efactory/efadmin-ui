@@ -30,7 +30,7 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <a target="_blank" href="https://docs.auauz.net/">
+          <a target="_blank" href="http://docs.efactory.vip/">
             <el-dropdown-item>
               {{ $t('navbar.projectDocs') }}
             </el-dropdown-item>
