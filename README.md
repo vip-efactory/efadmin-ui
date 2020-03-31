@@ -17,9 +17,10 @@
 
 #### 项目源码
 
-|     |   后端源码  |   前端源码  |
-|---  |--- | --- |
-|  github   |  https://github.com/vip-efactory/efadmin   |  https://github.com/vip-efactory/efadmin-ui   |
+|        | 后端源码                                 | 前端源码                                    |
+|:-------|:----------------------------------------|:-------------------------------------------|
+| github | https://github.com/vip-efactory/efadmin | https://github.com/vip-efactory/efadmin-ui |
+| gitee  | https://gitee.com/vip-efactory/efadmin  | https://gitee.com/vip-efactory/efadmin-ui  |
 
 #### 体验地址
 <http://efadmin.ddbin.com/>  
@@ -41,21 +42,22 @@ npm run build
 ```
 
 #### 项目图片展示
-![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/zh_Login.png)
 
-![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/switch_lang_Login.png)
+![image](https://gitee.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/zh_Login.png)
 
-![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/en_Login.png)
+![image](https://gitee.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/switch_lang_Login.png)
 
-![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/zh_main.png)
+![image](https://gitee.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/en_Login.png)
 
-![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/en_main.png)
+![image](https://gitee.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/zh_main.png)
 
-![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/en_employee.png)
+![image](https://gitee.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/en_main.png)
 
-![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/i18n_zh_api.png)
+![image](https://gitee.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/en_employee.png)
 
-![image](https://github.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/i18n_en_api.png)
+![image](https://gitee.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/i18n_zh_api.png)
+
+![image](https://gitee.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/i18n_en_api.png)
 
 
 #### 反馈交流
