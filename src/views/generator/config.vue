@@ -239,12 +239,12 @@ export default {
     this.tableName = this.$route.params.tableName
     this.$nextTick(() => {
       this.init()
-      get(this.tableName).then(data => {
-        this.form = data
+      get(this.tableName).then(r => {
+        this.form = r.data
         this.form.cover = this.form.cover.toString()
       })
-      getDicts().then(data => {
-        this.dicts = data
+      getDicts().then(r => {
+        this.dicts = r.data
       })
     })
   },
@@ -263,7 +263,7 @@ export default {
           this.columnLoading = false
         } else {
           this.columnLoading = false
-          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          crud.notify(res.msg, 'error')
         }
       }).catch(err => {
         this.columnLoading = false
@@ -282,7 +282,7 @@ export default {
               this.configLoading = false
             } else {
               this.configLoading = false
-              crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+              crud.notify(res.msg, 'error')
             }
           }).catch(err => {
             this.configLoading = false
@@ -300,7 +300,7 @@ export default {
           this.syncLoading = false
         } else {
           this.syncLoading = false
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          crud.notify(r.msg, 'error')
         }
       }).then(() => {
         this.syncLoading = false
@@ -318,7 +318,7 @@ export default {
               this.notify(i18n.t('codegen.generateOK'), 'success')
             } else {
               this.genLoading = false
-              crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+              crud.notify(r.msg, 'error')
             }
           }).catch(err => {
             this.genLoading = false
@@ -326,7 +326,7 @@ export default {
           })
         } else {
           this.genLoading = false
-          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          crud.notify(res.msg, 'error')
         }
       }).catch(err => {
         this.genLoading = false
