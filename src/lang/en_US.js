@@ -681,6 +681,27 @@ export default {
     contentLi1: 'SM.MS image bed is used for image upload in rich text:',
     contentLi2: 'For more help please check the official documentation:'
   },
+  tenant: {
+    // 属性的国际化信息
+    TITLE: 'System Tenant',
+    id: '主键',
+    tenantName: '租户名称',
+    tenantCode: '租户编码',
+    dbUsername: 'DB用户名',
+    dbPassword: 'DB密码',
+    driverClassName: '驱动类名',
+    jdbcUrl: 'JDBC链接',
+    status: '租户状态',
+    // 属性非空的国际化信息
+    idRequired: '主键不能为空',
+    tenantNameRequired: '租户名称不能为空',
+    tenantCodeRequired: '租户编码不能为空',
+    dbUsernameRequired: 'DB用户名不能为空',
+    dbPasswordRequired: 'DB密码不能为空',
+    driverClassNameRequired: '驱动类名不能为空',
+    jdbcUrlRequired: 'JDBC链接不能为空',
+    statusRequired: '租户状态不能'
+  },
   documentation: {
     documentation: 'Documentation',
     github: 'Github Repository'
