@@ -21,6 +21,8 @@ service.interceptors.request.use(
     config.headers['Content-Type'] = 'application/json'
     // 携带国际化区域环境参数
     config.headers['locale'] = store.getters.locale
+    // 携带租户参数,暂时测试写死
+    config.headers['TENANT_ID'] = 1
     return config
   },
   error => {
