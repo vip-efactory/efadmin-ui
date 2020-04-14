@@ -49,7 +49,9 @@ module.exports = {
         '@': resolve('src'),
         '@crud': resolve('src/components/Crud')
       }
-    }
+    },
+    // 支持在浏览器中调试源码，利于开发环境调试
+    devtool: '#cheap-module-eval-source-map'
   },
   chainWebpack(config) {
     config.plugins.delete('preload') // TODO: need test
