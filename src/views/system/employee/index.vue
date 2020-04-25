@@ -18,28 +18,28 @@
           <el-form-item :label="$t('employee.name')" prop="name">
             <el-input v-model="form.name" style="width: 370px;" />
           </el-form-item>
-          <el-form-item :label="$t('employee.address')">
+          <el-form-item :label="$t('employee.address')" prop="address">
             <el-input v-model="form.address" style="width: 370px;" />
           </el-form-item>
-          <el-form-item :label="$t('employee.avatar')">
+          <el-form-item :label="$t('employee.avatar')" prop="avatar">
             <el-input v-model="form.avatar" style="width: 370px;" />
           </el-form-item>
-          <el-form-item :label="$t('employee.birthday')">
+          <el-form-item :label="$t('employee.birthday')" prop="birthday">
             <el-date-picker v-model="form.birthday" type="datetime" style="width: 370px;" />
           </el-form-item>
-          <el-form-item :label="$t('employee.code')">
+          <el-form-item :label="$t('employee.code')" prop="code">
             <el-input v-model="form.code" style="width: 370px;" />
           </el-form-item>
-          <el-form-item :label="$t('employee.email')">
+          <el-form-item :label="$t('employee.email')" prop="email">
             <el-input v-model="form.email" style="width: 370px;" />
           </el-form-item>
-          <el-form-item :label="$t('employee.idNumber')">
+          <el-form-item :label="$t('employee.idNumber')" prop="idNumber">
             <el-input v-model="form.idNumber" style="width: 370px;" />
           </el-form-item>
-          <el-form-item :label="$t('employee.phone')">
-            <el-input v-model.number="form.phone" style="width: 370px;" />
+          <el-form-item :label="$t('employee.phone')" prop="phone">
+            <el-input v-model="form.phone" style="width: 370px;" />
           </el-form-item>
-          <el-form-item :label="$t('employee.status')">
+          <el-form-item :label="$t('employee.status')" prop="status">
             <el-radio-group v-model="form.status">
               <el-radio
                 v-for="item in dict.employee_status"
@@ -67,7 +67,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('be.remark')">
+          <el-form-item :label="$t('be.remark')" prop="remark">
             <el-input v-model="form.remark" :rows="3" type="textarea" style="width: 370px;" />
           </el-form-item>
         </el-form>
@@ -176,6 +176,9 @@ export default {
         email: [
           { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' },
           { type: 'email', message: i18n.t('employee.emailFormatChk'), trigger: 'blur' }
+        ],
+        status: [
+          { required: true, message: i18n.t('employee.statusSelectChk'), trigger: 'blur' }
         ]
       },
       queryTypeOptions: [
