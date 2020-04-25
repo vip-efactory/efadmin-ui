@@ -255,7 +255,17 @@ export default {
     dept: '部门',
     simpleSearchPlaceholder: '请输入搜索内容',
     simpleSearchField: '请选择搜索字段',
-    nameRequired: '姓名不能为空'
+    nameRequired: '姓名不能为空',
+    nameLengthRangeChk: '姓名长度范围是2-128个字符',
+    codeRequired: '编码不能为空',
+    codeLengthRangeChk: '编码长度范围是1-32个字符',
+    emailRequired: '邮件不能为空',
+    emailFormatChk: '邮件格式不正确',
+    phoneRequired: '电话不能为空',
+    phoneLengthRangeChk: '电话长度范围是3-32个字符',
+    statusSelectChk: '请选择员工状态',
+    deptSelectChk: '请选择所在部门',
+    jobSelectChk: '请选择员工职位'
   },
   online: {
     TITLE: '在线用户',

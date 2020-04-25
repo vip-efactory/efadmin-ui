@@ -255,7 +255,17 @@ export default {
     dept: 'Department',
     simpleSearchPlaceholder: 'Enter search content',
     simpleSearchField: 'Select a search field',
-    nameRequired: 'Name cannot be empty'
+    nameRequired: 'Name cannot be empty',
+    nameLengthRangeChk: 'Name length range is 2-128 characters',
+    codeRequired: 'Code cannot be empty',
+    codeLengthRangeChk: 'Code length range is 1-32 characters',
+    emailRequired: 'Email cannot be empty',
+    emailFormatChk: 'Email format is incorrect',
+    phoneRequired: 'Phone cannot be empty',
+    phoneLengthRangeChk: 'Phone length range is 3-32 characters',
+    statusSelectChk: 'Please select employee status',
+    deptSelectChk: 'Please select a department belong to',
+    jobSelectChk: 'Please select an employee position'
   },
   online: {
     TITLE: 'Online User',

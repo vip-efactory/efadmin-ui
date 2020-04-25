@@ -37,10 +37,10 @@
             <el-input v-model="form.idNumber" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.phone')">
-            <el-input v-model="form.phone" style="width: 370px;" />
+            <el-input v-model.number="form.phone" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.status')">
-            <el-radio-group v-model="form.status" >
+            <el-radio-group v-model="form.status">
               <el-radio
                 v-for="item in dict.employee_status"
                 :key="item.id"
@@ -92,10 +92,14 @@
             {{ dict.label.employee_status[scope.row.status] }}
           </template>
         </el-table-column>
-<!--        <el-table-column v-if="columns.visible('dept')" prop="dept" :label="$t('employee.dept')" sortable="custom" />-->
-        <el-table-column v-if="columns.visible('job')" prop="job" :label="$t('employee.job')" sortable="custom" >
+        <el-table-column v-if="columns.visible('dept')" prop="dept" :label="$t('employee.dept')" sortable="custom">
           <template slot-scope="scope">
-            <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
+            <div>{{ scope.row.dept.name }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="columns.visible('job')" prop="job" :label="$t('employee.job')" sortable="custom">
+          <template slot-scope="scope">
+            <div>{{ scope.row.job.name }}</div>
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('remark')" prop="remark" :label="$t('be.remark')" sortable="custom" />
@@ -158,7 +162,20 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' },
+          { min: 2, max: 128, message: i18n.t('employee.nameLengthRangeChk'), trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' },
+          { min: 1, max: 32, message: i18n.t('employee.codeLengthRangeChk'), trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' },
+          { min: 3, max: 32, message: i18n.t('employee.phoneLengthRangeChk'), trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' },
+          { type: 'email', message: i18n.t('employee.emailFormatChk'), trigger: 'blur' }
         ]
       },
       queryTypeOptions: [
@@ -177,7 +194,29 @@ export default {
       this.getJobs(this.form.dept.id)
       form.status = form.status.toString()
     },
-
+    // 提交前做的操作
+    [CRUD.HOOK.afterValidateCU](crud) {
+      if (!crud.form.status) {
+        this.$message({
+          message: i18n.t('employee.statusSelectChk'),
+          type: 'warning'
+        })
+        return false
+      } else if (!crud.form.dept.id) {
+        this.$message({
+          message: i18n.t('employee.deptSelectChk'),
+          type: 'warning'
+        })
+        return false
+      } else if (!crud.form.job.id) {
+        this.$message({
+          message: i18n.t('employee.jobSelectChk'),
+          type: 'warning'
+        })
+        return false
+      }
+      return true
+    },
     // 获取数据前设置好接口地址
     [CRUD.HOOK.beforeRefresh]() {
       const query = this.query
