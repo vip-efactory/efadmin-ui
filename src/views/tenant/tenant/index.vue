@@ -34,7 +34,13 @@
             <el-input v-model="form.jdbcUrl" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('tenant.status')" prop="status">
-            未设置字典，请手动设置 Select
+            <el-radio-group v-model="form.status">
+              <el-radio
+                v-for="item in dict.tenant_status"
+                :key="item.id"
+                :label="item.value"
+              >{{ item.label }}</el-radio>
+            </el-radio-group>
           </el-form-item>
           <el-form-item :label="$t('be.remark')">
             <el-input v-model="form.remark" style="width: 370px;" />
@@ -51,10 +57,14 @@
         <el-table-column v-if="columns.visible('tenantName')" prop="tenantName" :label="$t('tenant.tenantName')" sortable="custom" />
         <el-table-column v-if="columns.visible('tenantCode')" prop="tenantCode" :label="$t('tenant.tenantCode')" sortable="custom" />
         <el-table-column v-if="columns.visible('dbUsername')" prop="dbUsername" :label="$t('tenant.dbUsername')" sortable="custom" />
-        <el-table-column v-if="columns.visible('dbPassword')" prop="dbPassword" :label="$t('tenant.dbPassword')" sortable="custom" />
-        <el-table-column v-if="columns.visible('driverClassName')" prop="driverClassName" :label="$t('tenant.driverClassName')" sortable="custom" />
-        <el-table-column v-if="columns.visible('jdbcUrl')" prop="jdbcUrl" :label="$t('tenant.jdbcUrl')" sortable="custom" />
-        <el-table-column v-if="columns.visible('status')" prop="status" :label="$t('tenant.status')" sortable="custom" />
+        <!--<el-table-column v-if="columns.visible('dbPassword')" prop="dbPassword" :label="$t('tenant.dbPassword')" sortable="custom" />-->
+        <el-table-column v-if="columns.visible('driverClassName')" :show-overflow-tooltip="true" prop="driverClassName" :label="$t('tenant.driverClassName')" sortable="custom" />
+        <el-table-column v-if="columns.visible('jdbcUrl')" :show-overflow-tooltip="true" prop="jdbcUrl" :label="$t('tenant.jdbcUrl')" sortable="custom" />
+        <el-table-column v-if="columns.visible('status')" prop="status" :label="$t('tenant.status')" sortable="custom">
+          <template slot-scope="scope">
+            {{ dict.label.tenant_status[scope.row.status] }}
+          </template>
+        </el-table-column>
         <el-table-column v-if="columns.visible('remark')" prop="remark" :label="$t('be.remark')" sortable="custom" />
         <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
           <template slot-scope="scope">
@@ -100,6 +110,7 @@ export default {
   name: 'Tenant',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(defaultCrud), header(), form(defaultForm), crud()],
+  dicts: ['tenant_status'],
   data() {
     return {
       permission: {
