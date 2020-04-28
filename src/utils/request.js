@@ -21,8 +21,8 @@ service.interceptors.request.use(
     config.headers['Content-Type'] = 'application/json'
     // 携带国际化区域环境参数
     config.headers['locale'] = store.getters.locale
-    // 携带租户参数,暂时测试写死
-    config.headers['TENANT_ID'] = 1
+    // 若是开发环境此处可以写死，如果不想使用多租户此处默认为0就可以了。若是线上部署，此处可以不写，由nginx转发时处理是最好的方式！
+    // config.headers['TENANT_ID'] = 1
     return config
   },
   error => {
