@@ -10,9 +10,8 @@
 2.支持捕捉后端的业务逻辑错误--R对象内; --已完成
 3.支持高级搜索功能;  --已完成
 4.支持国际化:前端的界面及后端的接口; --已完成
-5.修正了一些eladmin-web的已发现的问题;  --持续进行
-6.监控中心及支持警告通知; --未开始 
-7.支持OEM;    --未开始
+5.支持多租户模式，不同租户独立的数据库和Redis数据库; --已完成 2.1.0+
+6.修正了一些eladmin-web的已发现的问题;  --持续进行
 ```
 
 #### 项目源码
@@ -23,8 +22,17 @@
 | gitee  | https://gitee.com/vip-efactory/efadmin  | https://gitee.com/vip-efactory/efadmin-ui  |
 
 #### 体验地址
-<http://efadmin.ddbin.com/>  
-用户名密码：admin/123456
+##### 管理多租户,可以管理其他租户的数据源
+<https://efadmin.ddbin.com/>  
+用户名密码：root/123456
+
+注意:因为下面两个租户的https证书使用的是efadmin.ddbin.com的，所以访问时，浏览器会说证书无效，信任即可!
+##### 租户1
+<https://t1.ddbin.com/>  
+用户名密码：admin1/123456
+##### 租户2
+<https://t2.ddbin.com/>  
+用户名密码：admin2/123456
 
 #### 文档说明
 <http://docs.efactory.vip/>
