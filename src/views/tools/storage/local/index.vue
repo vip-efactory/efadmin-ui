@@ -75,7 +75,7 @@
           >
             <a
               slot="reference"
-              :href="baseApi + '/file/' + scope.row.type + '/' + scope.row.realName"
+              :href="baseApi + '/file/' + scope.row.realName"
               class="el-link--primary"
               style="word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color: #1890ff;font-size: 13px;"
               target="_blank"
@@ -88,8 +88,8 @@
       <el-table-column v-if="columns.visible('path')" prop="path" :label="$t('storage.thumbnail')">
         <template slot-scope="{row}">
           <el-image
-            :src=" baseApi + '/file/' + row.type + '/' + row.realName"
-            :preview-src-list="[baseApi + '/file/' + row.type + '/' + row.realName]"
+            :src=" baseApi + '/file/' + row.realName"
+            :preview-src-list="[baseApi + '/file/' + row.realName]"
             fit="contain"
             lazy
             class="el-avatar"
@@ -117,7 +117,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getToken } from '@/utils/auth'
+import { getToken, getTenant4Dev } from '@/utils/auth'
 import crudFile from '@/api/tools/localStorage'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
@@ -136,7 +136,10 @@ export default {
     return {
       delAllLoading: false,
       loading: false,
-      headers: { 'Authorization': getToken() },
+      headers: {
+        'Authorization': getToken(),
+        'TENANT_ID': getTenant4Dev()
+      },
       permission: {
         edit: ['admin', 'storage:edit'],
         del: ['admin', 'storage:del']

@@ -16,3 +16,9 @@ export function setToken(token, rememberMe) {
 export function removeToken() {
   return Cookies.remove(TokenKey)
 }
+
+// 获取开发环境的租户信息，注意:开发环境指定租户可以方便测试及开发，正式环境通过nginx全局配置并覆盖此配置。
+export function getTenant4Dev() {
+  // return Cookies.get(TenantKey)
+  return 1 // 此处可以手动指定租户的id,此处为１
+}

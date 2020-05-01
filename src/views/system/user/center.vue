@@ -109,7 +109,7 @@
 import { mapGetters } from 'vuex'
 import updatePass from './center/updatePass'
 import updateEmail from './center/updateEmail'
-import { getToken } from '@/utils/auth'
+import { getToken, getTenant4Dev } from '@/utils/auth'
 import store from '@/store'
 import { isvalidPhone } from '@/utils/validate'
 import { parseTime } from '@/utils/index'
@@ -136,7 +136,8 @@ export default {
       activeName: 'first',
       saveLoading: false,
       headers: {
-        'Authorization': getToken()
+        'Authorization': getToken(),
+        'TENANT_ID': getTenant4Dev()
       },
       form: {},
       rules: {

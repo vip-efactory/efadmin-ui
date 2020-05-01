@@ -27,7 +27,7 @@
 <script>
 import { add, edit, getApps, getServers } from '@/api/mnt/deploy'
 import { mapGetters } from 'vuex'
-import { getToken } from '@/utils/auth'
+import { getToken, getTenant4Dev } from '@/utils/auth'
 
 export default {
   props: {},
@@ -38,7 +38,8 @@ export default {
       apps: [],
       servers: [],
       headers: {
-        Authorization: getToken()
+        'Authorization': getToken(),
+        'TENANT_ID': getTenant4Dev()
       },
       deployInfo: {},
       form: {
@@ -95,7 +96,11 @@ export default {
             this.$parent.init()
           } else {
             this.loading = false
-            crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+            this.$notify({
+              title: res.msg,
+              type: 'error',
+              duration: 5000
+            })
           }
         })
         .catch(err => {
@@ -118,7 +123,11 @@ export default {
             this.$parent.init()
           } else {
             this.loading = false
-            crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+            this.$notify({
+              title: res.msg,
+              type: 'error',
+              duration: 5000
+            })
           }
         })
         .catch(err => {
@@ -141,14 +150,22 @@ export default {
         if (res.code === 0) {
           this.apps = res.data.content
         } else {
-          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          this.$notify({
+            title: res.msg,
+            type: 'error',
+            duration: 5000
+          })
         }
       })
       getServers().then(res => {
         if (res.code === 0) {
           this.servers = res.data.content
         } else {
-          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          this.$notify({
+            title: res.msg,
+            type: 'error',
+            duration: 5000
+          })
         }
       })
     },

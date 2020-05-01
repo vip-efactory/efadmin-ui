@@ -26,7 +26,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getToken } from '@/utils/auth'
+import { getToken, getTenant4Dev } from '@/utils/auth'
 import i18n from '../../../lang'
 
 export default {
@@ -43,7 +43,8 @@ export default {
       loading: false,
       dialog: false,
       headers: {
-        Authorization: getToken()
+        'Authorization': getToken(),
+        'TENANT_ID': getTenant4Dev()
       },
       rules: {}
     }

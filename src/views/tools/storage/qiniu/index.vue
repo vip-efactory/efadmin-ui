@@ -82,7 +82,7 @@
 <script>
 import crudQiNiu from '@/api/tools/qiniu'
 import { mapGetters } from 'vuex'
-import { getToken } from '@/utils/auth'
+import { getToken, getTenant4Dev } from '@/utils/auth'
 import eForm from './form'
 import CRUD, { presenter, header, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
@@ -103,7 +103,11 @@ export default {
       },
       title: '文件', dialog: false,
       icon: 'el-icon-refresh',
-      url: '', headers: { 'Authorization': getToken() },
+      url: '',
+      headers: {
+        'Authorization': getToken(),
+        'TENANT_ID': getTenant4Dev()
+      },
       dialogImageUrl: '', dialogVisible: false, fileList: [], files: [], newWin: null
     }
   },

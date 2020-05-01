@@ -97,7 +97,7 @@
 import { mapGetters } from 'vuex'
 import crudPic from '@/api/tools/picture'
 import CRUD, { presenter, header, crud } from '@crud/crud'
-import { getToken } from '@/utils/auth'
+import { getToken, getTenant4Dev } from '@/utils/auth'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
@@ -115,7 +115,8 @@ export default {
       dialog: false,
       syncLoading: false,
       headers: {
-        'Authorization': getToken()
+        'Authorization': getToken(),
+        'TENANT_ID': getTenant4Dev()
       },
       permission: {
         del: ['admin', 'pictures:del']

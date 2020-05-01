@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from '@/router/routers'
 import { Notification, MessageBox } from 'element-ui'
-import { getToken } from '@/utils/auth'
+import { getToken, getTenant4Dev } from '@/utils/auth'
 import Config from '@/settings'
 import store from '@/store'
 import i18n from '../lang'
@@ -22,7 +22,7 @@ service.interceptors.request.use(
     // 携带国际化区域环境参数
     config.headers['locale'] = store.getters.locale
     // 若是开发环境此处可以写死，如果不想使用多租户此处默认为0就可以了。若是线上部署，此处可以不写，由nginx转发时处理是最好的方式！
-    // config.headers['TENANT_ID'] = 1
+    config.headers['TENANT_ID'] = getTenant4Dev()
     return config
   },
   error => {
