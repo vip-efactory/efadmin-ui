@@ -67,7 +67,7 @@
       <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('storage.name')" sortable="custom">
         <template slot-scope="scope">
           <el-popover
-            :content="'file/' + scope.row.type + '/' + scope.row.realName"
+            :content="'file/' + scope.row.realName"
             placement="top-start"
             :title="$t('storage.path')"
             width="200"
