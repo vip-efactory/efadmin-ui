@@ -3,10 +3,10 @@ import VueI18n from 'vue-i18n'
 import Cookies from 'js-cookie'
 import elementEnLocale from 'element-ui/lib/locale/lang/en' // element-ui lang
 import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN'// element-ui lang
-import elementJaLocale from 'element-ui/lib/locale/lang/ja'// element-ui lang
+// import elementJaLocale from 'element-ui/lib/locale/lang/ja'// element-ui lang
 import enLocale from './en_US'
 import zhLocale from './zh_CN'
-import jaLocale from './ja_JP'
+// import jaLocale from './ja_JP'
 import Config from '@/settings'
 
 Vue.use(VueI18n)
@@ -19,16 +19,17 @@ const messages = {
   zh_CN: {
     ...zhLocale,
     ...elementZhLocale
-  },
-  ja_JP: {
-    ...jaLocale,
-    ...elementJaLocale
   }
+  // ,
+  // ja_JP: {
+  //   ...jaLocale,
+  //   ...elementJaLocale
+  // }
 }
 
 export function getLocale() {
   // get from Cookie
-  let locale = Cookies.get(Config.LocaleKey)
+  const locale = Cookies.get(Config.LocaleKey)
   if (locale) return locale
 
   // if has not choose language
@@ -36,7 +37,7 @@ export function getLocale() {
   const locales = Object.keys(messages)
   for (const tmpLocale of locales) {
     // if language contain - ,replace - to _
-    language = language.replace('-','_')
+    language = language.replace('-', '_')
     if (language.indexOf(tmpLocale) > -1) {
       return tmpLocale
     }

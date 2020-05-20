@@ -10,9 +10,6 @@
       <el-dropdown-item :disabled="language==='en_US'" command="en_US">
         English(US)
       </el-dropdown-item>
-      <el-dropdown-item :disabled="language==='ja_JP'" command="ja_JP">
-        日本語
-      </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
