@@ -26,7 +26,7 @@ module.exports = {
   /**
    * @description token key
    */
-  TokenKey: 'EF-ADMIN-TOEKN',
+  TokenKey: 'EFADMIN-TOEKN',
   /**
    * @description 请求超时时间，毫秒（默认2分钟）
    */
