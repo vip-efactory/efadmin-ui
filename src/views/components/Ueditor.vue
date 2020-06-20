@@ -19,7 +19,7 @@ export default {
       saving: false,
       uploadedFile: [],
       form: {
-        content: '演示环境，请不要上传太多文件，以免占用服务器存储，谢谢!'
+        content: '演示环境，请不要上传太多文件，以免占用服务器存储，谢谢!<BR/> Demo environment, please do not upload too many files, so as not to occupy server storage, thank you!'
       },
       rules: {
       },
