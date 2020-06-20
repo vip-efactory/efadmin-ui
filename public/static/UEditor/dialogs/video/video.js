@@ -728,6 +728,7 @@
                   }
                 })
                 header['Authorization']=token;
+                header['TENANT_ID']= 1;
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
