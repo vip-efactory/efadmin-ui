@@ -48,22 +48,3 @@ new Vue({
   i18n,
   render: h => h(App)
 })
-
-// 访问统计
-var _hmt = _hmt || []
-window._hmt = _hmt; // 修改为window 全局变量
-(function() {
-  var hm = document.createElement('script')
-  hm.src = 'https://hm.baidu.com/hm.js?b78a8f91e80fc5d355a9adaed655633f'
-  var s = document.getElementsByTagName('script')[0]
-  s.parentNode.insertBefore(hm, s)
-})()
-
-router.beforeEach((to, from, next) => {
-  if (window._hmt) {
-    if (to.path) {
-      window._hmt.push(['_trackPageview', '/#' + to.fullPath])
-    }
-  }
-  next()
-})
