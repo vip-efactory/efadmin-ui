@@ -1,21 +1,17 @@
 import request from '@/utils/request'
 // 登录
-export function login(username, password, code, uuid) {
-  return request({
-    url: '/auth/oauth/token',
-    headers: {
-      isToken:false,
-      'Authorization': 'Basic aWRjOmlkYw=='
-    },
-    method: 'post',
-    data: {
-      username,
-      password,
-      code,
-      uuid
-    }
-  })
-}
+// export function login(username, password, code, uuid) {
+//   return request({
+//     url: '/auth/oauth/token',
+//     method: 'post',
+//     data: {
+//       username,
+//       password,
+//       code,
+//       uuid
+//     }
+//   })
+// }
 
 export function getInfo() {
   return request({
@@ -26,7 +22,7 @@ export function getInfo() {
 
 export function getCodeImg() {
   return request({
-    url: '/auth/code',
+    url: '/admin/auth/code',
     method: 'get'
   })
 }
@@ -39,14 +35,14 @@ export function getCodeImg() {
 // }
 
 const scope = 'server'
-
-export const loginByUsername = (username, password, code, randomStr) => {
+export const login = (username, password, code, uuid) => {
   const grant_type = 'password'
+  const randomStr = uuid
   // aWRjOmlkYw==    idc:idc
   return request({
     url: '/auth/oauth/token',
     headers: {
-      isToken:false,
+      isToken: false,
       'Authorization': 'Basic aWRjOmlkYw=='
     },
     method: 'post',
@@ -60,7 +56,7 @@ export const refreshToken = (refresh_token) => {
     url: '/auth/oauth/token',
     headers: {
       'isToken': false,
-      'Authorization': 'Basic cGlnOnBpZw==',
+      'Authorization': 'Basic cGlnOnBpZw=='
     },
     method: 'post',
     params: { refresh_token, grant_type, scope }
