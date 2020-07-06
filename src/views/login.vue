@@ -181,6 +181,7 @@ export default {
   }
 
   .login-form {
+    opacity: 0.8;
     border-radius: 6px;
     background: #ffffff;
     width: 385px;
