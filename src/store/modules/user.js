@@ -1,5 +1,6 @@
 import { login, getInfo, logout } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { setStore } from '@/utils/store'
 
 const user = {
   state: {
@@ -7,7 +8,10 @@ const user = {
     user: {},
     roles: [],
     // 第一次加载菜单时用到
-    loadMenus: false
+    loadMenus: false,
+    accessToken: '', // 访问token
+    refreshToken: '', // 刷新token
+    expiresIn: '' // 超时时间
   },
 
   mutations: {
@@ -22,6 +26,30 @@ const user = {
     },
     SET_LOAD_MENUS: (state, loadMenus) => {
       state.loadMenus = loadMenus
+    },
+    SET_ACCESS_TOKEN: (state, accessToken) => {
+      state.accessToken = accessToken
+      setStore({
+        name: 'access_token',
+        content: state.accessToken,
+        type: 'session'
+      })
+    },
+    SET_REFRESH_TOKEN: (state, refreshToken) => {
+      state.refreshToken = refreshToken
+      setStore({
+        name: 'refresh_token',
+        content: state.refreshToken,
+        type: 'session'
+      })
+    },
+    SET_EXPIRES_IN: (state, expiresIn) => {
+      state.expiresIn = expiresIn
+      setStore({
+        name: 'expires_in',
+        content: state.expiresIn,
+        type: 'session'
+      })
     }
   },
 
@@ -31,16 +59,15 @@ const user = {
       const rememberMe = userInfo.rememberMe
       return new Promise((resolve, reject) => {
         login(userInfo.username, userInfo.password, userInfo.code, userInfo.uuid).then(res => {
-          if (res.code === 0) {
-            setToken(res.data.token, rememberMe)
-            commit('SET_TOKEN', res.data.token)
-            setUserInfo(res.data.user, commit)
-            // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js
-            commit('SET_LOAD_MENUS', true)
-            resolve()
-          } else {
-            crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-          }
+          setToken(res.access_token, rememberMe)
+          commit('SET_TOKEN', res.access_token)
+          commit('SET_ACCESS_TOKEN', res.access_token)
+          commit('SET_REFRESH_TOKEN', res.refresh_token)
+          commit('SET_EXPIRES_IN', res.expires_in)
+          // setUserInfo(res.data.user, commit)
+          // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js
+          commit('SET_LOAD_MENUS', true)
+          resolve()
         }).catch(error => {
           reject(error)
         })
@@ -55,7 +82,7 @@ const user = {
             setUserInfo(res.data, commit)
             resolve(res.data)
           } else {
-            crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+            this.$notify(res.msg, 'error')
           }
         }).catch(error => {
           reject(error)
@@ -70,7 +97,7 @@ const user = {
             logOut(commit)
             resolve()
           } else {
-            crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+            this.$notify(res.msg, 'error')
           }
         }).catch(error => {
           logOut(commit)
