@@ -7,7 +7,7 @@ export function getAllJob(deptId) {
     size: 9999
   }
   return request({
-    url: 'api/job/page',
+    url: 'admin/job/page',
     method: 'get',
     params
   })
@@ -15,7 +15,7 @@ export function getAllJob(deptId) {
 
 export function add(data) {
   return request({
-    url: 'api/job',
+    url: 'admin/job',
     method: 'post',
     data
   })
@@ -23,7 +23,7 @@ export function add(data) {
 
 export function del(ids) {
   return request({
-    url: 'api/job',
+    url: 'admin/job',
     method: 'delete',
     data: ids
   })
@@ -31,7 +31,7 @@ export function del(ids) {
 
 export function edit(data) {
   return request({
-    url: 'api/job',
+    url: 'admin/job',
     method: 'put',
     data
   })

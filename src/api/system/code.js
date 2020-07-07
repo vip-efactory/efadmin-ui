@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function resetEmail(data) {
   return request({
-    url: 'api/code/resetEmail',
+    url: 'admin/code/resetEmail',
     method: 'post',
     data
   })
@@ -10,7 +10,7 @@ export function resetEmail(data) {
 
 export function updatePass(pass) {
   return request({
-    url: 'api/users/updatePass/' + pass,
+    url: 'admin/users/updatePass/' + pass,
     method: 'get'
   })
 }

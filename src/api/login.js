@@ -1,24 +1,4 @@
 import request from '@/utils/request'
-// 登录
-// export function login(username, password, code, uuid) {
-//   return request({
-//     url: '/auth/oauth/token',
-//     method: 'post',
-//     data: {
-//       username,
-//       password,
-//       code,
-//       uuid
-//     }
-//   })
-// }
-
-export function getInfo() {
-  return request({
-    url: '/auth/info',
-    method: 'get'
-  })
-}
 
 export function getCodeImg() {
   return request({
@@ -27,14 +7,8 @@ export function getCodeImg() {
   })
 }
 
-// export function logout() {
-//   return request({
-//     url: 'admin/auth/logout',
-//     method: 'delete'
-//   })
-// }
-
 const scope = 'server'
+// 登录获取Token
 export const login = (username, password, code, uuid) => {
   const grant_type = 'password'
   const randomStr = uuid
@@ -49,7 +23,7 @@ export const login = (username, password, code, uuid) => {
     params: { username, password, randomStr, code, grant_type, scope }
   })
 }
-
+// 获取刷新Token
 export const refreshToken = (refresh_token) => {
   const grant_type = 'refresh_token'
   return request({
@@ -62,14 +36,14 @@ export const refreshToken = (refresh_token) => {
     params: { refresh_token, grant_type, scope }
   })
 }
-
-export const getUserInfo = () => {
+// 获取用户所有的信息
+export const getInfo = () => {
   return request({
-    url: '/admin/user/info',
+    url: '/admin/auth/info',
     method: 'get'
   })
 }
-
+// 退出系统
 export const logout = () => {
   return request({
     url: '/auth/token/logout',

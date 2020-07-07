@@ -56,6 +56,7 @@ import Cookies from 'js-cookie'
 import LangSelect from '@/components/LangSelect'
 import { getLocale } from '../lang'
 import i18n from '../lang'
+import {loadMenus} from "../router";
 
 export default {
   name: 'Login',
@@ -146,11 +147,10 @@ export default {
             Cookies.remove('password')
             Cookies.remove('rememberMe')
           }
+          // 登录获取token
           this.$store.dispatch('Login', user).then(r => {
-            // if (r.code === 0) {
             this.loading = false
             this.$router.push({ path: this.redirect || '/' })
-            // }
           }).catch(() => {
             this.loading = false
             this.getCode()

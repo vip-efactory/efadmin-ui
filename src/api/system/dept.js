@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getDepts(params) {
   return request({
-    url: 'api/dept/all',
+    url: 'admin/dept/all',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getDepts(params) {
 
 export function add(data) {
   return request({
-    url: 'api/dept',
+    url: 'admin/dept',
     method: 'post',
     data
   })
@@ -18,7 +18,7 @@ export function add(data) {
 
 export function del(ids) {
   return request({
-    url: 'api/dept',
+    url: 'admin/dept',
     method: 'delete',
     data: ids
   })
@@ -26,7 +26,7 @@ export function del(ids) {
 
 export function edit(data) {
   return request({
-    url: 'api/dept',
+    url: 'admin/dept',
     method: 'put',
     data
   })
