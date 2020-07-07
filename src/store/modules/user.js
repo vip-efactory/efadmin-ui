@@ -64,9 +64,9 @@ const user = {
           commit('SET_ACCESS_TOKEN', res.access_token)
           commit('SET_REFRESH_TOKEN', res.refresh_token)
           commit('SET_EXPIRES_IN', res.expires_in)
-          // setUserInfo(res.data.user, commit)
+          setUserInfo(res.idcUser, commit)
           // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js
-          // commit('SET_LOAD_MENUS', true)
+          commit('SET_LOAD_MENUS', true)
           resolve()
         }).catch(error => {
           reject(error)

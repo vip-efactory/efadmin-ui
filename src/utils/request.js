@@ -18,7 +18,7 @@ service.interceptors.request.use(
     const isToken = (config.headers || {}).isToken === false
     const token = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     if (token && !isToken) {
-      config.headers['Authorization'] = token// token
+      config.headers['Authorization'] = 'BEARER ' + token // token
     }
     config.headers['Content-Type'] = 'application/json'
     // 携带国际化区域环境参数

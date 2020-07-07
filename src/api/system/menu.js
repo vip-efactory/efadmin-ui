@@ -38,4 +38,4 @@ export function edit(data) {
   })
 }
 
-export default { add, edit, del, getMenusTree }
+export default { add, edit, del, getMenusTree, buildMenus }
