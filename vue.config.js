@@ -23,19 +23,20 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    // 后端是微服务模块admin就表示认证管理模块
     proxy: {
-      '/api': {
-        target: process.env.VUE_APP_BASE_API,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': 'api'
-        }
-      },
       '/auth': {
         target: process.env.VUE_APP_BASE_API,
         changeOrigin: true,
         pathRewrite: {
           '^/auth': 'auth'
+        }
+      },
+      '/admin': {
+        target: process.env.VUE_APP_BASE_API,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/admin': 'admin'
         }
       }
     }
