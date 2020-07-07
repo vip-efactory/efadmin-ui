@@ -56,7 +56,6 @@ import Cookies from 'js-cookie'
 import LangSelect from '@/components/LangSelect'
 import { getLocale } from '../lang'
 import i18n from '../lang'
-import {loadMenus} from "../router";
 
 export default {
   name: 'Login',
