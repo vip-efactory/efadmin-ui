@@ -65,7 +65,7 @@ import i18n from '../../../lang'
 
 // crud交由presenter持有
 const adSearchFields = new Map([['username', i18n.t('log.username')], ['requestIp', i18n.t('log.requestIp')], ['address', i18n.t('log.address')], ['description', i18n.t('log.description')], ['browser', i18n.t('log.browser')], ['time', i18n.t('log.time')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('log.TITLE'), url: 'api/logs', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: i18n.t('log.TITLE'), url: 'admin/logs', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
 export default {
   name: 'Log',
   components: { Search, crudOperation, pagination },
