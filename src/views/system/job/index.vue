@@ -71,7 +71,7 @@ import i18n from '../../../lang'
 const adSearchFields = new Map([['name', i18n.t('job.name')], ['sort', i18n.t('job.sort')], ['status', i18n.t('job.enabled')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
 const crud = CRUD({
   title: i18n.t('job.TITLE'),
-  url: 'api/job/page',
+  url: 'admin/job/page',
   sort: ['sort,asc', 'id,desc'],
   crudMethod: { ...crudJob },
   adSearchFields: adSearchFields

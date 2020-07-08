@@ -170,7 +170,7 @@ export default {
       }
     },
     beforeInit() {
-      this.url = 'api/logs/user'
+      this.url = 'admin/logs/user'
       return true
     },
     handleSuccess(response, file, fileList) {
