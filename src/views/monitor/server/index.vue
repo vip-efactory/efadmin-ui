@@ -1,28 +1,28 @@
 <template>
-  <div v-loading="!show" element-loading-text="数据加载中..." :style="!show ? 'height: 500px' : 'height: 100%'" class="app-container">
+  <div v-loading="!show" :element-loading-text="$t('system.dataLoading')" :style="!show ? 'height: 500px' : 'height: 100%'" class="app-container">
     <div v-if="show">
       <el-card class="box-card">
         <div style="color: #666;font-size: 13px;">
           <svg-icon icon-class="system" style="margin-right: 5px" />
           <span>
-            系统：{{ data.sys.os }}
+            {{ $t('system.os') }}：{{ data.sys.os }}
           </span>
           <span>
             IP：{{ data.sys.ip }}
           </span>
           <span>
-            项目已不间断运行：{{ data.sys.day }}
+            {{ $t('system.uptime') }}：{{ data.sys.day }}
           </span>
           <i class="el-icon-refresh" style="margin-left: 40px" @click="init" />
         </div>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span style="font-weight: bold;color: #666;font-size: 15px">状态</span>
+          <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.status') }}</span>
         </div>
         <div>
           <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" style="margin-bottom: 10px">
-            <div class="title">CPU使用率</div>
+            <div class="title">{{ $t('system.cpuUsedRate') }}</div>
             <el-tooltip placement="top-end">
               <div slot="content" style="font-size: 12px;">
                 <div style="padding: 3px;">
@@ -42,20 +42,20 @@
                 <el-progress type="circle" :percentage="parseFloat(data.cpu.used)" />
               </div>
             </el-tooltip>
-            <div class="footer">{{ data.cpu.coreNumber }} 核心</div>
+            <div class="footer">{{ data.cpu.coreNumber }} {{ $t('system.cores') }}</div>
           </el-col>
           <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" style="margin-bottom: 10px">
-            <div class="title">内存使用率</div>
+            <div class="title">{{ $t('system.memUsedRate') }}</div>
             <el-tooltip placement="top-end">
               <div slot="content" style="font-size: 12px;">
                 <div style="padding: 3px;">
-                  总量：{{ data.memory.total }}
+                  {{ $t('system.total') }}：{{ data.memory.total }}
                 </div>
                 <div style="padding: 3px">
-                  已使用：{{ data.memory.used }}
+                  {{ $t('system.used') }}：{{ data.memory.used }}
                 </div>
                 <div style="padding: 3px">
-                  空闲：{{ data.memory.available }}
+                  {{ $t('system.available') }}：{{ data.memory.available }}
                 </div>
               </div>
               <div class="content">
@@ -65,17 +65,17 @@
             <div class="footer">{{ data.memory.used }} / {{ data.memory.total }}</div>
           </el-col>
           <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" style="margin-bottom: 10px">
-            <div class="title">交换区使用率</div>
+            <div class="title">{{ $t('system.swapUsedRate') }}</div>
             <el-tooltip placement="top-end">
               <div slot="content" style="font-size: 12px;">
                 <div style="padding: 3px;">
-                  总量：{{ data.swap.total }}
+                  {{ $t('system.total') }}：{{ data.swap.total }}
                 </div>
                 <div style="padding: 3px">
-                  已使用：{{ data.swap.used }}
+                  {{ $t('system.used') }}：{{ data.swap.used }}
                 </div>
                 <div style="padding: 3px">
-                  空闲：{{ data.swap.available }}
+                  {{ $t('system.available') }}：{{ data.swap.available }}
                 </div>
               </div>
               <div class="content">
@@ -85,18 +85,18 @@
             <div class="footer">{{ data.swap.used }} / {{ data.swap.total }}</div>
           </el-col>
           <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" style="margin-bottom: 10px">
-            <div class="title">磁盘使用率</div>
+            <div class="title">{{ $t('system.diskUsedRate') }}</div>
             <div class="content">
               <el-tooltip placement="top-end">
                 <div slot="content" style="font-size: 12px;">
                   <div style="padding: 3px">
-                    总量：{{ data.disk.total }}
+                    {{ $t('system.total') }}：{{ data.disk.total }}
                   </div>
                   <div style="padding: 3px">
-                    空闲：{{ data.disk.available }}
+                    {{ $t('system.available') }}：{{ data.disk.available }}
                   </div>
                   <div style="padding: 3px">
-                    点击查看更多磁盘信息
+                    {{ $t('system.clickViewMore') }}
                   </div>
                 </div>
                 <div class="content" @click="viewDiskDetail">
@@ -114,7 +114,7 @@
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" style="margin-bottom: 10px">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
-                <span style="font-weight: bold;color: #666;font-size: 15px">CPU使用率监控</span>
+                <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.cpuUsedRateMonitor') }}</span>
               </div>
               <div>
                 <v-chart :options="cpuInfo" />
@@ -124,7 +124,7 @@
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" style="margin-bottom: 10px">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
-                <span style="font-weight: bold;color: #666;font-size: 15px">内存使用率监控</span>
+                <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.memUsedRateMonitor') }}</span>
               </div>
               <div>
                 <v-chart :options="memoryInfo" />
