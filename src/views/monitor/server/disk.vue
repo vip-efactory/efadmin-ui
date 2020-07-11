@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialog" append-to-body :title="$t('system.diskDetail')" width="88%">
+  <el-dialog v-dialogDrag :visible.sync="dialog" append-to-body :title="$t('system.diskDetail')" width="88%">
     <!--表格渲染-->
     <el-table :data="data" style="width: 100%;margin-top: -10px;">
       <el-table-column :show-overflow-tooltip="true" prop="name" :label="$t('system.name')" />
