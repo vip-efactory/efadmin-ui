@@ -95,8 +95,11 @@
                   <div style="padding: 3px">
                     空闲：{{ data.disk.available }}
                   </div>
+                  <div style="padding: 3px">
+                    点击查看更多磁盘信息
+                  </div>
                 </div>
-                <div class="content">
+                <div class="content" @click="viewDiskDetail">
                   <el-progress type="circle" :percentage="parseFloat(data.disk.usageRate)" />
                 </div>
               </el-tooltip>
@@ -131,6 +134,7 @@
         </el-row>
       </div>
     </div>
+    <Disk ref="disk" />
   </div>
 </template>
 
@@ -139,10 +143,12 @@ import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/polar'
 import { initData } from '@/api/data'
+import Disk from './disk'
 export default {
   name: 'ServerMonitor',
   components: {
-    'v-chart': ECharts
+    'v-chart': ECharts,
+    Disk
   },
   data() {
     return {
@@ -249,6 +255,12 @@ export default {
           this.$notify(res.msg, 'error')
         }
       })
+    },
+
+    // 查看磁盘的详细信息
+    viewDiskDetail() {
+      this.$refs.disk.dialog = true
+      this.$refs.disk.doInit()
     }
   }
 }
