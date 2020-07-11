@@ -260,7 +260,7 @@ export default {
     // 查看磁盘的详细信息
     viewDiskDetail() {
       this.$refs.disk.dialog = true
-      this.$refs.disk.doInit()
+      this.$refs.disk.doInit(this.data.disk.disks)
     }
   }
 }
