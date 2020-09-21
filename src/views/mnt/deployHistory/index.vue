@@ -65,7 +65,7 @@ import i18n from '../../../lang'
 
 // crud交由presenter持有
 const adSearchFields = new Map([['appName', i18n.t('deployHistory.appName')], ['ip', i18n.t('deployHistory.ip')], ['deployUser', i18n.t('deployHistory.deployUser')], ['deployDate', i18n.t('deployHistory.deployDate')]]) // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('deployHistory.TITLE'), url: 'api/deployHistory/page', crudMethod: { del }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: i18n.t('deployHistory.TITLE'), url: 'api/deployHistory/page', exportUrl: 'api/deployHistory/download', crudMethod: { del }, adSearchFields: adSearchFields })
 export default {
   name: 'DeployHistory',
   components: { pagination, crudOperation, rrOperation },

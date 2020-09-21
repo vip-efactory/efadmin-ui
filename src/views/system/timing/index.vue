@@ -128,7 +128,7 @@ import { cron } from 'vue-cron'
 
 // crud交由presenter持有
 const adSearchFields = new Map([['jobName', i18n.t('task.jobName')], ['beanName', i18n.t('task.beanName')], ['methodName', i18n.t('task.methodName')], ['remark', i18n.t('be.remark')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('task.TITLE'), url: 'api/jobs/page', crudMethod: { ...crudJob }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: i18n.t('task.TITLE'), url: 'api/jobs/page', exportUrl: 'api/jobs/download', crudMethod: { ...crudJob }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, jobName: null, beanName: null, methodName: null, params: null, cronExpression: null, isPause: false, remark: null }
 export default {
   name: 'Timing',

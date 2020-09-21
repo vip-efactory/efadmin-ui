@@ -85,7 +85,7 @@ import i18n from '../../../lang'
 
 // crud交由presenter持有
 const adSearchFields = new Map([['name', i18n.t('mserver.name')], ['ip', i18n.t('mserver.ip')], ['port', i18n.t('mserver.port')], ['account', i18n.t('mserver.account')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('mserver.TITLE'), url: 'api/serverDeploy/page', crudMethod: { ...crudServer }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: i18n.t('mserver.TITLE'), url: 'api/serverDeploy/page', exportUrl: 'api/serverDeploy/download', crudMethod: { ...crudServer }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, ip: null, port: 22, account: 'root', password: null }
 export default {
   name: 'Server',

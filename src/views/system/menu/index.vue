@@ -165,7 +165,7 @@ import i18n from '../../../lang'
 
 // crud交由presenter持有
 const adSearchFields = new Map([['name', i18n.t('menu.name')], ['sort', i18n.t('menu.sort')], ['path', i18n.t('menu.path')], ['permission', i18n.t('menu.permission')], ['component', i18n.t('menu.component')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('menu.TITLE'), url: 'api/menus/all', crudMethod: { ...crudMenu }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: i18n.t('menu.TITLE'), url: 'api/menus/all', exportUrl: 'api/menus/download', crudMethod: { ...crudMenu }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, sort: 999, path: null, component: null, componentName: null, iframe: false, roles: [], pid: 0, icon: null, cache: false, hidden: false, type: 0, permission: null }
 export default {
   name: 'Menu',

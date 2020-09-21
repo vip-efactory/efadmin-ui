@@ -95,6 +95,7 @@ export default {
     // 获取数据前设置好接口地址
     beforeInit() {
       this.url = 'api/jobs/logs'
+      this.exportUrl = 'api/jobs/logs/download'
       this.size = 6
       return true
     },

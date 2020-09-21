@@ -72,6 +72,7 @@ const adSearchFields = new Map([['name', i18n.t('job.name')], ['sort', i18n.t('j
 const crud = CRUD({
   title: i18n.t('job.TITLE'),
   url: 'api/job/page',
+  exportUrl: 'api/job/download',
   sort: ['sort,asc', 'id,desc'],
   crudMethod: { ...crudJob },
   adSearchFields: adSearchFields

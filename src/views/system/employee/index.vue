@@ -145,7 +145,7 @@ import i18n from '../../../lang'
 
 // crud交由presenter持有
 const adSearchFields = new Map([['name', i18n.t('employee.name')], ['phone', i18n.t('employee.phone')], ['createTime', i18n.t('be.createTime')], ['updateTime', i18n.t('be.updateTime')], ['remark', i18n.t('be.updateTime')]]) // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('employee.TITLE'), url: 'api/employee/page', crudMethod: { ...crudEmployee }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: i18n.t('employee.TITLE'), url: 'api/employee/page', crudMethod: { ...crudEmployee }, adSearchFields: adSearchFields, optShow: { add: true, edit: true, del: true, download: false }})
 const defaultForm = { id: null, address: null, avatar: null, birthday: null, code: null, email: null, idNumber: null, name: null, phone: null, status: null, dept: { id: null }, job: { id: null }, remark: null, createTime: null, creatorNum: null, updateTime: null, updaterNum: null }
 export default {
   name: 'Employee',

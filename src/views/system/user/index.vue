@@ -212,7 +212,7 @@ import i18n from '../../../lang'
 let userRoles = []
 // crud交由presenter持有
 const adSearchFields = new Map([['username', i18n.t('user.username')], ['nickName', i18n.t('user.nickName')], ['sex', i18n.t('user.sex')], ['phone', i18n.t('user.phone')], ['email', i18n.t('user.email')], ['enabled', i18n.t('user.enabled')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('user.TITLE'), url: 'api/users/page', crudMethod: { ...crudUser }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: i18n.t('user.TITLE'), url: 'api/users/page', exportUrl: 'api/users/download', crudMethod: { ...crudUser }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, username: null, nickName: null, sex: '男', email: null, enabled: 'false', roles: [], job: { id: null }, dept: { id: null }, phone: null }
 export default {
   name: 'User',
