@@ -24,6 +24,8 @@ export default {
       total: 0,
       // 请求数据的url
       url: '',
+      // export excel url
+      exportUrl: '',
       // 查询数据的参数
       params: {},
       // 待查询的对象
@@ -344,7 +346,7 @@ export default {
      * 获取弹窗的标题
      */
     getFormTitle() {
-      return this.isAdd ? i18n.t('crud.new' ) + ` ${this.title}` : i18n.t('crud.edit') + ` ${this.title}`
+      return this.isAdd ? i18n.t('crud.new') + ` ${this.title}` : i18n.t('crud.edit') + ` ${this.title}`
     },
     /**
      * 通用导出
@@ -352,7 +354,7 @@ export default {
     downloadMethod() {
       this.beforeInit()
       this.downloadLoading = true
-      download(this.url + '/download', this.params).then(result => {
+      download(this.exportUrl, this.params).then(result => {
         this.downloadFile(result, this.title + '数据', 'xlsx')
         this.downloadLoading = false
       }).catch(() => {
