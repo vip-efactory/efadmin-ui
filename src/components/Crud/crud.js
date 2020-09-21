@@ -374,7 +374,12 @@ function CRUD(options) {
      */
     doExport() {
       crud.downloadLoading = true
-      download(crud.url + '/download', crud.getQueryParams()).then(result => {
+      // 如果url中含有"/page",则截掉后拼接
+      let downloadUrl = crud.url
+      if (crud.url.indexOf('/page') > -1) {
+        downloadUrl = crud.url.substr(0, crud.url.indexOf('/page'))
+      }
+      download(downloadUrl + '/download', crud.getQueryParams()).then(result => {
         downloadFile(result, crud.title + i18n.t('crud.exportData'), 'xlsx')
         crud.downloadLoading = false
       }).catch(() => {
