@@ -33,7 +33,7 @@
             <el-select v-model="item.searchType" :title="$t('advanceSearch.searchTypeTitle')" style="width: 190px;">
               <el-option label="≈≈≈" :value="0" :title="$t('advanceSearch.searchTypeTitle0')" />
               <el-option label="=" :value="1" :title="$t('advanceSearch.searchTypeTitle1')" />
-              <el-option label="a &lt; x &lt; b" :value="2" :title="$t('advanceSearch.searchTypeTitle2')" />
+              <el-option label="a ≤ x ≤ b" :value="2" :title="$t('advanceSearch.searchTypeTitle2')" />
               <el-option label="!=" :value="3" :title="$t('advanceSearch.searchTypeTitle3')" />
               <el-option label=" < " :value="4" :title="$t('advanceSearch.searchTypeTitle4')" />
               <el-option label=" <= " :value="5" :title="$t('advanceSearch.searchTypeTitle5')" />
@@ -157,7 +157,7 @@
         <template slot-scope="scope">
           <span v-if="scope.row.searchType == 0">{{ '≈≈≈' }}</span>
           <span v-else-if="scope.row.searchType == 1">{{ ' = ' }}</span>
-          <span v-else-if="scope.row.searchType == 2">{{ ' a &lt; x &lt; b ' }}</span>
+          <span v-else-if="scope.row.searchType == 2">{{ ' a ≤ x ≤ b ' }}</span>
           <span v-else-if="scope.row.searchType == 3">{{ ' != ' }}</span>
           <span v-else-if="scope.row.searchType == 4">{{ ' &lt; ' }}</span>
           <span v-else-if="scope.row.searchType == 5">{{ ' &le; ' }}</span>
@@ -275,15 +275,17 @@ export default {
         this.$message(i18n.t('advanceSearch.valueEmptyChk'), 'warning')
         return false
       }
-      // 如果是范围查询，开始值不能比结束值小！！
+      // 如果是范围查询
       if (item.searchType === 2) {
         if (item.val2 === '') {
           this.$message(i18n.t('advanceSearch.endValueEmptyChk'), 'warning')
           return false
-        } else if (item.val > item.val2) {
-          this.$message(i18n.t('advanceSearch.valGtVal2Chk'), 'warning')
-          return false
         }
+        // 不再判断大小，不同的数据类型判断不一定准确，交给后端判断及交换位置!!
+        // else if (item.val > item.val2) {
+        //   this.$message(i18n.t('advanceSearch.valGtVal2Chk'), 'warning')
+        //   return false
+        // }
       }
 
       // 检查是否为单条件查询
