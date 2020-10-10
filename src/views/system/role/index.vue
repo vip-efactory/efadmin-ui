@@ -110,7 +110,6 @@
             :data="menus"
             :default-checked-keys="menuIds"
             :props="defaultProps"
-            check-strictly
             accordion
             show-checkbox
             node-key="id"

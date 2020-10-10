@@ -52,6 +52,7 @@
           <el-form-item v-show="globalType != 0" :label="$t('advanceSearch.orderLabel')" :label-width="formLabelWidth">
             <el-input
               v-model.number="item.order"
+              type="Number"
               width="120px"
               :title="$t('advanceSearch.orderTitle')"
               style="width: 190px;"
