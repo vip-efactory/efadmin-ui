@@ -31,19 +31,22 @@
         <el-col :span="8">
           <el-form-item :label="$t('advanceSearch.searchTypeLabel')" :label-width="formLabelWidth">
             <el-select v-model="item.searchType" :title="$t('advanceSearch.searchTypeTitle')" style="width: 190px;">
-              <el-option label="≈≈≈" :value="0" :title="$t('advanceSearch.searchTypeTitle0')" />
+              <!-- 规则二: 字典模糊查询是没有意义 -->
+              <el-option v-if="currentFieldType !== 'dict'" label="≈≈≈" :value="0" :title="$t('advanceSearch.searchTypeTitle0')" />
               <el-option label="=" :value="1" :title="$t('advanceSearch.searchTypeTitle1')" />
-              <el-option label="a ≤ x ≤ b" :value="2" :title="$t('advanceSearch.searchTypeTitle2')" />
+              <!-- 规则一: 范围查询只能针对数字和日期类型,针对文本和字典是没有意义的 -->
+              <el-option v-if="currentFieldType !== 'dict' && currentFieldType !== 'text'" label="a ≤ x ≤ b" :value="2" :title="$t('advanceSearch.searchTypeTitle2')" />
               <el-option label="!=" :value="3" :title="$t('advanceSearch.searchTypeTitle3')" />
-              <el-option label=" < " :value="4" :title="$t('advanceSearch.searchTypeTitle4')" />
-              <el-option label=" <= " :value="5" :title="$t('advanceSearch.searchTypeTitle5')" />
-              <el-option label=" > " :value="6" :title="$t('advanceSearch.searchTypeTitle6')" />
-              <el-option label=" >= " :value="7" :title="$t('advanceSearch.searchTypeTitle7')" />
+              <el-option v-if="currentFieldType !== 'dict' && currentFieldType !== 'text'" label=" < " :value="4" :title="$t('advanceSearch.searchTypeTitle4')" />
+              <el-option v-if="currentFieldType !== 'dict' && currentFieldType !== 'text'" label=" <= " :value="5" :title="$t('advanceSearch.searchTypeTitle5')" />
+              <el-option v-if="currentFieldType !== 'dict' && currentFieldType !== 'text'" label=" > " :value="6" :title="$t('advanceSearch.searchTypeTitle6')" />
+              <el-option v-if="currentFieldType !== 'dict' && currentFieldType !== 'text'" label=" >= " :value="7" :title="$t('advanceSearch.searchTypeTitle7')" />
               <el-option label="IS NULL" :value="8" :title="$t('advanceSearch.searchTypeTitle8')" />
               <el-option label="NOT NULL" :value="9" :title="$t('advanceSearch.searchTypeTitle9')" />
-              <el-option label="≈==" :value="10" :title="$t('advanceSearch.searchTypeTitle10')" />
-              <el-option label="==≈" :value="11" :title="$t('advanceSearch.searchTypeTitle11')" />
-              <el-option label="∈" :value="12" :title="$t('advanceSearch.searchTypeTitle12')" />
+              <el-option v-if="currentFieldType !== 'dict'" label="≈==" :value="10" :title="$t('advanceSearch.searchTypeTitle10')" />
+              <el-option v-if="currentFieldType !== 'dict'" label="==≈" :value="11" :title="$t('advanceSearch.searchTypeTitle11')" />
+              <!-- 规则三: 字典类型值只能手选(因为值用户通常是不知道),支持in查询是没有意义的 -->
+              <el-option v-if="currentFieldType !== 'dict'" label="∈" :value="12" :title="$t('advanceSearch.searchTypeTitle12')" />
             </el-select>
           </el-form-item>
         </el-col>
