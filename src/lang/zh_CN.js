@@ -686,7 +686,15 @@ export default {
     btnAddItem: '加入条件区',
     btnSearch: '搜索',
     btnReset: '清除所有查询条件',
-    btnCancel: '取消'
+    btnCancel: '取消',
+    to: '至',
+    selectDate: '选择日期',
+    startDate: '开始日期',
+    endDate: '结束日期',
+    pleaseSelect: '请选择',
+    recentWeek: '最近一周',
+    recentMonth: '最近一个月',
+    recent3Month: '最近三个月'
   },
   editor: {
     baseOn: '富文本基于',

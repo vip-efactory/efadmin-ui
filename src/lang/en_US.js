@@ -686,7 +686,15 @@ export default {
     btnAddItem: 'Add condition',
     btnSearch: 'Search',
     btnReset: 'Clear all conditions',
-    btnCancel: 'Cancel'
+    btnCancel: 'Cancel',
+    to: 'To',
+    selectDate: 'Select date',
+    startDate: 'Start date',
+    endDate: 'End date',
+    pleaseSelect: 'Please choose',
+    recentWeek: 'Last week',
+    recentMonth: 'Last month',
+    recent3Month: 'Last 3 months'
   },
   editor: {
     baseOn: 'Rich text based on',

@@ -92,36 +92,38 @@
         </el-col>
         <!--   日期类型选择     -->
         <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 2 && currentFieldType ==='date'" :span="8">
-          <el-form-item label="值" :label-width="formLabelWidth">
+          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
             <el-date-picker
               v-model="item.val"
               type="date"
               value-format="yyyy-MM-dd"
-              placeholder="选择日期"
+              :placeholder="$t('advanceSearch.selectDate')"
+              style="width: 190px;"
             />
           </el-form-item>
         </el-col>
         <!--   日期类型区间筛选     -->
         <el-col v-if="item.searchType !== 8 && item.searchType !== 9 &&item.searchType ===2 && currentFieldType ==='date'" :span="20">
-          <el-form-item label="值" :label-width="formLabelWidth">
+          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
             <el-date-picker
               v-model="item.val"
               type="daterange"
               align="right"
               unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              :range-separator="$t('advanceSearch.to')"
+              :start-placeholder="$t('advanceSearch.startDate')"
+              :end-placeholder="$t('advanceSearch.endDate')"
               value-format="yyyy-MM-dd HH:mm:ss"
               :default-time="['00:00:00', '23:59:59']"
               :picker-options="pickerOptions"
+              style="width: 508px;"
             />
           </el-form-item>
         </el-col>
         <!--   字典下拉选择     -->
         <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && currentFieldType ==='dict'" :span="20">
-          <el-form-item label="值" :label-width="formLabelWidth">
-            <el-select v-model="item.val" filterable placeholder="请选择">
+          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
+            <el-select v-model="item.val" filterable :placeholder="$t('advanceSearch.pleaseSelect')">
               <el-option
                 v-for="(dict, index) in dicts"
                 :key="dict.name + index"
@@ -287,7 +289,7 @@ export default {
       // 时间范围的默认选择项
       pickerOptions: {
         shortcuts: [{
-          text: '最近一周',
+          text: i18n.t('advanceSearch.recentWeek'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -295,7 +297,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近一个月',
+          text: i18n.t('advanceSearch.recentMonth'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -303,7 +305,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: '最近三个月',
+          text: i18n.t('advanceSearch.recent3Month'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
