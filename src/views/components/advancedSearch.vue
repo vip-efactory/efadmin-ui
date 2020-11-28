@@ -23,8 +23,8 @@
         <el-col :span="8">
           <!--  单个条件查询需要显示的字段开始 -->
           <el-form-item :label="$t('advanceSearch.nameLabel')" :label-width="formLabelWidth">
-            <el-select v-model="item.name" :title="$t('advanceSearch.nameTitle')" style="width: 190px;">
-              <el-option v-for="field in adSearchFields" :key="field[0]" :label="field[1]" :value="field[0]" />
+            <el-select v-model="item.name" :title="$t('advanceSearch.nameTitle')" style="width: 190px;" filterable @change="currentSelect">
+              <el-option v-for="field in adSearchFields" :key="field.fieldName" :label="field.labelName" :value="field.fieldName" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -49,7 +49,7 @@
         </el-col>
         <el-col :span="8">
           <!-- 多个条件查询额外需要显示的字段 -->
-          <el-form-item v-show="globalType != 0" :label="$t('advanceSearch.orderLabel')" :label-width="formLabelWidth">
+          <el-form-item v-show="globalType !== 0" :label="$t('advanceSearch.orderLabel')" :label-width="formLabelWidth">
             <el-input
               v-model.number="item.order"
               type="Number"
@@ -61,30 +61,71 @@
         </el-col>
       </el-row>
       <el-row>
+        <!-- 处理不同类型值的输入 text和number类型值 -->
         <el-col :span="8">
-          <!-- 类型为8和9是不需要值的 -->
+          <!-- 类型为8和9是不需要值的,仅当text和number的时候才显示 -->
           <el-form-item
-            v-show="item.searchType != 8 && item.searchType != 9"
+            v-if="item.searchType !== 8 && item.searchType !== 9 && (currentFieldType === 'text' || currentFieldType === 'number') "
             :label="$t('advanceSearch.valLabel')"
             :label-width="formLabelWidth"
           >
-            <el-input v-model="item.val" :title="$t('advanceSearch.val1Title')" style="width: 190px;" />
-            <!--            <el-input v-show="item.searchType == 2" v-model="item.val2" :title="$t('advanceSearch.val2Title')" style="width: 190px;" />-->
+            <el-input v-model="item.val" :type="currentFieldType" :title="$t('advanceSearch.val1Title')" style="width: 190px;" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <!-- 类型为8和9是不需要值的 -->
           <el-form-item
-            v-show="item.searchType == 2"
+            v-if="item.searchType === 2 && (currentFieldType === 'text' || currentFieldType === 'number')"
             :label="$t('advanceSearch.val2Label')"
             :label-width="formLabelWidth"
           >
             <el-input
-              v-show="item.searchType == 2"
               v-model="item.val2"
+              :type="currentFieldType"
               :title="$t('advanceSearch.val2Title')"
               style="width: 190px;"
             />
+          </el-form-item>
+        </el-col>
+        <!--   日期类型选择     -->
+        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 2 && currentFieldType ==='date'" :span="8">
+          <el-form-item label="值" :label-width="formLabelWidth">
+            <el-date-picker
+              v-model="item.val"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期"
+            />
+          </el-form-item>
+        </el-col>
+        <!--   日期类型区间筛选     -->
+        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 &&item.searchType ===2 && currentFieldType ==='date'" :span="20">
+          <el-form-item label="值" :label-width="formLabelWidth">
+            <el-date-picker
+              v-model="item.val"
+              type="daterange"
+              align="right"
+              unlink-panels
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              :default-time="['00:00:00', '23:59:59']"
+              :picker-options="pickerOptions"
+            />
+          </el-form-item>
+        </el-col>
+        <!--   字典下拉选择     -->
+        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && currentFieldType ==='dict'" :span="20">
+          <el-form-item label="值" :label-width="formLabelWidth">
+            <el-select v-model="item.val" filterable placeholder="请选择">
+              <el-option
+                v-for="(dict, index) in dicts"
+                :key="dict.name + index"
+                :label="dict.name"
+                :value="dict.id"
+              />
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -237,7 +278,37 @@ export default {
       },
       formLabelWidth: '125px',
       search: '', // 条件表里的条件搜索
-      conditions: [] // 存放生成的条件集合
+      conditions: [], // 存放生成的条件集合
+      currentFieldType: 'text', // 当前选中的条件的数据类型,支持text,number,date,dict
+      dicts: [], // 存放字典类型的字典项
+      // 时间范围的默认选择项
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      }
     }
   },
   computed: {
@@ -278,15 +349,16 @@ export default {
       }
       // 如果是范围查询
       if (item.searchType === 2) {
+        // 如果是时间范围,因为时间选择值在一个字段里,所以分别取值赋值为开始和结束的值
+        if (this.currentFieldType === 'date') {
+          const value = item.val
+          item.val = value[0]
+          item.val2 = value[1]
+        }
         if (item.val2 === '') {
           this.$message(i18n.t('advanceSearch.endValueEmptyChk'), 'warning')
           return false
         }
-        // 不再判断大小，不同的数据类型判断不一定准确，交给后端判断及交换位置!!
-        // else if (item.val > item.val2) {
-        //   this.$message(i18n.t('advanceSearch.valGtVal2Chk'), 'warning')
-        //   return false
-        // }
       }
 
       // 检查是否为单条件查询
@@ -333,6 +405,19 @@ export default {
       crud.toQuery() // 触发查询请求
       // 关闭对话框
       this.modalClose()
+    },
+    // 当前选择的条件类型,以便使用不同的组件方便用户进行输入
+    currentSelect(val) {
+      this.adSearchFields.filter((item) => {
+        if (item.fieldName === val) {
+          this.currentFieldType = item.type
+          if (item.type === 'dict') { // 字典类型的处理
+            this.item.searchType = 1
+            this.dicts = item.dicts
+          }
+          this.item.val = ''
+        }
+      })
     }
   }
 }
