@@ -123,7 +123,7 @@
         <!--   字典下拉选择     -->
         <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && currentFieldType ==='dict'" :span="20">
           <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
-            <el-select v-model="item.val" filterable :placeholder="$t('advanceSearch.pleaseSelect')">
+            <el-select v-model="item.val" filterable :placeholder="$t('advanceSearch.pleaseSelect')" style="width: 190px;">
               <el-option
                 v-for="(dict, index) in dicts"
                 :key="dict.name + index"
@@ -285,7 +285,7 @@ export default {
       search: '', // 条件表里的条件搜索
       conditions: [], // 存放生成的条件集合
       currentFieldType: 'text', // 当前选中的条件的数据类型,支持text,number,date,dict
-      dicts: [], // 存放字典类型的字典项
+      dicts: [], // 存放当前条件的字典类型的字典项
       // 时间范围的默认选择项
       pickerOptions: {
         shortcuts: [{
@@ -415,10 +415,13 @@ export default {
     currentSelect(val) {
       this.adSearchFields.filter((item) => {
         if (item.fieldName === val) {
-          this.currentFieldType = item.type
+          // 支持外部不传入类型,不传入默认为text类型
+          if (item.type !== undefined) {
+            this.currentFieldType = item.type
+          }
           if (item.type === 'dict') { // 字典类型的处理
             this.item.searchType = 1
-            this.dicts = item.dicts
+            // this.dicts = item.dicts
           }
           this.item.val = ''
         }
