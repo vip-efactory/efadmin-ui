@@ -66,9 +66,17 @@
       <el-row>
         <!-- 处理不同类型值的输入 text和number类型值 -->
         <el-col :span="8">
+          <!-- 类型为12(in查询时),一直显示,手动进行输入 -->
+          <el-form-item
+            v-if="item.searchType === 12"
+            :label="$t('advanceSearch.valLabel')"
+            :label-width="formLabelWidth"
+          >
+            <el-input v-model="item.val" type="text" :title="$t('advanceSearch.val1Title')" style="width: 190px;" />
+          </el-form-item>
           <!-- 类型为8和9是不需要值的,仅当text和number的时候才显示 -->
           <el-form-item
-            v-if="item.searchType !== 8 && item.searchType !== 9 && (currentFieldType === 'text' || currentFieldType === 'number') "
+            v-else-if="item.searchType !== 8 && item.searchType !== 9 && (currentFieldType === 'text' || currentFieldType === 'number') "
             :label="$t('advanceSearch.valLabel')"
             :label-width="formLabelWidth"
           >
@@ -91,7 +99,7 @@
           </el-form-item>
         </el-col>
         <!--   日期类型选择     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 2 && currentFieldType ==='date'" :span="8">
+        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='date'" :span="8">
           <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
             <el-date-picker
               v-model="item.val"
@@ -103,7 +111,7 @@
           </el-form-item>
         </el-col>
         <!--   日期类型区间筛选     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 &&item.searchType ===2 && currentFieldType ==='date'" :span="20">
+        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 &&item.searchType ===2 && currentFieldType ==='date'" :span="20">
           <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
             <el-date-picker
               v-model="item.val"
@@ -121,7 +129,7 @@
           </el-form-item>
         </el-col>
         <!--   字典下拉选择     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && currentFieldType ==='dict'" :span="20">
+        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && currentFieldType ==='dict'" :span="20">
           <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
             <el-select v-model="item.val" filterable :placeholder="$t('advanceSearch.pleaseSelect')" style="width: 190px;">
               <el-option
@@ -418,6 +426,8 @@ export default {
           // 支持外部不传入类型,不传入默认为text类型
           if (item.type !== undefined) {
             this.currentFieldType = item.type
+          } else {
+            this.currentFieldType = 'text'
           }
           if (item.type === 'dict') { // 字典类型的处理
             this.item.searchType = 1
