@@ -211,7 +211,7 @@ import i18n from '../../../lang'
 
 let userRoles = []
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'username', labelName: i18n.t('user.username') }, { fieldName: 'nickName', labelName: i18n.t('user.nickName') }, { fieldName: 'sex', labelName: i18n.t('user.sex') }, { fieldName: 'phone', labelName: i18n.t('user.phone') }, { fieldName: 'email', labelName: i18n.t('user.email') }, { fieldName: 'enabled', labelName: i18n.t('user.enabled'), type: 'dict', dictName: 'user_status' }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'date' }] // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'username', labelName: i18n.t('user.username') }, { fieldName: 'nickName', labelName: i18n.t('user.nickName') }, { fieldName: 'sex', labelName: i18n.t('user.sex') }, { fieldName: 'phone', labelName: i18n.t('user.phone') }, { fieldName: 'email', labelName: i18n.t('user.email') }, { fieldName: 'enabled', labelName: i18n.t('user.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'date' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.t('user.TITLE'), url: 'api/users/page', exportUrl: 'api/users/download', crudMethod: { ...crudUser }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, username: null, nickName: null, sex: '男', email: null, enabled: 'false', roles: [], job: { id: null }, dept: { id: null }, phone: null }
 export default {

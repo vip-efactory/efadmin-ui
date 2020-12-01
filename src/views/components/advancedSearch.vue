@@ -3,7 +3,7 @@
   <el-dialog v-dialogDrag :title="modalObj.title" :visible.sync="showAdSearchDialog" width="1000px" center :before-close="modalClose">
     <el-form :model="item">
       <el-row>
-        <el-col :span="20">
+        <el-col :span="16">
           <el-form-item :label="$t('advanceSearch.globalTypeLabel')" :label-width="formLabelWidth">
             <template>
               <el-radio-group v-model="globalType">
@@ -15,8 +15,10 @@
                 </el-radio>
               </el-radio-group>
             </template>
-            <!--        <el-input v-model="form.name" autocomplete="off"></el-input>-->
           </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-link href="https://docs.efactory.vip/ejpa/adsearchQD.html#%E6%89%93%E5%BC%80%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%97%E7%9A%84%E5%88%97%E8%A1%A8%E7%95%8C%E9%9D%A2"><b> -- ? -- </b></el-link>
         </el-col>
       </el-row>
       <el-row>
@@ -133,10 +135,10 @@
           <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
             <el-select v-model="item.val" filterable :placeholder="$t('advanceSearch.pleaseSelect')" style="width: 190px;">
               <el-option
-                v-for="(dict, index) in dicts"
-                :key="dict.name + index"
-                :label="dict.name"
-                :value="dict.id"
+                v-for="(d, index) in dicts"
+                :key="d.label + index"
+                :label="d.label"
+                :value="d.value"
               />
             </el-select>
           </el-form-item>
@@ -431,7 +433,7 @@ export default {
           }
           if (item.type === 'dict') { // 字典类型的处理
             this.item.searchType = 1
-            // this.dicts = item.dicts
+            this.dicts = item.dicts
           }
           this.item.val = ''
         }
