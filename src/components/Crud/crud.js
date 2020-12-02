@@ -29,7 +29,7 @@ function CRUD(options) {
     // 是否显示高级搜索按钮,有些场景不需要显示
     showAdSearchBtn: true,
     // 需要高级搜索的字段信息,例如:[{fieldName: 'userName', labelName: '用户名', type: 'text', dists: [{label:'user_status',value: 1 }]}]
-    // type 支持text,number,date,dict
+    // type 支持text,number,date,datetime,dict
     adSearchFields: [],
     // 高级查询的参数集合,使用Post方法传递的data
     adSearchConditions: [],

@@ -18,7 +18,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-link href="https://docs.efactory.vip/ejpa/adsearchQD.html#%E6%89%93%E5%BC%80%E6%93%8D%E4%BD%9C%E6%97%A5%E5%BF%97%E7%9A%84%E5%88%97%E8%A1%A8%E7%95%8C%E9%9D%A2"><b> -- ? -- </b></el-link>
+          <el-link href="https://docs.efactory.vip/ejpa/adsearchQD.html" target="_blank"><b> -- ? -- </b></el-link>
         </el-col>
       </el-row>
       <el-row>
@@ -112,8 +112,20 @@
             />
           </el-form-item>
         </el-col>
+        <!--   日期时间类型选择     -->
+        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='datetime'" :span="8">
+          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
+            <el-date-picker
+              v-model="item.val"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              :placeholder="$t('advanceSearch.selectDate')"
+              style="width: 190px;"
+            />
+          </el-form-item>
+        </el-col>
         <!--   日期类型区间筛选     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 &&item.searchType ===2 && currentFieldType ==='date'" :span="20">
+        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 &&item.searchType ===2 && (currentFieldType ==='date' || currentFieldType ==='datetime')" :span="20">
           <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
             <el-date-picker
               v-model="item.val"
