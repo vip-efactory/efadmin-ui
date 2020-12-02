@@ -103,7 +103,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['remark', i18n.t('be.remark')], ['createTime', i18n.t('be.createTime')], ['updateTime', i18n.t('be.updateTime')], ['creatorNum', i18n.t('be.creatorNum')], ['updaterNum', i18n.t('be.updaterNum')]]) // 需要高级搜索的字段，此处只是通用的字段，实体自己的需要手动添加！
+const adSearchFields = [{ fieldName: 'remark', labelName: i18n.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }, { fieldName: 'updateTime', labelName: i18n.t('be.updateTime'), type: 'datetime' }, { fieldName: 'creatorNum', labelName: i18n.t('be.creatorNum') }, { fieldName: 'updaterNum', labelName: i18n.t('be.updaterNum') }] // 需要高级搜索的字段，此处只是通用的字段，实体自己的需要手动添加！
 const defaultCrud = CRUD({ title: i18n.t('tenant.TITLE'), url: 'api/tenant/page', sort: 'id,desc', crudMethod: { ...crudTenant }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, tenantName: null, tenantCode: null, dbUsername: null, dbPassword: null, driverClassName: null, jdbcUrl: null, status: null, remark: null, createTime: null, creatorNum: null, updateTime: null, updaterNum: null }
 export default {
