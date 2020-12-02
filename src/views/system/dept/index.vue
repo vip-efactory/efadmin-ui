@@ -90,7 +90,7 @@ import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['name', i18n.t('dept.name')], ['enabled', i18n.t('dept.enabled')], ['remark', i18n.t('be.remark')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('dept.name') }, { fieldName: 'enabled', labelName: i18n.t('dept.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'remark', labelName: i18n.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.t('dept.TITLE'), url: 'api/dept/all', exportUrl: 'api/dept/download', crudMethod: { ...crudDept }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, pid: 1, enabled: 'true', remark: null }
 export default {

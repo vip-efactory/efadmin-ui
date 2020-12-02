@@ -64,7 +64,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'username', labelName: i18n.t('log.username'), type: 'text' }, { fieldName: 'requestIp', labelName: i18n.t('log.requestIp'), type: 'text' }, { fieldName: 'address', labelName: i18n.t('log.address'), type: 'text' }, { fieldName: 'description', labelName: i18n.t('log.description'), type: 'text' }, { fieldName: 'browser', labelName: i18n.t('log.browser'), type: 'text' }, { fieldName: 'time', labelName: i18n.t('log.time'), type: 'number' }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'date' }] // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'username', labelName: i18n.t('log.username'), type: 'text' }, { fieldName: 'requestIp', labelName: i18n.t('log.requestIp'), type: 'text' }, { fieldName: 'address', labelName: i18n.t('log.address'), type: 'text' }, { fieldName: 'description', labelName: i18n.t('log.description'), type: 'text' }, { fieldName: 'browser', labelName: i18n.t('log.browser'), type: 'text' }, { fieldName: 'time', labelName: i18n.t('log.time'), type: 'number' }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.t('log.ERROR_TITLE'), url: 'api/logs/error', exportUrl: 'api/logs/error/download', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
 export default {
   name: 'ErrorLog',

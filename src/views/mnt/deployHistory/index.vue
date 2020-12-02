@@ -64,7 +64,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['appName', i18n.t('deployHistory.appName')], ['ip', i18n.t('deployHistory.ip')], ['deployUser', i18n.t('deployHistory.deployUser')], ['deployDate', i18n.t('deployHistory.deployDate')]]) // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'appName', labelName: i18n.t('deployHistory.appName') }, { fieldName: 'ip', labelName: i18n.t('deployHistory.ip') }, { fieldName: 'deployUser', labelName: i18n.t('deployHistory.deployUser') }, { fieldName: 'deployDate', labelName: i18n.t('deployHistory.deployDate'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.t('deployHistory.TITLE'), url: 'api/deployHistory/page', exportUrl: 'api/deployHistory/download', crudMethod: { del }, adSearchFields: adSearchFields })
 export default {
   name: 'DeployHistory',

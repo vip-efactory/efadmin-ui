@@ -134,7 +134,7 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['name', i18n.t('role.name')], ['dataScope', i18n.t('role.dataScope')], ['permission', i18n.t('role.permission')], ['level', i18n.t('role.level')], ['remark', i18n.t('role.remark')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('role.name') }, { fieldName: 'dataScope', labelName: i18n.t('role.dataScope') }, { fieldName: 'permission', labelName: i18n.t('role.permission') }, { fieldName: 'level', labelName: i18n.t('role.level'), type: 'number' }, { fieldName: 'remark', labelName: i18n.t('role.remark') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.t('role.TITLE'), url: 'api/roles/page', exportUrl: 'api/roles/download', sort: 'level,asc', crudMethod: { ...crudRoles }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, depts: [], remark: null, dataScope: '全部', level: 3, permission: null }
 export default {

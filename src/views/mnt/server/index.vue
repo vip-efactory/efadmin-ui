@@ -84,7 +84,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['name', i18n.t('mserver.name')], ['ip', i18n.t('mserver.ip')], ['port', i18n.t('mserver.port')], ['account', i18n.t('mserver.account')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('mserver.name') }, { fieldName: 'ip', labelName: i18n.t('mserver.ip') }, { fieldName: 'port', labelName: i18n.t('mserver.port'), type: 'number' }, { fieldName: 'account', labelName: i18n.t('mserver.account') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.t('mserver.TITLE'), url: 'api/serverDeploy/page', exportUrl: 'api/serverDeploy/download', crudMethod: { ...crudServer }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, ip: null, port: 22, account: 'root', password: null }
 export default {

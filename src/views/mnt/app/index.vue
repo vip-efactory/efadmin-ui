@@ -98,7 +98,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['name', i18n.t('mapp.name')], ['port', i18n.t('mapp.port')], ['uploadPath', i18n.t('mapp.uploadPath')], ['deployPath', i18n.t('mapp.deployPath')], ['backupPath', i18n.t('mapp.backupPath')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('mapp.name') }, { fieldName: 'port', labelName: i18n.t('mapp.port'), type: 'number' }, { fieldName: 'uploadPath', labelName: i18n.t('mapp.uploadPath') }, { fieldName: 'deployPath', labelName: i18n.t('mapp.deployPath') }, { fieldName: 'backupPath', labelName: i18n.t('mapp.backupPath') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'date' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.t('mapp.TITLE'), url: 'api/app/page', exportUrl: 'api/app/download', crudMethod: { ...crudApp }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, port: 8080, uploadPath: '/opt/upload', deployPath: '/opt/app', backupPath: '/opt/backup', startScript: null, deployScript: null }
 export default {

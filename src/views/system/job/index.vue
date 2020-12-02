@@ -68,7 +68,7 @@ import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['name', i18n.t('job.name')], ['sort', i18n.t('job.sort')], ['status', i18n.t('job.enabled')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('job.name') }, { fieldName: 'sort', labelName: i18n.t('job.sort'), type: 'number' }, { fieldName: 'status', labelName: i18n.t('job.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const crud = CRUD({
   title: i18n.t('job.TITLE'),
   url: 'api/job/page',

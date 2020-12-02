@@ -91,7 +91,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['name', i18n.t('storage.name')], ['suffix', i18n.t('storage.suffix')], ['type', i18n.t('storage.type')], ['bucket', i18n.t('storage.bucket')], ['updateTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.t('storage.type') }, { fieldName: 'bucket', labelName: i18n.t('storage.bucket') }, { fieldName: 'updateTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: '七牛云文件', url: 'api/qiNiuContent/page', crudMethod: { ...crudQiNiu }, adSearchFields: adSearchFields })
 export default {
   components: { eForm, pagination, crudOperation, rrOperation },

@@ -164,7 +164,7 @@ import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['name', i18n.t('menu.name')], ['sort', i18n.t('menu.sort')], ['path', i18n.t('menu.path')], ['permission', i18n.t('menu.permission')], ['component', i18n.t('menu.component')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('menu.name') }, { fieldName: 'sort', labelName: i18n.t('menu.sort'), type: 'number' }, { fieldName: 'path', labelName: i18n.t('menu.path') }, { fieldName: 'permission', labelName: i18n.t('menu.permission') }, { fieldName: 'component', labelName: i18n.t('menu.component') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.t('menu.TITLE'), url: 'api/menus/all', exportUrl: 'api/menus/download', crudMethod: { ...crudMenu }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, sort: 999, path: null, component: null, componentName: null, iframe: false, roles: [], pid: 0, icon: null, cache: false, hidden: false, type: 0, permission: null }
 export default {

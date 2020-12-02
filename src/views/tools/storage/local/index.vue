@@ -126,7 +126,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = new Map([['name', i18n.t('storage.name')], ['suffix', i18n.t('storage.suffix')], ['type', i18n.t('storage.type')], ['operate', i18n.t('storage.operate')], ['createTime', i18n.t('be.createTime')]]) // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.t('storage.type') }, { fieldName: 'operate', labelName: i18n.t('storage.operate') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: '文件', url: 'api/localStorage/page', crudMethod: { ...crudFile }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: '' }
 export default {
