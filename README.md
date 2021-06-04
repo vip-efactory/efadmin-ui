@@ -24,19 +24,19 @@
 #### 体验地址
 ##### 管理多租户,可以管理其他租户的数据源  
 因阿里云服务器宽带仅1M,即理论最大128K/s文件传输速度,因此登录可能会慢一些，请知悉。  
-<https://efadmin.ddbin.com/>  
+<https://efadmin.ddbin.com:1443/>  
 用户名密码：root/123456
 
 注意:因为下面两个租户的https证书使用的是efadmin.ddbin.com的，所以访问时，浏览器会说证书无效，信任即可!
 ##### 租户1
-<https://t1.ddbin.com/>  
+<https://t1.ddbin.com:1443/>  
 用户名密码：admin1/123456
 ##### 租户2
-<https://t2.ddbin.com/>  
+<https://t2.ddbin.com:1443/>  
 用户名密码：admin2/123456
 
 #### 文档说明
-<http://docs.efactory.vip/>
+<https://docs.efactory.vip:1443/>
 
 #### TODO
 顶部多页签以支持大型系统
@@ -72,6 +72,15 @@ npm run build
 
 ![image](https://gitee.com/vip-efactory/efadmin-ui/raw/master/public/proj_imgs/i18n_en_api.png)
 
+#### Docker部署
+```shell
+docker run --user root:root --name iNginx --restart always -d -p 1080:80 -p 1443:443 \
+-v /data/Nginx/content:/usr/share/nginx/html:ro \
+-v /data/Nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro \
+-v /data/Nginx/nginx_cache:/data/Nginx/nginx_cache \
+-v /data/Nginx/nginx_cache_tmp:/data/Nginx/nginx_cache_tmp \
+-v /data/Nginx/ssl:/data/ssl nginx:1.20.0
+```
 
 #### 反馈交流
 
