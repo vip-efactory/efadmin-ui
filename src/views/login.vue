@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login" :style="'background-image:url('+ BackgroundImage +');'">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" label-position="left" label-width="0px" class="login-form">
       <div class="title-container">
         <h3 class="title">
@@ -56,12 +56,14 @@ import Cookies from 'js-cookie'
 import LangSelect from '@/components/LangSelect'
 import { getLocale } from '../lang'
 import i18n from '../lang'
+import BackgroundImage from '@/assets/images/bg.png'
 
 export default {
   name: 'Login',
   components: { LangSelect },
   data() {
     return {
+      BackgroundImage: BackgroundImage,
       codeUrl: '',
       cookiePass: '',
       loginForm: {
@@ -171,7 +173,6 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100%;
-    background-image:url(https://api.isoyu.com/bing_images.php);
     background-size: cover;
   }
   .title {
