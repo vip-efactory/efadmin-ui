@@ -204,7 +204,9 @@ export default {
     deleteTips: '确定删除吗,如果存在下级节点则一并删除，此操作不能撤销！',
     deptSearchPlaceholder: '输入部门名称搜索',
     nameRequired: '请输入部门名称',
-    pidChk: '上级部门不能为空'
+    pidChk: '上级部门不能为空',
+    sort: '排序',
+    sortInputPlaceholder: '显示顺序'
   },
   job: {
     TITLE: '岗位',
