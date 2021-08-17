@@ -204,7 +204,9 @@ export default {
     deleteTips: 'Are you sure you want to delete it? If there are subordinate nodes, delete it together. This operation cannot be undone!',
     deptSearchPlaceholder: 'Enter dept name search',
     nameRequired: 'Please enter the department name',
-    pidChk: 'The Higher office cannot be empty'
+    pidChk: 'The Higher office cannot be empty',
+    sort: 'Sort',
+    sortInputPlaceholder: 'Display order'
   },
   job: {
     TITLE: 'Job',

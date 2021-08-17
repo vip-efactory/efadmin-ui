@@ -35,6 +35,9 @@
         <el-form-item v-if="form.pid !== 0" :label="$t('dept.pid')" prop="pid">
           <treeselect v-model="form.pid" :options="depts" style="width: 370px;" :placeholder="$t('dept.selectSuperTips')" />
         </el-form-item>
+        <el-form-item :label="$t('dept.sort')" prop="sort">
+          <el-input v-model="form.sort" type="number" style="width: 370px;" :placeholder="$t('dept.sortInputPlaceholder')" />
+        </el-form-item>
         <el-form-item :label="$t('be.remark')" prop="remark">
           <el-input v-model="form.remark" style="width: 370px;" />
         </el-form-item>
@@ -59,6 +62,7 @@
           />
         </template>
       </el-table-column>
+      <el-table-column v-if="columns.visible('sort')" :label="$t('dept.sort')" prop="sort" />
       <el-table-column v-if="columns.visible('remark')" :label="$t('be.remark')" prop="remark" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')">
         <template slot-scope="scope">
