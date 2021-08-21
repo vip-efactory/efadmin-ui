@@ -14,7 +14,7 @@
             overflow: hidden;
         }
     </style>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+    <script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=XblAvKPTlzXsAcOt4AoRP38DstYxbZrb"></script>
 </head>
 
 <body onload="initMap();">
@@ -25,13 +25,13 @@
     function getParam(name) {
         return location.href.match(new RegExp('[?#&]' + name + '=([^?#&]+)', 'i')) ? RegExp.$1 : '';
     }
-    var map, marker;
-    var centerParam = getParam('center');
-    var zoomParam = getParam('zoom');
-    var widthParam = getParam('width');
-    var heightParam = getParam('height');
-    var markersParam = getParam('markers');
-    var markerStylesParam = getParam('markerStyles');
+    let map, marker;
+    let centerParam = getParam('center');
+    let zoomParam = getParam('zoom');
+    let widthParam = getParam('width');
+    let heightParam = getParam('height');
+    let markersParam = getParam('markers');
+    let markerStylesParam = getParam('markerStyles');
 
     //创建和初始化地图函数：
     function initMap() {
@@ -39,7 +39,7 @@
         if (!window.BMap) {
             return;
         }
-        var dituContent = document.getElementById('dituContent');
+        let dituContent = document.getElementById('dituContent');
         dituContent.style.width = widthParam + 'px';
         dituContent.style.height = heightParam + 'px';
 
@@ -48,8 +48,8 @@
         addMapControl();//向地图添加控件
 
         // 创建标注
-        var markersArr = markersParam.split(',');
-        var point = new BMap.Point(markersArr[0], markersArr[1]);
+        let markersArr = markersParam.split(',');
+        let point = new BMap.Point(markersArr[0], markersArr[1]);
         marker = new BMap.Marker(point);
         marker.enableDragging();
         map.addOverlay(marker); // 将标注添加到地图中
@@ -62,36 +62,36 @@
     //创建地图函数：
     function createMap() {
         map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
-        var centerArr = centerParam.split(',');
-        var point = new BMap.Point(parseFloat(centerArr[0]), parseFloat(centerArr[1]));//定义一个中心点坐标
+        let centerArr = centerParam.split(',');
+        let point = new BMap.Point(parseFloat(centerArr[0]), parseFloat(centerArr[1]));//定义一个中心点坐标
         map.centerAndZoom(point, parseInt(zoomParam));//设定地图的中心点和坐标并将地图显示在地图容器中
     }
 
     //地图事件设置函数：
     function setMapEvent() {
         map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
-        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
-        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
-        map.enableKeyboard();//启用键盘上下左右键移动地图
+        map.enableScrollWheelZoom = true;//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom = true;//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard = true;//启用键盘上下左右键移动地图
     }
 
     //地图控件添加函数：
     function addMapControl() {
         //向地图中添加缩放控件
-        var ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE});
+        let ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE});
         map.addControl(ctrl_nav);
         //向地图中添加缩略图控件
-        var ctrl_ove = new BMap.OverviewMapControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
+        let ctrl_ove = new BMap.OverviewMapControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
         map.addControl(ctrl_ove);
         //向地图中添加比例尺控件
-        var ctrl_sca = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
+        let ctrl_sca = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
         map.addControl(ctrl_sca);
     }
 
     function setMapListener() {
-        var editor = parent.editor, containerIframe,
+        let editor = parent.editor, containerIframe,
             iframes = parent.document.getElementsByTagName('iframe');
-        for (var key in iframes) {
+        for (let key in iframes) {
             if (iframes[key].contentWindow == window) {
                 containerIframe = iframes[key];
                 break;
@@ -104,9 +104,9 @@
         }
 
         function mapListenerHandler() {
-            var zoom = map.getZoom(),
+            let zoom = map.getZoom(),
                 center = map.getCenter(),
-                marker = window.marker.getPoint();
+                marker = window.marker.getPosition();
             containerIframe.src = containerIframe.src.
                 replace(new RegExp('([?#&])center=([^?#&]+)', 'i'), '$1center=' + center.lng + ',' + center.lat).
                 replace(new RegExp('([?#&])markers=([^?#&]+)', 'i'), '$1markers=' + marker.lng + ',' + marker.lat).

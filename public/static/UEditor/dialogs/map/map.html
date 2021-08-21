@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <script type="text/javascript" src="../internal.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=我的key"></script>
+    <script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=XblAvKPTlzXsAcOt4AoRP38DstYxbZrb"></script>
     <style type="text/css">
         .content{width:530px; height: 350px;margin: 10px auto;}
         .content table{width: 100%}
@@ -31,20 +31,24 @@
     <div style="width:100%;height:340px;margin:5px auto;border:1px solid gray" id="container"></div>
 
 </div>
+<!--百度地图接口 https://lbsyun.baidu.com/index.php?title=jspopular3.0-->
 <script type="text/javascript">
-    var map = new BMap.Map("container"),marker,point,styleStr;
-    map.enableScrollWheelZoom();
-    map.enableContinuousZoom();
+    let map = new BMap.Map("container"), marker, point, styleStr;
+  //map.enableScrollWheelZoom();
+    map.enableScrollWheelZoom = true;
+    //map.enableContinuousZoom();
+    map.enableContinuousZoom = true;
     function doSearch(){
         if (!document.getElementById('city').value) {
             alert(lang.cityMsg);
             return;
         }
-        var search = new BMap.LocalSearch(document.getElementById('city').value, {
+
+        let search = new BMap.LocalSearch(document.getElementById('city').value, {
             onSearchComplete: function (results){
                 if (results && results.getNumPois()) {
-                    var points = [];
-                    for (var i=0; i<results.getCurrentNumPois(); i++) {
+                    let points = [];
+                    for (let i=0; i<results.getCurrentNumPois(); i++) {
                         points.push(results.getPoi(i).point);
                     }
                     if (points.length > 1) {
@@ -53,7 +57,7 @@
                         map.centerAndZoom(points[0], 13);
                     }
                     point = map.getCenter();
-                    marker.setPoint(point);
+                    marker.setPosition(point);
                 } else {
                     alert(lang.errorMsg);
                 }
@@ -63,11 +67,11 @@
     }
     //获得参数
     function getPars(str,par){
-        var reg = new RegExp(par+"=((\\d+|[.,])*)","g");
+        let reg = new RegExp(par+"=((\\d+|[.,])*)","g");
         return reg.exec(str)[1];
     }
     function init(){
-        var mapNode = editor.selection.getRange().getClosedNode(),
+        let mapNode = editor.selection.getRange().getClosedNode(),
             isMapImg = mapNode && /api[.]map[.]baidu[.]com/ig.test(mapNode.getAttribute("src")),
             isMapIframe = mapNode && domUtils.hasClass(mapNode, 'ueditor_baidumap');
         if(isMapImg || isMapIframe){
@@ -104,15 +108,15 @@
         }
     };
     dialog.onok = function (){
-        var center = map.getCenter();
-        var zoom = map.zoomLevel;
-        var size = map.getSize();
-        var mapWidth = size.width;
-        var mapHeight = size.height;
-        var point = marker.getPoint();
+        let center = map.getCenter();
+        let zoom = map.getZoom();
+        let size = map.getSize();
+        let mapWidth = size.width;
+        let mapHeight = size.height;
+        let point = marker.getPosition();
 
         if($G('is_dynamic').checked) {
-            var URL = editor.options.UEDITOR_HOME_URL,
+            let URL = editor.options.UEDITOR_HOME_URL,
                 url = [URL + (/\/$/.test(URL) ? '':'/') + "dialogs/map/show.html" +
                     '#center=' + center.lng + ',' + center.lat,
                     '&zoom=' + zoom,
@@ -120,9 +124,9 @@
                     '&height=' + mapHeight,
                     '&markers=' + point.lng + ',' + point.lat,
                     '&markerStyles=' + 'l,A'].join('');
-            editor.execCommand('inserthtml', '<iframe class="ueditor_baidumap" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' :'') + ' frameborder="0" width="' + (mapWidth+4) + '" height="' + (mapHeight+4) + '"></iframe>');
+            editor.execCommand('inserthtml', '<iframe class="ueditor_baidumap" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' :'') + ' frameborder="0" width="' + (mapWidth+4) + '" height="' + (mapHeight+4) + '"></iframe>', true);
         } else {
-            var url = "http://api.map.baidu.com/staticimage?center=" + center.lng + ',' + center.lat +
+            let url = "http://api.map.baidu.com/staticimage?center=" + center.lng + ',' + center.lat +
                     "&zoom=" + zoom + "&width=" + size.width + '&height=' + size.height + "&markers=" + point.lng + ',' + point.lat;
             editor.execCommand('inserthtml', '<img width="'+ size.width +'"height="'+ size.height +'" src="' + url + '"' + (styleStr ? ' style="' + styleStr + '"' :'') + '/>');
         }
