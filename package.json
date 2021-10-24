@@ -54,7 +54,7 @@
     "path-to-regexp": "2.4.0",
     "qs": "^6.9.1",
     "screenfull": "4.2.0",
-    "vue": "2.6.14",
+    "vue": "2.6.10",
     "vue-count-to": "1.0.13",
     "vue-cron": "^1.0.9",
     "vue-cropper": "0.4.9",
@@ -65,7 +65,7 @@
     "vue-splitpane": "1.0.4",
     "vue-ueditor-wrap": "^2.5.6",
     "vuex": "3.1.0",
-    "wangeditor": ">=3.1.1",
+    "wangeditor": "4.7.9",
     "xlsx": "^0.17.3"
   },
   "devDependencies": {
