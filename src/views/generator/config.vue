@@ -171,6 +171,10 @@
               <el-input v-model="form.apiAlias" style="width: 40%" />
               <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.apiAliasTips') }}</span>
             </el-form-item>
+            <el-form-item :label="$t('genConfig.parentMenuId')" prop="parentMenuId">
+              <el-input v-model="form.parentMenuId" style="width: 40%" />
+              <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.parentMenuId') }}</span>
+            </el-form-item>
             <el-form-item :label="$t('genConfig.path')" prop="path">
               <el-input v-model="form.path" style="width: 40%" />
               <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.pathTips') }}</span>
@@ -211,7 +215,7 @@ export default {
   data() {
     return {
       activeName: 'first', tableName: '', tableHeight: 550, columnLoading: false, configLoading: false, dicts: [], syncLoading: false, genLoading: false,
-      form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: 'false', apiPath: '', prefix: '', apiAlias: null },
+      form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: 'false', apiPath: '', prefix: '', apiAlias: null, parentMenuId: null },
       rules: {
         author: [
           { required: true, message: i18n.t('genConfig.authorRequired'), trigger: 'blur' }
@@ -227,6 +231,9 @@ export default {
         ],
         apiAlias: [
           { required: true, message: i18n.t('genConfig.apiAliasRequired'), trigger: 'blur' }
+        ],
+        parentMenuId: [
+          { required: true, message: i18n.t('genConfig.apiParentMenuIdRequired'), trigger: 'blur' }
         ],
         cover: [
           { required: true, message: i18n.t('genConfig.coverRequired'), trigger: 'blur' }

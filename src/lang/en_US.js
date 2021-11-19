@@ -449,6 +449,7 @@ export default {
   genConfig: {
     tableName: 'Table name',
     apiAlias: 'Interface name',
+    parentMenuId: 'Parent MenuId',
     pack: 'Package path',
     moduleName: 'Module name',
     path: 'Front-end file path',
@@ -485,6 +486,7 @@ export default {
     prefixTips: 'Table prefix is ​​not stripped by default, but can be customized',
     coverTips: 'Beware of misuse, please choose carefully',
     apiAliasRequired: 'Interface name cannot be empty',
+    apiParentMenuIdRequired: 'Parent Menu Id cannot be empty',
     packRequired: 'Package path cannot be empty',
     moduleNameRequired: 'Module name cannot be empty',
     pathRequired: 'Front end path cannot be empty',

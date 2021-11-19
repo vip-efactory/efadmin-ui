@@ -449,6 +449,7 @@ export default {
   genConfig: {
     tableName: '表名称',
     apiAlias: '接口名称',
+    parentMenuId: '父菜单ID',
     pack: '置于包下',
     moduleName: '模块名称',
     path: '前端路径',
@@ -485,6 +486,7 @@ export default {
     prefixTips: '默认不去除表前缀，可自定义,例如:tbl_',
     coverTips: '谨防误操作，请慎重选择',
     apiAliasRequired: '接口名称不能为空',
+    apiParentMenuIdRequired: '父菜单ID不能为空',
     packRequired: '包路径不能为空',
     moduleNameRequired: '模块名称不能为空',
     pathRequired: '前端路径不能为空',
