@@ -172,7 +172,7 @@
               <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.apiAliasTips') }}</span>
             </el-form-item>
             <el-form-item :label="$t('genConfig.parentMenuId')" prop="parentMenuId">
-              <el-input v-model="form.parentMenuId" style="width: 40%" />
+              <treeselect v-model="form.parentMenuId" :options="menus" style="width: 40%" :placeholder="$t('menu.pidPlaceholder')" />
               <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.parentMenuId') }}</span>
             </el-form-item>
             <el-form-item :label="$t('genConfig.path')" prop="path">
@@ -207,13 +207,17 @@ import { update, get } from '@/api/generator/genConfig'
 import { save, sync, generator } from '@/api/generator/generator'
 import { getDicts } from '@/api/system/dict'
 import i18n from '../../lang'
+import Treeselect from '@riophae/vue-treeselect'
+import CRUD from '@crud/crud'
+import crudMenu from '@/api/system/menu'
 
 export default {
   name: 'GeneratorConfig',
-  components: {},
+  components: { Treeselect },
   mixins: [crud],
   data() {
     return {
+      menus: [], // 菜单选项
       activeName: 'first', tableName: '', tableHeight: 550, columnLoading: false, configLoading: false, dicts: [], syncLoading: false, genLoading: false,
       form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: 'false', apiPath: '', prefix: '', apiAlias: null, parentMenuId: null },
       rules: {
@@ -252,6 +256,16 @@ export default {
       })
       getDicts().then(r => {
         this.dicts = r.data
+      })
+      crudMenu.getMenusTree().then(res => {
+        if (res.code === 0) {
+          this.menus = []
+          const menu = { id: 0, label: '顶级类目', children: [] }
+          menu.children = res.data
+          this.menus.push(menu)
+        } else {
+          crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+        }
       })
     })
   },
