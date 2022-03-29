@@ -306,7 +306,7 @@ export default {
       formLabelWidth: '125px',
       search: '', // 条件表里的条件搜索
       conditions: [], // 存放生成的条件集合
-      currentFieldType: 'text', // 当前选中的条件的数据类型,支持text,number,date,dict
+      currentFieldType: 'text', // 当前选中的条件的数据类型,支持text,number,date,datetime,dict
       dicts: [], // 存放当前条件的字典类型的字典项
       // 时间范围的默认选择项
       pickerOptions: {
@@ -377,7 +377,7 @@ export default {
       // 如果是范围查询
       if (item.searchType === 2) {
         // 如果是时间范围,因为时间选择值在一个字段里,所以分别取值赋值为开始和结束的值
-        if (this.currentFieldType === 'date') {
+        if (this.currentFieldType === 'date' || this.currentFieldType === 'datetime') {
           const value = item.val
           item.val = value[0]
           item.val2 = value[1]
