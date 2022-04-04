@@ -27,7 +27,7 @@
 <https://efadmin.ddbin.com:1443/>  
 用户名密码：root/123456
 
-注意:因为下面两个租户的https证书使用的是efadmin.ddbin.com的，所以访问时，浏览器会说证书无效，信任即可!
+注意:因为下面两个租户的https证书使用的是ddbin.com的，所以访问时，浏览器会说证书无效，信任即可!
 ##### 租户1
 <https://t1.ddbin.com:1443/>  
 用户名密码：admin1/123456
@@ -36,6 +36,7 @@
 用户名密码：admin2/123456
 
 #### 文档说明
+注意:因为下面的https证书使用的是efactory.vip的，所以访问时，浏览器会说证书无效，信任即可!
 <https://docs.efactory.vip:1443/>
 
 #### TODO
