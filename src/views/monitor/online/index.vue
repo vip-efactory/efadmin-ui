@@ -1,8 +1,17 @@
 <template>
   <div class="app-container">
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
-        <el-input v-model="query.filter" clearable size="small" :placeholder="$t('online.allTableLikeSearch')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+      <!-- 加可选链，确保crud、props存在后再判断searchToggle -->
+      <div v-if="crud?.props?.searchToggle">
+        <el-input
+          v-model="query.filter"
+          clearable
+          size="small"
+          :placeholder="$t('online.allTableLikeSearch')"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter.native="crud?.toQuery"
+        />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation>
@@ -13,15 +22,22 @@
           icon="el-icon-delete"
           size="mini"
           :loading="delLoading"
-          :disabled="crud.selections.length === 0"
-          @click="doDelete(crud.selections)"
+          :disabled="crud?.selections?.length === 0"
+          @click="doDelete(crud?.selections)"
         >
           {{ $t('online.forceOut') }}
         </el-button>
       </crudOperation>
     </div>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      style="width: 100%;"
+      @selection-change="crud?.selectionChangeHandler"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('userName')" prop="userName" :label="$t('online.userName')" sortable="custom" />
       <el-table-column v-if="columns.visible('nickName')" prop="nickName" :label="$t('online.nickName')" sortable="custom" />
@@ -66,7 +82,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ url: 'auth/online', exportUrl: 'auth/online/download', title: i18n.t('online.TITLE'), showAdSearchBtn: false })
+const defaultCrud = CRUD({ url: 'auth/online', exportUrl: 'auth/online/download', title: i18n.global.t('online.TITLE'), showAdSearchBtn: false })
 export default {
   name: 'OnlineUser',
   components: { pagination, crudOperation, rrOperation },
@@ -78,19 +94,22 @@ export default {
     }
   },
   created() {
-    this.crud.msg.del = i18n.t('online.deleteOk')
-    this.crud.optShow = {
-      add: false,
-      edit: false,
-      del: false,
-      download: true
+    // 方法1：先判断crud是否存在，避免空值访问（简单场景）
+    if (this.crud) {
+      this.crud.msg.del = i18n.global.t('online.deleteOk')
+      this.crud.optShow = {
+        add: false,
+        edit: false,
+        del: false,
+        download: true
+      }
     }
   },
   methods: {
     doDelete(datas) {
-      this.$confirm(i18n.t('online.deleteContentStart') + `${datas.length}` + i18n.t('online.deleteContentEnd'), i18n.t('online.deleteTitle'), {
-        confirmButtonText: i18n.t('crud.confirm'),
-        cancelButtonText: i18n.t('crud.cancel'),
+      this.$confirm(i18n.global.t('online.deleteContentStart') + `${datas.length}` + i18n.global.t('online.deleteContentEnd'), i18n.global.t('online.deleteTitle'), {
+        confirmButtonText: i18n.global.t('crud.confirm'),
+        cancelButtonText: i18n.global.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         this.delMethod(datas)

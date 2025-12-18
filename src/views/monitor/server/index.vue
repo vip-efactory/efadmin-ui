@@ -116,9 +116,8 @@
               <div slot="header" class="clearfix">
                 <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.cpuUsedRateMonitor') }}</span>
               </div>
-              <div>
-                <v-chart :options="cpuInfo" />
-              </div>
+              <!-- 🔥 替换 v-chart 为原生 DOM 容器 -->
+              <div id="cpuMonitorChart" class="chart-container" />
             </el-card>
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" style="margin-bottom: 10px">
@@ -126,9 +125,8 @@
               <div slot="header" class="clearfix">
                 <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.memUsedRateMonitor') }}</span>
               </div>
-              <div>
-                <v-chart :options="memoryInfo" />
-              </div>
+              <!-- 🔥 替换 v-chart 为原生 DOM 容器 -->
+              <div id="memoryMonitorChart" class="chart-container" />
             </el-card>
           </el-col>
         </el-row>
@@ -139,15 +137,19 @@
 </template>
 
 <script>
-import ECharts from 'vue-echarts'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/polar'
+// 🔥 移除 vue-echarts 相关导入（已卸载，Vue3 不兼容）
+// import ECharts from 'vue-echarts'
+// import 'echarts/lib/chart/line'
+// import 'echarts/lib/component/polar'
+
 import { initData } from '@/api/data'
 import Disk from './disk'
+import { debounce } from '@/utils'
+
 export default {
   name: 'ServerMonitor',
   components: {
-    'v-chart': ECharts,
+    // 🔥 移除 vue-echarts 组件注册
     Disk
   },
   data() {
@@ -156,6 +158,10 @@ export default {
       monitor: null,
       url: 'api/monitor',
       data: {},
+      // 图表实例（存储全局，避免重复初始化）
+      cpuChart: null,
+      memoryChart: null,
+      // 图表配置项（保留原有逻辑不变）
       cpuInfo: {
         tooltip: {
           trigger: 'axis'
@@ -226,38 +232,90 @@ export default {
   },
   created() {
     this.init()
+    // 定时刷新数据（保留原有逻辑）
     this.monitor = window.setInterval(() => {
       setTimeout(() => {
         this.init()
       }, 2)
     }, 3500)
   },
-  destroyed() {
+  mounted() {
+    // 初始化图表（确保DOM加载完成）
+    this.$nextTick(() => {
+      this.initCharts()
+    })
+    // 窗口resize自适应
+    this.__resizeHandler = debounce(() => {
+      this.cpuChart?.resize()
+      this.memoryChart?.resize()
+    }, 100)
+    window.addEventListener('resize', this.__resizeHandler)
+  },
+  beforeUnmount() {
+    // 清理定时器 + 销毁图表 + 移除事件监听
     clearInterval(this.monitor)
+    window.removeEventListener('resize', this.__resizeHandler)
+    this.cpuChart?.dispose()
+    this.memoryChart?.dispose()
   },
   methods: {
+    // 🔥 初始化图表实例（原生ECharts）
+    initCharts() {
+      if (!this.$echarts) {
+        console.error('ECharts 全局挂载失败！请检查 main.js 配置')
+        return
+      }
+
+      // CPU监控图表
+      const cpuDom = document.getElementById('cpuMonitorChart')
+      if (cpuDom) {
+        this.cpuChart = this.$echarts.init(cpuDom)
+        this.cpuChart.setOption(this.cpuInfo)
+      }
+
+      // 内存监控图表
+      const memoryDom = document.getElementById('memoryMonitorChart')
+      if (memoryDom) {
+        this.memoryChart = this.$echarts.init(memoryDom)
+        this.memoryChart.setOption(this.memoryInfo)
+      }
+    },
+
+    // 加载数据（保留原有逻辑，新增图表更新）
     init() {
       initData(this.url, {}).then(res => {
         if (res.code === 0) {
           this.data = res.data
           this.show = true
+
+          // 数据长度控制（保留原有逻辑：最多显示8个数据点）
           if (this.cpuInfo.xAxis.data.length >= 8) {
             this.cpuInfo.xAxis.data.shift()
             this.memoryInfo.xAxis.data.shift()
             this.cpuInfo.series[0].data.shift()
             this.memoryInfo.series[0].data.shift()
           }
+
+          // 更新数据（保留原有逻辑）
           this.cpuInfo.xAxis.data.push(res.data.time)
           this.memoryInfo.xAxis.data.push(res.data.time)
           this.cpuInfo.series[0].data.push(parseFloat(res.data.memory.used))
           this.memoryInfo.series[0].data.push(parseFloat(res.data.memory.usageRate))
+
+          // 🔥 关键：更新图表数据（原生ECharts需手动调用setOption）
+          this.cpuChart?.setOption(this.cpuInfo)
+          this.memoryChart?.setOption(this.memoryInfo)
         } else {
-          this.$notify(res.msg, 'error')
+          this.$notify({
+            title: '错误',
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },
 
-    // 查看磁盘的详细信息
+    // 查看磁盘的详细信息（保留原有功能）
     viewDiskDetail() {
       this.$refs.disk.dialog = true
       this.$refs.disk.doInit(this.data.disk.disks)
@@ -267,34 +325,44 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
- ::v-deep .box-card {
-    margin-bottom: 5px;
-    span {
-      margin-right: 28px;
-    }
-    .el-icon-refresh {
-      margin-right: 10px;
-      float: right;
-      cursor:pointer;
-    }
+:deep(.box-card) {
+  margin-bottom: 5px;
+  span {
+    margin-right: 28px;
   }
-  .cpu, .memory, .swap, .disk  {
-    width: 20%;
-    float: left;
-    padding-bottom: 20px;
-    margin-right: 5%;
+  .el-icon-refresh {
+    margin-right: 10px;
+    float: right;
+    cursor: pointer;
   }
-  .title, .footer {
-    text-align: center;
-    font-size: 15px;
-    font-weight: 500;
-    color: #999;
-    height: 25px;
-    line-height: 25px;
-  }
-  .content {
-    text-align: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
+}
+
+.cpu, .memory, .swap, .disk {
+  width: 20%;
+  float: left;
+  padding-bottom: 20px;
+  margin-right: 5%;
+}
+
+.title, .footer {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: #999;
+  height: 25px;
+  line-height: 25px;
+}
+
+.content {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+// 🔥 图表容器样式（确保图表正常显示）
+.chart-container {
+  width: 100%;
+  height: 250px; // 匹配原有 v-chart 高度
+  padding: 5px;
+}
 </style>

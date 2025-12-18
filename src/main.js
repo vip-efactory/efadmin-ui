@@ -1,69 +1,98 @@
-import Vue from 'vue'
-
+import { createApp } from 'vue'
 import Cookies from 'js-cookie'
-
 import 'normalize.css/normalize.css'
 
-import Element from 'element-ui'
-//
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
+// 2. Element Plus 导入
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 
-import i18n from './lang' // internationalization
-// 数据字典
-import dict from './components/Dict'
-// 引入Dialog可拖拽，注意文件所在目录。
-import './utils/dialog-drag.js'
-// 权限指令
-import permission from './components/Permission'
-import './assets/styles/element-variables.scss'
-// global css
-import './assets/styles/index.scss'
-// 代码高亮
-import VueHighlightJS from 'vue-highlightjs'
+// 3. 高亮指令
+import highlightjs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 
+// 4. 业务导入
+import i18n from './lang'
+import dict from './components/Dict'
+import './utils/dialog-drag.js'
+import permission from './components/Permission'
+import './assets/styles/element-variables.scss'
+import './assets/styles/index.scss'
+
+// 5. 根组件、store、路由
 import App from './App'
 import store from './store'
-import router from './router/routers'
+import router from './router'
+import './assets/icons'
 
-import './assets/icons' // icon
-import './router/index' // permission control
+// 6. 自定义指令/组件
+import dialogDrag from './utils/dialog-drag'
+import { registerSvgIcon } from './assets/icons/index'
+import CountTo from 'vue3-count-to'
 
-Vue.use(VueHighlightJS)
-Vue.use(mavonEditor)
-Vue.use(permission)
-Vue.use(dict)
-Vue.use(Element, {
-  size: Cookies.get('size') || 'small', // set element-ui default size
-  i18n: (key, value) => i18n.t(key, value)
+// 🔥 移除 ECharts 模块化导入，只使用 CDN 全局变量
+// import * as echarts from 'echarts'
+
+// 7. 创建Vue3实例
+const app = createApp(App)
+
+// 🔥 全局挂载 CDN 的 ECharts（不做任何模块化处理）
+app.config.globalProperties.$echarts = window.echarts || {}
+
+// 8. 注册指令/组件
+app.directive('dialog-drag', dialogDrag)
+registerSvgIcon(app)
+app.component('CountTo', CountTo)
+
+// 9. 高亮指令（补充 updated 钩子，抽离复用函数）
+// 9. 高亮指令（补充 updated 钩子，修复 ESLint 报错）
+function highlightCode(el) {
+  const blocks = el.querySelectorAll('pre code')
+  blocks.forEach(block => highlightjs.highlightElement(block))
+}
+app.directive('highlight', {
+  mounted(el) {
+    highlightCode(el)
+  },
+  updated(el) {
+    const blocks = el.querySelectorAll('pre code')
+    blocks.forEach(block => {
+      // eslint-disable-next-line no-self-assign
+      block.innerHTML = block.innerHTML
+      highlightjs.highlightElement(block)
+    })
+  }
+})
+app.use(permission)
+app.use(dict)
+
+// 10. Element Plus 初始化（兼容 window.ELEMENT + Cookies）
+const initSize = window.ELEMENT?.size || Cookies.get('size') || 'small'
+app.use(ElementPlus, {
+  size: initSize,
+  locale: zhCn
 })
 
-Vue.config.productionTip = false
+// 11. 调整挂载顺序：先 store → router → i18n
+app.use(store)
+app.use(router)
+app.use(i18n)
 
-new Vue({
-  el: '#app',
-  router,
-  store,
-  i18n,
-  render: h => h(App)
-})
+// 移除 Vue3 废弃的 productionTip
+// app.config.productionTip = false
+app.mount('#app')
 
-// 访问统计
+// 12. 百度统计（异步加载优化）
 var _hmt = _hmt || []
-window._hmt = _hmt; // 修改为window 全局变量
-(function() {
+window._hmt = _hmt
+;(function() {
   var hm = document.createElement('script')
   hm.src = 'https://hm.baidu.com/hm.js?b78a8f91e80fc5d355a9adaed655633f'
+  hm.async = true
+  hm.defer = true
   var s = document.getElementsByTagName('script')[0]
   s.parentNode.insertBefore(hm, s)
 })()
 
-router.beforeEach((to, from, next) => {
-  if (window._hmt) {
-    if (to.path) {
-      window._hmt.push(['_trackPageview', '/#' + to.fullPath])
-    }
-  }
-  next()
-})
+// 挂载 window.store 到实例挂载后
+window.store = store

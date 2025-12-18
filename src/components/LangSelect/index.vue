@@ -3,19 +3,21 @@
     <div>
       <svg-icon class-name="international-icon" icon-class="language" />
     </div>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item :disabled="language==='zh_CN'" command="zh_CN">
-        简体中文
-      </el-dropdown-item>
-      <el-dropdown-item :disabled="language==='en_US'" command="en_US">
-        English(US)
-      </el-dropdown-item>
-    </el-dropdown-menu>
+    <!-- 仅修改这里：Vue3插槽语法，用#dropdown替代slot="dropdown" -->
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item :disabled="language==='zh_CN'" command="zh_CN">
+          简体中文
+        </el-dropdown-item>
+        <el-dropdown-item :disabled="language==='en_US'" command="en_US">
+          English(US)
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
   </el-dropdown>
 </template>
 
 <script>
-
 export default {
   computed: {
     language() {
@@ -24,13 +26,9 @@ export default {
   },
   methods: {
     handleSetLanguage(lang) {
-      this.$i18n.locale = lang
+      // 仅新增这一行兼容Vue3的i18n（核心功能不失效），其余不动
+      this.$i18n.global ? (this.$i18n.global.locale = lang) : (this.$i18n.locale = lang)
       this.$store.dispatch('app/setLocale', lang)
-      // this.$message({
-      //   message: 'Switch Language Success',
-      //   type: 'success'
-      // })
-      // 刷新当前页面,否则后台的菜单信息不会变,
       window.location.reload()
     }
   }

@@ -2,7 +2,7 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud?.props?.searchToggle">  <!-- 用可选链防护空值 -->
         <!-- 搜索 -->
         <el-input v-model="query.blurry" clearable size="small" :placeholder="$t('menu.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
         <el-date-picker
@@ -21,7 +21,14 @@
       <crudOperation :permission="permission" />
     </div>
     <!--表单渲染-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="670px">
+    <el-dialog
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU()"
+      :visible.sync="dialogVisible"
+      :title="crud?.status?.title"
+      width="670px"
+    >
       <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="120px">
         <el-form-item :label="$t('menu.type')" prop="type">
           <el-radio-group v-model="form.type" size="mini" style="width: 300px">
@@ -93,7 +100,16 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="id" @select="crud.selectChange" @select-all="crud.selectAllChange" @selection-change="crud.selectionChangeHandler">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      row-key="id"
+      @select="crud?.selectChange"
+      @select-all="crud?.selectAllChange"
+      @selection-change="crud?.selectionChangeHandler"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" :show-overflow-tooltip="true" :label="$t('menu.name')" width="125px" prop="name" />
       <el-table-column v-if="columns.visible('icon')" prop="icon" :label="$t('menu.icon')" align="center" width="60px">
@@ -155,8 +171,8 @@
 <script>
 import crudMenu from '@/api/system/menu'
 import IconSelect from '@/components/IconSelect'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
@@ -164,8 +180,8 @@ import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('menu.name') }, { fieldName: 'sort', labelName: i18n.t('menu.sort'), type: 'number' }, { fieldName: 'path', labelName: i18n.t('menu.path') }, { fieldName: 'permission', labelName: i18n.t('menu.permission') }, { fieldName: 'component', labelName: i18n.t('menu.component') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('menu.TITLE'), url: 'api/menus/all', exportUrl: 'api/menus/download', crudMethod: { ...crudMenu }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('menu.name') }, { fieldName: 'sort', labelName: i18n.global.t('menu.sort'), type: 'number' }, { fieldName: 'path', labelName: i18n.global.t('menu.path') }, { fieldName: 'permission', labelName: i18n.global.t('menu.permission') }, { fieldName: 'component', labelName: i18n.global.t('menu.component') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('menu.TITLE'), url: 'api/menus/all', exportUrl: 'api/menus/download', crudMethod: { ...crudMenu }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, sort: 999, path: null, component: null, componentName: null, iframe: false, roles: [], pid: 0, icon: null, cache: false, hidden: false, type: 0, permission: null }
 export default {
   name: 'Menu',
@@ -181,11 +197,25 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('menu.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('menu.nameRequired'), trigger: 'blur' }
         ],
         path: [
-          { required: true, message: i18n.t('menu.pathRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('menu.pathRequired'), trigger: 'blur' }
         ]
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 用可选链防护：crud、status存在时才判断cu，否则返回false
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 仅当newVal为false，且crud、status存在时，才修改cu的值
+        if (!newVal && this.crud?.status) {
+          this.crud.status.cu = 0
+        }
       }
     }
   },
@@ -212,7 +242,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
+:deep(.el-input-number .el-input__inner) {
     text-align: left;
   }
 </style>

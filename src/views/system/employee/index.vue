@@ -2,10 +2,23 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud?.props?.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.value" clearable :placeholder="$t('employee.simpleSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <el-select v-model="query.type" clearable :placeholder="$t('employee.simpleSearchField')" class="filter-item" style="width: 130px">
+        <el-input
+          v-model="query.value"
+          clearable
+          :placeholder="$t('employee.simpleSearchPlaceholder')"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter.native="crud?.toQuery"
+        />
+        <el-select
+          v-model="query.type"
+          clearable
+          :placeholder="$t('employee.simpleSearchField')"
+          class="filter-item"
+          style="width: 130px"
+        >
           <el-option v-for="item in queryTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
         </el-select>
         <rrOperation :crud="crud" />
@@ -13,7 +26,14 @@
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
       <!--表单组件-->
-      <el-dialog v-dialogDrag :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="520px">
+      <el-dialog
+        v-dialogDrag
+        :close-on-click-modal="false"
+        :before-close="() => crud?.cancelCU()"
+        :visible.sync="dialogVisible"
+        :title="crud?.status?.title"
+        width="520px"
+      >
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
           <el-form-item :label="$t('employee.name')" prop="name">
             <el-input v-model="form.name" style="width: 370px;" />
@@ -77,7 +97,15 @@
         </div>
       </el-dialog>
       <!--表格渲染-->
-      <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+      <el-table
+        ref="table"
+        v-loading="crud?.loading"
+        :data="crud?.data"
+        size="small"
+        style="width: 100%;"
+        @selection-change="crud?.selectionChangeHandler"
+        @sort-change="crud?.doTitleOrder"
+      >
         <el-table-column type="selection" width="55" />
         <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('employee.name')" sortable="custom" />
         <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" :label="$t('employee.address')" sortable="custom" />
@@ -139,13 +167,13 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('employee.name') }, { fieldName: 'phone', labelName: i18n.t('employee.phone') }, { fieldName: 'remark', labelName: i18n.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }, { fieldName: 'updateTime', labelName: i18n.t('be.updateTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('employee.TITLE'), url: 'api/employee/page', crudMethod: { ...crudEmployee }, adSearchFields: adSearchFields, optShow: { add: true, edit: true, del: true, download: false }})
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('employee.name') }, { fieldName: 'phone', labelName: i18n.global.t('employee.phone') }, { fieldName: 'remark', labelName: i18n.global.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }, { fieldName: 'updateTime', labelName: i18n.global.t('be.updateTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('employee.TITLE'), url: 'api/employee/page', crudMethod: { ...crudEmployee }, adSearchFields: adSearchFields, optShow: { add: true, edit: true, del: true, download: false }})
 const defaultForm = { id: null, address: null, avatar: null, birthday: null, code: null, email: null, idNumber: null, name: null, phone: null, status: null, dept: { id: null }, job: { id: null }, remark: null, createTime: null, creatorNum: null, updateTime: null, updaterNum: null }
 export default {
   name: 'Employee',
@@ -162,28 +190,42 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' },
-          { min: 2, max: 128, message: i18n.t('employee.nameLengthRangeChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('employee.nameRequired'), trigger: 'blur' },
+          { min: 2, max: 128, message: i18n.global.t('employee.nameLengthRangeChk'), trigger: 'blur' }
         ],
         code: [
-          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' },
-          { min: 1, max: 32, message: i18n.t('employee.codeLengthRangeChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('employee.nameRequired'), trigger: 'blur' },
+          { min: 1, max: 32, message: i18n.global.t('employee.codeLengthRangeChk'), trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' },
-          { min: 3, max: 32, message: i18n.t('employee.phoneLengthRangeChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('employee.nameRequired'), trigger: 'blur' },
+          { min: 3, max: 32, message: i18n.global.t('employee.phoneLengthRangeChk'), trigger: 'blur' }
         ],
         email: [
-          { required: true, message: i18n.t('employee.nameRequired'), trigger: 'blur' },
-          { type: 'email', message: i18n.t('employee.emailFormatChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('employee.nameRequired'), trigger: 'blur' },
+          { type: 'email', message: i18n.global.t('employee.emailFormatChk'), trigger: 'blur' }
         ],
         status: [
-          { required: true, message: i18n.t('employee.statusSelectChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('employee.statusSelectChk'), trigger: 'blur' }
         ]
       },
       queryTypeOptions: [
-        { key: 'name', display_name: i18n.t('employee.name') }
+        { key: 'name', display_name: i18n.global.t('employee.name') }
       ]
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 加可选链确保crud、status存在，再判断cu；空值时兜底返回false
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 仅当newVal为false，且crud、status都存在时，才修改cu
+        if (!newVal && this.crud?.status) {
+          this.crud.status.cu = 0
+        }
+      }
     }
   },
   methods: {
@@ -201,19 +243,19 @@ export default {
     [CRUD.HOOK.afterValidateCU](crud) {
       if (!crud.form.status) {
         this.$message({
-          message: i18n.t('employee.statusSelectChk'),
+          message: i18n.global.t('employee.statusSelectChk'),
           type: 'warning'
         })
         return false
       } else if (!crud.form.dept.id) {
         this.$message({
-          message: i18n.t('employee.deptSelectChk'),
+          message: i18n.global.t('employee.deptSelectChk'),
           type: 'warning'
         })
         return false
       } else if (!crud.form.job.id) {
         this.$message({
-          message: i18n.t('employee.jobSelectChk'),
+          message: i18n.global.t('employee.jobSelectChk'),
           type: 'warning'
         })
         return false

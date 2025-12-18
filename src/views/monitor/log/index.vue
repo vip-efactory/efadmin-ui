@@ -64,8 +64,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'username', labelName: i18n.t('log.username'), type: 'text' }, { fieldName: 'requestIp', labelName: i18n.t('log.requestIp'), type: 'text' }, { fieldName: 'address', labelName: i18n.t('log.address'), type: 'text' }, { fieldName: 'description', labelName: i18n.t('log.description'), type: 'text' }, { fieldName: 'browser', labelName: i18n.t('log.browser'), type: 'text' }, { fieldName: 'time', labelName: i18n.t('log.time'), type: 'number' }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('log.TITLE'), url: 'api/logs', exportUrl: 'api/logs/download', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'username', labelName: i18n.global.t('log.username'), type: 'text' }, { fieldName: 'requestIp', labelName: i18n.global.t('log.requestIp'), type: 'text' }, { fieldName: 'address', labelName: i18n.global.t('log.address'), type: 'text' }, { fieldName: 'description', labelName: i18n.global.t('log.description'), type: 'text' }, { fieldName: 'browser', labelName: i18n.global.t('log.browser'), type: 'text' }, { fieldName: 'time', labelName: i18n.global.t('log.time'), type: 'number' }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('log.TITLE'), url: 'api/logs', exportUrl: 'api/logs/download', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
 export default {
   name: 'Log',
   components: { Search, crudOperation, pagination },
@@ -89,9 +89,9 @@ export default {
   },
   methods: {
     confirmDelAll() {
-      this.$confirm(i18n.t('log.deleteTips'), i18n.t('log.deleteTitle'), {
-        confirmButtonText: i18n.t('crud.confirm'),
-        cancelButtonText: i18n.t('crud.cancel'),
+      this.$confirm(i18n.global.t('log.deleteTips'), i18n.global.t('log.deleteTitle'), {
+        confirmButtonText: i18n.global.t('crud.confirm'),
+        cancelButtonText: i18n.global.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         this.crud.delAllLoading = true

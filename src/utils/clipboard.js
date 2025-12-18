@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import Clipboard from 'clipboard'
+import { ElMessage } from 'element-plus'
 
+// 2. 修改clipboardSuccess函数
 function clipboardSuccess() {
-  Vue.prototype.$message({
+  ElMessage({
     message: 'Copy successfully',
     type: 'success',
     duration: 1500
   })
 }
-
 function clipboardError() {
   Vue.prototype.$message({
     message: 'Copy failed',

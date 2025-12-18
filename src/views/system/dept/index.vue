@@ -2,9 +2,18 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <!-- 用可选链防护crud、props的空值访问 -->
+      <div v-if="crud?.props?.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.name" clearable size="small" :placeholder="$t('dept.deptSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input
+          v-model="query.name"
+          clearable
+          size="small"
+          :placeholder="$t('dept.deptSearchPlaceholder')"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter.native="crud?.toQuery"
+        />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -24,7 +33,14 @@
       <crudOperation :permission="permission" />
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="520px">
+    <el-dialog
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU()"
+      :visible.sync="cdialogVisible"
+      :title="crud?.status?.title"
+      width="520px"
+    >
       <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
         <el-form-item :label="$t('dept.name')" prop="name">
           <el-input v-model="form.name" style="width: 370px;" />
@@ -48,7 +64,17 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" default-expand-all :data="crud.data" row-key="id" @select="crud.selectChange" @select-all="crud.selectAllChange" @selection-change="crud.selectionChangeHandler">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      default-expand-all
+      :data="crud?.data"
+      row-key="id"
+      @select="crud?.selectChange"
+      @select-all="crud?.selectAllChange"
+      @selection-change="crud?.selectionChangeHandler"
+    >
       <el-table-column :selectable="checkboxT" type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" :label="$t('dept.name')" prop="name" />
       <el-table-column v-if="columns.visible('enabled')" :label="$t('dept.enabled')" align="center" prop="enabled">
@@ -85,8 +111,8 @@
 
 <script>
 import crudDept from '@/api/system/dept'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
@@ -94,8 +120,8 @@ import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('dept.name') }, { fieldName: 'enabled', labelName: i18n.t('dept.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'remark', labelName: i18n.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('dept.TITLE'), url: 'api/dept/all', exportUrl: 'api/dept/download', crudMethod: { ...crudDept }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('dept.name') }, { fieldName: 'enabled', labelName: i18n.global.t('dept.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'remark', labelName: i18n.global.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('dept.TITLE'), url: 'api/dept/all', exportUrl: 'api/dept/download', crudMethod: { ...crudDept }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, pid: 1, enabled: 'true', remark: null }
 export default {
   name: 'Dept',
@@ -108,7 +134,7 @@ export default {
       depts: [],
       rules: {
         name: [
-          { required: true, message: i18n.t('dept.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('dept.nameRequired'), trigger: 'blur' }
         ]
       },
       permission: {
@@ -117,9 +143,21 @@ export default {
         del: ['admin', 'dept:del']
       },
       enabledTypeOptions: [
-        { key: 'true', display_name: i18n.t('common.enable') },
-        { key: 'false', display_name: i18n.t('common.disable') }
+        { key: 'true', display_name: i18n.global.t('common.enable') },
+        { key: 'false', display_name: i18n.global.t('common.disable') }
       ]
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        return this.crud.status.cu > 0
+      },
+      set(newVal) {
+        if (!newVal) {
+          this.crud.status.cu = 0
+        }
+      }
     }
   },
   methods: {
@@ -139,7 +177,7 @@ export default {
     [CRUD.HOOK.afterValidateCU]() {
       if (!this.form.pid && this.form.id !== 1) {
         this.$message({
-          message: i18n.t('dept.pidChk'),
+          message: i18n.global.t('dept.pidChk'),
           type: 'warning'
         })
         return false
@@ -148,9 +186,9 @@ export default {
     },
     // 改变状态
     changeEnabled(data, val) {
-      this.$confirm(i18n.t('crud.thisOperate') + this.dict.label.dept_status[val] + '" ' + data.name + i18n.t('crud.continueTxt'), i18n.t('crud.dialogTitleHint'), {
-        confirmButtonText: i18n.t('crud.confirm'),
-        cancelButtonText: i18n.t('crud.cancel'),
+      this.$confirm(i18n.global.t('crud.thisOperate') + this.dict.label.dept_status[val] + '" ' + data.name + i18n.global.t('crud.continueTxt'), i18n.global.t('crud.dialogTitleHint'), {
+        confirmButtonText: i18n.global.t('crud.confirm'),
+        cancelButtonText: i18n.global.t('crud.cancel'),
         type: 'warning'
       }).then(r => {
         if (r.code === 0) {

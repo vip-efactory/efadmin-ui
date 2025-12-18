@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      title: i18n.t('sidebar.title'),
+      title: i18n.global.t('sidebar.title'),
       logo: Logo
     }
   }

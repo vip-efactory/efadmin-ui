@@ -346,7 +346,7 @@ export default {
      * 获取弹窗的标题
      */
     getFormTitle() {
-      return this.isAdd ? i18n.t('crud.new') + ` ${this.title}` : i18n.t('crud.edit') + ` ${this.title}`
+      return this.isAdd ? i18n.global.t('crud.new') + ` ${this.title}` : i18n.global.t('crud.edit') + ` ${this.title}`
     },
     /**
      * 通用导出

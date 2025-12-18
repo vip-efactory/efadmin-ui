@@ -2,7 +2,7 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <el-input v-model="query.name" clearable size="small" :placeholder="$t('codegen.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <rrOperation :crud="crud" />
       </div>
@@ -21,7 +21,13 @@
       </crudOperation>
     </div>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      style="width: 100%;"
+      @selection-change="crud?.selectionChangeHandler"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('tableName')" :show-overflow-tooltip="true" prop="tableName" :label="$t('codegen.tableName')" />
       <el-table-column v-if="columns.visible('engine')" :show-overflow-tooltip="true" prop="engine" :label="$t('codegen.engine')" />
@@ -76,7 +82,10 @@ export default {
     }
   },
   created() {
-    this.crud.optShow = { add: false, edit: false, del: false, download: false }
+    // 先判断crud已初始化，再设置optShow
+    if (this.crud) {
+      this.crud.optShow = { add: false, edit: false, del: false, download: false }
+    }
   },
   methods: {
     toGen(tableName) {
@@ -84,7 +93,7 @@ export default {
       generator(tableName, 0).then(r => {
         if (r.code === 0) {
           this.$notify({
-            title: i18n.t('codegen.generateOK'),
+            title: i18n.global.t('codegen.generateOK'),
             type: 'success',
             duration: 2500
           })
@@ -108,7 +117,7 @@ export default {
       sync(tables).then(r => {
         if (r.code === 0) {
           this.crud.refresh()
-          this.crud.notify(i18n.t('codegen.syncOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(i18n.global.t('codegen.syncOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.syncLoading = false
         } else {
           this.syncLoading = false

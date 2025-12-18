@@ -4,39 +4,39 @@
       <!--左侧插槽-->
       <slot name="left" />
       <el-button
-        v-if="crud.optShow.add"
+        v-if="crud && crud.optShow && crud.optShow.add && permission"
         v-permission="permission.add"
         class="filter-item"
         size="mini"
         type="primary"
         icon="el-icon-plus"
-        @click="crud.toAdd"
+        @click="crud?.toAdd"
       >
         {{ $t('crud.new') }}
       </el-button>
       <el-button
-        v-if="crud.optShow.edit"
+        v-if="crud && crud.optShow && crud.optShow.edit && permission"
         v-permission="permission.edit"
         class="filter-item"
         size="mini"
         type="success"
         icon="el-icon-edit"
-        :disabled="crud.selections.length !== 1"
-        @click="crud.toEdit(crud.selections[0])"
+        :disabled="crud?.selections?.length !== 1"
+        @click="crud?.toEdit(crud?.selections?.[0])"
       >
         {{ $t('crud.edit') }}
       </el-button>
       <el-button
-        v-if="crud.optShow.del"
+        v-if="crud && crud.optShow && crud.optShow.del && permission"
         slot="reference"
         v-permission="permission.del"
         class="filter-item"
         type="danger"
         icon="el-icon-delete"
         size="mini"
-        :loading="crud.delAllLoading"
-        :disabled="crud.selections.length === 0"
-        @click="toDelete(crud.selections)"
+        :loading="crud?.delAllLoading"
+        :disabled="crud?.selections?.length === 0"
+        @click="toDelete(crud?.selections)"
       >
         {{ $t('crud.delete') }}
       </el-button>

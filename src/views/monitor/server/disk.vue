@@ -37,8 +37,8 @@ export default {
       data: [],
       errorInfo: '', errorDialog: false,
       enabledTypeOptions: [
-        { key: 'true', display_name: i18n.t('common.success') },
-        { key: 'false', display_name: i18n.t('common.failure') }
+        { key: 'true', display_name: i18n.global.t('common.success') },
+        { key: 'false', display_name: i18n.global.t('common.failure') }
       ]
     }
   },
@@ -57,7 +57,7 @@ export default {
     color: #444;
     background: #ffffff !important;
   }
-  /deep/ .el-dialog__body{
+  :deep(el-dialog__body) {
     padding: 0 20px 10px 20px !important;
   }
 </style>

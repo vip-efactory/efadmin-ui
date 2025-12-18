@@ -2,7 +2,7 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!--搜索-->
         <el-input v-model="query.filename" clearable size="small" :placeholder="$t('picture.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
@@ -64,7 +64,14 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      style="width: 100%;"
+      @selection-change="crud?.selectionChangeHandler"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('filename')" width="200" prop="filename" :label="$t('picture.filename')" sortable="custom" />
       <el-table-column v-if="columns.visible('username')" prop="username" :label="$t('picture.username')" sortable="custom" />
@@ -104,8 +111,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'filename', labelName: i18n.t('picture.filename') }, { fieldName: 'username', labelName: i18n.t('picture.username') }, { fieldName: 'width', labelName: i18n.t('picture.width') }, { fieldName: 'height', labelName: i18n.t('picture.height') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('picture.TITLE'), url: 'api/pictures/page', exportUrl: 'api/pictures/download', crudMethod: { ...crudPic }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'filename', labelName: i18n.global.t('picture.filename') }, { fieldName: 'username', labelName: i18n.global.t('picture.username') }, { fieldName: 'width', labelName: i18n.global.t('picture.width') }, { fieldName: 'height', labelName: i18n.global.t('picture.height') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('picture.TITLE'), url: 'api/pictures/page', exportUrl: 'api/pictures/download', crudMethod: { ...crudPic }, adSearchFields: adSearchFields })
 export default {
   name: 'Pictures',
   components: { pagination, crudOperation, rrOperation },
@@ -133,8 +140,11 @@ export default {
     ])
   },
   created() {
-    this.crud.optShow.add = false
-    this.crud.optShow.edit = false
+    // 先确认crud已初始化，再修改optShow的属性
+    if (this.crud) {
+      this.crud.optShow.add = false
+      this.crud.optShow.edit = false
+    }
   },
   methods: {
     handleSuccess(response, file, fileList) {
@@ -175,7 +185,7 @@ export default {
       this.syncLoading = true
       crudPic.sync().then(res => {
         if (res.code === 0) {
-          this.crud.notify(i18n.t('picture.syncOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(i18n.global.t('picture.syncOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.crud.toQuery()
           this.syncLoading = false
         } else {

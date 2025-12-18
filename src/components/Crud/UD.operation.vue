@@ -36,7 +36,7 @@ export default {
     },
     msg: {
       type: String,
-      default: i18n.t('crud.deleteTips')
+      default: i18n.global.t('crud.deleteTips')
     }
   },
   data() {

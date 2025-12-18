@@ -29,8 +29,8 @@ export default {
       editorContent:
         `
         <ul>
-          <li>` + i18n.t('editor.contentLi1') + `<a style="color: #42b983" target="_blank" href="https://sm.ms/">sm.ms</a></li>
-          <li>` + i18n.t('editor.contentLi2') + `<a style="color: #42b983" target="_blank" href="https://www.wangeditor.com/doc/">wangEditor4</a></li>
+          <li>` + i18n.global.t('editor.contentLi1') + `<a style="color: #42b983" target="_blank" href="https://sm.ms/">sm.ms</a></li>
+          <li>` + i18n.global.t('editor.contentLi2') + `<a style="color: #42b983" target="_blank" href="https://www.wangeditor.com/doc/">wangEditor4</a></li>
         </ul>
         `
     }
@@ -69,7 +69,7 @@ export default {
   .text {
     text-align:left;
   }
-  /deep/ .w-e-text-container {
+  :deep(w-e-text-container) {
     height: 420px !important;
   }
 </style>

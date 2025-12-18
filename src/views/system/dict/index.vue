@@ -51,22 +51,47 @@
           <el-table v-loading="loading" :data="data" highlight-current-row style="width: 100%;" @current-change="handleCurrentChange">
             <el-table-column :show-overflow-tooltip="true" prop="name" :label="$t('dict.name')" />
             <el-table-column :show-overflow-tooltip="true" prop="remark" :label="$t('be.remark')" />
-            <el-table-column v-if="checkPermission(['admin','dict:edit','dict:del'])" :label="$t('be.operate')" width="230px" align="center" fixed="right">
-              <template slot-scope="scope">
-                <el-button v-permission="['admin','dict:edit']" size="mini" type="primary" icon="el-icon-edit" @click="showEditFormDialog(scope.row)" />
-                <el-popover
-                  :ref="scope.row.id"
+            <el-table-column
+              v-if="checkPermission(['admin','dict:edit','dict:del'])"
+              :label="$t('be.operate')"
+              width="230px"
+              align="center"
+              fixed="right"
+            >
+              <!-- 1. 替换slot-scope为Vue3标准的#default插槽语法 -->
+              <template #default="scope">
+                <!-- 2. 加v-if确保scope.row存在后再渲染所有操作组件，避免空值报错 -->
+                <div v-if="scope.row">
+                  <el-button
+                    v-permission="['admin','dict:edit']"
+                    size="mini"
+                    type="primary"
+                    icon="el-icon-edit"
+                    @click="showEditFormDialog(scope.row)"
+                  />
+                  <el-popover
+                    :ref="`popover_${scope.row.id}`"
                   v-permission="['admin','dict:del']"
                   placement="top"
                   width="230px"
-                >
+                  >
                   <p>{{ $t('dict.deleteTips') }}</p>
                   <div style="text-align: right; margin: 0">
-                    <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">{{ $t('crud.cancel') }}</el-button>
-                    <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
+                    <el-button
+                      size="mini"
+                      type="text"
+                      @click="$refs[`popover_${scope.row.id}`]?.doClose()"
+                    >{{ $t('crud.cancel') }}</el-button>
+                    <el-button
+                      :loading="delLoading"
+                      type="primary"
+                      size="mini"
+                      @click="delMethod(scope.row.id)"
+                    >{{ $t('crud.confirm') }}</el-button>
                   </div>
                   <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini" />
-                </el-popover>
+                  </el-popover>
+                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -87,7 +112,7 @@
           <div slot="header" class="clearfix">
             <span>{{ $t('dict.dictDetails') }}</span>
             <el-button
-              v-if="checkPermission(['admin','dict:add']) && this.$refs.dictDetail && this.$refs.dictDetail.dictName"
+              v-if="checkPermission(['admin','dict:add']) && $refs.dictDetail && $refs.dictDetail.dictName"
               class="filter-item"
               size="mini"
               style="float: right;padding: 4px 10px"
@@ -115,7 +140,7 @@ export default {
   mixins: [crud],
   data() {
     return {
-      title: i18n.t('dict.TITLE'),
+      title: i18n.global.t('dict.TITLE'),
       crudMethod: { ...crudDict },
       queryTypeOptions: [
         { key: 'name', display_name: '字典名称' },
@@ -124,7 +149,7 @@ export default {
       form: { id: null, name: null, remark: null },
       rules: {
         name: [
-          { required: true, message: i18n.t('dict.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('dict.nameRequired'), trigger: 'blur' }
         ]
       }
     }

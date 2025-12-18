@@ -37,7 +37,7 @@ export default {
       }],
       rules: {
         subject: [
-          { required: true, message: i18n.t('email.emailSubjectRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('email.emailSubjectRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -49,24 +49,34 @@ export default {
   },
   mounted() {
     const _this = this
+    // 先判断ref是否存在，避免实例化失败
+    if (!this.$refs.editor) return
+
+    // 实例化编辑器（wangEditor 4+ 用 E 或 WangEditor，根据实际引入的名称）
     var editor = new E(this.$refs.editor)
-    // 自定义菜单配置
-    editor.customConfig.zIndex = 10
-    // 文件上传
-    editor.customConfig.customUploadImg = function(files, insert) {
-      // files 是 input 中选中的文件列表
-      // insert 是获取图片 url 后，插入到编辑器的方法
+
+    // 1. 旧版customConfig已改为config
+    editor.config.zIndex = 10
+
+    // 2. 文件上传：移除嵌套的files.forEach（避免重复循环）
+    editor.config.customUploadImg = function(files, insert) {
       files.forEach(image => {
-        files.forEach(image => {
-          upload(_this.imagesUploadApi, image).then(data => {
+        // 3. 添加catch捕获上传错误，避免Promise报错
+        upload(_this.imagesUploadApi, image)
+          .then(data => {
             insert(data.data.url)
           })
-        })
+          .catch(err => {
+            console.error('图片上传失败：', err)
+            _this.$message.error('图片上传失败，请重试')
+          })
       })
     }
-    editor.customConfig.onchange = (html) => {
-      this.form.content = html
+
+    editor.config.onchange = (html) => {
+      _this.form.content = html
     }
+
     editor.create()
   },
   methods: {
@@ -76,7 +86,7 @@ export default {
         this.tos.splice(index, 1)
       } else {
         this.$message({
-          message: i18n.t('email.atLeastOneMailto'),
+          message: i18n.global.t('email.atLeastOneMailto'),
           type: 'warning'
         })
       }
@@ -96,7 +106,7 @@ export default {
           this.tos.forEach(function(data, index) {
             if (data.value === '') {
               _this.$message({
-                message: i18n.t('email.mailToRequired'),
+                message: i18n.global.t('email.mailToRequired'),
                 type: 'warning'
               })
               sub = true
@@ -104,7 +114,7 @@ export default {
               _this.form.tos.push(data.value)
             } else {
               _this.$message({
-                message: i18n.t('email.emailFormatError'),
+                message: i18n.global.t('email.emailFormatError'),
                 type: 'warning'
               })
               sub = true
@@ -115,7 +125,7 @@ export default {
           send(this.form).then(res => {
             if (res.code === 0) {
               this.$notify({
-                title: i18n.t('email.sendOK'),
+                title: i18n.global.t('email.sendOK'),
                 type: 'success',
                 duration: 2500
               })
@@ -143,7 +153,7 @@ export default {
     margin: 20px;
     width: 730px;
   }
-  /deep/ .w-e-text-container {
+  :deep(w-e-text-container) {
     height: 360px !important;
   }
 </style>

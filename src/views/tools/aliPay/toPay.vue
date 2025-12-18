@@ -31,13 +31,13 @@ export default {
       loading: false, form: { subject: '', totalAmount: '', body: '' },
       rules: {
         subject: [
-          { required: true, message: i18n.t('aliPay.commodityNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('aliPay.commodityNameRequired'), trigger: 'blur' }
         ],
         totalAmount: [
-          { required: true, message: i18n.t('aliPay.commodityPriceRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('aliPay.commodityPriceRequired'), trigger: 'blur' }
         ],
         body: [
-          { required: true, message: i18n.t('aliPay.commodityDescRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('aliPay.commodityDescRequired'), trigger: 'blur' }
         ]
       }
     }

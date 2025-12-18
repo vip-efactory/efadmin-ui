@@ -4,7 +4,7 @@
     <eForm ref="form" />
     <!-- 工具栏 -->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
         <el-input v-model="query.key" clearable size="small" :placeholder="$t('storage.qiniuSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
         <el-date-picker
@@ -56,24 +56,56 @@
         </div>
       </el-dialog>
       <!--表格渲染-->
-      <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
+      <el-table
+        ref="table"
+        v-loading="crud?.loading"
+        :data="crud?.data || []"
+        style="width: 100%;"
+        @selection-change="crud?.selectionChangeHandler"
+      >
         <el-table-column type="selection" width="55" />
-        <el-table-column v-if="columns.visible('name')" prop="name" :show-overflow-tooltip="true" :label="$t('storage.name')">
+        <el-table-column
+          v-if="columns?.visible('name')"
+          prop="name"
+          :show-overflow-tooltip="true"
+          :label="$t('storage.name')"
+        >
           <template slot-scope="scope">
-            <a href="JavaScript:" class="el-link el-link--primary" target="_blank" type="primary" @click="download(scope.row.id)">{{ scope.row.key }}</a>
+            <!-- 规范javascript协议写法（小写） -->
+            <a href="javascript:" class="el-link el-link--primary" target="_blank" type="primary" @click="download(scope.row.id)">{{ scope.row.key }}</a>
           </template>
         </el-table-column>
-        <el-table-column v-if="columns.visible('suffix')" :show-overflow-tooltip="true" prop="suffix" :label="$t('storage.suffix')" @selection-change="crud.selectionChangeHandler" />
-        <el-table-column v-if="columns.visible('bucket')" prop="bucket" :label="$t('storage.bucket')" />
-        <el-table-column v-if="columns.visible('size')" prop="size" :label="$t('storage.size')" />
-        <el-table-column v-if="columns.visible('type')" prop="type" :label="$t('storage.type')" />
-        <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" :label="$t('be.createTime')">
+        <el-table-column
+          v-if="columns?.visible('suffix')"
+          :show-overflow-tooltip="true"
+          prop="suffix"
+          :label="$t('storage.suffix')"
+        />
+        <el-table-column
+          v-if="columns?.visible('bucket')"
+          prop="bucket"
+          :label="$t('storage.bucket')"
+        />
+        <el-table-column
+          v-if="columns?.visible('size')"
+          prop="size"
+          :label="$t('storage.size')"
+        />
+        <el-table-column
+          v-if="columns?.visible('type')"
+          prop="type"
+          :label="$t('storage.type')"
+        />
+        <el-table-column
+          v-if="columns?.visible('updateTime')"
+          :label="$t('be.createTime')"
+        >
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.updateTime) }}</span>
+            <span>{{ parseTime(scope?.row?.updateTime) }}</span>
           </template>
         </el-table-column>
+
       </el-table>
-      <!--分页组件-->
       <pagination />
     </div>
   </div>
@@ -91,7 +123,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.t('storage.type') }, { fieldName: 'bucket', labelName: i18n.t('storage.bucket') }, { fieldName: 'updateTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.global.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.global.t('storage.type') }, { fieldName: 'bucket', labelName: i18n.global.t('storage.bucket') }, { fieldName: 'updateTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: '七牛云文件', url: 'api/qiNiuContent/page', crudMethod: { ...crudQiNiu }, adSearchFields: adSearchFields })
 export default {
   components: { eForm, pagination, crudOperation, rrOperation },
@@ -128,8 +160,11 @@ export default {
     }
   },
   created() {
-    this.crud.optShow.add = false
-    this.crud.optShow.edit = false
+    // 先确认crud已初始化，再修改optShow的属性
+    if (this.crud) {
+      this.crud.optShow.add = false
+      this.crud.optShow.edit = false
+    }
   },
   methods: {
     // 七牛云配置

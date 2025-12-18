@@ -2,7 +2,7 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
         <el-input v-model="query.blurry" clearable :placeholder="$t('deployHistory.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
@@ -22,7 +22,14 @@
       <crudOperation :permission="permission" />
     </div>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      style="width: 100%"
+      @selection-change="crud?.selectionChangeHandler"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('appName')" prop="appName" :label="$t('deployHistory.appName')" sortable="custom" />
       <el-table-column v-if="columns.visible('ip')" prop="ip" :label="$t('deployHistory.ip')" sortable="custom" />
@@ -64,8 +71,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'appName', labelName: i18n.t('deployHistory.appName') }, { fieldName: 'ip', labelName: i18n.t('deployHistory.ip') }, { fieldName: 'deployUser', labelName: i18n.t('deployHistory.deployUser') }, { fieldName: 'deployDate', labelName: i18n.t('deployHistory.deployDate'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('deployHistory.TITLE'), url: 'api/deployHistory/page', exportUrl: 'api/deployHistory/download', crudMethod: { del }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'appName', labelName: i18n.global.t('deployHistory.appName') }, { fieldName: 'ip', labelName: i18n.global.t('deployHistory.ip') }, { fieldName: 'deployUser', labelName: i18n.global.t('deployHistory.deployUser') }, { fieldName: 'deployDate', labelName: i18n.global.t('deployHistory.deployDate'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('deployHistory.TITLE'), url: 'api/deployHistory/page', exportUrl: 'api/deployHistory/download', crudMethod: { del }, adSearchFields: adSearchFields })
 export default {
   name: 'DeployHistory',
   components: { pagination, crudOperation, rrOperation },
@@ -79,11 +86,14 @@ export default {
     }
   },
   created() {
-    this.crud.optShow = {
-      add: false,
-      edit: false,
-      del: true,
-      download: true
+    // 先判断crud已初始化，再修改optShow
+    if (this.crud) {
+      this.crud.optShow = {
+        add: false,
+        edit: false,
+        del: true,
+        download: true
+      }
     }
   },
   methods: {

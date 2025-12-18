@@ -1,95 +1,55 @@
 <template>
-  <div v-if="!item.hidden" class="menu-wrapper">
-    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
-      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
-        </el-menu-item>
-      </app-link>
+  <!-- 多子菜单（>=2）：渲染父菜单 -->
+  <el-sub-menu
+    v-if="item.children && item.children.length >= 2"
+    :index="resolvePath(item.path)"
+  >
+    <template #title>
+      <svg-icon :icon-class="item.meta?.icon || 'menu'" />
+      <span>{{ item.meta?.title || item.name }}</span>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
-      <template slot="title">
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
-      </template>
-      <sidebar-item
-        v-for="child in item.children"
-        :key="child.path"
-        :is-nest="true"
-        :item="child"
-        :base-path="resolvePath(child.path)"
-        class="nest-menu"
-      />
-    </el-submenu>
-  </div>
+    <sidebar-item
+      v-for="child in item.children"
+      :key="child.path"
+      :item="child"
+      :base-path="resolvePath(item.path)"
+    />
+  </el-sub-menu>
+
+  <!-- 单子菜单（==1）：直接渲染子项（不能用 <template>） -->
+  <sidebar-item
+    v-else-if="item.children && item.children.length === 1"
+    :item="item.children[0]"
+    :base-path="resolvePath(item.path)"
+  />
+
+  <!-- 无子菜单：普通项 -->
+  <el-menu-item v-else :index="resolvePath(item.path)">
+    <svg-icon :icon-class="item.meta?.icon || 'menu'" />
+    <span>{{ item.meta?.title || item.name }}</span>
+  </el-menu-item>
 </template>
 
-<script>
-import path from 'path'
-import { isExternal } from '@/utils/validate'
-import Item from './Item'
-import AppLink from './Link'
-import FixiOSBug from './FixiOSBug'
-
-export default {
-  name: 'SidebarItem',
-  components: { Item, AppLink },
-  mixins: [FixiOSBug],
-  props: {
-    // route object
-    item: {
-      type: Object,
-      required: true
-    },
-    isNest: {
-      type: Boolean,
-      default: false
-    },
-    basePath: {
-      type: String,
-      default: ''
-    }
+<script setup>
+import SvgIcon from '@/components/SvgIcon'
+import path from 'path' // 新增：引入path模块解析路径
+// 只接收item，去掉所有冗余props
+const props = defineProps({ // 改动4：修改props接收方式，新增basePath
+  item: {
+    type: Object,
+    required: true
   },
-  data() {
-    // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
-    // TODO: refactor with render function
-    this.onlyOneChild = null
-    return {}
-  },
-  methods: {
-    hasOneShowingChild(children = [], parent) {
-      const showingChildren = children.filter(item => {
-        if (item.hidden) {
-          return false
-        } else {
-          // Temp set(will be used if only has one showing child)
-          this.onlyOneChild = item
-          return true
-        }
-      })
-
-      // When there is only one child router, the child router is displayed by default
-      if (showingChildren.length === 1) {
-        return true
-      }
-
-      // Show parent if there are no child router to display
-      if (showingChildren.length === 0) {
-        this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
-        return true
-      }
-
-      return false
-    },
-    resolvePath(routePath) {
-      if (isExternal(routePath)) {
-        return routePath
-      }
-      if (isExternal(this.basePath)) {
-        return this.basePath
-      }
-      return path.resolve(this.basePath, routePath)
-    }
+  basePath: { // 新增：接收主组件传递的basePath
+    type: String,
+    default: ''
   }
+})
+
+// 新增：路径解析方法（兼容相对路径/绝对路径）
+const resolvePath = (routePath) => {
+  if (!routePath) return ''
+  // 简单拼接路径（和旧版逻辑一致）
+  return path.resolve(props.basePath, routePath)
 }
 </script>

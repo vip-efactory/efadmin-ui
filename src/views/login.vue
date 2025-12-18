@@ -74,9 +74,9 @@ export default {
         uuid: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', message: i18n.t('login.usernameChk') }],
-        password: [{ required: true, trigger: 'blur', message: i18n.t('login.passwordChk') }],
-        code: [{ required: true, trigger: 'change', message: i18n.t('login.verificationCodeChk') }]
+        username: [{ required: true, trigger: 'blur', message: i18n.global.t('login.usernameChk') }],
+        password: [{ required: true, trigger: 'blur', message: i18n.global.t('login.passwordChk') }],
+        code: [{ required: true, trigger: 'change', message: i18n.global.t('login.verificationCodeChk') }]
       },
       loading: false,
       redirect: undefined

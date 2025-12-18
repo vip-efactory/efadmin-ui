@@ -26,7 +26,7 @@
       <el-col :xs="15" :sm="18" :md="20" :lg="20" :xl="20">
         <!--工具栏-->
         <div class="head-container">
-          <div v-if="crud.props.searchToggle">
+          <div v-if="crud && crud.props && crud.props.searchToggle">
             <!-- 搜索 -->
             <el-input
               v-model="query.blurry"
@@ -69,7 +69,16 @@
           <crudOperation show="" :permission="permission" />
         </div>
         <!--表单渲染-->
-        <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="630px">
+        <!-- 1. :before-close 加可选链+函数包裹，避免crud为null时调用方法 -->
+        <!-- 2. :title 加可选链判空，避免crud.status不存在时报错 -->
+        <el-dialog
+          append-to-body
+          :close-on-click-modal="false"
+          :before-close="() => crud?.cancelCU()"
+          :visible.sync="dialogVisible"
+          :title="crud?.status?.title || ''"
+          width="630px"
+        >
           <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="96px">
             <el-form-item :label="$t('user.username')" prop="username">
               <el-input v-model="form.username" />
@@ -142,7 +151,14 @@
           </div>
         </el-dialog>
         <!--表格渲染-->
-        <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+        <el-table
+          ref="table"
+          v-loading="crud?.loading"
+          :data="crud?.data || []"
+          style="width: 100%;"
+          @selection-change="val => crud?.selectionChangeHandler(val)"
+          @sort-change="val => crud?.doTitleOrder(val)"
+        >
           <el-table-column :selectable="checkboxT" type="selection" width="55" />
           <el-table-column v-if="columns.visible('username')" :show-overflow-tooltip="true" prop="username" :label="$t('user.username')" sortable="custom" />
           <el-table-column v-if="columns.visible('nickName')" :show-overflow-tooltip="true" prop="nickName" :label="$t('user.nickName')" sortable="custom" />
@@ -204,15 +220,15 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
-import Treeselect from '@riophae/vue-treeselect'
+import Treeselect from 'vue3-treeselect'
 import { mapGetters } from 'vuex'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import i18n from '../../../lang'
 
 let userRoles = []
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'username', labelName: i18n.t('user.username') }, { fieldName: 'nickName', labelName: i18n.t('user.nickName') }, { fieldName: 'sex', labelName: i18n.t('user.sex') }, { fieldName: 'phone', labelName: i18n.t('user.phone') }, { fieldName: 'email', labelName: i18n.t('user.email') }, { fieldName: 'enabled', labelName: i18n.t('user.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('user.TITLE'), url: 'api/users/page', exportUrl: 'api/users/download', crudMethod: { ...crudUser }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'username', labelName: i18n.global.t('user.username') }, { fieldName: 'nickName', labelName: i18n.global.t('user.nickName') }, { fieldName: 'sex', labelName: i18n.global.t('user.sex') }, { fieldName: 'phone', labelName: i18n.global.t('user.phone') }, { fieldName: 'email', labelName: i18n.global.t('user.email') }, { fieldName: 'enabled', labelName: i18n.global.t('user.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('user.TITLE'), url: 'api/users/page', exportUrl: 'api/users/download', crudMethod: { ...crudUser }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, username: null, nickName: null, sex: '男', email: null, enabled: 'false', roles: [], job: { id: null }, dept: { id: null }, phone: null }
 export default {
   name: 'User',
@@ -224,9 +240,9 @@ export default {
     // 自定义验证
     const validPhone = (rule, value, callback) => {
       if (!value) {
-        callback(new Error(i18n.t('user.phoneEmptyChk')))
+        callback(new Error(i18n.global.t('user.phoneEmptyChk')))
       } else if (!isvalidPhone(value)) {
-        callback(new Error(i18n.t('user.phoneFormatChk')))
+        callback(new Error(i18n.global.t('user.phoneFormatChk')))
       } else {
         callback()
       }
@@ -246,16 +262,16 @@ export default {
       ],
       rules: {
         username: [
-          { required: true, message: i18n.t('user.usernameEmptyChk'), trigger: 'blur' },
-          { min: 2, max: 20, message: i18n.t('user.usernameLengthRangeChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('user.usernameEmptyChk'), trigger: 'blur' },
+          { min: 2, max: 20, message: i18n.global.t('user.usernameLengthRangeChk'), trigger: 'blur' }
         ],
         nickName: [
-          { required: true, message: i18n.t('user.nickNameEmptyChk'), trigger: 'blur' },
-          { min: 2, max: 20, message: i18n.t('user.nickNameLengthRangeChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('user.nickNameEmptyChk'), trigger: 'blur' },
+          { min: 2, max: 20, message: i18n.global.t('user.nickNameLengthRangeChk'), trigger: 'blur' }
         ],
         email: [
-          { required: true, message: i18n.t('user.emailEmptyChk'), trigger: 'blur' },
-          { type: 'email', message: i18n.t('user.emailFormatChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('user.emailEmptyChk'), trigger: 'blur' },
+          { type: 'email', message: i18n.global.t('user.emailFormatChk'), trigger: 'blur' }
         ],
         phone: [
           { required: true, trigger: 'blur', validator: validPhone }
@@ -266,14 +282,27 @@ export default {
   computed: {
     ...mapGetters([
       'user'
-    ])
+    ]),
+    dialogVisible: {
+      get() {
+        // 用可选链逐层判空，若crud/status/cu不存在，默认cu为0，返回false
+        return this.crud?.status?.cu > 0
+      },
+      set(newVal) {
+        // 先判断crud和status存在，再修改cu值，避免crud为null时报错
+        if (!newVal && this.crud && this.crud.status) {
+          this.crud.status.cu = 0
+        }
+      }
+    }
   },
   created() {
-    this.$nextTick(() => {
-      this.getDeptDatas()
+    this.getDeptDatas()
+    // 加判空，避免crud未初始化报错
+    if (this.crud) {
       this.crud.toQuery()
-      this.crud.msg.add = i18n.t('user.userAddOKMsg')
-    })
+      this.crud.msg.add = this.$t('user.userAddOKMsg')
+    }
   },
   mounted: function() {
     const that = this
@@ -334,19 +363,19 @@ export default {
     [CRUD.HOOK.afterValidateCU](crud) {
       if (!crud.form.dept.id) {
         this.$message({
-          message: i18n.t('user.deptEmptyChk'),
+          message: i18n.global.t('user.deptEmptyChk'),
           type: 'warning'
         })
         return false
       } else if (!crud.form.job.id) {
         this.$message({
-          message: i18n.t('user.jobEmptyChk'),
+          message: i18n.global.t('user.jobEmptyChk'),
           type: 'warning'
         })
         return false
       } else if (this.roles.length === 0) {
         this.$message({
-          message: i18n.t('user.rolesEmptyChk'),
+          message: i18n.global.t('user.rolesEmptyChk'),
           type: 'warning'
         })
         return false
@@ -388,14 +417,14 @@ export default {
     },
     // 改变状态
     changeEnabled(data, val) {
-      this.$confirm(i18n.t('crud.thisOperate') + this.dict.label.user_status[val] + '" ' + data.username + i18n.t('crud.continueTxt'), i18n.t('crud.dialogTitleHint'), {
-        confirmButtonText: i18n.t('crud.confirm'),
-        cancelButtonText: i18n.t('crud.cancel'),
+      this.$confirm(i18n.global.t('crud.thisOperate') + this.dict.label.user_status[val] + '" ' + data.username + i18n.global.t('crud.continueTxt'), i18n.global.t('crud.dialogTitleHint'), {
+        confirmButtonText: i18n.global.t('crud.confirm'),
+        cancelButtonText: i18n.global.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         crudUser.edit(data).then(res => {
           if (res.code === 0) {
-            this.crud.notify(this.dict.label.user_status[val] + i18n.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+            this.crud.notify(this.dict.label.user_status[val] + i18n.global.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           } else {
             this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }

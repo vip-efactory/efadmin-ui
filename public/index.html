@@ -1,15 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= webpackConfig.name %></title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title><%= webpackConfig.name %></title>
+
+  <!-- 1. 引入 Vue3 全局实例（确保 Cron 组件能找到 Vue3 依赖，避免语法冲突） -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.3.4/vue.global.prod.js"></script>
+  <!-- 2. Element Plus 样式（Cron 组件依赖，保持原有版本） -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.7.0/index.css">
+  <!-- 3. Vue3 原生兼容 Cron 组件（替换原冲突版本，无 _c 语法） -->
+  <script src="https://cdn.jsdelivr.net/npm/vue-cron-next@1.0.2/dist/vue-cron-next.umd.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-cron-next@1.0.2/dist/style.css">
+
+  <!-- 引入UEditor核心配置和JS（解压后的资源放public/static/UEditor/） -->
+  <script src="/static/UEditor/ueditor.config.js"></script>
+  <script src="/static/UEditor/ueditor.all.min.js"></script>
+  <script src="/static/UEditor/lang/zh-cn/zh-cn.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<!-- built files will be auto injected -->
+</body>
 </html>

@@ -2,7 +2,7 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
         <el-input v-model="query.appName" clearable :placeholder="$t('deploy.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
@@ -74,7 +74,14 @@
       </crudOperation>
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="520px">
+    <el-dialog
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU()"
+      :visible.sync="dialogVisible"
+      :title="crud?.status?.title"
+      width="520px"
+    >
       <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
         <el-form-item :label="$t('deploy.appName')" prop="app.id">
           <el-select v-model.number="form.app.id" :placeholder="$t('deploy.appNameRequired')" style="width: 370px">
@@ -96,7 +103,17 @@
     <fForm ref="sysRestore" :key="times" :app-name="appName" />
     <dForm ref="deploy" />
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row stripe style="width: 100%" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      highlight-current-row
+      stripe
+      style="width: 100%"
+      @selection-change="crud?.selectionChangeHandler"
+      @current-change="handleCurrentChange"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('app.name')" prop="app.name" :label="$t('deploy.appName')" sortable="custom" />
       <el-table-column v-if="columns.visible('servers')" prop="servers" :label="$t('deploy.server')" sortable="custom" />
@@ -131,7 +148,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: i18n.t('deploy.TITLE'), url: 'api/deploy/page', exportUrl: 'api/deploy/download', crudMethod: { ...crudDeploy }, showAdSearchBtn: false }) // 不显示高级搜索
+const defaultCrud = CRUD({ title: i18n.global.t('deploy.TITLE'), url: 'api/deploy/page', exportUrl: 'api/deploy/download', crudMethod: { ...crudDeploy }, showAdSearchBtn: false }) // 不显示高级搜索
 const defaultForm = { id: null, app: { id: null }, deploys: [] }
 export default {
   components: { dForm, fForm, pagination, crudOperation, rrOperation, udOperation },
@@ -147,11 +164,25 @@ export default {
       },
       rules: {
         'app.id': [
-          { required: true, message: i18n.t('deploy.appNameRequired'), trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.global.t('deploy.appNameRequired'), trigger: 'blur', type: 'number' }
         ],
         deploys: [
-          { required: true, message: i18n.t('deploy.serverRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('deploy.serverRequired'), trigger: 'blur' }
         ]
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 用可选链确保crud、status存在，空值时兜底返回false
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 仅当newVal为false，且crud、status都存在时，才修改cu
+        if (!newVal && this.crud?.status) {
+          this.crud.status.cu = 0
+        }
       }
     }
   },

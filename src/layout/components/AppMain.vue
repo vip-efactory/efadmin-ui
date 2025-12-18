@@ -1,15 +1,20 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="cachedViews">
-        <router-view :key="key" />
-      </keep-alive>
-    </transition>
+    <!-- 核心修改：router-view 改用 v-slot 写法，保留所有原有属性 -->
+    <router-view v-slot="{ Component }">
+      <transition name="fade-transform" mode="out-in">
+        <keep-alive :include="cachedViews">
+          <component :is="Component" :key="key" />
+        </keep-alive>
+      </transition>
+    </router-view>
+
+    <!-- 以下原有代码完全保留，无需修改 -->
     <div v-if="$store.state.settings.showFooter" id="el-main-footer">
       <span v-html="$store.state.settings.footerTxt" />
       <span v-show="is_zh_CN"> ⋅ </span>
       <a v-show="is_zh_CN" href="http://www.beian.miit.gov.cn" target="_blank">{{ $store.state.settings.caseNumber }}</a>
-      <a v-show="is_zh_CN" href="https://jq.qq.com/?_wv=1027&k=5DTYJ3S" target="_blank" >QQ交流群:601693868</a>
+      <a v-show="is_zh_CN" href="https://jq.qq.com/?_wv=1027&k=5DTYJ3S" target="_blank">QQ交流群:601693868</a>
     </div>
   </section>
 </template>

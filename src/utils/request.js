@@ -1,10 +1,11 @@
 import axios from 'axios'
 import router from '@/router/routers'
-import { Notification, MessageBox } from 'element-ui'
+// 1. 替换 Element UI 为 Element Plus 组件
+import { ElNotification, ElMessageBox } from 'element-plus'
 import { getToken, getTenant4Dev } from '@/utils/auth'
 import Config from '@/settings'
 import store from '@/store'
-import i18n from '../lang'
+import i18n from '../lang' // 导入修改后的 vue-i18n@9.x 实例
 
 // 创建axios实例
 const service = axios.create({
@@ -16,19 +17,18 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     if (getToken()) {
-      config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+      config.headers['Authorization'] = getToken() // 保留原有token逻辑
     }
     config.headers['Content-Type'] = 'application/json'
-    // 携带国际化区域环境参数
+    // 携带国际化区域环境参数（Vuex4的getters使用正常，无需修改）
     config.headers['locale'] = store.getters.locale
-    // 若是开发环境此处可以写死，如果不想使用多租户此处默认为0就可以了。若是线上部署，此处可以不写，由nginx转发时处理是最好的方式！
+    // 多租户ID逻辑保留
     config.headers['TENANT_ID'] = getTenant4Dev()
     return config
   },
   error => {
-    // Do something with request error
     console.log(error) // for debug
-    Promise.reject(error)
+    return Promise.reject(error) // 补充return，避免Promise链断裂
   }
 )
 
@@ -37,7 +37,8 @@ service.interceptors.response.use(
   response => {
     const code = response.status
     if (code < 200 || code > 300) {
-      Notification.error({
+      // 2. 替换 Notification 为 ElNotification
+      ElNotification.error({
         title: response.message
       })
       return Promise.reject('error')
@@ -51,8 +52,9 @@ service.interceptors.response.use(
       code = error.response.data.status
     } catch (e) {
       if (error.toString().indexOf('Error: timeout') !== -1) {
-        Notification.error({
-          title: i18n.t('sys.networkRequestTimeout'),
+        // 3. Vue3 的 i18n 使用 global.t() 替代原有的 t()
+        ElNotification.error({
+          title: i18n.global.t('sys.networkRequestTimeout'),
           duration: 5000
         })
         return Promise.reject(error)
@@ -60,37 +62,40 @@ service.interceptors.response.use(
     }
     if (code) {
       if (code === 401) {
-        MessageBox.confirm(
-          i18n.t('sys.reloginTips') + '',
-          i18n.t('sys.systemHint') + '',
+        // 4. 替换 MessageBox 为 ElMessageBox，i18n 改用 global.t()
+        ElMessageBox.confirm(
+          i18n.global.t('sys.reloginTips'),
+          i18n.global.t('sys.systemHint'),
           {
-            confirmButtonText: i18n.t('sys.reloginBtn'),
-            cancelButtonText: i18n.t('crud.cancel'),
+            confirmButtonText: i18n.global.t('sys.reloginBtn'),
+            cancelButtonText: i18n.global.t('crud.cancel'),
             type: 'warning'
           }
         ).then(() => {
           store.dispatch('LogOut').then(() => {
-            location.reload() // 为了重新实例化vue-router对象 避免bug
+            location.reload() // 保留原有逻辑（Vue3中reload仍有效）
           })
         })
       } else if (code === 403) {
-        router.push({ path: '/401' })
+        router.push({ path: '/401' }) // Vue Router4 跳转逻辑正常
       } else {
         const errorMsg = error.response.data.message
         if (errorMsg !== undefined) {
-          Notification.error({
+          ElNotification.error({
             title: errorMsg,
             duration: 5000
           })
         }
       }
     } else {
-      Notification.error({
-        title: i18n.t('sys.interfaceRequestFailed'),
+      // 5. 接口请求失败的国际化提示
+      ElNotification.error({
+        title: i18n.global.t('sys.interfaceRequestFailed'),
         duration: 5000
       })
     }
     return Promise.reject(error)
   }
 )
+
 export default service

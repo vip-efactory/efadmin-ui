@@ -13,7 +13,7 @@
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
       <!--表单组件-->
-      <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
+      <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="dialogVisible" :title="crud.status.title" width="500px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
           <el-form-item :label="$t('tenant.tenantName')" prop="tenantName">
             <el-input v-model="form.tenantName" style="width: 370px;" />
@@ -103,8 +103,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'remark', labelName: i18n.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }, { fieldName: 'updateTime', labelName: i18n.t('be.updateTime'), type: 'datetime' }, { fieldName: 'creatorNum', labelName: i18n.t('be.creatorNum') }, { fieldName: 'updaterNum', labelName: i18n.t('be.updaterNum') }] // 需要高级搜索的字段，此处只是通用的字段，实体自己的需要手动添加！
-const defaultCrud = CRUD({ title: i18n.t('tenant.TITLE'), url: 'api/tenant/page', sort: 'id,desc', crudMethod: { ...crudTenant }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'remark', labelName: i18n.global.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }, { fieldName: 'updateTime', labelName: i18n.global.t('be.updateTime'), type: 'datetime' }, { fieldName: 'creatorNum', labelName: i18n.global.t('be.creatorNum') }, { fieldName: 'updaterNum', labelName: i18n.global.t('be.updaterNum') }] // 需要高级搜索的字段，此处只是通用的字段，实体自己的需要手动添加！
+const defaultCrud = CRUD({ title: i18n.global.t('tenant.TITLE'), url: 'api/tenant/page', sort: 'id,desc', crudMethod: { ...crudTenant }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, tenantName: null, tenantCode: null, dbUsername: null, dbPassword: null, driverClassName: null, jdbcUrl: null, status: null, remark: null, createTime: null, creatorNum: null, updateTime: null, updaterNum: null }
 export default {
   name: 'Tenant',
@@ -120,27 +120,39 @@ export default {
       },
       rules: {
         tenantName: [
-          { required: true, message: i18n.t('tenant.tenantNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('tenant.tenantNameRequired'), trigger: 'blur' }
         ],
         dbUsername: [
-          { required: true, message: i18n.t('tenant.dbUsernameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('tenant.dbUsernameRequired'), trigger: 'blur' }
         ],
         dbPassword: [
-          { required: true, message: i18n.t('tenant.dbPasswordRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('tenant.dbPasswordRequired'), trigger: 'blur' }
         ],
         driverClassName: [
-          { required: true, message: i18n.t('tenant.driverClassNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('tenant.driverClassNameRequired'), trigger: 'blur' }
         ],
         jdbcUrl: [
-          { required: true, message: i18n.t('tenant.jdbcUrlRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('tenant.jdbcUrlRequired'), trigger: 'blur' }
         ],
         status: [
-          { required: true, message: i18n.t('tenant.statusRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('tenant.statusRequired'), trigger: 'blur' }
         ]
       },
       queryTypeOptions: [
-        { key: 'tenantName', display_name: i18n.t('tenant.tenantName') }
+        { key: 'tenantName', display_name: i18n.global.t('tenant.tenantName') }
       ]
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        return this.crud.status.cu > 0
+      },
+      set(newVal) {
+        if (!newVal) {
+          this.crud.status.cu = 0
+        }
+      }
     }
   },
   methods: {

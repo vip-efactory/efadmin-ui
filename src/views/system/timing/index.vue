@@ -2,7 +2,7 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
         <el-input v-model="query.jobName" clearable size="small" :placeholder="$t('task.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
         <el-date-picker
@@ -32,7 +32,14 @@
       <Log ref="log" />
     </div>
     <!--Form表单-->
-    <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" append-to-body width="650px">
+    <el-dialog
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU()"
+      :visible.sync="dialogVisible"
+      :title="crud?.status?.title"
+      append-to-body
+      width="650px"
+    >
       <el-form ref="form" :model="form" :rules="rules" size="small" label-width="140px">
         <el-form-item :label="$t('task.jobName')" prop="jobName">
           <el-input v-model="form.jobName" style="width: 460px;" />
@@ -47,14 +54,13 @@
           <el-input v-model="form.params" style="width: 460px;" />
         </el-form-item>
         <el-form-item :label="$t('task.cronExpression')">
-          <template>
-            <div class="cron">
-              <el-popover v-model="cronPopover">
-                <cron :i18n="cronLocale" @change="changeCron" @close="cronPopover=false" />
-                <el-input slot="reference" v-model="form.cronExpression" placeholder="请输入定时策略" @click="cronPopover=true" />
-              </el-popover>
-            </div>
-          </template>
+          <div class="cron">
+            <el-popover v-model="cronPopover">
+              <!-- 模板标签不变，仍为 <cron> -->
+              <cron :i18n="cronLocale" @change="changeCron" @close="cronPopover=false" />
+              <el-input slot="reference" v-model="form.cronExpression" placeholder="请输入定时策略" @click="cronPopover=true" />
+            </el-popover>
+          </div>
         </el-form-item>
         <el-form-item :label="$t('task.isPause')">
           <el-radio v-model="form.isPause" :label="false">{{ $t('bool.true') }}</el-radio>
@@ -70,7 +76,14 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      style="width: 100%;"
+      @selection-change="crud?.selectionChangeHandler"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column :selectable="checkboxT" type="selection" width="55" />
       <el-table-column v-if="columns.visible('jobName')" :show-overflow-tooltip="true" prop="jobName" width="110px" :label="$t('task.jobName')" sortable="custom" />
       <el-table-column v-if="columns.visible('beanName')" :show-overflow-tooltip="true" prop="beanName" :label="$t('task.beanName')" sortable="custom" />
@@ -124,15 +137,18 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
 import i18n, { getLocale } from '../../../lang'
-import { cron } from 'vue-cron'
+
+// 🔥 关键修改：获取 Vue3 原生 Cron 组件（CDN 暴露的全局变量为 VueCronNext）
+const CronComponent = window.VueCronNext
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'jobName', labelName: i18n.t('task.jobName') }, { fieldName: 'beanName', labelName: i18n.t('task.beanName') }, { fieldName: 'methodName', labelName: i18n.t('task.methodName') }, { fieldName: 'remark', labelName: i18n.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('task.TITLE'), url: 'api/jobs/page', exportUrl: 'api/jobs/download', crudMethod: { ...crudJob }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'jobName', labelName: i18n.global.t('task.jobName') }, { fieldName: 'beanName', labelName: i18n.global.t('task.beanName') }, { fieldName: 'methodName', labelName: i18n.global.t('task.methodName') }, { fieldName: 'remark', labelName: i18n.global.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('task.TITLE'), url: 'api/jobs/page', exportUrl: 'api/jobs/download', crudMethod: { ...crudJob }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, jobName: null, beanName: null, methodName: null, params: null, cronExpression: null, isPause: false, remark: null }
 export default {
   name: 'Timing',
-  components: { Log, pagination, crudOperation, rrOperation, cron },
+  // 🔥 关键修改：注册组件（名称仍为 cron，与模板 <cron> 对应，无需改模板）
+  components: { Log, pagination, crudOperation, rrOperation, cron: CronComponent },
   mixins: [presenter(defaultCrud), header(), form(defaultForm), crud()],
   data() {
     return {
@@ -144,25 +160,37 @@ export default {
       },
       rules: {
         jobName: [
-          { required: true, message: i18n.t('task.jobNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('task.jobNameRequired'), trigger: 'blur' }
         ],
         beanName: [
-          { required: true, message: i18n.t('task.beanNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('task.beanNameRequired'), trigger: 'blur' }
         ],
         methodName: [
-          { required: true, message: i18n.t('task.methodNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('task.methodNameRequired'), trigger: 'blur' }
         ],
         cronExpression: [
-          { required: true, message: i18n.t('task.cronExpressionRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('task.cronExpressionRequired'), trigger: 'blur' }
         ]
       },
       cronPopover: false
     }
   },
   computed: {
-    // 当是中文环境时显示中文,否则显示英文,已知问题,手动切换cron的语言时控制台有警告!
+    // 🔥 关键修改：适配 VueCronNext 的 i18n 格式（中文：zh-CN，英文：en-US）
     cronLocale: function() {
-      return getLocale().indexOf('zh') > -1 ? 'cn' : 'en'
+      return getLocale().indexOf('zh') > -1 ? 'zh-CN' : 'en-US'
+    },
+    dialogVisible: {
+      get() {
+        // 用可选链确保crud、status存在，空值时兜底返回false
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 仅当newVal为false，且crud、status都存在时，才修改cu
+        if (!newVal && this.crud?.status) {
+          this.crud.status.cu = 0
+        }
+      }
     }
   },
   methods: {
@@ -170,7 +198,7 @@ export default {
     execute(id) {
       crudJob.execution(id).then(res => {
         if (res.code === 0) {
-          this.crud.notify(i18n.t('common.execOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(i18n.global.t('common.execOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
         } else {
           crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
@@ -183,7 +211,7 @@ export default {
       crudJob.updateIsPause(id).then(res => {
         if (res.code === 0) {
           this.crud.toQuery()
-          this.crud.notify(status + i18n.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(status + i18n.global.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
         } else {
           crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }

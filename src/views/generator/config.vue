@@ -214,22 +214,22 @@ export default {
       form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: 'false', apiPath: '', prefix: '', apiAlias: null },
       rules: {
         author: [
-          { required: true, message: i18n.t('genConfig.authorRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.authorRequired'), trigger: 'blur' }
         ],
         pack: [
-          { required: true, message: i18n.t('genConfig.packRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.packRequired'), trigger: 'blur' }
         ],
         moduleName: [
-          { required: true, message: i18n.t('genConfig.moduleNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.moduleNameRequired'), trigger: 'blur' }
         ],
         path: [
-          { required: true, message: i18n.t('genConfig.pathRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.pathRequired'), trigger: 'blur' }
         ],
         apiAlias: [
-          { required: true, message: i18n.t('genConfig.apiAliasRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.apiAliasRequired'), trigger: 'blur' }
         ],
         cover: [
-          { required: true, message: i18n.t('genConfig.coverRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.coverRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -259,7 +259,7 @@ export default {
       this.columnLoading = true
       save(this.data).then(res => {
         if (res.code === 0) {
-          this.notify(i18n.t('genConfig.saveOK'), 'success')
+          this.notify(i18n.global.t('genConfig.saveOK'), 'success')
           this.columnLoading = false
         } else {
           this.columnLoading = false
@@ -276,7 +276,7 @@ export default {
           this.configLoading = true
           update(this.form).then(res => {
             if (res.code === 0) {
-              this.notify(i18n.t('genConfig.saveOK'), 'success')
+              this.notify(i18n.global.t('genConfig.saveOK'), 'success')
               this.form = res.data
               this.form.cover = this.form.cover.toString()
               this.configLoading = false
@@ -296,7 +296,7 @@ export default {
       sync([this.tableName]).then(r => {
         if (r.code === 0) {
           this.init()
-          this.notify(i18n.t('codegen.syncOK'), 'success')
+          this.notify(i18n.global.t('codegen.syncOK'), 'success')
           this.syncLoading = false
         } else {
           this.syncLoading = false
@@ -310,12 +310,12 @@ export default {
       this.genLoading = true
       save(this.data).then(res => {
         if (res.code === 0) {
-          this.notify(i18n.t('genConfig.saveOK'), 'success')
+          this.notify(i18n.global.t('genConfig.saveOK'), 'success')
           // 生成代码
           generator(this.tableName, 0).then(r => {
             if (r.code === 0) {
               this.genLoading = false
-              this.notify(i18n.t('codegen.generateOK'), 'success')
+              this.notify(i18n.global.t('codegen.generateOK'), 'success')
             } else {
               this.genLoading = false
               crud.notify(r.msg, 'error')
@@ -346,7 +346,7 @@ export default {
 </style>
 
 <style scoped>
-  /deep/ .input-with-select .el-input-group__prepend {
+:deep(.input-with-select .el-input-group__prepend) {
     background-color: #fff;
   }
 </style>

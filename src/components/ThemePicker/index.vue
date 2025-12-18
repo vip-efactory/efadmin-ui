@@ -4,163 +4,126 @@
     :predefine="['#409EFF', '#1890ff', '#304156','#212121','#11a983', '#13c2c2', '#6959CD', '#f5222d', ]"
     class="theme-picker"
     popper-class="theme-picker-dropdown"
+    teleport="body"
+    @mousedown.stop
+    @click.stop
+    @touchstart.stop
   />
 </template>
 
 <script>
-const version = require('element-ui/package.json').version // element-ui version from node_modules
 const ORIGINAL_THEME = '#409EFF' // default color
 
 export default {
+  name: 'ThemePicker',
   data() {
     return {
-      chalk: '', // content of theme-chalk css
-      theme: ''
+      theme: ORIGINAL_THEME
     }
   },
   computed: {
+    // 从Vuex获取已保存的主题色
     defaultTheme() {
-      return this.$store.state.settings.theme
+      return this.$store.state.settings.theme || ORIGINAL_THEME
     }
   },
   watch: {
+    // 初始化/同步Vuex中的主题色到组件
     defaultTheme: {
-      handler: function(val, oldVal) {
+      handler(val) {
         this.theme = val
+        // 初始化时同步CSS变量
+        this.setCssVariable(val)
       },
       immediate: true
     },
-    async theme(val) {
-      const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
-      if (typeof val !== 'string') return
-      const themeCluster = this.getThemeCluster(val.replace('#', ''))
-      const originalCluster = this.getThemeCluster(oldVal.replace('#', ''))
-      console.log(themeCluster, originalCluster)
+    // 监听主题色变化，更新全局样式（Element Plus 核心逻辑）
+    theme(val) {
+      if (!val || typeof val !== 'string') return
 
-      const $message = this.$message({
-        message: ' Compiling the theme',
+      // 显示加载提示
+      const loadingMsg = this.$message({
+        message: '正在切换主题色...',
         customClass: 'theme-message',
         type: 'success',
         duration: 0,
-        iconClass: 'el-icon-loading'
+        icon: 'el-icon-loading' // Element Plus 图标属性调整
       })
 
-      const getHandler = (variable, id) => {
-        return () => {
-          const originalCluster = this.getThemeCluster(ORIGINAL_THEME.replace('#', ''))
-          const newStyle = this.updateStyle(this[variable], originalCluster, themeCluster)
-
-          let styleTag = document.getElementById(id)
-          if (!styleTag) {
-            styleTag = document.createElement('style')
-            styleTag.setAttribute('id', id)
-            document.head.appendChild(styleTag)
-          }
-          styleTag.innerText = newStyle
-        }
+      try {
+        // 核心：更新Element Plus的CSS变量
+        this.setCssVariable(val)
+        // 通知父组件更新Vuex
+        this.$emit('change', val)
+      } catch (e) {
+        this.$message.error('主题色切换失败')
+        console.error(e)
+      } finally {
+        // 关闭加载提示
+        loadingMsg.close()
       }
-
-      if (!this.chalk) {
-        const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
-        await this.getCSSString(url, 'chalk')
-      }
-
-      const chalkHandler = getHandler('chalk', 'chalk-style')
-
-      chalkHandler()
-
-      const styles = [].slice.call(document.querySelectorAll('style'))
-        .filter(style => {
-          const text = style.innerText
-          return new RegExp(oldVal, 'i').test(text) && !/Chalk Variables/.test(text)
-        })
-      styles.forEach(style => {
-        const { innerText } = style
-        if (typeof innerText !== 'string') return
-        style.innerText = this.updateStyle(innerText, originalCluster, themeCluster)
-      })
-
-      this.$emit('change', val)
-
-      $message.close()
     }
   },
-
   methods: {
-    updateStyle(style, oldCluster, newCluster) {
-      let newStyle = style
-      oldCluster.forEach((color, index) => {
-        newStyle = newStyle.replace(new RegExp(color, 'ig'), newCluster[index])
-      })
-      return newStyle
+    // 设置Element Plus CSS变量（核心方法）
+    setCssVariable(primaryColor) {
+      const docEl = document.documentElement
+      // 主色
+      docEl.style.setProperty('--el-color-primary', primaryColor)
+      // 主色浅3度
+      docEl.style.setProperty('--el-color-primary-light-3', this.tintColor(primaryColor.replace('#', ''), 0.3))
+      // 主色浅5度
+      docEl.style.setProperty('--el-color-primary-light-5', this.tintColor(primaryColor.replace('#', ''), 0.5))
+      // 主色浅7度
+      docEl.style.setProperty('--el-color-primary-light-7', this.tintColor(primaryColor.replace('#', ''), 0.7))
+      // 主色深2度
+      docEl.style.setProperty('--el-color-primary-dark-2', this.shadeColor(primaryColor.replace('#', ''), 0.2))
     },
+    // 计算浅色（辅助方法）
+    tintColor(color, tint) {
+      let r = parseInt(color.slice(0, 2), 16)
+      let g = parseInt(color.slice(2, 4), 16)
+      let b = parseInt(color.slice(4, 6), 16)
 
-    getCSSString(url, variable) {
-      return new Promise(resolve => {
-        const xhr = new XMLHttpRequest()
-        xhr.onreadystatechange = () => {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, '')
-            resolve()
-          }
-        }
-        xhr.open('GET', url)
-        xhr.send()
-      })
+      r += Math.round(tint * (255 - r))
+      g += Math.round(tint * (255 - g))
+      b += Math.round(tint * (255 - b))
+
+      r = r.toString(16).padStart(2, '0')
+      g = g.toString(16).padStart(2, '0')
+      b = b.toString(16).padStart(2, '0')
+
+      return `#${r}${g}${b}`
     },
+    // 计算深色（辅助方法）
+    shadeColor(color, shade) {
+      let r = parseInt(color.slice(0, 2), 16)
+      let g = parseInt(color.slice(2, 4), 16)
+      let b = parseInt(color.slice(4, 6), 16)
 
-    getThemeCluster(theme) {
-      const tintColor = (color, tint) => {
-        let red = parseInt(color.slice(0, 2), 16)
-        let green = parseInt(color.slice(2, 4), 16)
-        let blue = parseInt(color.slice(4, 6), 16)
+      r = Math.round((1 - shade) * r)
+      g = Math.round((1 - shade) * g)
+      b = Math.round((1 - shade) * b)
 
-        if (tint === 0) { // when primary color is in its rgb space
-          return [red, green, blue].join(',')
-        } else {
-          red += Math.round(tint * (255 - red))
-          green += Math.round(tint * (255 - green))
-          blue += Math.round(tint * (255 - blue))
+      r = r.toString(16).padStart(2, '0')
+      g = g.toString(16).padStart(2, '0')
+      b = b.toString(16).padStart(2, '0')
 
-          red = red.toString(16)
-          green = green.toString(16)
-          blue = blue.toString(16)
-
-          return `#${red}${green}${blue}`
-        }
-      }
-
-      const shadeColor = (color, shade) => {
-        let red = parseInt(color.slice(0, 2), 16)
-        let green = parseInt(color.slice(2, 4), 16)
-        let blue = parseInt(color.slice(4, 6), 16)
-
-        red = Math.round((1 - shade) * red)
-        green = Math.round((1 - shade) * green)
-        blue = Math.round((1 - shade) * blue)
-
-        red = red.toString(16)
-        green = green.toString(16)
-        blue = blue.toString(16)
-
-        return `#${red}${green}${blue}`
-      }
-
-      const clusters = [theme]
-      for (let i = 0; i <= 9; i++) {
-        clusters.push(tintColor(theme, Number((i / 10).toFixed(2))))
-      }
-      clusters.push(shadeColor(theme, 0.1))
-      return clusters
+      return `#${r}${g}${b}`
     }
   }
 }
 </script>
 
 <style>
-.theme-message,
+/* 确保颜色选择器下拉层层级最高，显示在所有弹窗上方 */
 .theme-picker-dropdown {
-  z-index: 99999 !important;
+  z-index: 999999 !important;
+  overflow: visible !important;
+}
+
+.theme-message {
+  z-index: 999999 !important;
 }
 
 .theme-picker .el-color-picker__trigger {
@@ -169,6 +132,7 @@ export default {
   padding: 2px;
 }
 
+/* 隐藏Element Plus颜色选择器的无用链接按钮 */
 .theme-picker-dropdown .el-color-dropdown__link-btn {
   display: none;
 }

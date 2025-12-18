@@ -46,19 +46,19 @@ export default {
       loading: false, form: { accessKey: '', secretKey: '', bucket: '', host: '', zone: '', type: '' },
       rules: {
         accessKey: [
-          { required: true, message: i18n.t('storage.accessKeyRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.accessKeyRequired'), trigger: 'blur' }
         ],
         secretKey: [
-          { required: true, message: i18n.t('storage.secretKeyRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.secretKeyRequired'), trigger: 'blur' }
         ],
         bucket: [
-          { required: true, message: i18n.t('storage.bucketRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.bucketRequired'), trigger: 'blur' }
         ],
         host: [
-          { required: true, message: i18n.t('storage.hostRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.hostRequired'), trigger: 'blur' }
         ],
         type: [
-          { required: true, message: i18n.t('storage.bucketTypeRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.bucketTypeRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -78,7 +78,7 @@ export default {
           update(this.form).then(res => {
             if (res.code === 0) {
               this.$notify({
-                title: i18n.t('crud.editSuccess'),
+                title: i18n.global.t('crud.editSuccess'),
                 type: 'success',
                 duration: 2500
               })

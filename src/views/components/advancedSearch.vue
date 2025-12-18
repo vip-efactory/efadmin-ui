@@ -5,16 +5,14 @@
       <el-row>
         <el-col :span="16">
           <el-form-item :label="$t('advanceSearch.globalTypeLabel')" :label-width="formLabelWidth">
-            <template>
-              <el-radio-group v-model="globalType">
-                <el-radio :label="0" :title="$t('advanceSearch.globalTypeTitle0')">{{ $t('advanceSearch.typeSingle') }}
-                </el-radio>
-                <el-radio :label="1" :title="$t('advanceSearch.globalTypeTitle1')">{{ $t('advanceSearch.typeMulti') }}
-                </el-radio>
-                <el-radio :label="2" :title="$t('advanceSearch.globalTypeTitle2')">{{ $t('advanceSearch.typeGroup') }}
-                </el-radio>
-              </el-radio-group>
-            </template>
+            <el-radio-group v-model="globalType">
+              <el-radio :label="0" :title="$t('advanceSearch.globalTypeTitle0')">{{ $t('advanceSearch.typeSingle') }}
+              </el-radio>
+              <el-radio :label="1" :title="$t('advanceSearch.globalTypeTitle1')">{{ $t('advanceSearch.typeMulti') }}
+              </el-radio>
+              <el-radio :label="2" :title="$t('advanceSearch.globalTypeTitle2')">{{ $t('advanceSearch.typeGroup') }}
+              </el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="4">
@@ -285,8 +283,20 @@ import i18n from '../../lang'
 
 export default {
   name: 'Modal',
+  // 修复后的 props 定义（解决所有 3 个警告）
   props: {
-    modalObj: Object
+    // 1. 规范 modalObj 的定义（type + 默认值）
+    modalObj: {
+      type: Object, // 显式定义类型
+      required: false, // 非必传（可选，默认false）
+      default: () => ({}) // 对象默认值必须用函数返回
+    },
+    // 2. 若有 default 这个 prop（非笔误），规范定义；若无则删除这行！
+    default: {
+      type: [String, Number, Boolean, Object], // 根据实际用途定义类型（比如 String）
+      required: false,
+      default: '' // 给默认值（比如空字符串，根据类型调整）
+    }
   },
   data() {
     return {
@@ -311,7 +321,7 @@ export default {
       // 时间范围的默认选择项
       pickerOptions: {
         shortcuts: [{
-          text: i18n.t('advanceSearch.recentWeek'),
+          text: i18n.global.t('advanceSearch.recentWeek'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -319,7 +329,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: i18n.t('advanceSearch.recentMonth'),
+          text: i18n.global.t('advanceSearch.recentMonth'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -327,7 +337,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: i18n.t('advanceSearch.recent3Month'),
+          text: i18n.global.t('advanceSearch.recent3Month'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -366,12 +376,12 @@ export default {
     handleItemChk(item) {
       // 条件名称不允许为空
       if (item.name === '') {
-        this.$message(i18n.t('advanceSearch.nameChk'), 'warning')
+        this.$message(i18n.global.t('advanceSearch.nameChk'), 'warning')
         return false
       }
       // 不是非空查询的时候，不允许值为空
       if (item.searchType !== 8 && item.searchType !== 9 && item.val === '') {
-        this.$message(i18n.t('advanceSearch.valueEmptyChk'), 'warning')
+        this.$message(i18n.global.t('advanceSearch.valueEmptyChk'), 'warning')
         return false
       }
       // 如果是范围查询
@@ -383,14 +393,14 @@ export default {
           item.val2 = value[1]
         }
         if (item.val2 === '') {
-          this.$message(i18n.t('advanceSearch.endValueEmptyChk'), 'warning')
+          this.$message(i18n.global.t('advanceSearch.endValueEmptyChk'), 'warning')
           return false
         }
       }
 
       // 检查是否为单条件查询
       if (this.globalType === 0 && this.conditions.length > 0) {
-        this.$message(i18n.t('advanceSearch.singleItemChk'), 'warning')
+        this.$message(i18n.global.t('advanceSearch.singleItemChk'), 'warning')
         return false
       }
 

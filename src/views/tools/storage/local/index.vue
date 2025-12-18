@@ -2,7 +2,7 @@
   <div class="app-container" style="padding: 8px;">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
         <el-input v-model="query.blurry" clearable size="small" :placeholder="$t('storage.localSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
@@ -33,7 +33,14 @@
       </crudOperation>
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.add ? $t('storage.fileUpload') : $t('storage.editFile')" width="500px">
+    <el-dialog
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU?.()"
+      :visible.sync="dialogVisible"
+      :title="crud?.status?.add ? $t('storage.fileUpload') : $t('storage.editFile')"
+      width="500px"
+    >
       <el-form ref="form" :model="form" size="small" label-width="80px">
         <el-form-item :label="$t('storage.name')">
           <el-input v-model="form.name" style="width: 370px;" />
@@ -62,7 +69,14 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      style="width: 100%;"
+      @selection-change="crud?.selectionChangeHandler"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('storage.name')" sortable="custom">
         <template slot-scope="scope">
@@ -126,7 +140,7 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.t('storage.type') }, { fieldName: 'operate', labelName: i18n.t('storage.operate') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.global.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.global.t('storage.type') }, { fieldName: 'operate', labelName: i18n.global.t('storage.operate') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: '文件', url: 'api/localStorage/page', crudMethod: { ...crudFile }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: '' }
 export default {
@@ -150,10 +164,25 @@ export default {
     ...mapGetters([
       'baseApi',
       'fileUploadApi'
-    ])
+    ]),
+    dialogVisible: {
+      get() {
+        // 用可选链防护crud、status的访问，默认cu为0
+        return (this.crud?.status?.cu ?? 0) > 0
+      },
+      set(newVal) {
+        // 先确认crud、status存在，再修改cu
+        if (!newVal && this.crud?.status) {
+          this.crud.status.cu = 0
+        }
+      }
+    }
   },
   created() {
-    this.crud.optShow.add = false
+    // 先确认crud已初始化，再修改optShow属性
+    if (this.crud) {
+      this.crud.optShow.add = false
+    }
   },
   methods: {
     // 上传文件
@@ -165,13 +194,13 @@ export default {
       isLt2M = file.size / 1024 / 1024 < 100
       if (!isLt2M) {
         this.loading = false
-        this.$message.error(i18n.t('storage.sizeLimit'))
+        this.$message.error(i18n.global.t('storage.sizeLimit'))
       }
       this.form.name = file.name
       return isLt2M
     },
     handleSuccess(response, file, fileList) {
-      this.crud.notify(i18n.t('storage.uploadOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+      this.crud.notify(i18n.global.t('storage.uploadOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
       this.$refs.upload.clearFiles()
       this.crud.status.add = CRUD.STATUS.NORMAL
       this.crud.resetForm()
@@ -192,10 +221,10 @@ export default {
 </script>
 
 <style scoped>
-  /deep/ .el-image__error, .el-image__placeholder{
-    background: none;
-  }
-  /deep/ .el-image-viewer__wrapper{
+:deep(.el-image__error, .el-image__placeholder) {
+  background: none;
+}
+:deep(el-image-viewer__wrapper) {
     top: 55px;
   }
 </style>

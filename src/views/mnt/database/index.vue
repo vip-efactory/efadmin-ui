@@ -2,7 +2,7 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
         <el-input v-model="query.blurry" clearable :placeholder="$t('crud.fuzzySearch')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
@@ -34,7 +34,14 @@
     </div>
     <!--表单组件-->
     <eForm ref="execute" :database-info="currentRow" />
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="570px">
+    <el-dialog
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU()"
+      :visible.sync="dialogVisible"
+      :title="crud?.status?.title"
+      width="570px"
+    >
       <el-form ref="form" :model="form" :rules="rules" size="small" label-width="130px">
         <el-form-item :label="$t('db.name')" prop="name">
           <el-input v-model="form.name" style="width: 370px" />
@@ -56,7 +63,17 @@
       </div>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row stripe style="width: 100%" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      highlight-current-row
+      stripe
+      style="width: 100%"
+      @selection-change="crud?.selectionChangeHandler"
+      @current-change="handleCurrentChange"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" prop="name" width="140px" :label="$t('db.name')" sortable="custom" />
       <el-table-column v-if="columns.visible('jdbcUrl')" prop="jdbcUrl" :label="$t('db.jdbcUrl')" sortable="custom" />
@@ -92,8 +109,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('db.name') }, { fieldName: 'jdbcUrl', labelName: i18n.t('db.jdbcUrl') }, { fieldName: 'userName', labelName: i18n.t('db.userName') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('db.TITLE'), url: 'api/database/page', exportUrl: 'api/database/download', crudMethod: { ...crudDatabase }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('db.name') }, { fieldName: 'jdbcUrl', labelName: i18n.global.t('db.jdbcUrl') }, { fieldName: 'userName', labelName: i18n.global.t('db.userName') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('db.TITLE'), url: 'api/database/page', exportUrl: 'api/database/download', crudMethod: { ...crudDatabase }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, jdbcUrl: 'jdbc:mysql://', userName: null, pwd: null }
 export default {
   name: 'DataBase',
@@ -112,17 +129,31 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('db.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('db.nameRequired'), trigger: 'blur' }
         ],
         jdbcUrl: [
-          { required: true, message: i18n.t('db.jdbcUrlRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('db.jdbcUrlRequired'), trigger: 'blur' }
         ],
         userName: [
-          { required: true, message: i18n.t('db.userNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('db.userNameRequired'), trigger: 'blur' }
         ],
         pwd: [
-          { required: true, message: i18n.t('db.pwdRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('db.pwdRequired'), trigger: 'blur' }
         ]
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 用可选链确保crud、status存在，空值时兜底返回false
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 仅当newVal为false，且crud、status都存在时，才修改cu
+        if (!newVal && this.crud?.status) {
+          this.crud.status.cu = 0
+        }
       }
     }
   },
@@ -134,7 +165,7 @@ export default {
           testDbConnect(this.form).then((res) => {
             this.loading = false
             if (res.code === 0) {
-              this.crud.notify(res.data ? i18n.t('common.connectOK') : i18n.t('common.connectFailed'), res.data ? 'success' : 'error')
+              this.crud.notify(res.data ? i18n.global.t('common.connectOK') : i18n.global.t('common.connectFailed'), res.data ? 'success' : 'error')
             } else {
               this.crud.notify(res.msg, 'error')
             }

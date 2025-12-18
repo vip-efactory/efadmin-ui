@@ -2,7 +2,8 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <!-- 把 v-if="crud.props.searchToggle" 改成先判断crud存在 -->
+      <div v-if="crud && crud.props.searchToggle">
         <!-- 搜索 -->
         <el-input v-model="query.blurry" size="small" clearable :placeholder="$t('role.searchPlaceholder')" :title="$t('role.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
@@ -21,7 +22,14 @@
       <crudOperation :permission="permission" />
     </div>
     <!-- 表单渲染 -->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="630px">
+    <el-dialog
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud && crud.cancelCU()"
+      :visible.sync="dialogVisible"
+      :title="crud?.status?.title"
+      width="630px"
+    >
       <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="130px">
         <el-form-item :label="$t('role.name')" prop="name">
           <el-input v-model="form.name" style="width: 145px;" />
@@ -61,7 +69,16 @@
           <div slot="header" class="clearfix">
             <span class="role-span">{{ $t('role.roleList') }}</span>
           </div>
-          <el-table ref="table" v-loading="crud.loading" highlight-current-row style="width: 100%;" :data="crud.data" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
+          <el-table
+            ref="table"
+            v-loading="crud?.loading"
+            highlight-current-row
+            style="width: 100%;"
+            :data="crud?.data"
+            @selection-change="crud?.selectionChangeHandler"
+            @current-change="handleCurrentChange"
+            @sort-change="crud?.doTitleOrder"
+          >
             <el-table-column :selectable="checkboxT" type="selection" width="55" />
             <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('role.name')" sortable="custom" />
             <el-table-column v-if="columns.visible('dataScope')" prop="dataScope" :label="$t('role.dataScope')" sortable="custom" />
@@ -129,13 +146,13 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('role.name') }, { fieldName: 'dataScope', labelName: i18n.t('role.dataScope') }, { fieldName: 'permission', labelName: i18n.t('role.permission') }, { fieldName: 'level', labelName: i18n.t('role.level'), type: 'number' }, { fieldName: 'remark', labelName: i18n.t('role.remark') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('role.TITLE'), url: 'api/roles/page', exportUrl: 'api/roles/download', sort: 'level,asc', crudMethod: { ...crudRoles }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('role.name') }, { fieldName: 'dataScope', labelName: i18n.global.t('role.dataScope') }, { fieldName: 'permission', labelName: i18n.global.t('role.permission') }, { fieldName: 'level', labelName: i18n.global.t('role.level'), type: 'number' }, { fieldName: 'remark', labelName: i18n.global.t('role.remark') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('role.TITLE'), url: 'api/roles/page', exportUrl: 'api/roles/download', sort: 'level,asc', crudMethod: { ...crudRoles }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, depts: [], remark: null, dataScope: '全部', level: 3, permission: null }
 export default {
   name: 'Role',
@@ -154,11 +171,27 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('role.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('role.nameRequired'), trigger: 'blur' }
         ],
         permission: [
-          { required: true, message: i18n.t('role.permissionRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('role.permissionRequired'), trigger: 'blur' }
         ]
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 先判断crud和status是否存在，不存在则返回默认false
+        return this.crud && this.crud.status && this.crud.status.cu > 0
+        // 也可以用可选链（更简洁，需确保项目支持ES2020+）：
+        // return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 只有crud和status存在时，才修改cu的值
+        if (!newVal && this.crud && this.crud.status) {
+          this.crud.status.cu = 0
+        }
       }
     }
   },
@@ -172,8 +205,14 @@ export default {
         crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
       }
     })
+  },
+  // 新增mounted钩子，执行crud相关操作
+  mounted() {
     this.$nextTick(() => {
-      this.crud.toQuery()
+      // 加安全判断，避免crud未初始化的情况
+      if (this.crud) {
+        this.crud.toQuery()
+      }
     })
   },
   methods: {
@@ -195,7 +234,7 @@ export default {
     [CRUD.HOOK.afterValidateCU](crud) {
       if (crud.form.dataScope === '自定义' && crud.form.depts.length === 0) {
         this.$message({
-          message: i18n.t('role.customChk'),
+          message: i18n.global.t('role.customChk'),
           type: 'warning'
         })
         return false
@@ -267,7 +306,7 @@ export default {
       })
       crudRoles.editMenu(role).then(res => {
         if (res.code === 0) {
-          this.crud.notify(i18n.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(i18n.global.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.menuLoading = false
           this.update()
         } else {
@@ -326,7 +365,7 @@ export default {
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
+:deep(.el-input-number .el-input__inner) {
     text-align: left;
   }
 </style>

@@ -23,9 +23,11 @@ export default {
   methods: {
     tabClick(name) {
       if (this.activeName === 'first') {
-        this.$refs.local.crud.toQuery()
+        // 逐层可选链防护：先确认$refs.local存在，再确认crud存在，最后调用toQuery
+        this.$refs.local?.crud?.toQuery()
       } else {
-        this.$refs.qiNiu.crud.toQuery()
+        // 同理防护$refs.qiNiu和对应的crud
+        this.$refs.qiNiu?.crud?.toQuery()
       }
     }
   }

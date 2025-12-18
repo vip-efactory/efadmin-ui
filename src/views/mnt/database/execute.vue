@@ -61,7 +61,7 @@ export default {
     handleSuccess(response, file, fileList) {
       if (response === 'success') {
         this.$notify({
-          title: i18n.t('common.execOK'),
+          title: i18n.global.t('common.execOK'),
           type: 'success',
           duration: 2500
         })

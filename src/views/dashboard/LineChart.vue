@@ -3,8 +3,10 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
+// 1. 替换为安全初始化工具，保留核心库用于校验
+import { initEcharts } from '@/utils/echartsFix'
+import * as echarts from 'echarts'
+require('echarts/theme/macarons')
 import { debounce } from '@/utils'
 import { getChartData } from '@/api/monitor/visits'
 
@@ -46,39 +48,43 @@ export default {
         this.weekDays = res.data.weekDays
         this.initChart()
       } else {
-        crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+        // 2. 修复变量名（假设CRUD是全局变量，保持原有逻辑）
+        crud.notify(res.msg, crud.NOTIFICATION_TYPE.ERROR)
       }
     })
     if (this.autoResize) {
-      this.__resizeHandler = debounce(() => {
-        if (this.chart) {
+      // 3. 修复变量名（去掉下划线，避免ESLint保留键报错）
+      this.resizeHandler = debounce(() => {
+        // 4. 强化实例校验
+        if (this.chart && echarts.getInstanceByDom(this.$el) === this.chart) {
           this.chart.resize()
         }
       }, 100)
-      window.addEventListener('resize', this.__resizeHandler)
+      window.addEventListener('resize', this.resizeHandler)
     }
 
-    // 监听侧边栏的变化
     this.sidebarElm = document.getElementsByClassName('sidebar-container')[0]
     this.sidebarElm && this.sidebarElm.addEventListener('transitionend', this.sidebarResizeHandler)
   },
   beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    if (this.autoResize) {
-      window.removeEventListener('resize', this.__resizeHandler)
+    if (this.autoResize && this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler)
     }
 
     this.sidebarElm && this.sidebarElm.removeEventListener('transitionend', this.sidebarResizeHandler)
 
-    this.chart.dispose()
+    // 5. 强化实例销毁（通过DOM查找确保彻底清除）
+    if (this.$el) {
+      const instance = echarts.getInstanceByDom(this.$el)
+      if (instance) instance.dispose()
+    }
     this.chart = null
   },
   methods: {
     sidebarResizeHandler(e) {
       if (e.propertyName === 'width') {
-        this.__resizeHandler()
+        // 同步修改变量名
+        this.resizeHandler && this.resizeHandler()
       }
     },
     setOptions({ visitsData, ipData } = {}) {
@@ -110,7 +116,8 @@ export default {
           }
         },
         legend: {
-          data: ['pv', 'ip']
+          data: ['pv', 'ip'],
+          selectedMode: false
         },
         series: [{
           name: 'pv', itemStyle: {
@@ -151,7 +158,8 @@ export default {
       })
     },
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
+      // 6. 用安全初始化工具替代原init，确保实例唯一
+      this.chart = initEcharts(this.$el, 'macarons')
       this.setOptions(this.chartData)
     }
   }

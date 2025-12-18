@@ -36,22 +36,47 @@
         <el-table-column prop="label" :label="$t('dictDetail.label')" />
         <el-table-column prop="value" :label="$t('dictDetail.value')" />
         <el-table-column prop="sort" :label="$t('dictDetail.sort')" />
-        <el-table-column v-if="checkPermission(['admin','dict:edit','dict:del'])" :label="$t('be.operate')" width="230px" align="center" fixed="right">
-          <template slot-scope="scope">
-            <el-button v-permission="['admin','dict:edit']" size="mini" type="primary" icon="el-icon-edit" @click="showEditFormDialog(scope.row)" />
-            <el-popover
-              :ref="scope.row.id"
+        <el-table-column
+          v-if="checkPermission(['admin','dict:edit','dict:del'])"
+          :label="$t('be.operate')"
+          width="230px"
+          align="center"
+          fixed="right"
+        >
+          <!-- 1. 替换Vue2废弃的slot-scope为Vue3标准#default插槽 -->
+          <template #default="scope">
+            <!-- 2. 加v-if确保scope.row存在后再渲染，避免空值访问 -->
+            <div v-if="scope.row">
+              <el-button
+                v-permission="['admin','dict:edit']"
+                size="mini"
+                type="primary"
+                icon="el-icon-edit"
+                @click="showEditFormDialog(scope.row)"
+              />
+              <el-popover
+              :ref="`dictPopover_${scope.row.id}`"
               v-permission="['admin','dict:del']"
               placement="top"
               width="230"
-            >
+              >
               <p>{{ $t('dictDetail.deleteTips') }}</p>
               <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">{{ $t('crud.cancel') }}</el-button>
-                <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                @click="$refs[`dictPopover_${scope.row.id}`]?.doClose()"
+                >{{ $t('crud.cancel') }}</el-button>
+                <el-button
+                  :loading="delLoading"
+                  type="primary"
+                  size="mini"
+                  @click="delMethod(scope.row.id)"
+                >{{ $t('crud.confirm') }}</el-button>
               </div>
               <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini" />
-            </el-popover>
+              </el-popover>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -77,17 +102,17 @@ export default {
   mixins: [crud],
   data() {
     return {
-      title: i18n.t('dictDetail.TITLE'),
+      title: i18n.global.t('dictDetail.TITLE'),
       sort: ['sort,asc', 'id,desc'],
       crudMethod: { ...crudDictDetail },
       dictName: '',
       form: { id: null, label: null, value: null, dict: { id: null }, sort: 999 },
       rules: {
         label: [
-          { required: true, message: i18n.t('dictDetail.labelRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('dictDetail.labelRequired'), trigger: 'blur' }
         ],
         sort: [
-          { required: true, message: i18n.t('dictDetail.sortRequired'), trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.global.t('dictDetail.sortRequired'), trigger: 'blur', type: 'number' }
         ]
       }
     }
@@ -106,7 +131,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
+:deep(.el-input-number .el-input__inner) {
     text-align: left;
   }
 </style>

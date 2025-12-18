@@ -86,8 +86,8 @@
 <script>
 import CRUD, { form } from '@crud/crud'
 import { getDepts } from '@/api/system/dept'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import i18n from '../../../../lang'
 
 const defaultForm = {
@@ -113,12 +113,12 @@ export default {
       depts: [],
       rules: {
         name: [
-          { required: true, message: i18n.t('job.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('job.nameRequired'), trigger: 'blur' }
         ],
         sort: [
-          { required: true, message: i18n.t('job.sortRequired'), trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.global.t('job.sortRequired'), trigger: 'blur', type: 'number' }
         ],
-        dept: { required: true, message: i18n.t('job.deptRequired'), trigger: 'select' }
+        dept: { required: true, message: i18n.global.t('job.deptRequired'), trigger: 'select' }
       }
     }
   },
@@ -139,7 +139,7 @@ export default {
     [CRUD.HOOK.afterValidateCU]() {
       if (!this.form.dept.id) {
         this.$notify({
-          title: i18n.t('job.deptRequired'),
+          title: i18n.global.t('job.deptRequired'),
           type: 'warning'
         })
         return false
@@ -151,7 +151,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
+:deep(.el-input-number .el-input__inner) {
     text-align: left;
   }
 </style>
