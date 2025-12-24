@@ -1,6 +1,7 @@
 # efadmin-ui
 基于eladmin-web改造增强的项目
 基于2019-07-04的[定时任务加入漏掉的新增与编辑dialog]节点
+项目运行，基于Nodejs14.21.3
 
 20191227同步至eladmin-web的20191224的[:bookmark: v2.4 优化]节点
 
