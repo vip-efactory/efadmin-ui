@@ -4,7 +4,15 @@
     <div class="head-container">
       <div v-if="crud?.props?.searchToggle">  <!-- 用可选链防护空值 -->
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" clearable size="small" :placeholder="$t('menu.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+        <el-input
+          v-model="crud.blurry"
+          clearable
+          size="small"
+          :placeholder="$t('menu.searchPlaceholder')"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter="crud.toQuery"
+        />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -113,12 +121,12 @@
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" :show-overflow-tooltip="true" :label="$t('menu.name')" width="125px" prop="name" />
       <el-table-column v-if="columns.visible('icon')" prop="icon" :label="$t('menu.icon')" align="center" width="60px">
-        <template slot-scope="scope">
+        <template #default="scope">
           <svg-icon :icon-class="scope.row.icon" />
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('sort')" prop="sort" align="center" :label="$t('menu.sort')">
-        <template slot-scope="scope">
+        <template #default="scope">
           {{ scope.row.sort }}
         </template>
       </el-table-column>
@@ -126,7 +134,7 @@
       <el-table-column v-if="columns.visible('permission')" :show-overflow-tooltip="true" prop="permission" :label="$t('menu.permission')" />
       <el-table-column v-if="columns.visible('component')" :show-overflow-tooltip="true" prop="component" :label="$t('menu.component')" />
       <el-table-column v-if="columns.visible('iframe')" prop="iframe" :label="$t('menu.iFrame')" width="75px">
-        <template slot-scope="scope">
+        <template #default="scope">
           <!--若为true,显示对号-->
           <i v-if="scope.row.iframe" class="el-icon-check" />
           <!--          <span v-if="scope.row.iframe">{{ $t('bool.true') }}</span>-->
@@ -134,7 +142,7 @@
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('cache')" prop="cache" :label="$t('menu.cache')" width="75px">
-        <template slot-scope="scope">
+        <template #default="scope">
           <!--若为true,显示对号-->
           <i v-if="scope.row.cache" class="el-icon-check" />
           <!--          <span v-if="scope.row.cache">{{ $t('bool.true') }}</span>-->
@@ -142,7 +150,7 @@
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('hidden')" prop="hidden" :label="$t('menu.hidden')" width="75px">
-        <template slot-scope="scope">
+        <template #default="scope">
           <!--若为true,显示对号-->
           <i v-if="scope.row.hidden" />
           <i v-else class="el-icon-check" />
@@ -151,12 +159,12 @@
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" width="135px">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','menu:edit','menu:del']" :label="$t('be.operate')" width="130px" align="center" fixed="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"

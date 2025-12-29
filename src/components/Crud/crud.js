@@ -487,7 +487,7 @@ function callVmHook(crud, hook) {
   return ret
 }
 
-// 组件配置：Presenter（主页）
+// crud.js 中的 presenter 函数
 function presenter(crudInstance) {
   if (!crudInstance) {
     console.error('presenter 必须传入 CRUD 实例')
@@ -501,27 +501,28 @@ function presenter(crudInstance) {
     }
   }
   return {
-    inject: { crud: { default: () => crudInstance }},
-    provide() {
-      return {
-        crud: this.crud || crudInstance,
-        'crud.query': (this.crud || crudInstance).query,
-        'crud.page': (this.crud || crudInstance).page,
-        'crud.form': (this.crud || crudInstance).form
-      }
-    },
+    // 关键修改：直接把 crudInstance 作为组件的 data 属性（不再用 inject）
     data() {
       return {
+        crud: crudInstance, // 直接挂载传入的 CRUD 实例到组件
         searchToggle: true,
         columns: obColumns({})
       }
     },
+    // 提供给子组件的依赖（保持不变）
+    provide() {
+      return {
+        crud: crudInstance,
+        'crud.query': crudInstance.query,
+        'crud.page': crudInstance.page,
+        'crud.form': crudInstance.form
+      }
+    },
     methods: { parseTime },
     created() {
-      if (this.crud) {
-        this.crud.registerVM('presenter', this, 0)
-        this.crud.queryOnPresenterCreated && this.crud.toQuery()
-      }
+      // 现在 this.crud 就是有效的 crudInstance，无需判空
+      this.crud.registerVM('presenter', this, 0)
+      this.crud.queryOnPresenterCreated && this.crud.toQuery()
     },
     beforeUnmount() {
       this.crud?.unregisterVM(this)

@@ -34,12 +34,12 @@
       <el-table-column v-if="columns.visible('coding')" :show-overflow-tooltip="true" prop="coding" :label="$t('codegen.coding')" />
       <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" :label="$t('be.remark')" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('be.operate')" width="250px" align="center" fixed="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button size="mini" style="margin-right: 2px" type="text">
             <router-link :to="'/sys-tools/generator/preview/' + scope.row.tableName">
               {{ $t('codegen.previewBtn') }}

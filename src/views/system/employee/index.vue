@@ -116,35 +116,35 @@
         <el-table-column v-if="columns.visible('idNumber')" prop="idNumber" :label="$t('employee.idNumber')" sortable="custom" />
         <el-table-column v-if="columns.visible('phone')" prop="phone" :label="$t('employee.phone')" sortable="custom" />
         <el-table-column v-if="columns.visible('status')" prop="status" :label="$t('employee.status')" sortable="custom">
-          <template slot-scope="scope">
+          <template #default="scope">
             {{ dict.label.employee_status[scope.row.status] }}
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('dept')" prop="dept" :label="$t('employee.dept')" sortable="custom">
-          <template slot-scope="scope">
+          <template #default="scope">
             <div>{{ scope.row.dept.name }}</div>
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('job')" prop="job" :label="$t('employee.job')" sortable="custom">
-          <template slot-scope="scope">
+          <template #default="scope">
             <div>{{ scope.row.job.name }}</div>
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('remark')" prop="remark" :label="$t('be.remark')" sortable="custom" />
         <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-          <template slot-scope="scope">
+          <template #default="scope">
             <span>{{ parseTime(scope.row.createTime) }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('creatorNum')" prop="creatorNum" :label="$t('be.creatorNum')" sortable="custom" />
         <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" :label="$t('be.updateTime')" sortable="custom">
-          <template slot-scope="scope">
+          <template #default="scope">
             <span>{{ parseTime(scope.row.updateTime) }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('updaterNum')" prop="updaterNum" :label="$t('be.updaterNum')" sortable="custom" />
         <el-table-column v-permission="['admin','employee:edit','employee:del']" :label="$t('be.operate')" width="150px" align="center">
-          <template slot-scope="scope">
+          <template #default="scope">
             <udOperation
               :data="scope.row"
               :permission="permission"

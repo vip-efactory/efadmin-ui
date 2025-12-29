@@ -79,7 +79,7 @@
     >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('storage.name')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             :content="'file/' + scope.row.realName"
             placement="top-start"
@@ -100,7 +100,7 @@
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('path')" prop="path" :label="$t('storage.thumbnail')">
-        <template slot-scope="{row}">
+        <template #default="{row}">
           <el-image
             :src=" baseApi + '/file/' + row.realName"
             :preview-src-list="[baseApi + '/file/' + row.realName]"
@@ -119,7 +119,7 @@
       <el-table-column v-if="columns.visible('size')" prop="size" :label="$t('storage.size')" />
       <el-table-column v-if="columns.visible('operate')" prop="operate" :label="$t('storage.operate')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>

@@ -79,12 +79,12 @@
       <el-table-column v-if="columns.visible('jdbcUrl')" prop="jdbcUrl" :label="$t('db.jdbcUrl')" sortable="custom" />
       <el-table-column v-if="columns.visible('userName')" prop="userName" width="200px" :label="$t('db.userName')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" width="200px" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','database:edit','database:del']" :label="$t('be.operate')" width="150px" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"

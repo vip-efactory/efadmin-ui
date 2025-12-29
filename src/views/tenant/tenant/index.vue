@@ -61,25 +61,25 @@
         <el-table-column v-if="columns.visible('driverClassName')" :show-overflow-tooltip="true" prop="driverClassName" :label="$t('tenant.driverClassName')" sortable="custom" />
         <el-table-column v-if="columns.visible('jdbcUrl')" :show-overflow-tooltip="true" prop="jdbcUrl" :label="$t('tenant.jdbcUrl')" sortable="custom" />
         <el-table-column v-if="columns.visible('status')" prop="status" :label="$t('tenant.status')" sortable="custom">
-          <template slot-scope="scope">
+          <template #default="scope">
             {{ dict.label.tenant_status[scope.row.status] }}
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('remark')" prop="remark" :label="$t('be.remark')" sortable="custom" />
         <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-          <template slot-scope="scope">
+          <template #default="scope">
             <span>{{ parseTime(scope.row.createTime) }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('creatorNum')" prop="creatorNum" :label="$t('be.creatorNum')" sortable="custom" />
         <el-table-column v-if="columns.visible('updateTime')" prop="updateTime" :label="$t('be.updateTime')" sortable="custom">
-          <template slot-scope="scope">
+          <template #default="scope">
             <span>{{ parseTime(scope.row.updateTime) }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('updaterNum')" prop="updaterNum" :label="$t('be.updaterNum')" sortable="custom" />
         <el-table-column v-permission="['admin','tenant:edit','tenant:del']" :label="$t('be.operate')" width="150px" align="center">
-          <template slot-scope="scope">
+          <template #default="scope">
             <udOperation
               :data="scope.row"
               :permission="permission"

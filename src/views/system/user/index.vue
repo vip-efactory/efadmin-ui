@@ -166,12 +166,12 @@
           <el-table-column v-if="columns.visible('phone')" :show-overflow-tooltip="true" prop="phone" width="100" :label="$t('user.phone')" sortable="custom" />
           <el-table-column v-if="columns.visible('email')" :show-overflow-tooltip="true" width="125" prop="email" :label="$t('user.email')" sortable="custom" />
           <el-table-column v-if="columns.visible('dept')" :show-overflow-tooltip="true" width="110" prop="dept" :label="$t('user.job')" sortable="custom">
-            <template slot-scope="scope">
-              <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
+            <template #default="scope">
+              <div>{{ scope.row?.dept?.name || '-' }} / {{ scope.row?.job?.name || '-' }}</div>
             </template>
           </el-table-column>
           <el-table-column v-if="columns.visible('enabled')" :label="$t('user.enabled')" align="center" prop="enabled" sortable="custom">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-switch
                 v-model="scope.row.enabled"
                 :disabled="user.id === scope.row.id"
@@ -182,8 +182,8 @@
             </template>
           </el-table-column>
           <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" prop="createTime" width="140" :label="$t('be.createTime')" sortable="custom">
-            <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.createTime) }}</span>
+            <template #default="scope">
+              <span>{{ parseTime(scope.row?.createTime || '') }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -193,7 +193,7 @@
             align="center"
             fixed="right"
           >
-            <template slot-scope="scope">
+            <template #default="scope">
               <udOperation
                 :data="scope.row"
                 :permission="permission"
@@ -229,6 +229,9 @@ let userRoles = []
 // crud交由presenter持有
 const adSearchFields = [{ fieldName: 'username', labelName: i18n.global.t('user.username') }, { fieldName: 'nickName', labelName: i18n.global.t('user.nickName') }, { fieldName: 'sex', labelName: i18n.global.t('user.sex') }, { fieldName: 'phone', labelName: i18n.global.t('user.phone') }, { fieldName: 'email', labelName: i18n.global.t('user.email') }, { fieldName: 'enabled', labelName: i18n.global.t('user.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.global.t('user.TITLE'), url: 'api/users/page', exportUrl: 'api/users/download', crudMethod: { ...crudUser }, adSearchFields: adSearchFields })
+// 加日志1：查看CRUD函数是否返回有效实例
+console.log('defaultCrud创建结果：', defaultCrud)
+console.log('CRUD函数本身是否存在：', CRUD)
 const defaultForm = { id: null, username: null, nickName: null, sex: '男', email: null, enabled: 'false', roles: [], job: { id: null }, dept: { id: null }, phone: null }
 export default {
   name: 'User',
@@ -298,7 +301,8 @@ export default {
   },
   created() {
     this.getDeptDatas()
-    // 加判空，避免crud未初始化报错
+    // 加日志2：查看组件中this.crud是否注入成功
+    console.log('组件中this.crud：', this.crud)
     if (this.crud) {
       this.crud.toQuery()
       this.crud.msg.add = this.$t('user.userAddOKMsg')
@@ -348,7 +352,7 @@ export default {
     },
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
-      this.getJobs(this.form.dept.id)
+      this.getJobs(this.form?.dept?.id || null)
       userRoles = []
       const roles = []
       form.roles.forEach(function(role, index) {

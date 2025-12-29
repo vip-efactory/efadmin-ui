@@ -35,12 +35,12 @@
       <el-table-column v-if="columns.visible('ip')" prop="ip" :label="$t('deployHistory.ip')" sortable="custom" />
       <el-table-column v-if="columns.visible('deployUser')" prop="deployUser" :label="$t('deployHistory.deployUser')" sortable="custom" />
       <el-table-column v-if="columns.visible('deployDate')" prop="deployDate" :label="$t('deployHistory.deployDate')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.deployDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','deployHistory:del']" :label="$t('be.operate')" width="100px" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             :ref="scope.row.id"
             v-permission="['admin','deployHistory:del']"

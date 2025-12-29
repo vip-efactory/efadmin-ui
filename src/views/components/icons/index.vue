@@ -8,11 +8,13 @@
       <el-tab-pane label="Icons">
         <div v-for="item of svgIcons" :key="item" @click="handleClipboard(generateIconCode(item),$event)">
           <el-tooltip placement="top">
-            <div slot="content">
+            <!-- 【必改】Vue3废弃slot="content"，改为#content（v-slot:content的缩写） -->
+            <template #content>
               {{ generateIconCode(item) }}
-            </div>
+            </template>
             <div class="icon-item">
-              <svg-icon :icon-class="item" class-name="disabled" />
+              <!-- 【可选】加空值容错，避免item为空时渲染报错 -->
+              <svg-icon v-if="item" :icon-class="item" class-name="disabled" />
               <span>{{ item }}</span>
             </div>
           </el-tooltip>
@@ -21,11 +23,13 @@
       <el-tab-pane label="Element-UI Icons">
         <div v-for="item of elementIcons" :key="item" @click="handleClipboard(generateElementIconCode(item),$event)">
           <el-tooltip placement="top">
-            <div slot="content">
+            <!-- 【必改】同上，slot="content" → #content -->
+            <template #content>
               {{ generateElementIconCode(item) }}
-            </div>
+            </template>
             <div class="icon-item">
-              <i :class="'el-icon-' + item" />
+              <!-- 【可选】空值容错 + Element Plus图标类名兼容 -->
+              <i v-if="item" :class="`el-icon-${item}`" />
               <span>{{ item }}</span>
             </div>
           </el-tooltip>
@@ -56,6 +60,8 @@ export default {
       return `<i class="el-icon-${symbol}" />`
     },
     handleClipboard(text, event) {
+      // 【可选】Vue3下阻止事件冒泡，避免触发无关行为
+      event.stopPropagation()
       clipboard(text, event)
     }
   }

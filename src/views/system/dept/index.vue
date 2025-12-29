@@ -78,7 +78,7 @@
       <el-table-column :selectable="checkboxT" type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" :label="$t('dept.name')" prop="name" />
       <el-table-column v-if="columns.visible('enabled')" :label="$t('dept.enabled')" align="center" prop="enabled">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-switch
             v-model="scope.row.enabled"
             :disabled="scope.row.id === 1"
@@ -91,12 +91,12 @@
       <el-table-column v-if="columns.visible('sort')" :label="$t('dept.sort')" prop="sort" />
       <el-table-column v-if="columns.visible('remark')" :label="$t('be.remark')" prop="remark" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','dept:edit','dept:del']" :label="$t('be.operate')" width="130px" align="center" fixed="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"

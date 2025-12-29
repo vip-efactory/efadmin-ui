@@ -118,12 +118,12 @@
       <el-table-column v-if="columns.visible('app.name')" prop="app.name" :label="$t('deploy.appName')" sortable="custom" />
       <el-table-column v-if="columns.visible('servers')" prop="servers" :label="$t('deploy.server')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('deploy.deployTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','deploy:edit','deploy:del']" :label="$t('be.operate')" width="150px" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"

@@ -90,7 +90,7 @@
       <el-table-column v-if="columns.visible('height')" prop="height" :label="$t('picture.height')" sortable="custom" />
       <el-table-column v-if="columns.visible('width')" prop="width" :label="$t('picture.width')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>

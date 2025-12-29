@@ -38,18 +38,18 @@
       <el-table-column :show-overflow-tooltip="true" prop="params" width="120px" :label="$t('task.params')" />
       <el-table-column :show-overflow-tooltip="true" prop="cronExpression" :label="$t('task.cronExpression')" />
       <el-table-column prop="createTime" :label="$t('task.logExceptionDetails')" width="140px">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button v-show="scope.row.exceptionDetail" size="mini" type="text" @click="info(scope.row.exceptionDetail)">{{ $t('task.viewExceptionDetails') }}</el-button>
         </template>
       </el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" prop="time" width="140px" :label="$t('task.logConsumeTime')" />
       <el-table-column align="center" prop="isSuccess" width="100px" :label="$t('task.logState')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tag :type="scope.row.isSuccess ? 'success' : 'danger'">{{ scope.row.isSuccess ? $t('common.success') : $t('common.failure') }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column :show-overflow-tooltip="true" prop="createTime" :label="$t('be.createTime')">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>

@@ -221,7 +221,7 @@
     >
       <el-table-column :label="$t('advanceSearch.nameLabel')" prop="name" fixed width="120" />
       <el-table-column :label="$t('advanceSearch.searchTypeLabel')" width="100">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span v-if="scope.row.searchType == 0">{{ '≈≈≈' }}</span>
           <span v-else-if="scope.row.searchType == 1">{{ ' = ' }}</span>
           <span v-else-if="scope.row.searchType == 2">{{ ' a ≤ x ≤ b ' }}</span>
@@ -242,19 +242,19 @@
       <el-table-column :label="$t('advanceSearch.val2Label')" prop="val2" width="140" />
       <el-table-column :label="$t('advanceSearch.orderLabel')" prop="order" width="80" />
       <el-table-column :label="$t('advanceSearch.logicalTypeLabel')" width="100">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span v-if="scope.row.logicalType == 0">{{ $t('advanceSearch.orLabel') }}</span>
           <span v-else>{{ $t('advanceSearch.andLabel') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('advanceSearch.bracketsGroupLabel')" width="120">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span v-if="scope.row.bracketsGroup == 'DEFAULT_NO_GROUP'">{{ $t('advanceSearch.GroupItemDefault') }}</span>
           <span v-else>{{ $t('advanceSearch.GroupItemOther') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('advanceSearch.logicalTypeGroupLabel')" width="90">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span v-if="scope.row.logicalTypeGroup == 0">{{ $t('advanceSearch.orLabel') }}</span>
           <span v-else>{{ $t('advanceSearch.andLabel') }}</span>
         </template>

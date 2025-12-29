@@ -86,12 +86,12 @@
             <el-table-column v-if="columns.visible('level')" prop="level" :label="$t('role.level')" sortable="custom" />
             <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" :label="$t('role.remark')" sortable="custom" />
             <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" width="135px" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-              <template slot-scope="scope">
+              <template #default="scope">
                 <span>{{ parseTime(scope.row.createTime) }}</span>
               </template>
             </el-table-column>
             <el-table-column v-permission="['admin','roles:edit','roles:del']" :label="$t('be.operate')" width="130px" align="center" fixed="right">
-              <template slot-scope="scope">
+              <template #default="scope">
                 <udOperation
                   v-if="scope.row.level >= level"
                   :data="scope.row"

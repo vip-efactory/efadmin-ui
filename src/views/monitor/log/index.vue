@@ -36,14 +36,14 @@
       <el-table-column v-if="columns.visible('description')" prop="description" :label="$t('log.description')" sortable="custom" />
       <el-table-column v-if="columns.visible('browser')" prop="browser" :label="$t('log.browser')" sortable="custom" />
       <el-table-column v-if="columns.visible('time')" prop="time" :label="$t('log.time')" align="center" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tag v-if="scope.row.time <= 300">{{ scope.row.time }}ms</el-tag>
           <el-tag v-else-if="scope.row.time <= 1000" type="warning">{{ scope.row.time }}ms</el-tag>
           <el-tag v-else type="danger">{{ scope.row.time }}ms</el-tag>
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" width="180px" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>

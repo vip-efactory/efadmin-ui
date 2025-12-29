@@ -67,12 +67,12 @@
       <el-table-column v-if="columns.visible('port')" prop="port" :label="$t('mserver.port')" sortable="custom" />
       <el-table-column v-if="columns.visible('account')" prop="account" :label="$t('mserver.account')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','serverDeploy:edit','serverDeploy:del']" :label="$t('be.operate')" width="150px" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"

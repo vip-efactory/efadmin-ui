@@ -36,12 +36,12 @@
       <el-table-column v-if="columns.visible('description')" prop="description" :label="$t('log.description')" sortable="custom" />
       <el-table-column v-if="columns.visible('browser')" prop="browser" :label="$t('log.browser')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('log.exceptionDetail')" width="120px">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button size="mini" type="text" @click="info(scope.row.id)">{{ $t('log.viewDetail') }}</el-button>
         </template>
       </el-table-column>

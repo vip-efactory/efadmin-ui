@@ -6,7 +6,15 @@
     <div class="head-container">
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.key" clearable size="small" :placeholder="$t('storage.qiniuSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+        <el-input
+          v-model="query.key"
+          clearable
+          size="small"
+          :placeholder="$t('storage.qiniuSearchPlaceholder')"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter="crud.toQuery"
+        />
         <el-date-picker
           v-model="query.c"
           :default-time="['00:00:00','23:59:59']"
@@ -70,7 +78,7 @@
           :show-overflow-tooltip="true"
           :label="$t('storage.name')"
         >
-          <template slot-scope="scope">
+          <template #default="scope">
             <!-- 规范javascript协议写法（小写） -->
             <a href="javascript:" class="el-link el-link--primary" target="_blank" type="primary" @click="download(scope.row.id)">{{ scope.row.key }}</a>
           </template>
@@ -100,7 +108,7 @@
           v-if="columns?.visible('updateTime')"
           :label="$t('be.createTime')"
         >
-          <template slot-scope="scope">
+          <template #default="scope">
             <span>{{ parseTime(scope?.row?.updateTime) }}</span>
           </template>
         </el-table-column>

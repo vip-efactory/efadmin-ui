@@ -37,27 +37,27 @@
               <el-table-column prop="columnName" :label="$t('genConfig.fieldName')" />
               <el-table-column prop="columnType" :label="$t('genConfig.fieldType')" />
               <el-table-column prop="remark" :label="$t('genConfig.fieldDescription')">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-input v-model="data[scope.$index].remark" size="mini" class="edit-input" />
                 </template>
               </el-table-column>
               <el-table-column align="center" :label="$t('genConfig.isRequired')" width="80px">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-checkbox v-model="data[scope.$index].notNull" />
                 </template>
               </el-table-column>
               <el-table-column align="center" :label="$t('genConfig.inList')" width="70px">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-checkbox v-model="data[scope.$index].listShow" />
                 </template>
               </el-table-column>
               <el-table-column align="center" :label="$t('genConfig.inForm')" width="70px">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-checkbox v-model="data[scope.$index].formShow" />
                 </template>
               </el-table-column>
               <el-table-column :label="$t('genConfig.inputType')">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-select v-model="data[scope.$index].formType" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option
                       :label="$t('genConfig.formInput')"
@@ -83,7 +83,7 @@
                 </template>
               </el-table-column>
               <el-table-column :label="$t('genConfig.queryType')">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-select v-model="data[scope.$index].queryType" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option
                       label="="
@@ -117,7 +117,7 @@
                 </template>
               </el-table-column>
               <el-table-column :label="$t('genConfig.dateAnnotation')">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-select v-model="data[scope.$index].dateAnnotation" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option
                       :label="$t('genConfig.autoCreateTime')"
@@ -131,7 +131,7 @@
                 </template>
               </el-table-column>
               <el-table-column :label="$t('genConfig.linkDict')">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-select v-model="data[scope.$index].dictName" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option v-for="item in dicts" :key="item.id" :label="item.remark === '' ? item.name : item.remark" :value="item.name" />
                   </el-select>

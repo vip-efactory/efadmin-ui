@@ -46,12 +46,12 @@
       <el-table-column v-if="columns.visible('address')" :show-overflow-tooltip="true" prop="address" :label="$t('online.address')" sortable="custom" />
       <el-table-column v-if="columns.visible('browser')" prop="browser" :label="$t('online.browser')" sortable="custom" />
       <el-table-column v-if="columns.visible('loginTime')" prop="loginTime" :label="$t('online.loginTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.loginTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('be.operate')" width="100px" fixed="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             :ref="scope.$index"
             v-permission="['admin']"

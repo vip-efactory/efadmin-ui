@@ -86,12 +86,12 @@
       <el-table-column v-if="columns.visible('deployPath')" prop="deployPath" :label="$t('mapp.deployPath')" sortable="custom" />
       <el-table-column v-if="columns.visible('backupPath')" prop="backupPath" :label="$t('mapp.backupPath')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','app:edit','app:del']" :label="$t('be.operate')" width="150px" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"

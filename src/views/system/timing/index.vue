@@ -4,7 +4,15 @@
     <div class="head-container">
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.jobName" clearable size="small" :placeholder="$t('task.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+        <el-input
+          v-model="query.jobName"
+          clearable
+          size="small"
+          :placeholder="$t('task.searchPlaceholder')"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter="crud.toQuery"
+        />
         <el-date-picker
           v-model="query.createTime"
           :default-time="['00:00:00','23:59:59']"
@@ -91,18 +99,18 @@
       <el-table-column v-if="columns.visible('params')" :show-overflow-tooltip="true" prop="params" width="140px" :label="$t('task.params')" sortable="custom" />
       <el-table-column v-if="columns.visible('cronExpression')" :show-overflow-tooltip="true" prop="cronExpression" width="140px" :label="$t('task.cronExpression')" sortable="custom" />
       <el-table-column v-if="columns.visible('isPause')" :show-overflow-tooltip="true" prop="isPause" width="90px" :label="$t('task.isPause')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tag :type="scope.row.isPause ? 'warning' : 'success'">{{ scope.row.isPause ? $t('task.paused') : $t('task.running') }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" :label="$t('be.remark')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','timing:edit','timing:del']" :label="$t('be.operate')" width="180px" align="center" fixed="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button v-permission="['admin','timing:edit']" size="mini" style="margin-right: 3px;" type="text" @click="crud.toEdit(scope.row)">{{ $t('crud.edit') }}</el-button>
           <el-button v-permission="['admin','timing:edit']" style="margin-left: -2px" type="text" size="mini" @click="execute(scope.row.id)">{{ $t('task.execBtn') }}</el-button>
           <el-button v-permission="['admin','timing:edit']" style="margin-left: 3px" type="text" size="mini" @click="updateStatus(scope.row.id,scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn'))">
