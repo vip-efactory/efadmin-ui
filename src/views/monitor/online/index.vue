@@ -50,24 +50,44 @@
           <span>{{ parseTime(scope.row.loginTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('be.operate')" width="100px" fixed="right">
+
+      <el-table-column :label="$t('be.operate')" width="120px" fixed="right">
         <template #default="scope">
           <el-popover
-            :ref="scope.$index"
+            :ref="`pop_${scope.$index}`"
             v-permission="['admin']"
             placement="top"
             width="180"
+            trigger="click"
           >
             <p>{{ $t('online.deleteTips') }}</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="small" type="text" @click="$refs[scope.$index].doClose()">{{ $t('crud.cancel') }}</el-button>
-              <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.key, scope.$index)">{{ $t('crud.confirm') }}</el-button>
+              <el-button
+                size="small"
+                type="text"
+                @click="$refs[`pop_${scope.$index}`]?.hide?.()"
+              >
+                {{ $t('crud.cancel') }}
+              </el-button>
+              <el-button
+                :loading="delLoading"
+                type="primary"
+                size="small"
+                @click="delMethod(scope.row.key, `pop_${scope.$index}`)"
+              >
+                {{ $t('crud.confirm') }}
+              </el-button>
             </div>
-            <el-button slot="reference" size="small" type="text">{{ $t('online.forceOut') }}</el-button>
+            <template #reference>
+              <el-button size="small" type="text" style="margin-left: -10px">
+                {{ $t('online.forceOut') }}
+              </el-button>
+            </template>
           </el-popover>
         </template>
       </el-table-column>
     </el-table>
+
     <!--分页组件-->
     <pagination />
   </div>
@@ -82,7 +102,13 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ url: 'auth/online', exportUrl: 'auth/online/download', title: i18n.global.t('online.TITLE'), showAdSearchBtn: false })
+const defaultCrud = CRUD({
+  url: 'auth/online',
+  exportUrl: 'auth/online/download',
+  title: i18n.global.t('online.TITLE'),
+  showAdSearchBtn: false
+})
+
 export default {
   name: 'OnlineUser',
   components: { pagination, crudOperation, rrOperation },
@@ -90,11 +116,13 @@ export default {
   data() {
     return {
       delLoading: false,
-      permission: {}
+      permission: {},
+      columns: {
+        visible: () => true
+      }
     }
   },
   created() {
-    // 方法1：先判断crud是否存在，避免空值访问（简单场景）
     if (this.crud) {
       this.crud.msg.del = i18n.global.t('online.deleteOk')
       this.crud.optShow = {
@@ -107,40 +135,44 @@ export default {
   },
   methods: {
     doDelete(datas) {
-      this.$confirm(i18n.global.t('online.deleteContentStart') + `${datas.length}` + i18n.global.t('online.deleteContentEnd'), i18n.global.t('online.deleteTitle'), {
-        confirmButtonText: i18n.global.t('crud.confirm'),
-        cancelButtonText: i18n.global.t('crud.cancel'),
-        type: 'warning'
-      }).then(() => {
+      this.$confirm(
+        i18n.global.t('online.deleteContentStart') + `${datas.length}` + i18n.global.t('online.deleteContentEnd'),
+        i18n.global.t('online.deleteTitle'),
+        {
+          confirmButtonText: i18n.global.t('crud.confirm'),
+          cancelButtonText: i18n.global.t('crud.cancel'),
+          type: 'warning'
+        }
+      ).then(() => {
         this.delMethod(datas)
       }).catch(() => {})
     },
     // 踢出用户
-    delMethod(key, index) {
+    delMethod(key, popRefKey) {
       const ids = []
-      if (key instanceof Array) {
-        key.forEach(val => {
-          ids.push(val.key)
-        })
-      } else ids.push(key)
+      if (Array.isArray(key)) {
+        key.forEach(val => ids.push(val.key))
+      } else {
+        ids.push(key)
+      }
       this.delLoading = true
       del(ids).then(r => {
+        this.delLoading = false
         if (r.code === 0) {
-          this.delLoading = false
-          if (this.$refs[index]) {
-            this.$refs[index].doClose()
+          // 关闭当前弹出层（如果存在）
+          if (popRefKey && this.$refs[popRefKey]?.hide) {
+            this.$refs[popRefKey].hide()
           }
           this.crud.dleChangePage(1)
           this.crud.delSuccessNotify()
           this.crud.toQuery()
         } else {
-          this.delLoading = false
           crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         this.delLoading = false
-        if (this.$refs[index]) {
-          this.$refs[index].doClose()
+        if (popRefKey && this.$refs[popRefKey]?.hide) {
+          this.$refs[popRefKey].hide()
         }
       })
     }
