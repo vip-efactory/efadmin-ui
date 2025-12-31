@@ -43,9 +43,7 @@
           align="center"
           fixed="right"
         >
-          <!-- 1. 替换Vue2废弃的slot-scope为Vue3标准#default插槽 -->
           <template #default="scope">
-            <!-- 2. 加v-if确保scope.row存在后再渲染，避免空值访问 -->
             <div v-if="scope.row">
               <el-button
                 v-permission="['admin','dict:edit']"
@@ -55,26 +53,29 @@
                 @click="showEditFormDialog(scope.row)"
               />
               <el-popover
-              :ref="`dictPopover_${scope.row.id}`"
-              v-permission="['admin','dict:del']"
-              placement="top"
-              width="230"
+                :ref="`dictPopover_${scope.row.id}`"
+                v-permission="['admin','dict:del']"
+                placement="top"
+                width="230"
+                trigger="click"
               >
-              <p>{{ $t('dictDetail.deleteTips') }}</p>
-              <div style="text-align: right; margin: 0">
-                <el-button
-                  size="small"
-                  type="text"
-                @click="$refs[`dictPopover_${scope.row.id}`]?.doClose()"
-                >{{ $t('crud.cancel') }}</el-button>
-                <el-button
-                  :loading="delLoading"
-                  type="primary"
-                  size="small"
-                  @click="delMethod(scope.row.id)"
-                >{{ $t('crud.confirm') }}</el-button>
-              </div>
-              <el-button slot="reference" type="danger" icon="Delete" size="small" />
+                <p>{{ $t('dictDetail.deleteTips') }}</p>
+                <div style="text-align: right; margin: 0">
+                  <el-button
+                    size="small"
+                    type="text"
+                    @click.stop="closeRowPopover(scope.row.id)"
+                  >{{ $t('crud.cancel') }}</el-button>
+                  <el-button
+                    :loading="delLoading"
+                    type="primary"
+                    size="small"
+                    @click.stop="delMethod(scope.row.id)"
+                  >{{ $t('crud.confirm') }}</el-button>
+                </div>
+                <template #reference>
+                  <el-button type="danger" icon="Delete" size="small" />
+                </template>
               </el-popover>
             </div>
           </template>
@@ -106,6 +107,9 @@ export default {
       sort: ['sort,asc', 'id,desc'],
       crudMethod: { ...crudDictDetail },
       dictName: '',
+      dialog: false, // 新增：弹窗显示状态（crud混入可能未定义，手动补充）
+      loading: false, // 新增：提交加载状态
+      delLoading: false, // 新增：删除加载状态
       form: { id: null, label: null, value: null, dict: { id: null }, sort: 999 },
       rules: {
         label: [
@@ -118,13 +122,62 @@ export default {
     }
   },
   methods: {
-    // 获取数据前设置好接口地址
+    // 核心新增：打开字典详情新增弹窗（父组件调用该方法）
+    showAddFormDialog() {
+      // 1. 打开弹窗
+      this.dialog = true
+      // 2. 重置表单（保留所属字典ID，清空其他字段，标识新增操作）
+      const dictId = this.form.dict?.id || null // 保留选中的字典ID
+      this.form = {
+        id: null, // 清空ID，区分新增/编辑
+        label: null,
+        value: null,
+        dict: { id: dictId }, // 携带所属字典ID
+        sort: 999 // 默认排序
+      }
+      // 3. 清空表单校验状态
+      this.$nextTick(() => {
+        this.$refs.form?.clearValidate()
+      })
+    },
+    // 核心新增：关闭弹窗/取消操作（对应dialog的before-close和取消按钮）
+    cancel() {
+      this.dialog = false
+      // 清空校验状态
+      this.$nextTick(() => {
+        this.$refs.form?.clearValidate()
+      })
+    },
+    // 原有：关闭行弹窗
+    closeRowPopover(id) {
+      const key = 'dictPopover_' + id
+      let pop = this.$refs[key]
+      if (Array.isArray(pop)) pop = pop[0]
+      if (pop) {
+        if (typeof pop.hide === 'function') pop.hide()
+        else if (typeof pop.doClose === 'function') pop.doClose()
+      }
+    },
+    // 原有：初始化前设置接口地址
     beforeInit() {
       this.url = 'api/dictDetail/page'
       if (this.dictName) {
         this.params['dictName'] = this.dictName
       }
       return true
+    },
+    // 可选：编辑弹窗（crud混入可能已实现，补充确保可用）
+    showEditFormDialog(row) {
+      this.dialog = true
+      // 赋值表单（编辑状态）
+      this.form = JSON.parse(JSON.stringify(row))
+      // 确保dict.id存在
+      if (!this.form.dict) {
+        this.form.dict = { id: this.form.dictId || null }
+      }
+      this.$nextTick(() => {
+        this.$refs.form?.clearValidate()
+      })
     }
   }
 }
@@ -132,6 +185,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 :deep(.el-input-number .el-input__inner) {
-    text-align: left;
-  }
+  text-align: left;
+}
 </style>

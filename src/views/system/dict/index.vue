@@ -134,13 +134,14 @@
         </el-card>
       </el-col>
 
-      <!-- 字典详情列表 -->
+      <!-- 字典详情列表（修改按钮显示条件，解决不显示问题） -->
       <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>{{ $t('dict.dictDetails') }}</span>
+            <!-- 优化：用currentDict判断，更稳定，解决按钮不显示问题 -->
             <el-button
-              v-if="checkPermission(['admin','dict:add']) && $refs.dictDetail && $refs.dictDetail.dictName"
+              v-if="checkPermission(['admin','dict:add']) && currentDict"
               class="filter-item"
               size="small"
               style="float: right;padding: 4px 10px"
@@ -177,7 +178,8 @@ export default {
       form: { id: null, name: null, remark: null },
       rules: {
         name: [{ required: true, message: i18n.global.t('dict.nameRequired'), trigger: 'blur' }]
-      }
+      },
+      currentDict: null
     }
   },
   created() {
@@ -211,10 +213,18 @@ export default {
     },
     // 选中字典后，设置字典详情数据
     handleCurrentChange(val) {
+      this.currentDict = val // 新增：存储当前选中字典
       if (val) {
         this.$refs.dictDetail.dictName = val.name
         this.$refs.dictDetail.form.dict.id = val.id
         this.$refs.dictDetail.init()
+      } else {
+        // 取消选中时，清空子组件数据
+        if (this.$refs.dictDetail) {
+          this.$refs.dictDetail.dictName = ''
+          this.$refs.dictDetail.form.dict.id = null
+          this.$refs.dictDetail.data = []
+        }
       }
     },
     // 覆盖混入里的 delMethod，只改关闭逻辑，其余保持一致
