@@ -528,15 +528,17 @@ function presenter(crudInstance) {
       this.crud?.unregisterVM(this)
     },
     mounted() {
-      if (!this.$refs?.table || !this.crud) return
-      const columns = {}
-      this.$refs.table.columns?.forEach(e => {
-        if (e?.property && e.type === 'default') {
-          columns[e.property] = { label: e.label, visible: true }
-        }
+      this.$nextTick(() => {
+        if (!this.$refs?.table || !this.crud) return
+        const columns = {}
+        this.$refs.table.columns?.forEach(e => {
+          if (e?.property && e.type === 'default') {
+            columns[e.property] = { label: e.label, visible: true }
+          }
+        })
+        this.columns = obColumns(columns)
+        this.crud.updateProp('tableColumns', columns)
       })
-      this.columns = obColumns(columns)
-      this.crud.updateProp('tableColumns', columns)
     }
   }
 }
@@ -633,18 +635,8 @@ CRUD.HOOK = {
   afterEditError: 'afterCrudEditError'
 }
 
-CRUD.STATUS = {
-  NORMAL: 0,
-  PREPARED: 1,
-  PROCESSING: 2
-}
-
-CRUD.NOTIFICATION_TYPE = {
-  SUCCESS: 'success',
-  WARNING: 'warning',
-  INFO: 'info',
-  ERROR: 'error'
-}
+CRUD.STATUS = { NORMAL: 0, PREPARED: 1, PROCESSING: 2 }
+CRUD.NOTIFICATION_TYPE = { SUCCESS: 'success', WARNING: 'warning', INFO: 'info', ERROR: 'error' }
 
 // 导出
 export default CRUD

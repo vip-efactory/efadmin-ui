@@ -32,7 +32,7 @@
       </el-form-item>
 
       <el-form-item style="width:100%;">
-        <el-button :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+        <el-button :loading="loading" size="large" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           <span v-if="!loading">{{ $t('login.logIn') }}</span>
           <span v-else>{{ $t('login.LoggingIn') }}</span>
         </el-button>

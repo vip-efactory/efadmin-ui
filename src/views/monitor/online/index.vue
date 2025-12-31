@@ -4,7 +4,7 @@
       <!-- 加可选链，确保crud、props存在后再判断searchToggle -->
       <div v-if="crud?.props?.searchToggle">
         <el-input
-          v-model="query.filter"
+          v-model="crud.query.filter"
           clearable
           size="small"
           :placeholder="$t('online.allTableLikeSearch')"
@@ -19,8 +19,8 @@
           slot="left"
           class="filter-item"
           type="danger"
-          icon="el-icon-delete"
-          size="mini"
+          icon="Delete"
+          size="small"
           :loading="delLoading"
           :disabled="crud?.selections?.length === 0"
           @click="doDelete(crud?.selections)"
@@ -60,10 +60,10 @@
           >
             <p>{{ $t('online.deleteTips') }}</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="$refs[scope.$index].doClose()">{{ $t('crud.cancel') }}</el-button>
-              <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.key, scope.$index)">{{ $t('crud.confirm') }}</el-button>
+              <el-button size="small" type="text" @click="$refs[scope.$index].doClose()">{{ $t('crud.cancel') }}</el-button>
+              <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.key, scope.$index)">{{ $t('crud.confirm') }}</el-button>
             </div>
-            <el-button slot="reference" size="mini" type="text">{{ $t('online.forceOut') }}</el-button>
+            <el-button slot="reference" size="small" type="text">{{ $t('online.forceOut') }}</el-button>
           </el-popover>
         </template>
       </el-table-column>

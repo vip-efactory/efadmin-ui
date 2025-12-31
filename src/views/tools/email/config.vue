@@ -16,7 +16,7 @@
       <el-input v-model="form.port" style="width: 40%;" :placeholder="$t('email.portTips')" />
     </el-form-item>
     <el-form-item label="">
-      <el-button :loading="loading" size="medium" type="primary" @click="doSubmit">{{ $t('crud.save') }}</el-button>
+      <el-button :loading="loading" size="large" type="primary" @click="doSubmit">{{ $t('crud.save') }}</el-button>
     </el-form-item>
   </el-form>
 </template>

@@ -4,15 +4,14 @@
     <div class="head-container">
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!--搜索-->
-        <el-input v-model="query.filename" clearable size="small" :placeholder="$t('picture.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.filename" clearable size="small" :placeholder="$t('picture.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />
@@ -24,18 +23,18 @@
           slot="left"
           v-permission="['admin','pictures:add']"
           class="filter-item"
-          size="mini"
+          size="small"
           type="primary"
-          icon="el-icon-upload"
+          icon="Upload"
           @click="dialog = true"
         >{{ $t('picture.uploadBtn') }}</el-button>
         <el-tooltip slot="right" class="item" effect="dark" :content="$t('picture.syncTips')" placement="top-start">
           <el-button
             v-permission="['admin','pictures:add']"
             class="filter-item"
-            size="mini"
+            size="small"
             type="success"
-            icon="el-icon-refresh"
+            icon="Refresh"
             :loading="syncLoading"
             @click="sync"
           >{{ $t('picture.synchronizeBtn') }}</el-button>
@@ -43,7 +42,7 @@
       </crudOperation>
     </div>
     <!--上传图片-->
-    <el-dialog :visible.sync="dialog" :close-on-click-modal="false" append-to-body width="600px" @close="doSubmit">
+    <el-dialog v-model="dialog" :close-on-click-modal="false" append-to-body width="600px" @close="doSubmit">
       <el-upload
         :on-preview="handlePictureCardPreview"
         :before-remove="handleBeforeRemove"
@@ -56,7 +55,7 @@
       >
         <i class="el-icon-plus" />
       </el-upload>
-      <el-dialog append-to-body :visible.sync="dialogVisible">
+      <el-dialog v-model="dialogVisible" append-to-body>
         <img :src="dialogImageUrl" width="100%" alt="">
       </el-dialog>
       <div slot="footer" class="dialog-footer">

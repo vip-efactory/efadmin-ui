@@ -1,5 +1,5 @@
 <template>
-  <el-dialog append-to-body :close-on-click-modal="false" :visible.sync="dialog" :title="$t('db.execScript')" width="420px">
+  <el-dialog v-model="dialog" append-to-body :close-on-click-modal="false" :title="$t('db.execScript')" width="420px">
     <el-form ref="form" :rules="rules" size="small">
       <el-upload
         :action="databaseUploadApi"

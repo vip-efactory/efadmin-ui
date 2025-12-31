@@ -25,7 +25,7 @@
       <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.notifyUrlSpan') }}</span>
     </el-form-item>
     <el-form-item label="">
-      <el-button :loading="loading" size="medium" type="primary" @click="doSubmit">{{ $t('crud.save') }}</el-button>
+      <el-button :loading="loading" size="large" type="primary" @click="doSubmit">{{ $t('crud.save') }}</el-button>
     </el-form-item>
   </el-form>
 </template>

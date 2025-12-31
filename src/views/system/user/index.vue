@@ -9,7 +9,7 @@
             clearable
             size="small"
             :placeholder="$t('dept.deptSearchPlaceholder')"
-            prefix-icon="el-icon-search"
+            prefix-icon="Search"
             class="filter-item"
             @input="getDeptDatas"
           />
@@ -29,27 +29,26 @@
           <div v-if="crud && crud.props && crud.props.searchToggle">
             <!-- 搜索 -->
             <el-input
-              v-model="query.blurry"
+              v-model="crud.query.blurry"
               clearable
               size="small"
               :placeholder="$t('user.userSearchPlaceholder')"
               style="width: 200px;"
               class="filter-item"
-              @keyup.enter.native="crud.toQuery"
+              @keyup.enter="crud.toQuery"
             />
             <el-date-picker
-              v-model="query.createTime"
-              :default-time="['00:00:00','23:59:59']"
+              v-model="crud.query.createTime"
               type="daterange"
               range-separator=":"
               size="small"
               class="date-item"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
               :start-placeholder="$t('common.startTime')"
               :end-placeholder="$t('common.endTime')"
             />
             <el-select
-              v-model="query.enabled"
+              v-model="crud.query.enabled"
               clearable
               size="small"
               :placeholder="$t('user.enabled')"
@@ -72,10 +71,10 @@
         <!-- 1. :before-close 加可选链+函数包裹，避免crud为null时调用方法 -->
         <!-- 2. :title 加可选链判空，避免crud.status不存在时报错 -->
         <el-dialog
+          v-model="dialogVisible"
           append-to-body
           :close-on-click-modal="false"
           :before-close="() => crud?.cancelCU()"
-          :visible.sync="dialogVisible"
           :title="crud?.status?.title || ''"
           width="630px"
         >

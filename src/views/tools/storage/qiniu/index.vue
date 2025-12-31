@@ -7,7 +7,7 @@
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
         <el-input
-          v-model="query.key"
+          v-model="crud.query.key"
           clearable
           size="small"
           :placeholder="$t('storage.qiniuSearchPlaceholder')"
@@ -17,12 +17,11 @@
         />
         <el-date-picker
           v-model="query.c"
-          :default-time="['00:00:00','23:59:59']"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />
@@ -31,21 +30,21 @@
       <crudOperation :permission="permission">
         <template slot="left">
           <!-- 上传 -->
-          <el-button class="filter-item" size="mini" type="primary" icon="el-icon-upload" @click="dialog = true">{{ $t('storage.uploadBtn') }}</el-button>
+          <el-button class="filter-item" size="small" type="primary" icon="Upload" @click="dialog = true">{{ $t('storage.uploadBtn') }}</el-button>
           <!-- 同步 -->
-          <el-button :icon="icon" class="filter-item" size="mini" type="warning" @click="synchronize">{{ $t('storage.synchronizeBtn') }}</el-button>
+          <el-button :icon="icon" class="filter-item" size="small" type="warning" @click="synchronize">{{ $t('storage.synchronizeBtn') }}</el-button>
           <!-- 配置 -->
           <el-button
             class="filter-item"
-            size="mini"
+            size="small"
             type="success"
-            icon="el-icon-s-tools"
+            icon="Tools"
             @click="doConfig"
           >{{ $t('storage.configBtn') }}</el-button>
         </template>
       </crudOperation>
       <!-- 文件上传 -->
-      <el-dialog :visible.sync="dialog" :close-on-click-modal="false" append-to-body width="500px" @close="doSubmit">
+      <el-dialog v-model="dialog" :close-on-click-modal="false" append-to-body width="500px" @close="doSubmit">
         <el-upload
           :before-remove="handleBeforeRemove"
           :on-success="handleSuccess"

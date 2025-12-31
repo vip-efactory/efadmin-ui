@@ -5,7 +5,8 @@ import 'normalize.css/normalize.css'
 // 2. Element Plus 导入
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 3. 高亮指令
 import highlightjs from 'highlight.js'
@@ -35,7 +36,9 @@ import CountTo from 'vue3-count-to'
 
 // 7. 创建Vue3实例
 const app = createApp(App)
-
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 // 🔥 全局挂载 CDN 的 ECharts（不做任何模块化处理）
 app.config.globalProperties.$echarts = window.echarts || {}
 

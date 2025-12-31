@@ -5,7 +5,7 @@
       <div v-if="crud?.props?.searchToggle">  <!-- 用可选链防护空值 -->
         <!-- 搜索 -->
         <el-input
-          v-model="crud.blurry"
+          v-model="crud.query.blurry"
           clearable
           size="small"
           :placeholder="$t('menu.searchPlaceholder')"
@@ -14,13 +14,12 @@
           @keyup.enter="crud.toQuery"
         />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startTime')"
           :end-placeholder="$t('common.endTime')"
         />
@@ -30,16 +29,16 @@
     </div>
     <!--表单渲染-->
     <el-dialog
+      v-model="dialogVisible"
       append-to-body
       :close-on-click-modal="false"
       :before-close="() => crud?.cancelCU()"
-      :visible.sync="dialogVisible"
       :title="crud?.status?.title"
       width="670px"
     >
       <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="120px">
         <el-form-item :label="$t('menu.type')" prop="type">
-          <el-radio-group v-model="form.type" size="mini" style="width: 300px">
+          <el-radio-group v-model="form.type" size="small" style="width: 300px">
             <el-radio-button label="0">{{ $t('menuType.dir') }}</el-radio-button>
             <el-radio-button label="1">{{ $t('menuType.menu') }}</el-radio-button>
             <el-radio-button label="2">{{ $t('menuType.button') }}</el-radio-button>
@@ -60,19 +59,19 @@
           </el-popover>
         </el-form-item>
         <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.iFrame')" prop="iframe">
-          <el-radio-group v-model="form.iframe" size="mini">
+          <el-radio-group v-model="form.iframe" size="small">
             <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
             <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item v-show="form.type.toString() === '1'" :label="$t('menu.cache')" prop="cache">
-          <el-radio-group v-model="form.cache" size="mini">
+          <el-radio-group v-model="form.cache" size="small">
             <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
             <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.hidden')" prop="hidden">
-          <el-radio-group v-model="form.hidden" size="mini">
+          <el-radio-group v-model="form.hidden" size="small">
             <el-radio-button label="false">{{ $t('bool.true') }}</el-radio-button>
             <el-radio-button label="true">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>

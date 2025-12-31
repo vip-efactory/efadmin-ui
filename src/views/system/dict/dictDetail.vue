@@ -8,10 +8,10 @@
       <div class="head-container">
         <!-- 搜索 -->
         <el-input v-model="query.label" clearable size="small" :placeholder="$t('dictDetail.queryTips')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
-        <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">{{ $t('crud.search') }}</el-button>
+        <el-button class="filter-item" size="small" type="success" icon="Search" @click="toQuery">{{ $t('crud.search') }}</el-button>
       </div>
       <!--表单组件-->
-      <el-dialog append-to-body :close-on-click-modal="false" :before-close="cancel" :visible.sync="dialog" :title="getFormTitle()" width="520px">
+      <el-dialog v-model="dialog" append-to-body :close-on-click-modal="false" :before-close="cancel" :title="getFormTitle()" width="520px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
           <el-form-item :label="$t('dictDetail.label')" prop="label">
             <el-input v-model="form.label" style="width: 370px;" />
@@ -49,9 +49,9 @@
             <div v-if="scope.row">
               <el-button
                 v-permission="['admin','dict:edit']"
-                size="mini"
+                size="small"
                 type="primary"
-                icon="el-icon-edit"
+                icon="Edit"
                 @click="showEditFormDialog(scope.row)"
               />
               <el-popover
@@ -63,18 +63,18 @@
               <p>{{ $t('dictDetail.deleteTips') }}</p>
               <div style="text-align: right; margin: 0">
                 <el-button
-                  size="mini"
+                  size="small"
                   type="text"
                 @click="$refs[`dictPopover_${scope.row.id}`]?.doClose()"
                 >{{ $t('crud.cancel') }}</el-button>
                 <el-button
                   :loading="delLoading"
                   type="primary"
-                  size="mini"
+                  size="small"
                   @click="delMethod(scope.row.id)"
                 >{{ $t('crud.confirm') }}</el-button>
               </div>
-              <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini" />
+              <el-button slot="reference" type="danger" icon="Delete" size="small" />
               </el-popover>
             </div>
           </template>

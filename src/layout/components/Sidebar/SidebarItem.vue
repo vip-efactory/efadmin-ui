@@ -24,8 +24,8 @@
     :base-path="resolvePath(item.path)"
   />
 
-  <!-- 无子菜单：普通项 -->
-  <el-menu-item v-else :index="resolvePath(item.path)">
+  <!-- 无子菜单：🌟 仅1处微调：index设为#（锚点，不触发路由跳转），去掉.stop修饰符 -->
+  <el-menu-item v-else :index="isExternal ? '' : resolvePath(item.path)" @click="handleClick">
     <svg-icon :icon-class="item.meta?.icon || 'menu'" />
     <span>{{ item.meta?.title || item.name }}</span>
   </el-menu-item>
@@ -51,5 +51,15 @@ const resolvePath = (routePath) => {
   if (!routePath) return ''
   // 简单拼接路径（和旧版逻辑一致）
   return path.resolve(props.basePath, routePath)
+}
+
+// 保留原有判断，无新增冗余
+const isExternal = /^https?:\/\//i.test(props.item.path)
+
+const handleClick = () => {
+  // 直接打开原始URL，无拼接，无事件阻断，不报错
+  if (isExternal) {
+    window.open(props.item.path, '_blank')
+  }
 }
 </script>

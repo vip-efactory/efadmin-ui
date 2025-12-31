@@ -5,15 +5,14 @@
       <!-- 把 v-if="crud.props.searchToggle" 改成先判断crud存在 -->
       <div v-if="crud && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" size="small" clearable :placeholder="$t('role.searchPlaceholder')" :title="$t('role.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.blurry" size="small" clearable :placeholder="$t('role.searchPlaceholder')" :title="$t('role.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startTime')"
           :end-placeholder="$t('common.endTime')"
         />
@@ -23,10 +22,10 @@
     </div>
     <!-- 表单渲染 -->
     <el-dialog
+      v-model="dialogVisible"
       append-to-body
       :close-on-click-modal="false"
       :before-close="() => crud && crud.cancelCU()"
-      :visible.sync="dialogVisible"
       :title="crud?.status?.title"
       width="630px"
     >
@@ -115,8 +114,8 @@
               v-permission="['admin','roles:edit']"
               :disabled="!showButton"
               :loading="menuLoading"
-              icon="el-icon-check"
-              size="mini"
+              icon="Check"
+              size="small"
               style="float: right; padding: 6px 9px"
               type="primary"
               @click="saveMenu"

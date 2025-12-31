@@ -33,6 +33,7 @@
     "url": "https://github.com/vip-efactory/efadmin-ui/issues"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
     "ajv": "^6.11.0",
     "axios": "^0.27.2",
     "clipboard": "2.0.4",

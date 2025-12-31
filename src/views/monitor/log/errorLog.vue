@@ -7,8 +7,8 @@
           slot="left"
           class="filter-item"
           type="danger"
-          icon="el-icon-delete"
-          size="mini"
+          icon="Delete"
+          size="small"
           :loading="crud.delAllLoading"
           @click="confirmDelAll()"
         >
@@ -42,11 +42,11 @@
       </el-table-column>
       <el-table-column :label="$t('log.exceptionDetail')" width="120px">
         <template #default="scope">
-          <el-button size="mini" type="text" @click="info(scope.row.id)">{{ $t('log.viewDetail') }}</el-button>
+          <el-button size="small" type="text" @click="info(scope.row.id)">{{ $t('log.viewDetail') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="dialog" :title="$t('log.exceptionDetail')" append-to-body top="30px" width="85%">
+    <el-dialog v-model="dialog" :title="$t('log.exceptionDetail')" append-to-body top="30px" width="85%">
       <pre v-highlightjs="errorInfo"><code class="java" /></pre>
     </el-dialog>
     <!--分页组件-->

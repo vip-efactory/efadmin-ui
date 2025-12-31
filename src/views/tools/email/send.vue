@@ -10,11 +10,11 @@
         :label="$t('email.mailTo') + (index === 0 ? '': index)"
       >
         <el-input v-model="domain.value" style="width: 550px" />
-        <el-button icon="el-icon-plus" @click="addDomain" />
-        <el-button style="margin-left:0;" icon="el-icon-minus" @click.prevent="removeDomain(domain)" />
+        <el-button icon="Plus" @click="addDomain" />
+        <el-button style="margin-left:0;" icon="Minus" @click.prevent="removeDomain(domain)" />
       </el-form-item>
       <div ref="editor" class="editor" />
-      <el-button :loading="loading" style="margin-left:1.6%;" size="medium" type="primary" @click="doSubmit">{{ $t('email.sendBtn') }}</el-button>
+      <el-button :loading="loading" style="margin-left:1.6%;" size="large" type="primary" @click="doSubmit">{{ $t('email.sendBtn') }}</el-button>
     </el-form>
   </div>
 </template>

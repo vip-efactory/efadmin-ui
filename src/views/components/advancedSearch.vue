@@ -1,6 +1,6 @@
 <!--高级搜索组件-->
 <template>
-  <el-dialog v-dialogDrag :title="modalObj.title" :visible.sync="showAdSearchDialog" width="1000px" center :before-close="modalClose">
+  <el-dialog v-model="showAdSearchDialog" draggable :title="modalObj.title" width="1000px" center :before-close="modalClose">
     <el-form :model="item">
       <el-row>
         <el-col :span="16">
@@ -55,7 +55,7 @@
           <el-form-item v-show="globalType !== 0" :label="$t('advanceSearch.orderLabel')" :label-width="formLabelWidth">
             <el-input
               v-model.number="item.order"
-              type="Number"
+              type="number"
               width="120px"
               :title="$t('advanceSearch.orderTitle')"
               style="width: 190px;"
@@ -116,7 +116,7 @@
             <el-date-picker
               v-model="item.val"
               type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
               :placeholder="$t('advanceSearch.selectDate')"
               style="width: 190px;"
             />
@@ -133,7 +133,7 @@
               :range-separator="$t('advanceSearch.to')"
               :start-placeholder="$t('advanceSearch.startDate')"
               :end-placeholder="$t('advanceSearch.endDate')"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
               :default-time="['00:00:00', '23:59:59']"
               :picker-options="pickerOptions"
               style="width: 508px;"
@@ -156,7 +156,7 @@
         <el-col :span="8">
           <!-- 多个条件查询额外需要显示的字段 -->
           <el-form-item
-            v-show="globalType != 0"
+            v-show="globalType !== 0"
             :label="$t('advanceSearch.logicalTypeLabel')"
             :label-width="formLabelWidth"
           >
@@ -172,7 +172,7 @@
         <!-- 分组条件查询额外需要显示的字段开始 -->
         <el-col :span="8">
           <el-form-item
-            v-show="globalType == 2"
+            v-show="globalType === 2"
             :label="$t('advanceSearch.bracketsGroupLabel')"
             :label-width="formLabelWidth"
           >
@@ -192,7 +192,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item
-            v-show="globalType == 2"
+            v-show="globalType === 2"
             :label="$t('advanceSearch.logicalTypeGroupLabel')"
             :label-width="formLabelWidth"
           >
@@ -206,7 +206,7 @@
         <el-col>
           <el-col :span="8">
             <el-form-item label=" " :label-width="formLabelWidth">
-              <el-button size="mini" type="primary" @click="handleItemAdd(item)">{{ $t('advanceSearch.btnAddItem') }}</el-button>
+              <el-button size="small" type="primary" @click="handleItemAdd(item)">{{ $t('advanceSearch.btnAddItem') }}</el-button>
             </el-form-item>
           </el-col>
         </el-col>
@@ -222,19 +222,19 @@
       <el-table-column :label="$t('advanceSearch.nameLabel')" prop="name" fixed width="120" />
       <el-table-column :label="$t('advanceSearch.searchTypeLabel')" width="100">
         <template #default="scope">
-          <span v-if="scope.row.searchType == 0">{{ '≈≈≈' }}</span>
-          <span v-else-if="scope.row.searchType == 1">{{ ' = ' }}</span>
-          <span v-else-if="scope.row.searchType == 2">{{ ' a ≤ x ≤ b ' }}</span>
-          <span v-else-if="scope.row.searchType == 3">{{ ' != ' }}</span>
-          <span v-else-if="scope.row.searchType == 4">{{ ' &lt; ' }}</span>
-          <span v-else-if="scope.row.searchType == 5">{{ ' &le; ' }}</span>
-          <span v-else-if="scope.row.searchType == 6">{{ ' > ' }}</span>
-          <span v-else-if="scope.row.searchType == 7">{{ ' >= ' }}</span>
-          <span v-else-if="scope.row.searchType == 8">{{ 'IS NULL' }}</span>
-          <span v-else-if="scope.row.searchType == 9">{{ 'NOT NULL' }}</span>
-          <span v-else-if="scope.row.searchType == 10">{{ '≈==' }}</span>
-          <span v-else-if="scope.row.searchType == 11">{{ '==≈' }}</span>
-          <span v-else-if="scope.row.searchType == 12">{{ ' ∈ ' }}</span>
+          <span v-if="scope.row.searchType === 0">{{ '≈≈≈' }}</span>
+          <span v-else-if="scope.row.searchType === 1">{{ ' = ' }}</span>
+          <span v-else-if="scope.row.searchType === 2">{{ ' a ≤ x ≤ b ' }}</span>
+          <span v-else-if="scope.row.searchType === 3">{{ ' != ' }}</span>
+          <span v-else-if="scope.row.searchType === 4">{{ ' &lt; ' }}</span>
+          <span v-else-if="scope.row.searchType === 5">{{ ' &le; ' }}</span>
+          <span v-else-if="scope.row.searchType === 6">{{ ' > ' }}</span>
+          <span v-else-if="scope.row.searchType === 7">{{ ' >= ' }}</span>
+          <span v-else-if="scope.row.searchType === 8">{{ 'IS NULL' }}</span>
+          <span v-else-if="scope.row.searchType === 9">{{ 'NOT NULL' }}</span>
+          <span v-else-if="scope.row.searchType === 10">{{ '≈==' }}</span>
+          <span v-else-if="scope.row.searchType === 11">{{ '==≈' }}</span>
+          <span v-else-if="scope.row.searchType === 12">{{ ' ∈ ' }}</span>
           <span v-else>{{ '' }}</span>
         </template>
       </el-table-column>
@@ -243,29 +243,29 @@
       <el-table-column :label="$t('advanceSearch.orderLabel')" prop="order" width="80" />
       <el-table-column :label="$t('advanceSearch.logicalTypeLabel')" width="100">
         <template #default="scope">
-          <span v-if="scope.row.logicalType == 0">{{ $t('advanceSearch.orLabel') }}</span>
+          <span v-if="scope.row.logicalType === 0">{{ $t('advanceSearch.orLabel') }}</span>
           <span v-else>{{ $t('advanceSearch.andLabel') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('advanceSearch.bracketsGroupLabel')" width="120">
         <template #default="scope">
-          <span v-if="scope.row.bracketsGroup == 'DEFAULT_NO_GROUP'">{{ $t('advanceSearch.GroupItemDefault') }}</span>
+          <span v-if="scope.row.bracketsGroup === 'DEFAULT_NO_GROUP'">{{ $t('advanceSearch.GroupItemDefault') }}</span>
           <span v-else>{{ $t('advanceSearch.GroupItemOther') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('advanceSearch.logicalTypeGroupLabel')" width="90">
         <template #default="scope">
-          <span v-if="scope.row.logicalTypeGroup == 0">{{ $t('advanceSearch.orLabel') }}</span>
+          <span v-if="scope.row.logicalTypeGroup === 0">{{ $t('advanceSearch.orLabel') }}</span>
           <span v-else>{{ $t('advanceSearch.andLabel') }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="right" fixed="right" width="120">
-        <template slot="header">
-          <el-input v-model="search" size="mini" :placeholder="$t('advanceSearch.tbSearchPlaceholder')" />
+        <template #header>
+          <el-input v-model="search" size="small" :placeholder="$t('advanceSearch.tbSearchPlaceholder')" />
         </template>
-        <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="handleItemDelete(scope.$index, scope.row)">X</el-button>
+        <template #default="scope">
+          <el-button size="small" type="danger" @click="handleItemDelete(scope.$index, scope.row)">X</el-button>
         </template>
       </el-table-column>
     </el-table>

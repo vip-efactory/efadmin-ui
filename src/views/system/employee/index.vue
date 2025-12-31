@@ -5,7 +5,7 @@
       <div v-if="crud?.props?.searchToggle">
         <!-- 搜索 -->
         <el-input
-          v-model="query.value"
+          v-model="crud.query.value"
           clearable
           :placeholder="$t('employee.simpleSearchPlaceholder')"
           style="width: 200px;"
@@ -13,7 +13,7 @@
           @keyup.enter.native="crud?.toQuery"
         />
         <el-select
-          v-model="query.type"
+          v-model="crud.query.type"
           clearable
           :placeholder="$t('employee.simpleSearchField')"
           class="filter-item"
@@ -27,10 +27,10 @@
       <crudOperation :permission="permission" />
       <!--表单组件-->
       <el-dialog
-        v-dialogDrag
+        v-model="dialogVisible"
+        draggable
         :close-on-click-modal="false"
         :before-close="() => crud?.cancelCU()"
-        :visible.sync="dialogVisible"
         :title="crud?.status?.title"
         width="520px"
       >

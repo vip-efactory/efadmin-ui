@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :title="$t('storage.qiniuConfigTitle')" append-to-body width="600px">
+  <el-dialog v-model="dialog" :close-on-click-modal="false" :title="$t('storage.qiniuConfigTitle')" append-to-body width="600px">
     <el-form ref="form" :model="form" :rules="rules" style="margin-top: 6px;" size="small" label-width="120px">
       <el-form-item label="Access Key" prop="accessKey">
         <el-input v-model="form.accessKey" style="width: 95%" :placeholder="$t('storage.accessKeyPlaceholder')" />

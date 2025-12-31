@@ -1,19 +1,18 @@
 <template>
-  <el-dialog append-to-body :close-on-click-modal="false" :visible.sync="dialog" title="系统还原" width="800px">
+  <el-dialog v-model="dialog" append-to-body :close-on-click-modal="false" title="系统还原" width="800px">
     <!--工具栏-->
     <div class="head-container">
       <el-date-picker
-        v-model="query.createTime"
-        :default-time="['00:00:00','23:59:59']"
+        v-model="crud.query.createTime"
         type="daterange"
         range-separator=":"
         size="small"
         class="date-item"
-        value-format="yyyy-MM-dd HH:mm:ss"
+        value-format="YYYY-MM-DD HH:mm:ss"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
       />
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
+      <el-button class="filter-item" size="small" type="success" icon="Search" @click="toQuery">搜索</el-button>
     </div>
     <el-form size="small" label-width="80px">
       <!--表格渲染-->

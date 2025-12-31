@@ -1,13 +1,15 @@
 <template>
   <div>
-    <el-button v-permission="permission.edit" :disabled="disabledEdit" size="mini" type="primary" :title="$t('crud.edit')" icon="el-icon-edit" @click="crud.toEdit(data)" />
+    <el-button v-permission="permission.edit" :disabled="disabledEdit" size="small" type="primary" :title="$t('crud.edit')" icon="Edit" @click="crud.toEdit(data)" />
     <el-popover v-model="pop" v-permission="permission.del" placement="top" width="180" trigger="manual" @show="onPopoverShow" @hide="onPopoverHide">
       <p>{{ msg }}</p>
       <div style="text-align: right; margin: 0">
-        <el-button size="mini" type="text" @click="doCancel">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="crud.dataStatus[data.id].delete === 2" type="primary" size="mini" @click="crud.doDelete(data)">{{ $t('crud.confirm') }}</el-button>
+        <el-button size="small" type="text" @click="doCancel">{{ $t('crud.cancel') }}</el-button>
+        <el-button :loading="crud.dataStatus[data.id].delete === 2" type="primary" size="small" @click="crud.doDelete(data)">{{ $t('crud.confirm') }}</el-button>
       </div>
-      <el-button slot="reference" :disabled="disabledDle" type="danger" :title="$t('crud.delete')" icon="el-icon-delete" size="mini" @click="toDelete" />
+      <template #reference>
+        <el-button :disabled="disabledDel" type="danger" :title="$t('crud.delete')" icon="Delete" size="small" @click="toDelete" />
+      </template>
     </el-popover>
   </div>
 </template>
@@ -30,7 +32,7 @@ export default {
       type: Boolean,
       default: false
     },
-    disabledDle: {
+    disabledDel: {
       type: Boolean,
       default: false
     },

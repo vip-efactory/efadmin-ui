@@ -1,31 +1,30 @@
 <template>
-  <el-dialog :visible.sync="dialog" append-to-body :title="$t('task.LOGTITLE')" width="88%">
+  <el-dialog v-model="dialog" append-to-body :title="$t('task.LOGTITLE')" width="88%">
     <!-- 搜索 -->
     <div class="head-container">
       <el-input v-model="query.jobName" clearable size="small" :placeholder="$t('task.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
       <el-date-picker
-        v-model="query.createTime"
-        :default-time="['00:00:00','23:59:59']"
+        v-model="crud.query.createTime"
         type="daterange"
         range-separator=":"
         size="small"
         class="date-item"
-        value-format="yyyy-MM-dd HH:mm:ss"
+        value-format="YYYY-MM-DD HH:mm:ss"
         :start-placeholder="$t('common.startDate')"
         :end-placeholder="$t('common.endDate')"
       />
       <el-select v-model="query.isSuccess" :placeholder="$t('task.logState')" clearable size="small" class="filter-item" style="width: 110px" @change="toQuery">
         <el-option v-for="item in enabledTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
-      <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">{{ $t('crud.search') }}</el-button>
+      <el-button class="filter-item" size="small" type="success" icon="Search" @click="toQuery">{{ $t('crud.search') }}</el-button>
       <!-- 导出 -->
       <div style="display: inline-block;">
         <el-button
           :loading="downloadLoading"
-          size="mini"
+          size="small"
           class="filter-item"
           type="warning"
-          icon="el-icon-download"
+          icon="Download"
           @click="downloadMethod"
         >{{ $t('crud.export') }}</el-button>
       </div>
@@ -39,7 +38,7 @@
       <el-table-column :show-overflow-tooltip="true" prop="cronExpression" :label="$t('task.cronExpression')" />
       <el-table-column prop="createTime" :label="$t('task.logExceptionDetails')" width="140px">
         <template #default="scope">
-          <el-button v-show="scope.row.exceptionDetail" size="mini" type="text" @click="info(scope.row.exceptionDetail)">{{ $t('task.viewExceptionDetails') }}</el-button>
+          <el-button v-show="scope.row.exceptionDetail" size="small" type="text" @click="info(scope.row.exceptionDetail)">{{ $t('task.viewExceptionDetails') }}</el-button>
         </template>
       </el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" prop="time" width="140px" :label="$t('task.logConsumeTime')" />
@@ -54,7 +53,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="errorDialog" append-to-body :title="$t('task.logExceptionDetails')" width="85%">
+    <el-dialog v-model="errorDialog" append-to-body :title="$t('task.logExceptionDetails')" width="85%">
       <pre v-highlightjs="errorInfo"><code class="java" /></pre>
     </el-dialog>
     <!--分页组件-->

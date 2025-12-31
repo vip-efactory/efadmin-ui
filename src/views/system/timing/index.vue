@@ -14,13 +14,12 @@
           @keyup.enter="crud.toQuery"
         />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />
@@ -31,9 +30,9 @@
         <el-button
           slot="right"
           class="filter-item"
-          size="mini"
+          size="small"
           type="info"
-          icon="el-icon-tickets"
+          icon="Tickets"
           @click="doLog"
         >{{ $t('task.logBtn') }}</el-button>
       </crudOperation>
@@ -41,9 +40,9 @@
     </div>
     <!--Form表单-->
     <el-dialog
+      v-model="dialogVisible"
       :close-on-click-modal="false"
       :before-close="() => crud?.cancelCU()"
-      :visible.sync="dialogVisible"
       :title="crud?.status?.title"
       append-to-body
       width="650px"
@@ -111,9 +110,9 @@
       </el-table-column>
       <el-table-column v-permission="['admin','timing:edit','timing:del']" :label="$t('be.operate')" width="180px" align="center" fixed="right">
         <template #default="scope">
-          <el-button v-permission="['admin','timing:edit']" size="mini" style="margin-right: 3px;" type="text" @click="crud.toEdit(scope.row)">{{ $t('crud.edit') }}</el-button>
-          <el-button v-permission="['admin','timing:edit']" style="margin-left: -2px" type="text" size="mini" @click="execute(scope.row.id)">{{ $t('task.execBtn') }}</el-button>
-          <el-button v-permission="['admin','timing:edit']" style="margin-left: 3px" type="text" size="mini" @click="updateStatus(scope.row.id,scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn'))">
+          <el-button v-permission="['admin','timing:edit']" size="small" style="margin-right: 3px;" type="text" @click="crud.toEdit(scope.row)">{{ $t('crud.edit') }}</el-button>
+          <el-button v-permission="['admin','timing:edit']" style="margin-left: -2px" type="text" size="small" @click="execute(scope.row.id)">{{ $t('task.execBtn') }}</el-button>
+          <el-button v-permission="['admin','timing:edit']" style="margin-left: 3px" type="text" size="small" @click="updateStatus(scope.row.id,scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn'))">
             {{ scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn') }}
           </el-button>
           <el-popover
@@ -124,10 +123,10 @@
           >
             <p>{{ $t('task.deleteTips') }}</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">{{ $t('crud.cancel') }}</el-button>
-              <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
+              <el-button size="small" type="text" @click="$refs[scope.row.id].doClose()">{{ $t('crud.cancel') }}</el-button>
+              <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
             </div>
-            <el-button slot="reference" type="text" size="mini">{{ $t('crud.delete') }}</el-button>
+            <el-button slot="reference" type="text" size="small">{{ $t('crud.delete') }}</el-button>
           </el-popover>
         </template>
       </el-table-column>

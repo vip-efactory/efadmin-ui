@@ -7,8 +7,8 @@
           slot="left"
           class="filter-item"
           type="danger"
-          icon="el-icon-delete"
-          size="mini"
+          icon="Delete"
+          size="small"
           :loading="crud.delAllLoading"
           @click="confirmDelAll()"
         >

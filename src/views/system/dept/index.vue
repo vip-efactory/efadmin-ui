@@ -6,7 +6,7 @@
       <div v-if="crud?.props?.searchToggle">
         <!-- 搜索 -->
         <el-input
-          v-model="query.name"
+          v-model="crud.query.name"
           clearable
           size="small"
           :placeholder="$t('dept.deptSearchPlaceholder')"
@@ -15,13 +15,12 @@
           @keyup.enter.native="crud?.toQuery"
         />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startTime')"
           :end-placeholder="$t('common.endTime')"
         />
@@ -34,10 +33,10 @@
     </div>
     <!--表单组件-->
     <el-dialog
+      v-model="cdialogVisible"
       append-to-body
       :close-on-click-modal="false"
       :before-close="() => crud?.cancelCU()"
-      :visible.sync="cdialogVisible"
       :title="crud?.status?.title"
       width="520px"
     >

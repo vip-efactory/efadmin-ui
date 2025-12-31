@@ -4,15 +4,14 @@
     <div class="head-container">
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" clearable size="small" :placeholder="$t('storage.localSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.blurry" clearable size="small" :placeholder="$t('storage.localSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />
@@ -24,9 +23,9 @@
           slot="left"
           v-permission="['admin','storage:add']"
           class="filter-item"
-          size="mini"
+          size="small"
           type="primary"
-          icon="el-icon-upload"
+          icon="Upload"
           @click="crud.toAdd"
         >{{ $t('storage.uploadBtn') }}
         </el-button>
@@ -34,10 +33,10 @@
     </div>
     <!--表单组件-->
     <el-dialog
+      v-model="dialogVisible"
       append-to-body
       :close-on-click-modal="false"
       :before-close="() => crud?.cancelCU?.()"
-      :visible.sync="dialogVisible"
       :title="crud?.status?.add ? $t('storage.fileUpload') : $t('storage.editFile')"
       width="500px"
     >

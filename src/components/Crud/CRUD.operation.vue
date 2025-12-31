@@ -7,9 +7,9 @@
         v-if="crud && crud.optShow && crud.optShow.add && permission"
         v-permission="permission.add"
         class="filter-item"
-        size="mini"
+        size="small"
         type="primary"
-        icon="el-icon-plus"
+        icon="Plus"
         @click="crud?.toAdd"
       >
         {{ $t('crud.new') }}
@@ -18,9 +18,9 @@
         v-if="crud && crud.optShow && crud.optShow.edit && permission"
         v-permission="permission.edit"
         class="filter-item"
-        size="mini"
+        size="small"
         type="success"
-        icon="el-icon-edit"
+        icon="Edit"
         :disabled="crud?.selections?.length !== 1"
         @click="crud?.toEdit(crud?.selections?.[0])"
       >
@@ -32,8 +32,8 @@
         v-permission="permission.del"
         class="filter-item"
         type="danger"
-        icon="el-icon-delete"
-        size="mini"
+        icon="Delete"
+        size="small"
         :loading="crud?.delAllLoading"
         :disabled="crud?.selections?.length === 0"
         @click="toDelete(crud?.selections)"
@@ -45,9 +45,9 @@
         :loading="crud.downloadLoading"
         :disabled="!crud.data.length"
         class="filter-item"
-        size="mini"
+        size="small"
         type="warning"
-        icon="el-icon-download"
+        icon="Download"
         @click="crud.doExport"
       >
         {{ $t('crud.export') }}
@@ -57,15 +57,15 @@
     </span>
     <el-button-group class="crud-opts-right">
       <el-button
-        size="mini"
+        size="small"
         plain
         type="info"
-        icon="el-icon-search"
+        icon="Search"
         @click="toggleSearch()"
       />
       <el-button
-        size="mini"
-        icon="el-icon-refresh"
+        size="small"
+        icon="Refresh"
         @click="crud.refresh()"
       />
       <el-popover
@@ -73,16 +73,15 @@
         width="150"
         trigger="click"
       >
-        <el-button
-          slot="reference"
-          size="mini"
-          icon="el-icon-s-grid"
-        >
-          <i
-            class="fa fa-caret-down"
-            aria-hidden="true"
-          />
-        </el-button>
+        <template #reference>
+          <el-button
+            size="small"
+            icon="Grid"
+          >
+            <i class="fa fa-caret-down" aria-hidden="true" />
+          </el-button>
+        </template>
+
         <el-checkbox
           v-model="allColumnsSelected"
           :indeterminate="allColumnsSelectedIndeterminate"
@@ -143,6 +142,8 @@ export default {
       }
       this.allColumnsSelected = val
       this.allColumnsSelectedIndeterminate = false
+      // 改动1：替换 $forceUpdate() 为 crud.refresh()，触发表格重新渲染
+      this.crud.refresh()
     },
     handleCheckedTableColumnsChange(item) {
       let totalCount = 0
@@ -160,6 +161,8 @@ export default {
       }
       this.allColumnsSelected = selectedCount === totalCount
       this.allColumnsSelectedIndeterminate = selectedCount !== totalCount && selectedCount !== 0
+      // 改动2：替换 $forceUpdate() 为 crud.refresh()，触发表格重新渲染
+      this.crud.refresh()
     },
     toggleSearch() {
       this.crud.props.searchToggle = !this.crud.props.searchToggle

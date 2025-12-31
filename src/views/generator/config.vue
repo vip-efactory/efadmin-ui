@@ -7,16 +7,16 @@
             <span class="role-span">{{ $t('genConfig.tblFieldConfig') }}：{{ tableName }}</span>
             <el-button
               :loading="genLoading"
-              icon="el-icon-s-promotion"
-              size="mini"
+              icon="Promotion"
+              size="small"
               style="float: right; padding: 6px 9px;"
               type="success"
               @click="toGen"
             >{{ $t('genConfig.saveAndGenerate') }}</el-button>
             <el-button
               :loading="columnLoading"
-              icon="el-icon-check"
-              size="mini"
+              icon="Check"
+              size="small"
               style="float: right; padding: 6px 9px;margin-right: 9px"
               type="primary"
               @click="saveColumnConfig"
@@ -24,8 +24,8 @@
             <el-tooltip class="item" effect="dark" :content="$t('codegen.syncTips')" placement="top-start">
               <el-button
                 :loading="syncLoading"
-                icon="el-icon-refresh"
-                size="mini"
+                icon="Refresh"
+                size="small"
                 style="float: right; padding: 6px 9px;"
                 type="info"
                 @click="sync"
@@ -38,7 +38,7 @@
               <el-table-column prop="columnType" :label="$t('genConfig.fieldType')" />
               <el-table-column prop="remark" :label="$t('genConfig.fieldDescription')">
                 <template #default="scope">
-                  <el-input v-model="data[scope.$index].remark" size="mini" class="edit-input" />
+                  <el-input v-model="data[scope.$index].remark" size="small" class="edit-input" />
                 </template>
               </el-table-column>
               <el-table-column align="center" :label="$t('genConfig.isRequired')" width="80px">
@@ -58,7 +58,7 @@
               </el-table-column>
               <el-table-column :label="$t('genConfig.inputType')">
                 <template #default="scope">
-                  <el-select v-model="data[scope.$index].formType" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
+                  <el-select v-model="data[scope.$index].formType" filterable class="edit-input" clearable size="small" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option
                       :label="$t('genConfig.formInput')"
                       value="Input"
@@ -84,7 +84,7 @@
               </el-table-column>
               <el-table-column :label="$t('genConfig.queryType')">
                 <template #default="scope">
-                  <el-select v-model="data[scope.$index].queryType" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
+                  <el-select v-model="data[scope.$index].queryType" filterable class="edit-input" clearable size="small" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option
                       label="="
                       value="="
@@ -118,7 +118,7 @@
               </el-table-column>
               <el-table-column :label="$t('genConfig.dateAnnotation')">
                 <template #default="scope">
-                  <el-select v-model="data[scope.$index].dateAnnotation" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
+                  <el-select v-model="data[scope.$index].dateAnnotation" filterable class="edit-input" clearable size="small" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option
                       :label="$t('genConfig.autoCreateTime')"
                       value="CreationTimestamp"
@@ -132,7 +132,7 @@
               </el-table-column>
               <el-table-column :label="$t('genConfig.linkDict')">
                 <template #default="scope">
-                  <el-select v-model="data[scope.$index].dictName" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
+                  <el-select v-model="data[scope.$index].dictName" filterable class="edit-input" clearable size="small" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option v-for="item in dicts" :key="item.id" :label="item.remark === '' ? item.name : item.remark" :value="item.name" />
                   </el-select>
                 </template>
@@ -147,8 +147,8 @@
             <span class="role-span">{{ $t('genConfig.generateConfigure') }}</span>
             <el-button
               :loading="configLoading"
-              icon="el-icon-check"
-              size="mini"
+              icon="Check"
+              size="small"
               style="float: right; padding: 6px 9px"
               type="primary"
               @click="doSubmit"
@@ -184,7 +184,7 @@
               <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.prefixTips') }}</span>
             </el-form-item>
             <el-form-item :label="$t('genConfig.cover')" prop="cover">
-              <el-radio-group v-model="form.cover" size="mini" style="width: 40%">
+              <el-radio-group v-model="form.cover" size="small" style="width: 40%">
                 <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
                 <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
               </el-radio-group>

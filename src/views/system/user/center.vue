@@ -92,7 +92,7 @@
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="">
-                  <el-button :loading="saveLoading" size="mini" type="primary" @click="doSubmit">保存配置</el-button>
+                  <el-button :loading="saveLoading" size="small" type="primary" @click="doSubmit">保存配置</el-button>
                 </el-form-item>
               </el-form>
             </el-tab-pane>

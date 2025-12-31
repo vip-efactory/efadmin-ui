@@ -4,15 +4,14 @@
     <div class="head-container">
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" clearable :placeholder="$t('deployHistory.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.blurry" clearable :placeholder="$t('deployHistory.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <el-date-picker
           v-model="query.deployDate"
-          :default-time="['00:00:00','23:59:59']"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           style="width: 240px"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
@@ -49,10 +48,10 @@
           >
             <p>{{ $t('crud.deleteTips') }}</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">{{ $t('crud.cancel') }}</el-button>
-              <el-button :loading="delLoading" type="primary" size="mini" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
+              <el-button size="small" type="text" @click="$refs[scope.row.id].doClose()">{{ $t('crud.cancel') }}</el-button>
+              <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
             </div>
-            <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini" />
+            <el-button slot="reference" type="danger" icon="Delete" size="small" />
           </el-popover>
         </template>
       </el-table-column>
