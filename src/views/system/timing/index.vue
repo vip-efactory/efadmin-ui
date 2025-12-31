@@ -126,7 +126,11 @@
               <el-button size="small" type="text" @click="$refs[scope.row.id].doClose()">{{ $t('crud.cancel') }}</el-button>
               <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
             </div>
-            <el-button slot="reference" type="text" size="small">{{ $t('crud.delete') }}</el-button>
+            <template #reference>
+              <el-button type="text" size="small">
+                {{ $t('crud.delete') }}
+              </el-button>
+            </template>
           </el-popover>
         </template>
       </el-table-column>
