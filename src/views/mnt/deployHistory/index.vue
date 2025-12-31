@@ -4,7 +4,14 @@
     <div class="head-container">
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="crud.query.blurry" clearable :placeholder="$t('deployHistory.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input
+          v-model="crud.query.blurry"
+          clearable
+          :placeholder="$t('deployHistory.searchPlaceholder')"
+          style="width: 200px"
+          class="filter-item"
+          @keyup.enter="crud.toQuery"
+        />
         <el-date-picker
           v-model="query.deployDate"
           type="daterange"
@@ -38,20 +45,30 @@
           <span>{{ parseTime(scope.row.deployDate) }}</span>
         </template>
       </el-table-column>
+
       <el-table-column v-permission="['admin','deployHistory:del']" :label="$t('be.operate')" width="100px" align="center">
         <template #default="scope">
           <el-popover
-            :ref="scope.row.id"
+            :ref="'popover-' + scope.row.id"
             v-permission="['admin','deployHistory:del']"
             placement="top"
             width="180"
+            trigger="click"
           >
             <p>{{ $t('crud.deleteTips') }}</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="small" type="text" @click="$refs[scope.row.id].doClose()">{{ $t('crud.cancel') }}</el-button>
-              <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
+              <el-button size="small" text @click="$refs['popover-' + scope.row.id].hide()">
+                {{ $t('crud.cancel') }}
+              </el-button>
+              <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.id)">
+                {{ $t('crud.confirm') }}
+              </el-button>
             </div>
-            <el-button slot="reference" type="danger" icon="Delete" size="small" />
+
+            <!-- Element Plus：reference 插槽 + 组件图标 -->
+            <template #reference>
+              <el-button type="danger" :icon="Delete" size="small" />
+            </template>
           </el-popover>
         </template>
       </el-table-column>
@@ -68,10 +85,23 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
+import { Delete } from '@element-plus/icons-vue' // 引入图标组件
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'appName', labelName: i18n.global.t('deployHistory.appName') }, { fieldName: 'ip', labelName: i18n.global.t('deployHistory.ip') }, { fieldName: 'deployUser', labelName: i18n.global.t('deployHistory.deployUser') }, { fieldName: 'deployDate', labelName: i18n.global.t('deployHistory.deployDate'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.global.t('deployHistory.TITLE'), url: 'api/deployHistory/page', exportUrl: 'api/deployHistory/download', crudMethod: { del }, adSearchFields: adSearchFields })
+const adSearchFields = [
+  { fieldName: 'appName', labelName: i18n.global.t('deployHistory.appName') },
+  { fieldName: 'ip', labelName: i18n.global.t('deployHistory.ip') },
+  { fieldName: 'deployUser', labelName: i18n.global.t('deployHistory.deployUser') },
+  { fieldName: 'deployDate', labelName: i18n.global.t('deployHistory.deployDate'), type: 'datetime' }
+]
+const defaultCrud = CRUD({
+  title: i18n.global.t('deployHistory.TITLE'),
+  url: 'api/deployHistory/page',
+  exportUrl: 'api/deployHistory/download',
+  crudMethod: { del },
+  adSearchFields
+})
+
 export default {
   name: 'DeployHistory',
   components: { pagination, crudOperation, rrOperation },
@@ -81,11 +111,11 @@ export default {
       delLoading: false,
       permission: {
         del: ['admin', 'deployHistory:del']
-      }
+      },
+      Delete // 供模板使用
     }
   },
   created() {
-    // 先判断crud已初始化，再修改optShow
     if (this.crud) {
       this.crud.optShow = {
         add: false,
@@ -98,21 +128,23 @@ export default {
   methods: {
     delMethod(id) {
       this.delLoading = true
-      del([id]).then(r => {
-        if (r.code === 0) {
+      del([id])
+        .then(r => {
+          if (r.code === 0) {
+            this.delLoading = false
+            this.$refs['popover-' + id]?.hide()
+            this.crud.dleChangePage(1)
+            this.crud.delSuccessNotify()
+            this.crud.toQuery()
+          } else {
+            this.delLoading = false
+            this.crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          }
+        })
+        .catch(() => {
           this.delLoading = false
-          this.$refs[id].doClose()
-          this.crud.dleChangePage(1)
-          this.crud.delSuccessNotify()
-          this.crud.toQuery()
-        } else {
-          this.delLoading = false
-          this.crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-        }
-      }).catch(() => {
-        this.delLoading = false
-        this.$refs[id].doClose()
-      })
+          this.$refs['popover-' + id]?.hide()
+        })
     }
   }
 }
