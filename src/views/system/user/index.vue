@@ -119,9 +119,9 @@
             <el-form-item :label="$t('user.enabled')">
               <el-radio-group v-model="crud.form.enabled" :disabled="crud.form.id === user.id">
                 <el-radio
-                  v-for="item in dict.user_status"
+                  v-for="item in (dict.user_status || defaultUserStatus)"
                   :key="item.id"
-                  :label="item.value"
+                  :label="item.value + ''"
                 >{{ item.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
@@ -250,6 +250,10 @@ export default {
       }
     }
     return {
+      defaultUserStatus: [
+        { id: 1, label: this.$t('common.enable'), value: 'true' },
+        { id: 2, label: this.$t('common.disable'), value: 'false' }
+      ],
       height: document.documentElement.clientHeight - 180 + 'px;',
       deptName: '', depts: [], deptDatas: [], jobs: [], level: 3, roles: [],
       defaultProps: { children: 'children', label: 'name' },
