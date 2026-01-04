@@ -122,6 +122,53 @@ export default {
     }
   },
   methods: {
+    // 核心修复：显式实现提交方法（确定按钮触发）
+    submitMethod() {
+      // 1. 先触发表单校验，校验失败则提示并返回
+      this.$refs.form.validate((valid) => {
+        if (!valid) {
+          // 校验失败，给出提示（可选，增强用户感知）
+          this.$message.warning('表单填写不完整，请检查！')
+          return false
+        }
+
+        // 2. 校验通过，设置加载状态
+        this.loading = true
+
+        // 3. 区分新增/编辑状态（通过 form.id 是否存在）
+        const isAdd = !this.form.id // 无id则为新增
+        const apiMethod = isAdd ? this.crudMethod.add : this.crudMethod.edit
+
+        // 4. 调用接口提交数据
+        apiMethod(this.form).then(res => {
+          this.loading = false
+          // 5. 接口返回成功
+          if (res && res.code === 0) {
+            this.$message.success(isAdd ? '新增成功' : '编辑成功')
+            this.dialog = false // 关闭弹窗
+            this.init() // 刷新字典详情列表
+            // 6. 重置表单（可选，避免下次打开残留数据）
+            this.form = {
+              id: null,
+              label: null,
+              value: null,
+              dict: { id: this.form.dict.id }, // 保留所属字典ID
+              sort: 999
+            }
+            this.$refs.form.clearValidate() // 清空校验状态
+          } else {
+            // 7. 接口返回失败（如后台校验失败）
+            const msg = res && res.msg ? res.msg : (isAdd ? '新增失败' : '编辑失败')
+            this.$message.error(msg)
+          }
+        }).catch(err => {
+          // 8. 接口调用异常（如网络错误）
+          this.loading = false
+          this.$message.error('提交失败，请稍后重试')
+          console.log('提交异常：', err)
+        })
+      })
+    },
     // 核心新增：打开字典详情新增弹窗（父组件调用该方法）
     showAddFormDialog() {
       // 1. 打开弹窗
