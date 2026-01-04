@@ -45,7 +45,7 @@
           <el-input v-model="crud.form.name" style="width: 370px;" />
         </el-form-item>
         <el-form-item v-if="crud.form.pid !== 0" :label="$t('dept.enabled')" prop="enabled">
-          <el-radio v-for="item in dict.dept_status" :key="item.id" v-model="crud.form.enabled" :label="item.value">{{ item.label }}</el-radio>
+          <el-radio v-for="item in (dict.user_status || defaultUserStatus)" :key="item.id" v-model="crud.form.enabled" :label="item.value + ''">{{ item.label }}</el-radio>
         </el-form-item>
         <el-form-item v-if="crud.form.pid !== 0" :label="$t('dept.pid')" prop="pid">
           <treeselect v-model="crud.form.pid" :options="depts" style="width: 370px;" :placeholder="$t('dept.selectSuperTips')" />
@@ -130,6 +130,10 @@ export default {
   dicts: ['dept_status'],
   data() {
     return {
+      defaultUserStatus: [
+        { id: 1, label: this.$t('common.enable'), value: 'true' },
+        { id: 2, label: this.$t('common.disable'), value: 'false' }
+      ],
       depts: [],
       rules: {
         name: [
@@ -175,7 +179,7 @@ export default {
     },
     // 提交前的验证
     [CRUD.HOOK.afterValidateCU]() {
-      if (!this.form.pid && this.form.id !== 1) {
+      if ((this.crud.form.pid === null || this.crud.form.pid === undefined) && this.form.id !== 1) {
         this.$message({
           message: i18n.global.t('dept.pidChk'),
           type: 'warning'
@@ -186,26 +190,36 @@ export default {
     },
     // 改变状态
     changeEnabled(data, val) {
-      this.$confirm(i18n.global.t('crud.thisOperate') + this.dict.label.dept_status[val] + '" ' + data.name + i18n.global.t('crud.continueTxt'), i18n.global.t('crud.dialogTitleHint'), {
-        confirmButtonText: i18n.global.t('crud.confirm'),
-        cancelButtonText: i18n.global.t('crud.cancel'),
-        type: 'warning'
-      }).then(r => {
-        if (r.code === 0) {
-          crudDept.edit(data).then(res => {
-            if (res.code === 0) {
-              this.crud.notify(this.dict.label.dept_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
-            } else {
-              crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-            }
-          }).catch(err => {
-            data.enabled = !data.enabled
-            console.log(err.response.data.message)
-          })
-        } else {
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+      // 1. 先弹出确认弹窗
+      this.$confirm(
+        i18n.global.t('crud.thisOperate') + this.dict.label.dept_status[val] + '" ' + data.name + i18n.global.t('crud.continueTxt'),
+        i18n.global.t('crud.dialogTitleHint'),
+        {
+          confirmButtonText: i18n.global.t('crud.confirm'),
+          cancelButtonText: i18n.global.t('crud.cancel'),
+          type: 'warning'
         }
+      ).then(() => {
+        // 2. 用户点击“确认”后，才调用修改状态的接口（关键：这里没有 r，直接执行接口）
+        crudDept.edit(data).then(res => {
+          if (res.code === 0) {
+            // 接口调用成功：提示成功，无需还原状态（开关保持切换后的值）
+            this.crud.notify(this.dict.label.dept_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+            // 可选：刷新表格数据，确保状态同步
+            this.crud.toQuery()
+          } else {
+            // 接口返回失败：提示错误，还原开关状态
+            crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+            data.enabled = !data.enabled
+          }
+        }).catch(err => {
+          // 接口调用异常（比如网络错误）：提示错误，还原开关状态
+          console.log('修改状态失败：', err.response?.data?.message || err.message)
+          this.crud.notify('修改状态失败，请稍后重试', CRUD.NOTIFICATION_TYPE.ERROR)
+          data.enabled = !data.enabled
+        })
       }).catch(() => {
+        // 3. 用户点击“取消”：还原开关状态（视觉上保持原来的样子）
         data.enabled = !data.enabled
       })
     },
