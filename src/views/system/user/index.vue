@@ -78,22 +78,22 @@
           :title="crud?.status?.title || ''"
           width="630px"
         >
-          <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="96px">
+          <el-form ref="form" :inline="true" :model="crud.form" :rules="rules" size="small" label-width="96px">
             <el-form-item :label="$t('user.username')" prop="username">
-              <el-input v-model="form.username" />
+              <el-input v-model="crud.form.username" />
             </el-form-item>
             <el-form-item :label="$t('user.phone')" prop="phone">
-              <el-input v-model.number="form.phone" />
+              <el-input v-model.number="crud.form.phone" />
             </el-form-item>
             <el-form-item :label="$t('user.nickName')" prop="nickName">
-              <el-input v-model="form.nickName" />
+              <el-input v-model="crud.form.nickName" />
             </el-form-item>
             <el-form-item :label="$t('user.email')" prop="email">
-              <el-input v-model="form.email" />
+              <el-input v-model="crud.form.email" />
             </el-form-item>
             <el-form-item :label="$t('user.dept')" prop="dept.id">
               <treeselect
-                v-model="form.dept.id"
+                v-model="crud.form.dept.id"
                 :options="depts"
                 style="width: 178px"
                 :placeholder="$t('user.selectDept')"
@@ -101,7 +101,7 @@
               />
             </el-form-item>
             <el-form-item :label="$t('user.job')" prop="job.id">
-              <el-select v-model="form.job.id" style="width: 178px" :placeholder="$t('user.selectJob')" :title="$t('user.selectJob')">
+              <el-select v-model="crud.form.job.id" style="width: 178px" :placeholder="$t('user.selectJob')" :title="$t('user.selectJob')">
                 <el-option
                   v-for="(item, index) in jobs"
                   :key="item.name + index"
@@ -111,13 +111,13 @@
               </el-select>
             </el-form-item>
             <el-form-item :label="$t('user.sex')">
-              <el-radio-group v-model="form.sex" style="width: 178px">
+              <el-radio-group v-model="crud.form.sex" style="width: 178px">
                 <el-radio label="男">{{ $t('sex.male') }}</el-radio>
                 <el-radio label="女">{{ $t('sex.female') }}</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item :label="$t('user.enabled')">
-              <el-radio-group v-model="form.enabled" :disabled="form.id === user.id">
+              <el-radio-group v-model="crud.form.enabled" :disabled="crud.form.id === user.id">
                 <el-radio
                   v-for="item in dict.user_status"
                   :key="item.id"
@@ -127,7 +127,7 @@
             </el-form-item>
             <el-form-item style="margin-bottom: 0;" :label="$t('user.roles')" prop="roles">
               <el-select
-                v-model="form.roles"
+                v-model="crud.form.roles"
                 style="width: 437px"
                 multiple
                 :placeholder="$t('user.selectRole')"
@@ -348,20 +348,20 @@ export default {
       this.getDepts()
       this.getRoles()
       this.getRoleLevel()
-      form.enabled = form.enabled.toString()
+      crud.form.enabled = crud.form.enabled.toString()
     },
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
       this.getJobs(this.form?.dept?.id || null)
       userRoles = []
       const roles = []
-      form.roles.forEach(function(role, index) {
+      crud.form.roles.forEach(function(role, index) {
         roles.push(role.id)
         // 初始化编辑时候的角色
         const rol = { id: role.id }
         userRoles.push(rol)
       })
-      form.roles = roles
+      crud.form.roles = roles
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {

@@ -29,15 +29,15 @@
       :title="crud?.status?.title"
       width="630px"
     >
-      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="130px">
+      <el-form ref="form" :inline="true" :model="crud.form" :rules="rules" size="small" label-width="130px">
         <el-form-item :label="$t('role.name')" prop="name">
-          <el-input v-model="form.name" style="width: 145px;" />
+          <el-input v-model="crud.form.name" style="width: 145px;" />
         </el-form-item>
         <el-form-item :label="$t('role.permission')" prop="permission">
-          <el-input v-model="form.permission" style="width: 145px;" />
+          <el-input v-model="crud.form.permission" style="width: 145px;" />
         </el-form-item>
         <el-form-item :label="$t('role.dataScope')" prop="dataScope">
-          <el-select v-model="form.dataScope" style="width: 145px" :placeholder="$t('role.dataScopePlaceholder')" @change="changeScope">
+          <el-select v-model="crud.form.dataScope" style="width: 145px" :placeholder="$t('role.dataScopePlaceholder')" @change="changeScope">
             <el-option
               v-for="item in dateScopes"
               :key="item"
@@ -47,13 +47,13 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('role.level')" prop="level">
-          <el-input-number v-model.number="form.level" :min="1" controls-position="right" style="width: 145px;" />
+          <el-input-number v-model.number="crud.form.level" :min="1" controls-position="right" style="width: 145px;" />
         </el-form-item>
-        <el-form-item v-if="form.dataScope === '自定义'" :label="$t('role.dataPermission')" prop="depts">
-          <treeselect v-model="form.depts" :options="depts" multiple style="width: 430px" :placeholder="$t('role.selectPlaceholder')" />
+        <el-form-item v-if="crud.form.dataScope === '自定义'" :label="$t('role.dataPermission')" prop="depts">
+          <treeselect v-model="crud.form.depts" :options="depts" multiple style="width: 430px" :placeholder="$t('role.selectPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('role.remark')" prop="remark">
-          <el-input v-model="form.remark" style="width: 430px;" rows="5" type="textarea" />
+          <el-input v-model="crud.form.remark" style="width: 430px;" rows="5" type="textarea" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -221,14 +221,14 @@ export default {
     },
     // 编辑前
     [CRUD.HOOK.beforeToEdit](crud, form) {
-      if (form.dataScope === '自定义') {
+      if (crud.form.dataScope === '自定义') {
         this.getDepts()
       }
       const depts = []
-      form.depts.forEach(function(dept, index) {
+      crud.form.depts.forEach(function(dept, index) {
         depts.push(dept.id)
       })
-      form.depts = depts
+      crud.form.depts = depts
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {

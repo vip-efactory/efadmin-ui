@@ -14,27 +14,27 @@
       <crudOperation :permission="permission" />
       <!--表单组件-->
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :before-close="crud.cancelCU" :title="crud.status.title" width="500px">
-        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
+        <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="80px">
           <el-form-item :label="$t('tenant.tenantName')" prop="tenantName">
-            <el-input v-model="form.tenantName" style="width: 370px;" />
+            <el-input v-model="crud.form.tenantName" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('tenant.tenantCode')">
-            <el-input v-model="form.tenantCode" style="width: 370px;" />
+            <el-input v-model="crud.form.tenantCode" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('tenant.dbUsername')" prop="dbUsername">
-            <el-input v-model="form.dbUsername" style="width: 370px;" />
+            <el-input v-model="crud.form.dbUsername" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('tenant.dbPassword')" prop="dbPassword">
-            <el-input v-model="form.dbPassword" style="width: 370px;" />
+            <el-input v-model="crud.form.dbPassword" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('tenant.driverClassName')" prop="driverClassName">
-            <el-input v-model="form.driverClassName" style="width: 370px;" />
+            <el-input v-model="crud.form.driverClassName" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('tenant.jdbcUrl')" prop="jdbcUrl">
-            <el-input v-model="form.jdbcUrl" style="width: 370px;" />
+            <el-input v-model="crud.form.jdbcUrl" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('tenant.status')" prop="status">
-            <el-radio-group v-model="form.status">
+            <el-radio-group v-model="crud.form.status">
               <el-radio
                 v-for="item in dict.tenant_status"
                 :key="item.id"
@@ -43,7 +43,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item :label="$t('be.remark')">
-            <el-input v-model="form.remark" style="width: 370px;" />
+            <el-input v-model="crud.form.remark" style="width: 370px;" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

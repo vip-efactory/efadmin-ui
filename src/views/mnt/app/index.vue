@@ -39,27 +39,27 @@
       :title="crud?.status?.title"
       width="850px"
     >
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="140px">
+      <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="140px">
         <el-form-item :label="$t('mapp.name')" prop="name">
-          <el-input v-model="form.name" style="width: 670px" :placeholder="$t('mapp.namePlaceholder')" />
+          <el-input v-model="crud.form.name" style="width: 670px" :placeholder="$t('mapp.namePlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.port')" prop="port">
-          <el-input-number v-model.number="form.port" :placeholder="$t('mapp.portPlaceholder')" />
+          <el-input-number v-model.number="crud.form.port" :placeholder="$t('mapp.portPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.uploadPath')" prop="uploadPath">
-          <el-input v-model="form.uploadPath" style="width: 670px" :placeholder="$t('mapp.uploadPathPlaceholder')" />
+          <el-input v-model="crud.form.uploadPath" style="width: 670px" :placeholder="$t('mapp.uploadPathPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.deployPath')" prop="deployPath">
-          <el-input v-model="form.deployPath" style="width: 670px" :placeholder="$t('mapp.deployPathPlaceholder')" />
+          <el-input v-model="crud.form.deployPath" style="width: 670px" :placeholder="$t('mapp.deployPathPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.backupPath')" prop="backupPath">
-          <el-input v-model="form.backupPath" style="width: 670px" :placeholder="$t('mapp.backupPathPlaceholder')" />
+          <el-input v-model="crud.form.backupPath" style="width: 670px" :placeholder="$t('mapp.backupPathPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.deployScript')" prop="deployScript">
-          <el-input v-model="form.deployScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
+          <el-input v-model="crud.form.deployScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
         </el-form-item>
         <el-form-item :label="$t('mapp.startScript')" prop="startScript">
-          <el-input v-model="form.startScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
+          <el-input v-model="crud.form.startScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

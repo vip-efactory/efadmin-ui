@@ -28,21 +28,21 @@
       :title="crud?.status?.title"
       width="550px"
     >
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
+      <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="100px">
         <el-form-item :label="$t('mserver.name')" prop="name">
-          <el-input v-model="form.name" style="width: 370px" />
+          <el-input v-model="crud.form.name" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('mserver.ip')" prop="ip">
-          <el-input v-model="form.ip" style="width: 370px" />
+          <el-input v-model="crud.form.ip" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('mserver.port')" prop="port">
-          <el-input-number v-model.number="form.port" controls-position="right" style="width: 370px;" />
+          <el-input-number v-model.number="crud.form.port" controls-position="right" style="width: 370px;" />
         </el-form-item>
         <el-form-item :label="$t('mserver.account')" prop="account">
-          <el-input v-model="form.account" style="width: 370px" />
+          <el-input v-model="crud.form.account" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('mserver.password')" prop="password">
-          <el-input v-model="form.password" type="password" style="width: 200px" />
+          <el-input v-model="crud.form.password" type="password" style="width: 200px" />
           <el-button :loading="loading" type="success" style="align: right;" @click="testConnectServer">{{ $t('common.testConnect') }}</el-button>
         </el-form-item>
       </el-form>

@@ -41,19 +41,19 @@
       :title="crud?.status?.title"
       width="570px"
     >
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="130px">
+      <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="130px">
         <el-form-item :label="$t('db.name')" prop="name">
-          <el-input v-model="form.name" style="width: 370px" />
+          <el-input v-model="crud.form.name" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('db.jdbcUrl')" prop="jdbcUrl">
-          <el-input v-model="form.jdbcUrl" style="width: 300px" />
+          <el-input v-model="crud.form.jdbcUrl" style="width: 300px" />
           <el-button :loading="loading" type="success" @click="testConnectDatabase">{{ $t('common.testConnect') }}</el-button>
         </el-form-item>
         <el-form-item :label="$t('db.userName')" prop="userName">
-          <el-input v-model="form.userName" style="width: 370px" />
+          <el-input v-model="crud.form.userName" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('db.pwd')" prop="pwd">
-          <el-input v-model="form.pwd" type="password" style="width: 370px" />
+          <el-input v-model="crud.form.pwd" type="password" style="width: 370px" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

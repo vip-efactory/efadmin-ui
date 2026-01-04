@@ -9,7 +9,7 @@
   >
     <el-form
       ref="form"
-      :model="form"
+      :model="crud.form"
       :rules="rules"
       size="small"
       label-width="160px"
@@ -19,7 +19,7 @@
         prop="name"
       >
         <el-input
-          v-model="form.name"
+          v-model="crud.form.name"
           style="width: 370px;"
         />
       </el-form-item>
@@ -28,7 +28,7 @@
         prop="sort"
       >
         <el-input-number
-          v-model.number="form.sort"
+          v-model.number="crud.form.sort"
           :min="0"
           :max="999"
           controls-position="right"
@@ -36,14 +36,14 @@
         />
       </el-form-item>
       <el-form-item
-        v-if="form.pid !== 0"
+        v-if="crud.form.pid !== 0"
         :label="$t('job.enabled')"
         prop="enabled"
       >
         <el-radio
           v-for="item in jobStatus"
           :key="item.id"
-          v-model="form.enabled"
+          v-model="crud.form.enabled"
           :label="item.value === 'true'"
         >
           {{ item.label }}
@@ -55,7 +55,7 @@
         :rules="rules.dept"
       >
         <treeselect
-          v-model="form.dept.id"
+          v-model="crud.form.dept.id"
           :options="depts"
           style="width: 370px"
           :placeholder="$t('job.deptSelectPlaceholder')"

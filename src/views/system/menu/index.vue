@@ -36,15 +36,15 @@
       :title="crud?.status?.title"
       width="670px"
     >
-      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="120px">
+      <el-form ref="form" :inline="true" :model="crud.form" :rules="rules" size="small" label-width="120px">
         <el-form-item :label="$t('menu.type')" prop="type">
-          <el-radio-group v-model="form.type" size="small" style="width: 300px">
+          <el-radio-group v-model="crud.form.type" size="small" style="width: 300px">
             <el-radio-button label="0">{{ $t('menuType.dir') }}</el-radio-button>
             <el-radio-button label="1">{{ $t('menuType.menu') }}</el-radio-button>
             <el-radio-button label="2">{{ $t('menuType.button') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.icon')" prop="icon">
+        <el-form-item v-show="crud.form.type.toString() !== '2'" :label="$t('menu.icon')" prop="icon">
           <el-popover
             placement="bottom-start"
             width="450"
@@ -52,53 +52,53 @@
             @show="$refs['iconSelect'].reset()"
           >
             <IconSelect ref="iconSelect" @selected="selected" />
-            <el-input slot="reference" v-model="form.icon" style="width: 450px;" :placeholder="$t('menu.iconPlaceholder')" readonly>
-              <svg-icon v-if="form.icon" slot="prefix" :icon-class="form.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
+            <el-input slot="reference" v-model="crud.form.icon" style="width: 450px;" :placeholder="$t('menu.iconPlaceholder')" readonly>
+              <svg-icon v-if="crud.form.icon" slot="prefix" :icon-class="crud.form.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
               <i v-else slot="prefix" class="el-icon-search el-input__icon" />
             </el-input>
           </el-popover>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.iFrame')" prop="iframe">
-          <el-radio-group v-model="form.iframe" size="small">
+        <el-form-item v-show="crud.form.type.toString() !== '2'" :label="$t('menu.iFrame')" prop="iframe">
+          <el-radio-group v-model="crud.form.iframe" size="small">
             <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
             <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() === '1'" :label="$t('menu.cache')" prop="cache">
-          <el-radio-group v-model="form.cache" size="small">
+        <el-form-item v-show="crud.form.type.toString() === '1'" :label="$t('menu.cache')" prop="cache">
+          <el-radio-group v-model="crud.form.cache" size="small">
             <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
             <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.hidden')" prop="hidden">
-          <el-radio-group v-model="form.hidden" size="small">
+        <el-form-item v-show="crud.form.type.toString() !== '2'" :label="$t('menu.hidden')" prop="hidden">
+          <el-radio-group v-model="crud.form.hidden" size="small">
             <el-radio-button label="false">{{ $t('bool.true') }}</el-radio-button>
             <el-radio-button label="true">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menuType.menuTitle')" prop="name">
-          <el-input v-model="form.name" :style=" form.type.toString() === '0' ? 'width: 450px' : 'width: 178px'" :placeholder="$t('menuType.menuTitle')" />
+        <el-form-item v-show="crud.form.type.toString() !== '2'" :label="$t('menuType.menuTitle')" prop="name">
+          <el-input v-model="crud.form.name" :style=" crud.form.type.toString() === '0' ? 'width: 450px' : 'width: 178px'" :placeholder="$t('menuType.menuTitle')" />
         </el-form-item>
-        <el-form-item v-show="form.type.toString() === '2'" :label="$t('menuType.btnName')" prop="name">
-          <el-input v-model="form.name" :placeholder="$t('menuType.btnName')" style="width: 178px;" />
+        <el-form-item v-show="crud.form.type.toString() === '2'" :label="$t('menuType.btnName')" prop="name">
+          <el-input v-model="crud.form.name" :placeholder="$t('menuType.btnName')" style="width: 178px;" />
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '0'" :label="$t('menu.permission')" prop="permission">
-          <el-input v-model="form.permission" :disabled="form.iframe" :placeholder="$t('menu.permission')" style="width: 178px;" />
+        <el-form-item v-show="crud.form.type.toString() !== '0'" :label="$t('menu.permission')" prop="permission">
+          <el-input v-model="crud.form.permission" :disabled="crud.form.iframe" :placeholder="$t('menu.permission')" style="width: 178px;" />
         </el-form-item>
-        <el-form-item v-if="form.type.toString() !== '2'" :label="$t('menu.path')" prop="path">
-          <el-input v-model="form.path" :placeholder="$t('menu.path')" style="width: 178px;" />
+        <el-form-item v-if="crud.form.type.toString() !== '2'" :label="$t('menu.path')" prop="path">
+          <el-input v-model="crud.form.path" :placeholder="$t('menu.path')" style="width: 178px;" />
         </el-form-item>
         <el-form-item :label="$t('menu.sort')" prop="sort">
-          <el-input-number v-model.number="form.sort" :min="0" :max="999" controls-position="right" style="width: 140px;" />
+          <el-input-number v-model.number="crud.form.sort" :min="0" :max="999" controls-position="right" style="width: 140px;" />
         </el-form-item>
-        <el-form-item v-show="!form.iframe && form.type.toString() === '1'" :label="$t('menu.componentName')" prop="componentName">
-          <el-input v-model="form.componentName" style="width: 178px;" :placeholder="$t('menu.componentNamePlaceholder')" />
+        <el-form-item v-show="!crud.form.iframe && crud.form.type.toString() === '1'" :label="$t('menu.componentName')" prop="componentName">
+          <el-input v-model="crud.form.componentName" style="width: 178px;" :placeholder="$t('menu.componentNamePlaceholder')" />
         </el-form-item>
-        <el-form-item v-show="!form.iframe && form.type.toString() === '1'" :label="$t('menu.component')" prop="component">
-          <el-input v-model="form.component" style="width: 178px;" :placeholder="$t('menu.componentPlaceholder')" />
+        <el-form-item v-show="!crud.form.iframe && crud.form.type.toString() === '1'" :label="$t('menu.component')" prop="component">
+          <el-input v-model="crud.form.component" style="width: 178px;" :placeholder="$t('menu.componentPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('menu.pid')" prop="pid">
-          <treeselect v-model="form.pid" :options="menus" style="width: 450px;" :placeholder="$t('menu.pidPlaceholder')" />
+          <treeselect v-model="crud.form.pid" :options="menus" style="width: 450px;" :placeholder="$t('menu.pidPlaceholder')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

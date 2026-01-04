@@ -33,28 +33,28 @@
     </div>
     <!--表单组件-->
     <el-dialog
-      v-model="cdialogVisible"
+      v-model="dialogVisible"
       append-to-body
       :close-on-click-modal="false"
       :before-close="() => crud?.cancelCU()"
       :title="crud?.status?.title"
       width="520px"
     >
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
+      <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="100px">
         <el-form-item :label="$t('dept.name')" prop="name">
-          <el-input v-model="form.name" style="width: 370px;" />
+          <el-input v-model="crud.form.name" style="width: 370px;" />
         </el-form-item>
-        <el-form-item v-if="form.pid !== 0" :label="$t('dept.enabled')" prop="enabled">
-          <el-radio v-for="item in dict.dept_status" :key="item.id" v-model="form.enabled" :label="item.value">{{ item.label }}</el-radio>
+        <el-form-item v-if="crud.form.pid !== 0" :label="$t('dept.enabled')" prop="enabled">
+          <el-radio v-for="item in dict.dept_status" :key="item.id" v-model="crud.form.enabled" :label="item.value">{{ item.label }}</el-radio>
         </el-form-item>
-        <el-form-item v-if="form.pid !== 0" :label="$t('dept.pid')" prop="pid">
-          <treeselect v-model="form.pid" :options="depts" style="width: 370px;" :placeholder="$t('dept.selectSuperTips')" />
+        <el-form-item v-if="crud.form.pid !== 0" :label="$t('dept.pid')" prop="pid">
+          <treeselect v-model="crud.form.pid" :options="depts" style="width: 370px;" :placeholder="$t('dept.selectSuperTips')" />
         </el-form-item>
         <el-form-item :label="$t('dept.sort')" prop="sort">
-          <el-input v-model="form.sort" type="number" style="width: 370px;" :placeholder="$t('dept.sortInputPlaceholder')" />
+          <el-input v-model="crud.form.sort" type="number" style="width: 370px;" :placeholder="$t('dept.sortInputPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('be.remark')" prop="remark">
-          <el-input v-model="form.remark" style="width: 370px;" />
+          <el-input v-model="crud.form.remark" style="width: 370px;" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

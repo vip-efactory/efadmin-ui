@@ -34,33 +34,33 @@
         :title="crud?.status?.title"
         width="520px"
       >
-        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
+        <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="100px">
           <el-form-item :label="$t('employee.name')" prop="name">
-            <el-input v-model="form.name" style="width: 370px;" />
+            <el-input v-model="crud.form.name" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.address')" prop="address">
-            <el-input v-model="form.address" style="width: 370px;" />
+            <el-input v-model="crud.form.address" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.avatar')" prop="avatar">
-            <el-input v-model="form.avatar" style="width: 370px;" />
+            <el-input v-model="crud.form.avatar" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.birthday')" prop="birthday">
-            <el-date-picker v-model="form.birthday" type="date" value-format="yyyy-MM-dd" style="width: 370px;" />
+            <el-date-picker v-model="crud.form.birthday" type="date" value-format="yyyy-MM-dd" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.code')" prop="code">
-            <el-input v-model="form.code" style="width: 370px;" />
+            <el-input v-model="crud.form.code" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.email')" prop="email">
-            <el-input v-model="form.email" style="width: 370px;" />
+            <el-input v-model="crud.form.email" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.idNumber')" prop="idNumber">
-            <el-input v-model="form.idNumber" style="width: 370px;" />
+            <el-input v-model="crud.form.idNumber" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.phone')" prop="phone">
-            <el-input v-model="form.phone" style="width: 370px;" />
+            <el-input v-model="crud.form.phone" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.status')" prop="status">
-            <el-radio-group v-model="form.status">
+            <el-radio-group v-model="crud.form.status">
               <el-radio
                 v-for="item in dict.employee_status"
                 :key="item.id"
@@ -70,7 +70,7 @@
           </el-form-item>
           <el-form-item :label="$t('employee.dept')" prop="dept.id">
             <treeselect
-              v-model="form.dept.id"
+              v-model="crud.form.dept.id"
               :options="depts"
               style="width: 178px"
               :placeholder="$t('user.selectDept')"
@@ -78,7 +78,7 @@
             />
           </el-form-item>
           <el-form-item :label="$t('employee.job')" prop="job.id">
-            <el-select v-model="form.job.id" style="width: 178px" :placeholder="$t('user.selectJob')" :title="$t('user.selectJob')">
+            <el-select v-model="crud.form.job.id" style="width: 178px" :placeholder="$t('user.selectJob')" :title="$t('user.selectJob')">
               <el-option
                 v-for="(item, index) in jobs"
                 :key="item.name + index"
@@ -88,7 +88,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('be.remark')" prop="remark">
-            <el-input v-model="form.remark" :rows="3" type="textarea" style="width: 370px;" />
+            <el-input v-model="crud.form.remark" :rows="3" type="textarea" style="width: 370px;" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -238,7 +238,7 @@ export default {
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
       this.getJobs(this.form.dept.id)
-      form.status = form.status.toString()
+      crud.form.status = crud.form.status.toString()
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {

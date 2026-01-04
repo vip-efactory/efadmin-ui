@@ -81,14 +81,14 @@
       :title="crud?.status?.title"
       width="520px"
     >
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
+      <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="100px">
         <el-form-item :label="$t('deploy.appName')" prop="app.id">
-          <el-select v-model.number="form.app.id" :placeholder="$t('deploy.appNameRequired')" style="width: 370px">
+          <el-select v-model.number="crud.form.app.id" :placeholder="$t('deploy.appNameRequired')" style="width: 370px">
             <el-option v-for="item in apps" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('deploy.server')" prop="deploys">
-          <el-select v-model="form.deploys" multiple :placeholder="$t('deploy.serverRequired')" style="width: 370px">
+          <el-select v-model="crud.form.deploys" multiple :placeholder="$t('deploy.serverRequired')" style="width: 370px">
             <el-option v-for="item in servers" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
@@ -195,7 +195,7 @@ export default {
     [CRUD.HOOK.beforeToCU](crud, form) {
       this.initSelect()
       const deploys = []
-      form.deploys.forEach(function(deploy, index) {
+      crud.form.deploys.forEach(function(deploy, index) {
         deploys.push(deploy.id)
       })
       this.form.deploys = deploys

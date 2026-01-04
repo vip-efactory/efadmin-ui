@@ -40,9 +40,9 @@
       :title="crud?.status?.add ? $t('storage.fileUpload') : $t('storage.editFile')"
       width="500px"
     >
-      <el-form ref="form" :model="form" size="small" label-width="80px">
+      <el-form ref="form" :model="crud.form" size="small" label-width="80px">
         <el-form-item :label="$t('storage.name')">
-          <el-input v-model="form.name" style="width: 370px;" />
+          <el-input v-model="crud.form.name" style="width: 370px;" />
         </el-form-item>
         <!--   上传文件   -->
         <el-form-item v-if="crud.status.add" :label="$t('storage.uploadBtn')">
@@ -54,7 +54,7 @@
             :headers="headers"
             :on-success="handleSuccess"
             :on-error="handleError"
-            :action="fileUploadApi + '?name=' + form.name"
+            :action="fileUploadApi + '?name=' + crud.form.name"
           >
             <div class="eladmin-upload"><i class="el-icon-upload" /> {{ $t('storage.addFile') }}</div>
             <div slot="tip" class="el-upload__tip">{{ $t('storage.localUploadTips') }}</div>

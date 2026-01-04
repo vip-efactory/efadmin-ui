@@ -47,34 +47,34 @@
       append-to-body
       width="650px"
     >
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="140px">
+      <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="140px">
         <el-form-item :label="$t('task.jobName')" prop="jobName">
-          <el-input v-model="form.jobName" style="width: 460px;" />
+          <el-input v-model="crud.form.jobName" style="width: 460px;" />
         </el-form-item>
         <el-form-item :label="$t('task.beanName')" prop="beanName">
-          <el-input v-model="form.beanName" style="width: 460px;" />
+          <el-input v-model="crud.form.beanName" style="width: 460px;" />
         </el-form-item>
         <el-form-item :label="$t('task.methodName')" prop="methodName">
-          <el-input v-model="form.methodName" style="width: 460px;" />
+          <el-input v-model="crud.form.methodName" style="width: 460px;" />
         </el-form-item>
         <el-form-item :label="$t('task.params')">
-          <el-input v-model="form.params" style="width: 460px;" />
+          <el-input v-model="crud.form.params" style="width: 460px;" />
         </el-form-item>
         <el-form-item :label="$t('task.cronExpression')">
           <div class="cron">
             <el-popover v-model="cronPopover">
               <!-- 模板标签不变，仍为 <cron> -->
               <cron :i18n="cronLocale" @change="changeCron" @close="cronPopover=false" />
-              <el-input slot="reference" v-model="form.cronExpression" placeholder="请输入定时策略" @click="cronPopover=true" />
+              <el-input slot="reference" v-model="crud.form.cronExpression" placeholder="请输入定时策略" @click="cronPopover=true" />
             </el-popover>
           </div>
         </el-form-item>
         <el-form-item :label="$t('task.isPause')">
-          <el-radio v-model="form.isPause" :label="false">{{ $t('bool.true') }}</el-radio>
-          <el-radio v-model="form.isPause" :label="true">{{ $t('bool.false') }}</el-radio>
+          <el-radio v-model="crud.form.isPause" :label="false">{{ $t('bool.true') }}</el-radio>
+          <el-radio v-model="crud.form.isPause" :label="true">{{ $t('bool.false') }}</el-radio>
         </el-form-item>
         <el-form-item :label="$t('be.remark')">
-          <el-input v-model="form.remark" style="width: 460px;" rows="2" type="textarea" />
+          <el-input v-model="crud.form.remark" style="width: 460px;" rows="2" type="textarea" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
