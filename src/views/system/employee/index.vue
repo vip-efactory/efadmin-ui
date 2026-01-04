@@ -62,8 +62,8 @@
           <el-form-item :label="$t('employee.status')" prop="status">
             <el-radio-group v-model="crud.form.status">
               <el-radio
-                v-for="item in dict.employee_status"
-                :key="item.id"
+                v-for="item in (dict.employee_status || defaultUserStatus)"
+                :key="item.value"
                 :label="item.value"
               >{{ item.label }}</el-radio>
             </el-radio-group>
@@ -182,6 +182,11 @@ export default {
   dicts: ['employee_status'],
   data() {
     return {
+      defaultUserStatus: [
+        { id: 1, label: '在职', value: 0 },
+        { id: 2, label: '休假', value: 1 },
+        { id: 3, label: '离职', value: 2 }
+      ],
       deptName: '', depts: [], jobs: [],
       permission: {
         add: ['admin', 'employee:add'],
@@ -194,19 +199,19 @@ export default {
           { min: 2, max: 128, message: i18n.global.t('employee.nameLengthRangeChk'), trigger: 'blur' }
         ],
         code: [
-          { required: true, message: i18n.global.t('employee.nameRequired'), trigger: 'blur' },
+          { required: true, message: i18n.global.t('employee.codeRequired'), trigger: 'blur' },
           { min: 1, max: 32, message: i18n.global.t('employee.codeLengthRangeChk'), trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: i18n.global.t('employee.nameRequired'), trigger: 'blur' },
+          { required: true, message: i18n.global.t('employee.phoneRequired'), trigger: 'blur' },
           { min: 3, max: 32, message: i18n.global.t('employee.phoneLengthRangeChk'), trigger: 'blur' }
         ],
         email: [
-          { required: true, message: i18n.global.t('employee.nameRequired'), trigger: 'blur' },
+          { required: true, message: i18n.global.t('employee.emailRequired'), trigger: 'blur' },
           { type: 'email', message: i18n.global.t('employee.emailFormatChk'), trigger: 'blur' }
         ],
         status: [
-          { required: true, message: i18n.global.t('employee.statusSelectChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('employee.statusSelectChk'), trigger: 'change' }
         ]
       },
       queryTypeOptions: [
@@ -237,8 +242,8 @@ export default {
     },
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
-      this.getJobs(this.form.dept.id)
-      crud.form.status = crud.form.status.toString()
+      this.getJobs(crud.form.dept.id)
+      crud.form.status = Number(crud.form.status)
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {
@@ -295,7 +300,7 @@ export default {
     // 点击部门搜索对应的岗位
     selectFun(node, instanceId) {
       this.getJobs(node.id)
-      this.form.job.id = null
+      this.crud.form.job.id = null
     }
   }
 }
