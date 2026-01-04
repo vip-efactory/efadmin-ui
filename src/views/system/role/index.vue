@@ -189,7 +189,8 @@ export default {
       set(newVal) {
         // 只有crud和status存在时，才修改cu的值
         if (!newVal && this.crud && this.crud.status) {
-          this.crud.status.cu = 0
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
         }
       }
     }

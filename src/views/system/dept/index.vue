@@ -154,7 +154,8 @@ export default {
       },
       set(newVal) {
         if (!newVal) {
-          this.crud.status.cu = 0
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
         }
       }
     }

@@ -163,12 +163,15 @@ function CRUD(options) {
     // 新增/编辑/删除 操作
     toAdd() {
       if (!(callVmHook(this, CRUD.HOOK.beforeToAdd, this.form) && callVmHook(this, CRUD.HOOK.beforeToCU, this.form))) return
+      this.resetForm()
       this.status.add = CRUD.STATUS.PREPARED
+      console.log('toAdd', this.form, this.status.add)
       callVmHook(this, CRUD.HOOK.afterToAdd, this.form)
       callVmHook(this, CRUD.HOOK.afterToCU, this.form)
     },
     toEdit(data) {
       if (!data?.id) return
+      // 【改动】先重置表单，再执行钩子
       this.resetForm(JSON.parse(JSON.stringify(data)))
       if (!(callVmHook(this, CRUD.HOOK.beforeToEdit, this.form) && callVmHook(this, CRUD.HOOK.beforeToCU, this.form))) return
       this.status.edit = CRUD.STATUS.PREPARED
@@ -376,6 +379,9 @@ function CRUD(options) {
       // Vue3 reactive 对象直接赋值（无需 vueSet）
       Object.keys(this.form).forEach(key => delete this.form[key])
       Object.assign(this.form, formData)
+      // 【核心改动】强制兜底 dept 和 job
+      this.form.dept = this.form.dept || { id: null }
+      this.form.job = this.form.job || { id: null }
     },
 
     // 数据状态管理
@@ -575,7 +581,7 @@ function pagination() {
   }
 }
 
-// 组件配置：Form（表单）
+// 组件配置：Form（表单）- 修复后
 function form(defaultForm) {
   return {
     inject: {
@@ -585,8 +591,12 @@ function form(defaultForm) {
     created() {
       if (this.crud) {
         this.crud.registerVM('form', this, 3)
-        this.crud.defaultForm = defaultForm || (() => ({}))
+        // 修复：强制转为函数，避免引用共享
+        this.crud.defaultForm = typeof defaultForm === 'function' ? defaultForm : () => ({ ...defaultForm })
         this.crud.resetForm()
+        // 兜底 form.dept 和 form.job
+        if (!this.form.dept) this.form.dept = { id: null }
+        if (!this.form.job) this.form.job = { id: null }
       }
     },
     beforeUnmount() {

@@ -172,7 +172,8 @@ export default {
       set(newVal) {
         // 先确认crud、status存在，再修改cu
         if (!newVal && this.crud?.status) {
-          this.crud.status.cu = 0
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
         }
       }
     }

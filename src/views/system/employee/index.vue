@@ -223,7 +223,8 @@ export default {
       set(newVal) {
         // 仅当newVal为false，且crud、status都存在时，才修改cu
         if (!newVal && this.crud?.status) {
-          this.crud.status.cu = 0
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
         }
       }
     }

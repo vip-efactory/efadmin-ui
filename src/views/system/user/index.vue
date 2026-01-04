@@ -291,9 +291,10 @@ export default {
         return this.crud?.status?.cu > 0
       },
       set(newVal) {
-        // 先判断crud和status存在，再修改cu值，避免crud为null时报错
+        // 当弹窗关闭（newVal 为 false）时，重置新增/编辑状态
         if (!newVal && this.crud && this.crud.status) {
-          this.crud.status.cu = 0
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
         }
       }
     }
@@ -338,7 +339,7 @@ export default {
     deleteTag(value) {
       userRoles.forEach(function(data, index) {
         if (data.id === value) {
-          userRoles.splice(index, value)
+          userRoles.splice(index, 1)
         }
       })
     },
