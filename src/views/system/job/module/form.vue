@@ -1,9 +1,9 @@
 <template>
   <el-dialog
+    v-model="dialogVisible"
     append-to-body
     :close-on-click-modal="false"
-    :before-close="crud.cancelCU"
-    :visible="crud.status.cu > 0"
+    :before-close="() => crud.cancelCU()"
     :title="crud.status.title"
     width="610px"
   >
@@ -41,7 +41,7 @@
         prop="enabled"
       >
         <el-radio
-          v-for="item in jobStatus"
+          v-for="item in (jobStatus || defaultUserStatus)"
           :key="item.id"
           v-model="crud.form.enabled"
           :label="item.value === 'true'"
@@ -110,6 +110,10 @@ export default {
   },
   data() {
     return {
+      defaultUserStatus: [
+        { id: 1, label: this.$t('common.enable'), value: 'true' },
+        { id: 2, label: this.$t('common.disable'), value: 'false' }
+      ],
       depts: [],
       rules: {
         name: [
@@ -119,6 +123,21 @@ export default {
           { required: true, message: i18n.global.t('job.sortRequired'), trigger: 'blur', type: 'number' }
         ],
         dept: { required: true, message: i18n.global.t('job.deptRequired'), trigger: 'select' }
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 确保 crud 实例存在，避免空值报错
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 当弹窗关闭（newVal 为 false）时，重置 CRUD 状态
+        if (!newVal && this.crud?.status) {
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
+        }
       }
     }
   },

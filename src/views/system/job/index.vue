@@ -110,17 +110,13 @@ export default {
         confirmButtonText: i18n.global.t('crud.confirm'),
         cancelButtonText: i18n.global.t('crud.cancel'),
         type: 'warning'
-      }).then(r => {
-        if (r.code === 0) {
-          crud.crudMethod.edit(data).then(() => {
-            crud.notify(this.dict.label.job_status[val] + '成功', 'success')
-          }).catch(err => {
-            data.enabled = !data.enabled
-            console.log(err.data.message)
-          })
-        } else {
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-        }
+      }).then(() => {
+        crud.crudMethod.edit(data).then(() => {
+          crud.notify(this.dict.label.job_status[val] + '成功', 'success')
+        }).catch(err => {
+          data.enabled = !data.enabled
+          console.log(err.data?.message)
+        })
       }).catch(() => {
         data.enabled = !data.enabled
       })
