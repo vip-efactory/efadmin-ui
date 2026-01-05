@@ -249,7 +249,7 @@ export default {
     },
     // 选中图标
     selected(name) {
-      this.form.icon = name
+      this.crud.form.icon = name
     }
   }
 }
