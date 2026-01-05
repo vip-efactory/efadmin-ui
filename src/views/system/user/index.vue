@@ -97,11 +97,12 @@
                 :options="depts"
                 style="width: 178px"
                 :placeholder="$t('user.selectDept')"
+                :required="true"
                 @select="selectFun"
               />
             </el-form-item>
             <el-form-item :label="$t('user.job')" prop="job.id">
-              <el-select v-model="crud.form.job.id" style="width: 178px" :placeholder="$t('user.selectJob')" :title="$t('user.selectJob')">
+              <el-select v-model="crud.form.job.id" style="width: 178px" :placeholder="$t('user.selectJob')" :title="$t('user.selectJob')" :disabled="!crud.form.dept.id" :empty-text="!jobs.length ? '请先选择所属部门' : '暂无岗位数据'">
                 <el-option
                   v-for="(item, index) in jobs"
                   :key="item.name + index"
@@ -257,7 +258,10 @@ export default {
         { id: 2, label: this.$t('common.disable'), value: 'false' }
       ],
       height: document.documentElement.clientHeight - 180 + 'px;',
-      deptName: '', depts: [], deptDatas: [], jobs: [], level: 3, roles: [],
+      deptName: '', depts: [], deptDatas: [],
+      // 改动点3：初始化岗位列表为空
+      jobs: [],
+      level: 3, roles: [],
       defaultProps: { children: 'children', label: 'name' },
       permission: {
         add: ['admin', 'user:add'],
@@ -283,6 +287,13 @@ export default {
         ],
         phone: [
           { required: true, trigger: 'blur', validator: validPhone }
+        ],
+        // 改动点4：新增部门和岗位的必选验证
+        'dept.id': [
+          { required: true, message: i18n.global.t('user.deptEmptyChk'), trigger: 'change' }
+        ],
+        'job.id': [
+          { required: true, message: i18n.global.t('user.jobEmptyChk'), trigger: 'change' }
         ]
       }
     }
@@ -355,6 +366,13 @@ export default {
       this.getRoles()
       this.getRoleLevel()
       crud.form.enabled = crud.form.enabled.toString()
+      // 新增：编辑时若有部门ID，加载对应岗位；新增时清空岗位
+      if (crud.form.dept.id) {
+        this.getJobs(crud.form.dept.id)
+      } else {
+        this.jobs = [] // 新增时默认清空岗位列表
+        crud.form.job.id = null // 清空岗位选中值
+      }
     },
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
@@ -457,18 +475,27 @@ export default {
     },
     // 获取弹窗内岗位数据
     getJobs(id) {
+      if (!id) {
+        this.jobs = []
+        this.crud.form.job.id = null
+        return
+      }
       getAllJob(id).then(res => {
         if (res.code === 0) {
           this.jobs = res.data.content
         } else {
           this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
-      }).catch(() => { })
+      }).catch(() => {
+        this.jobs = []
+      })
     },
     // 点击部门搜索对应的岗位
     selectFun(node, instanceId) {
+      // 选部门后加载对应岗位
       this.getJobs(node.id)
-      this.form.job.id = null
+      // 清空原有岗位选中值，强制重新选择
+      this.crud.form.job.id = null
     },
     // 获取权限级别
     getRoleLevel() {
