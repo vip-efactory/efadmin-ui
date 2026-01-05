@@ -174,12 +174,19 @@ export default {
   },
   methods: {
     copy() {
-      for (const key in this.currentRow) {
-        this.form[key] = this.currentRow[key]
-      }
-      this.form.id = null
-      this.form.createTime = null
+      // 1. 先打开新增表单（toAdd会重置form为默认值）
       this.crud.toAdd()
+
+      // 2. 再深拷贝当前选中行的信息到crud.form（覆盖默认值）
+      // 排除id和createTime，保证是“新增”而非“编辑”
+      const copyData = JSON.parse(JSON.stringify(this.currentRow))
+      delete copyData.id
+      delete copyData.createTime
+
+      // 3. 赋值给crud.form（关键：要操作crud.form而非this.form）
+      for (const key in copyData) {
+        this.crud.form[key] = copyData[key]
+      }
     },
     handleCurrentChange(row) {
       this.currentRow = JSON.parse(JSON.stringify(row))
