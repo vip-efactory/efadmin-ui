@@ -1,7 +1,7 @@
 <!-- @author zhengjie -->
 <template>
   <div class="icon-body">
-    <el-input v-model="name" style="position: relative;" clearable placeholder="请输入图标名称" @clear="filterIcons" @input.native="filterIcons">
+    <el-input v-model="name" style="position: relative;" clearable placeholder="请输入图标名称" @clear="filterIcons" @input="filterIcons">
       <template #suffix>
         <i class="el-icon-search el-input__icon" />
       </template>

@@ -21,7 +21,7 @@
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template #default="props">
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item :label="$t('log.method')" label-width="130px">
               <span>{{ props.row.method }}</span>

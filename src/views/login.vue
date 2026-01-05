@@ -14,14 +14,14 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input v-model="loginForm.password" type="password" auto-complete="off" :placeholder="$t('login.password')" @keyup.enter.native="handleLogin">
+        <el-input v-model="loginForm.password" type="password" auto-complete="off" :placeholder="$t('login.password')" @keyup.enter="handleLogin">
           <template #prefix>
             <svg-icon icon-class="password" class="el-input__icon input-icon" />
           </template>
         </el-input>
       </el-form-item>
       <el-form-item prop="code">
-        <el-input v-model="loginForm.code" auto-complete="off" :placeholder="$t('login.verificationCode')" style="width: 63%" @keyup.enter.native="handleLogin">
+        <el-input v-model="loginForm.code" auto-complete="off" :placeholder="$t('login.verificationCode')" style="width: 63%" @keyup.enter="handleLogin">
           <template #prefix>
             <svg-icon icon-class="validCode" class="el-input__icon input-icon" />
           </template>
@@ -38,7 +38,7 @@
       </el-form-item>
 
       <el-form-item style="width:100%;">
-        <el-button :loading="loading" size="large" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+        <el-button :loading="loading" size="large" type="primary" style="width:100%;" @click.prevent="handleLogin">
           <span v-if="!loading">{{ $t('login.logIn') }}</span>
           <span v-else>{{ $t('login.LoggingIn') }}</span>
         </el-button>

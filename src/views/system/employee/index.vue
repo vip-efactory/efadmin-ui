@@ -10,7 +10,7 @@
           :placeholder="$t('employee.simpleSearchPlaceholder')"
           style="width: 200px;"
           class="filter-item"
-          @keyup.enter.native="crud?.toQuery"
+          @keyup.enter="crud?.toQuery"
         />
         <el-select
           v-model="crud.query.type"

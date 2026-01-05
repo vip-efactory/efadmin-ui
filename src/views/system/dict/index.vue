@@ -55,7 +55,7 @@
               :placeholder="$t('dict.queryTips')"
               style="width: 200px;"
               class="filter-item"
-              @keyup.enter.native="toQuery"
+              @keyup.enter="toQuery"
             />
             <el-button class="filter-item" size="small" type="success" icon="Search" @click="toQuery">
               {{ $t('crud.search') }}

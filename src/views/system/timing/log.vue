@@ -2,7 +2,7 @@
   <el-dialog v-model="dialog" append-to-body :title="$t('task.LOGTITLE')" width="88%">
     <!-- 搜索 -->
     <div class="head-container">
-      <el-input v-model="query.jobName" clearable size="small" :placeholder="$t('task.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+      <el-input v-model="query.jobName" clearable size="small" :placeholder="$t('task.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter="toQuery" />
       <el-date-picker
         v-model="crud.query.createTime"
         type="daterange"

@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!--搜索-->
-        <el-input v-model="crud.query.filename" clearable size="small" :placeholder="$t('picture.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.filename" clearable size="small" :placeholder="$t('picture.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-date-picker
           v-model="crud.query.createTime"
           type="daterange"
@@ -81,7 +81,7 @@
       <el-table-column v-if="columns.visible('filename')" width="200" prop="filename" :label="$t('picture.filename')" sortable="custom" />
       <el-table-column v-if="columns.visible('username')" prop="username" :label="$t('picture.username')" sortable="custom" />
       <el-table-column v-if="columns.visible('url')" ref="table" :show-overflow-tooltip="true" prop="url" :label="$t('picture.url')">
-        <template slot-scope="{row}">
+        <template #default="{row}">
           <el-image
             :src="row.url"
             :preview-src-list="[row.url]"

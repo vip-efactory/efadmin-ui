@@ -7,7 +7,7 @@
       <!--工具栏-->
       <div class="head-container">
         <!-- 搜索 -->
-        <el-input v-model="query.label" clearable size="small" :placeholder="$t('dictDetail.queryTips')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+        <el-input v-model="query.label" clearable size="small" :placeholder="$t('dictDetail.queryTips')" style="width: 200px;" class="filter-item" @keyup.enter="toQuery" />
         <el-button class="filter-item" size="small" type="success" icon="Search" @click="toQuery">{{ $t('crud.search') }}</el-button>
       </div>
       <!--表单组件-->
