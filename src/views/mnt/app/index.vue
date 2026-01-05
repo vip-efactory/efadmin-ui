@@ -18,16 +18,18 @@
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission">
-        <el-button
-          slot="left"
-          v-permission="['admin','app:add']"
-          :disabled="!currentRow"
-          class="filter-item"
-          size="small"
-          type="primary"
-          icon="Plus"
-          @click="copy"
-        >{{ $t('mapp.copyBtn') }}</el-button>
+        <template #left>
+          <el-button
+            v-permission="['admin','app:add']"
+            :disabled="!currentRow"
+            class="filter-item"
+            size="small"
+            type="primary"
+            icon="Plus"
+            @click="copy"
+          >{{ $t('mapp.copyBtn') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表单组件-->
