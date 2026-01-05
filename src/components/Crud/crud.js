@@ -291,7 +291,7 @@ function CRUD(options) {
       // 执行删除
       if (!delAll && dataStatus) dataStatus.delete = CRUD.STATUS.PROCESSING
       if (delAll) this.delAllLoading = true
-      return this.crudMethod.delete(ids).then(r => {
+      return this.crudMethod.del(ids).then(r => {
         if (r.code === 0) {
           delAll ? this.delAllLoading = false : dataStatus.delete = CRUD.STATUS.PREPARED
           this.dleChangePage(1)
