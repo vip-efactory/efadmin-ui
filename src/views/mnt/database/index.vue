@@ -18,17 +18,18 @@
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission">
-        <el-button
-          slot="right"
-          v-permission="['admin','database:add']"
-          :disabled="!selectIndex"
-          class="filter-item"
-          size="small"
-          type="warning"
-          icon="Upload"
-          @click="execute"
-        >{{ $t('db.execScript') }}
-        </el-button>
+        <template #right>
+          <el-button
+            v-permission="['admin','database:add']"
+            :disabled="!selectIndex"
+            class="filter-item"
+            size="small"
+            type="warning"
+            icon="Upload"
+            @click="execute"
+          >{{ $t('db.execScript') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表单组件-->
