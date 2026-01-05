@@ -15,18 +15,19 @@
         <rrOperation :crud="crud" />
       </div>
       <crudOperation>
-        <el-button
-          slot="left"
-          class="filter-item"
-          type="danger"
-          icon="Delete"
-          size="small"
-          :loading="delLoading"
-          :disabled="crud?.selections?.length === 0"
-          @click="doDelete(crud?.selections)"
-        >
-          {{ $t('online.forceOut') }}
-        </el-button>
+        <template #left>
+          <el-button
+            class="filter-item"
+            type="danger"
+            icon="Delete"
+            size="small"
+            :loading="delLoading"
+            :disabled="crud?.selections?.length === 0"
+            @click="doDelete(crud?.selections)"
+          >
+            {{ $t('online.forceOut') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表格渲染-->

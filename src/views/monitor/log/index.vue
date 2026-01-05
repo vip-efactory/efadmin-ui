@@ -3,17 +3,18 @@
     <div class="head-container">
       <Search />
       <crudOperation>
-        <el-button
-          slot="left"
-          class="filter-item"
-          type="danger"
-          icon="Delete"
-          size="small"
-          :loading="crud.delAllLoading"
-          @click="confirmDelAll()"
-        >
-          {{ $t('log.clearLog') }}
-        </el-button>
+        <template #left>
+          <el-button
+            class="filter-item"
+            type="danger"
+            icon="Delete"
+            size="small"
+            :loading="crud.delAllLoading"
+            @click="confirmDelAll()"
+          >
+            {{ $t('log.clearLog') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表格渲染-->
