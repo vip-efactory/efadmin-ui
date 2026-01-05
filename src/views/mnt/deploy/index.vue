@@ -18,7 +18,7 @@
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission">
-        <template slot="right">
+        <template #right>
           <el-button
             v-permission="['admin','deploy:add']"
             :disabled="!selectIndex"
