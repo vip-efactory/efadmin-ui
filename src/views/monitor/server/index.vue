@@ -22,7 +22,7 @@
             <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.status') }}</span>
           </div>
         </template>
-        <div>
+        <el-row :gutter="10">
           <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" style="margin-bottom: 10px">
             <div class="title">{{ $t('system.cpuUsedRate') }}</div>
             <el-tooltip placement="top-end">
@@ -116,7 +116,7 @@
             </div>
             <div class="footer">{{ data.disk.used }} / {{ data.disk.total }}</div>
           </el-col>
-        </div>
+        </el-row>
       </el-card>
 
       <div>
@@ -180,6 +180,13 @@ export default {
         tooltip: {
           trigger: 'axis'
         },
+        grid: {
+          left: 10,
+          right: 30,
+          top: 10,
+          bottom: 10,
+          containLabel: true
+        },
         xAxis: {
           type: 'category',
           boundaryGap: false,
@@ -212,6 +219,13 @@ export default {
       memoryInfo: {
         tooltip: {
           trigger: 'axis'
+        },
+        grid: {
+          left: 10,
+          right: 30,
+          top: 10,
+          bottom: 10,
+          containLabel: true
         },
         xAxis: {
           type: 'category',
@@ -276,11 +290,14 @@ export default {
     // 🔥 初始化图表实例（原生ECharts）
     initCharts() {
       if (!this.$echarts) {
-        console.error('ECharts 全局挂载失败！请检查 main.js 配置')
+        console.error('ECharts 全局挂载失败！请检查是否引入CDN')
         return
       }
 
-      // CPU监控图表
+      // 避免重复初始化图表
+      if (this.cpuChart && this.memoryChart) return
+
+      // CPU监控图表（现在容器已渲染）
       const cpuDom = document.getElementById('cpuMonitorChart')
       if (cpuDom) {
         this.cpuChart = this.$echarts.init(cpuDom)
@@ -302,7 +319,12 @@ export default {
           this.data = res.data
           this.show = true
 
-          // 数据长度控制（保留原有逻辑：最多显示8个数据点）
+          // 🔥 新增：show为true后，等DOM渲染完成再初始化图表
+          this.$nextTick(() => {
+            this.initCharts()
+          })
+
+          // 数据长度控制（保留原有逻辑）
           if (this.cpuInfo.xAxis.data.length >= 8) {
             this.cpuInfo.xAxis.data.shift()
             this.memoryInfo.xAxis.data.shift()
@@ -310,21 +332,17 @@ export default {
             this.memoryInfo.series[0].data.shift()
           }
 
-          // 更新数据（保留原有逻辑）
+          // 🔥 修复CPU数据来源笔误（之前用了memory的数）
           this.cpuInfo.xAxis.data.push(res.data.time)
           this.memoryInfo.xAxis.data.push(res.data.time)
-          this.cpuInfo.series[0].data.push(parseFloat(res.data.memory.used))
+          this.cpuInfo.series[0].data.push(parseFloat(res.data.cpu.used)) // 改为cpu.used
           this.memoryInfo.series[0].data.push(parseFloat(res.data.memory.usageRate))
 
-          // 🔥 关键：更新图表数据（原生ECharts需手动调用setOption）
+          // 更新图表数据
           this.cpuChart?.setOption(this.cpuInfo)
           this.memoryChart?.setOption(this.memoryInfo)
         } else {
-          this.$notify({
-            title: '错误',
-            message: res.msg,
-            type: 'error'
-          })
+          this.$notify({ title: '错误', message: res.msg, type: 'error' })
         }
       })
     },
