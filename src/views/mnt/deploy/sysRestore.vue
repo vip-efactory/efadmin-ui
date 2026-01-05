@@ -32,10 +32,12 @@
         <el-table-column prop="deployUser" label="部署人员" />
       </el-table>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="cancel">取消</el-button>
-      <el-button v-permission="['admin','deploy:add']" :loading="submitLoading" type="primary" @click="doSubmit">确认</el-button>
-    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="text" @click="cancel">取消</el-button>
+        <el-button v-permission="['admin','deploy:add']" :loading="submitLoading" type="primary" @click="doSubmit">确认</el-button>
+      </div>
+    </template>
     <!--分页组件-->
     <el-pagination
       :total="total"

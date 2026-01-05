@@ -17,30 +17,34 @@
           <el-input v-model="form.remark" style="width: 370px;" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="cancel">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="loading" type="primary" @click="submitMethod">
-          {{ $t('crud.confirm') }}
-        </el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="text" @click="cancel">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="loading" type="primary" @click="submitMethod">
+            {{ $t('crud.confirm') }}
+          </el-button>
+        </div>
+      </template>
     </el-dialog>
 
     <!-- 字典列表 -->
     <el-row :gutter="10">
       <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10" style="margin-bottom: 10px">
         <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>{{ $t('dict.dictList') }}</span>
-            <el-button
-              v-permission="['admin','dict:add']"
-              class="filter-item"
-              size="small"
-              style="float: right;padding: 4px 10px"
-              type="primary"
-              icon="Plus"
-              @click="showAddFormDialog"
-            >{{ $t('crud.new') }}</el-button>
-          </div>
+          <template #header>
+            <div class="clearfix">
+              <span>{{ $t('dict.dictList') }}</span>
+              <el-button
+                v-permission="['admin','dict:add']"
+                class="filter-item"
+                size="small"
+                style="float: right;padding: 4px 10px"
+                type="primary"
+                icon="Plus"
+                @click="showAddFormDialog"
+              >{{ $t('crud.new') }}</el-button>
+            </div>
+          </template>
 
           <!-- 工具栏 -->
           <div class="head-container">
@@ -137,19 +141,21 @@
       <!-- 字典详情列表（修改按钮显示条件，解决不显示问题） -->
       <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
         <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>{{ $t('dict.dictDetails') }}</span>
-            <!-- 优化：用currentDict判断，更稳定，解决按钮不显示问题 -->
-            <el-button
-              v-if="checkPermission(['admin','dict:add']) && currentDict"
-              class="filter-item"
-              size="small"
-              style="float: right;padding: 4px 10px"
-              type="primary"
-              icon="Plus"
-              @click="$refs.dictDetail.showAddFormDialog"
-            >{{ $t('crud.new') }}</el-button>
-          </div>
+          <template #header>
+            <div class="clearfix">
+              <span>{{ $t('dict.dictDetails') }}</span>
+              <!-- 优化：用currentDict判断，更稳定，解决按钮不显示问题 -->
+              <el-button
+                v-if="checkPermission(['admin','dict:add']) && currentDict"
+                class="filter-item"
+                size="small"
+                style="float: right;padding: 4px 10px"
+                type="primary"
+                icon="Plus"
+                @click="$refs.dictDetail.showAddFormDialog"
+              >{{ $t('crud.new') }}</el-button>
+            </div>
+          </template>
           <dictDetail ref="dictDetail" />
         </el-card>
       </el-col>

@@ -27,14 +27,15 @@
       </div>
       <crudOperation :permission="permission">
         <!-- 任务日志 -->
-        <el-button
-          slot="right"
-          class="filter-item"
-          size="small"
-          type="info"
-          icon="Tickets"
-          @click="doLog"
-        >{{ $t('task.logBtn') }}</el-button>
+        <template #right>
+          <el-button
+            class="filter-item"
+            size="small"
+            type="info"
+            icon="Tickets"
+            @click="doLog"
+          >{{ $t('task.logBtn') }}</el-button>
+        </template>
       </crudOperation>
       <Log ref="log" />
     </div>
@@ -65,7 +66,9 @@
             <el-popover v-model="cronPopover">
               <!-- 模板标签不变，仍为 <cron> -->
               <cron :i18n="cronLocale" @change="changeCron" @close="cronPopover=false" />
-              <el-input slot="reference" v-model="crud.form.cronExpression" placeholder="请输入定时策略" @click="cronPopover=true" />
+              <template #reference>
+                <el-input v-model="crud.form.cronExpression" placeholder="请输入定时策略" @click="cronPopover=true" />
+              </template>
             </el-popover>
           </div>
         </el-form-item>
@@ -77,10 +80,12 @@
           <el-input v-model="crud.form.remark" style="width: 460px;" rows="2" type="textarea" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
     <el-table

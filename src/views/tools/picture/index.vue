@@ -19,26 +19,30 @@
       </div>
       <crudOperation :permission="permission">
         <!-- 上传 -->
-        <el-button
-          slot="left"
-          v-permission="['admin','pictures:add']"
-          class="filter-item"
-          size="small"
-          type="primary"
-          icon="Upload"
-          @click="dialog = true"
-        >{{ $t('picture.uploadBtn') }}</el-button>
-        <el-tooltip slot="right" class="item" effect="dark" :content="$t('picture.syncTips')" placement="top-start">
+        <template #left>
           <el-button
             v-permission="['admin','pictures:add']"
             class="filter-item"
             size="small"
-            type="success"
-            icon="Refresh"
-            :loading="syncLoading"
-            @click="sync"
-          >{{ $t('picture.synchronizeBtn') }}</el-button>
-        </el-tooltip>
+            type="primary"
+            icon="Upload"
+            @click="dialog = true"
+          >{{ $t('picture.uploadBtn') }}
+          </el-button>
+        </template>
+        <template #right>
+          <el-tooltip class="item" effect="dark" :content="$t('picture.syncTips')" placement="top-start">
+            <el-button
+              v-permission="['admin','pictures:add']"
+              class="filter-item"
+              size="small"
+              type="success"
+              icon="Refresh"
+              :loading="syncLoading"
+              @click="sync"
+            >{{ $t('picture.synchronizeBtn') }}</el-button>
+          </el-tooltip>
+        </template>
       </crudOperation>
     </div>
     <!--上传图片-->
@@ -58,9 +62,11 @@
       <el-dialog v-model="dialogVisible" append-to-body>
         <img :src="dialogImageUrl" width="100%" alt="">
       </el-dialog>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
     <el-table

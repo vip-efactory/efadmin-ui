@@ -3,7 +3,6 @@
     <div>
       <svg-icon class-name="international-icon" icon-class="language" />
     </div>
-    <!-- 仅修改这里：Vue3插槽语法，用#dropdown替代slot="dropdown" -->
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item :disabled="language==='zh_CN'" command="zh_CN">

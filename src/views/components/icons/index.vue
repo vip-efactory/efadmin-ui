@@ -8,7 +8,6 @@
       <el-tab-pane label="Icons">
         <div v-for="item of svgIcons" :key="item" @click="handleClipboard(generateIconCode(item),$event)">
           <el-tooltip placement="top">
-            <!-- 【必改】Vue3废弃slot="content"，改为#content（v-slot:content的缩写） -->
             <template #content>
               {{ generateIconCode(item) }}
             </template>
@@ -23,7 +22,6 @@
       <el-tab-pane label="Element-UI Icons">
         <div v-for="item of elementIcons" :key="item" @click="handleClipboard(generateElementIconCode(item),$event)">
           <el-tooltip placement="top">
-            <!-- 【必改】同上，slot="content" → #content -->
             <template #content>
               {{ generateElementIconCode(item) }}
             </template>

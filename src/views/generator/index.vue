@@ -7,17 +7,19 @@
         <rrOperation :crud="crud" />
       </div>
       <crudOperation>
-        <el-tooltip slot="right" class="item" effect="dark" :content="$t('codegen.syncTips')" placement="top-start">
-          <el-button
-            class="filter-item"
-            size="small"
-            type="success"
-            icon="Refresh"
-            :loading="syncLoading"
-            :disabled="crud.selections.length === 0"
-            @click="sync"
-          >{{ $t('codegen.synchronizeBtn') }}</el-button>
-        </el-tooltip>
+        <template #right>
+          <el-tooltip class="item" effect="dark" :content="$t('codegen.syncTips')" placement="top-start">
+            <el-button
+              class="filter-item"
+              size="small"
+              type="success"
+              icon="Refresh"
+              :loading="syncLoading"
+              :disabled="crud.selections.length === 0"
+              @click="sync"
+            >{{ $t('codegen.synchronizeBtn') }}</el-button>
+          </el-tooltip>
+        </template>
       </crudOperation>
     </div>
     <!--表格渲染-->

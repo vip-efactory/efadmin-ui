@@ -15,12 +15,16 @@
           {{ $t('common.dragFileUpload') }}
           <em>{{ $t('common.clickUpload') }}</em>
         </div>
-        <div slot="tip" class="el-upload__tip">{{ $t('db.execSqlTips') }}</div>
+        <template #tip>
+          <div class="el-upload__tip">{{ $t('db.execSqlTips') }}</div>
+        </template>
       </el-upload>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="cancel">{{ $t('common.close') }}</el-button>
-    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="primary" @click="cancel">{{ $t('common.close') }}</el-button>
+      </div>
+    </template>
   </el-dialog>
 </template>
 

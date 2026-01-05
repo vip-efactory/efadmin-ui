@@ -28,7 +28,7 @@
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission">
-        <template slot="left">
+        <template #left>
           <!-- 上传 -->
           <el-button class="filter-item" size="small" type="primary" icon="Upload" @click="dialog = true">{{ $t('storage.uploadBtn') }}</el-button>
           <!-- 同步 -->
@@ -56,11 +56,15 @@
           multiple
         >
           <el-button size="small" type="primary">{{ $t('storage.clickUpload') }}</el-button>
-          <div slot="tip" style="display: block;" class="el-upload__tip">{{ $t('storage.qiniuUploadTips') }}</div>
+          <template #tip>
+            <div style="display: block;" class="el-upload__tip">{{ $t('storage.qiniuUploadTips') }}</div>
+          </template>
         </el-upload>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
-        </div>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
+          </div>
+        </template>
       </el-dialog>
       <!--表格渲染-->
       <el-table

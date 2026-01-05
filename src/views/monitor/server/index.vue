@@ -17,27 +17,31 @@
         </div>
       </el-card>
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.status') }}</span>
-        </div>
+        <template #header>
+          <div class="clearfix">
+            <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.status') }}</span>
+          </div>
+        </template>
         <div>
           <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" style="margin-bottom: 10px">
             <div class="title">{{ $t('system.cpuUsedRate') }}</div>
             <el-tooltip placement="top-end">
-              <div slot="content" style="font-size: 12px;">
-                <div style="padding: 3px;">
-                  {{ data.cpu.name }}
+              <template #content>
+                <div style="font-size: 12px;">
+                  <div style="padding: 3px;">
+                    {{ data.cpu.name }}
+                  </div>
+                  <div style="padding: 3px">
+                    {{ data.cpu.package }}
+                  </div>
+                  <div style="padding: 3px">
+                    {{ data.cpu.core }}
+                  </div>
+                  <div style="padding: 3px">
+                    {{ data.cpu.logic }}
+                  </div>
                 </div>
-                <div style="padding: 3px">
-                  {{ data.cpu.package }}
-                </div>
-                <div style="padding: 3px">
-                  {{ data.cpu.core }}
-                </div>
-                <div style="padding: 3px">
-                  {{ data.cpu.logic }}
-                </div>
-              </div>
+              </template>
               <div class="content">
                 <el-progress type="circle" :percentage="parseFloat(data.cpu.used)" />
               </div>
@@ -47,17 +51,19 @@
           <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" style="margin-bottom: 10px">
             <div class="title">{{ $t('system.memUsedRate') }}</div>
             <el-tooltip placement="top-end">
-              <div slot="content" style="font-size: 12px;">
-                <div style="padding: 3px;">
-                  {{ $t('system.total') }}：{{ data.memory.total }}
+              <template #content>
+                <div style="font-size: 12px;">
+                  <div style="padding: 3px;">
+                    {{ $t('system.total') }}：{{ data.memory.total }}
+                  </div>
+                  <div style="padding: 3px">
+                    {{ $t('system.used') }}：{{ data.memory.used }}
+                  </div>
+                  <div style="padding: 3px">
+                    {{ $t('system.available') }}：{{ data.memory.available }}
+                  </div>
                 </div>
-                <div style="padding: 3px">
-                  {{ $t('system.used') }}：{{ data.memory.used }}
-                </div>
-                <div style="padding: 3px">
-                  {{ $t('system.available') }}：{{ data.memory.available }}
-                </div>
-              </div>
+              </template>
               <div class="content">
                 <el-progress type="circle" :percentage="parseFloat(data.memory.usageRate)" />
               </div>
@@ -67,17 +73,19 @@
           <el-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6" style="margin-bottom: 10px">
             <div class="title">{{ $t('system.swapUsedRate') }}</div>
             <el-tooltip placement="top-end">
-              <div slot="content" style="font-size: 12px;">
-                <div style="padding: 3px;">
-                  {{ $t('system.total') }}：{{ data.swap.total }}
+              <template #content>
+                <div style="font-size: 12px;">
+                  <div style="padding: 3px;">
+                    {{ $t('system.total') }}：{{ data.swap.total }}
+                  </div>
+                  <div style="padding: 3px">
+                    {{ $t('system.used') }}：{{ data.swap.used }}
+                  </div>
+                  <div style="padding: 3px">
+                    {{ $t('system.available') }}：{{ data.swap.available }}
+                  </div>
                 </div>
-                <div style="padding: 3px">
-                  {{ $t('system.used') }}：{{ data.swap.used }}
-                </div>
-                <div style="padding: 3px">
-                  {{ $t('system.available') }}：{{ data.swap.available }}
-                </div>
-              </div>
+              </template>
               <div class="content">
                 <el-progress type="circle" :percentage="parseFloat(data.swap.usageRate)" />
               </div>
@@ -88,17 +96,19 @@
             <div class="title">{{ $t('system.diskUsedRate') }}</div>
             <div class="content">
               <el-tooltip placement="top-end">
-                <div slot="content" style="font-size: 12px;">
-                  <div style="padding: 3px">
-                    {{ $t('system.total') }}：{{ data.disk.total }}
+                <template #content>
+                  <div style="font-size: 12px;">
+                    <div style="padding: 3px">
+                      {{ $t('system.total') }}：{{ data.disk.total }}
+                    </div>
+                    <div style="padding: 3px">
+                      {{ $t('system.available') }}：{{ data.disk.available }}
+                    </div>
+                    <div style="padding: 3px">
+                      {{ $t('system.clickViewMore') }}
+                    </div>
                   </div>
-                  <div style="padding: 3px">
-                    {{ $t('system.available') }}：{{ data.disk.available }}
-                  </div>
-                  <div style="padding: 3px">
-                    {{ $t('system.clickViewMore') }}
-                  </div>
-                </div>
+                </template>
                 <div class="content" @click="viewDiskDetail">
                   <el-progress type="circle" :percentage="parseFloat(data.disk.usageRate)" />
                 </div>
@@ -113,18 +123,22 @@
         <el-row :gutter="6">
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" style="margin-bottom: 10px">
             <el-card class="box-card">
-              <div slot="header" class="clearfix">
-                <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.cpuUsedRateMonitor') }}</span>
-              </div>
+              <template #header>
+                <div class="clearfix">
+                  <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.cpuUsedRateMonitor') }}</span>
+                </div>
+              </template>
               <!-- 🔥 替换 v-chart 为原生 DOM 容器 -->
               <div id="cpuMonitorChart" class="chart-container" />
             </el-card>
           </el-col>
           <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" style="margin-bottom: 10px">
             <el-card class="box-card">
-              <div slot="header" class="clearfix">
-                <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.memUsedRateMonitor') }}</span>
-              </div>
+              <template #header>
+                <div class="clearfix">
+                  <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.memUsedRateMonitor') }}</span>
+                </div>
+              </template>
               <!-- 🔥 替换 v-chart 为原生 DOM 容器 -->
               <div id="memoryMonitorChart" class="chart-container" />
             </el-card>

@@ -270,11 +270,13 @@
       </el-table-column>
     </el-table>
 
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="showAdSearchDialog = false">{{ $t('advanceSearch.btnCancel') }}</el-button>
-      <el-button type="danger" @click="handleItemsClear()">{{ $t('advanceSearch.btnReset') }}</el-button>
-      <el-button type="primary" @click="handleSearch()">{{ $t('advanceSearch.btnSearch') }}</el-button>
-    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showAdSearchDialog = false">{{ $t('advanceSearch.btnCancel') }}</el-button>
+        <el-button type="danger" @click="handleItemsClear()">{{ $t('advanceSearch.btnReset') }}</el-button>
+        <el-button type="primary" @click="handleSearch()">{{ $t('advanceSearch.btnSearch') }}</el-button>
+      </div>
+    </template>
   </el-dialog>
 </template>
 

@@ -23,10 +23,12 @@
             <el-input-number v-model.number="form.sort" :min="0" :max="999" controls-position="right" style="width: 370px;" />
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="text" @click="cancel">{{ $t('crud.cancel') }}</el-button>
-          <el-button :loading="loading" type="primary" @click="submitMethod">{{ $t('crud.confirm') }}</el-button>
-        </div>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button type="text" @click="cancel">{{ $t('crud.cancel') }}</el-button>
+            <el-button :loading="loading" type="primary" @click="submitMethod">{{ $t('crud.confirm') }}</el-button>
+          </div>
+        </template>
       </el-dialog>
       <!--表格渲染-->
       <el-table v-loading="loading" :data="data" style="width: 100%;">

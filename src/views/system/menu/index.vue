@@ -52,10 +52,14 @@
             @show="$refs['iconSelect'].reset()"
           >
             <IconSelect ref="iconSelect" @selected="selected" />
-            <el-input slot="reference" v-model="crud.form.icon" style="width: 450px;" :placeholder="$t('menu.iconPlaceholder')" readonly>
-              <svg-icon v-if="crud.form.icon" slot="prefix" :icon-class="crud.form.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
-              <i v-else slot="prefix" class="el-icon-search el-input__icon" />
-            </el-input>
+            <template #reference>
+              <el-input v-model="crud.form.icon" style="width: 450px;" :placeholder="$t('menu.iconPlaceholder')" readonly>
+                <template #prefix>
+                  <svg-icon v-if="crud.form.icon" :icon-class="crud.form.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
+                  <i v-else class="el-icon-search el-input__icon" />
+                </template>
+              </el-input>
+            </template>
           </el-popover>
         </el-form-item>
         <el-form-item v-show="crud.form.type.toString() !== '2'" :label="$t('menu.iFrame')" prop="iframe">
@@ -101,10 +105,12 @@
           <treeselect v-model="crud.form.pid" :options="menus" style="width: 450px;" :placeholder="$t('menu.pidPlaceholder')" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
     <el-table

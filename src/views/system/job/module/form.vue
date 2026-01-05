@@ -62,24 +62,25 @@
         />
       </el-form-item>
     </el-form>
-    <div
-      slot="footer"
-      class="dialog-footer"
-    >
-      <el-button
-        type="text"
-        @click="crud.cancelCU"
+    <template #footer>
+      <div
+        class="dialog-footer"
       >
-        {{ $t('crud.cancel') }}
-      </el-button>
-      <el-button
-        :loading="crud.cu === 2"
-        type="primary"
-        @click="crud.submitCU"
-      >
-        {{ $t('crud.confirm') }}
-      </el-button>
-    </div>
+        <el-button
+          type="text"
+          @click="crud.cancelCU"
+        >
+          {{ $t('crud.cancel') }}
+        </el-button>
+        <el-button
+          :loading="crud.cu === 2"
+          type="primary"
+          @click="crud.submitCU"
+        >
+          {{ $t('crud.confirm') }}
+        </el-button>
+      </div>
+    </template>
   </el-dialog>
 </template>
 

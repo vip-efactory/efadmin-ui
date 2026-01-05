@@ -19,16 +19,17 @@
       </div>
       <crudOperation :permission="permission">
         <!-- 新增 -->
-        <el-button
-          slot="left"
-          v-permission="['admin','storage:add']"
-          class="filter-item"
-          size="small"
-          type="primary"
-          icon="Upload"
-          @click="crud.toAdd"
-        >{{ $t('storage.uploadBtn') }}
-        </el-button>
+        <template #left>
+          <el-button
+            v-permission="['admin','storage:add']"
+            class="filter-item"
+            size="small"
+            type="primary"
+            icon="Upload"
+            @click="crud.toAdd"
+          >{{ $t('storage.uploadBtn') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表单组件-->
@@ -57,15 +58,19 @@
             :action="fileUploadApi + '?name=' + crud.form.name"
           >
             <div class="eladmin-upload"><i class="el-icon-upload" /> {{ $t('storage.addFile') }}</div>
-            <div slot="tip" class="el-upload__tip">{{ $t('storage.localUploadTips') }}</div>
+            <template #tip>
+              <div class="el-upload__tip">{{ $t('storage.localUploadTips') }}</div>
+            </template>
           </el-upload>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button v-if="crud.status.add" :loading="loading" type="primary" @click="upload">{{ $t('crud.confirm') }}</el-button>
-        <el-button v-else :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button v-if="crud.status.add" :loading="loading" type="primary" @click="upload">{{ $t('crud.confirm') }}</el-button>
+          <el-button v-else :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
     <el-table
@@ -86,15 +91,16 @@
             width="200"
             trigger="hover"
           >
-            <a
-              slot="reference"
-              :href="baseApi + '/file/' + scope.row.realName"
-              class="el-link--primary"
-              style="word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color: #1890ff;font-size: 13px;"
-              target="_blank"
-            >
-              {{ scope.row.name }}
-            </a>
+            <template #reference>
+              <a
+                :href="baseApi + '/file/' + scope.row.realName"
+                class="el-link--primary"
+                style="word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color: #1890ff;font-size: 13px;"
+                target="_blank"
+              >
+                {{ scope.row.name }}
+              </a>
+            </template>
           </el-popover>
         </template>
       </el-table-column>
@@ -107,9 +113,11 @@
             lazy
             class="el-avatar"
           >
-            <div slot="error">
-              <i class="el-icon-document" />
-            </div>
+            <template #error>
+              <div>
+                <i class="el-icon-document" />
+              </div>
+            </template>
           </el-image>
         </template>
       </el-table-column>

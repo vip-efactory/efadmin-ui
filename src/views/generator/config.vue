@@ -3,35 +3,37 @@
     <el-row :gutter="15">
       <el-col style="margin-bottom: 10px">
         <el-card class="box-card" shadow="never">
-          <div slot="header" class="clearfix">
-            <span class="role-span">{{ $t('genConfig.tblFieldConfig') }}：{{ tableName }}</span>
-            <el-button
-              :loading="genLoading"
-              icon="Promotion"
-              size="small"
-              style="float: right; padding: 6px 9px;"
-              type="success"
-              @click="toGen"
-            >{{ $t('genConfig.saveAndGenerate') }}</el-button>
-            <el-button
-              :loading="columnLoading"
-              icon="Check"
-              size="small"
-              style="float: right; padding: 6px 9px;margin-right: 9px"
-              type="primary"
-              @click="saveColumnConfig"
-            >{{ $t('crud.save') }}</el-button>
-            <el-tooltip class="item" effect="dark" :content="$t('codegen.syncTips')" placement="top-start">
+          <template #header>
+            <div class="clearfix">
+              <span class="role-span">{{ $t('genConfig.tblFieldConfig') }}：{{ tableName }}</span>
               <el-button
-                :loading="syncLoading"
-                icon="Refresh"
+                :loading="genLoading"
+                icon="Promotion"
                 size="small"
                 style="float: right; padding: 6px 9px;"
-                type="info"
-                @click="sync"
-              >{{ $t('codegen.synchronizeBtn') }}</el-button>
-            </el-tooltip>
-          </div>
+                type="success"
+                @click="toGen"
+              >{{ $t('genConfig.saveAndGenerate') }}</el-button>
+              <el-button
+                :loading="columnLoading"
+                icon="Check"
+                size="small"
+                style="float: right; padding: 6px 9px;margin-right: 9px"
+                type="primary"
+                @click="saveColumnConfig"
+              >{{ $t('crud.save') }}</el-button>
+              <el-tooltip class="item" effect="dark" :content="$t('codegen.syncTips')" placement="top-start">
+                <el-button
+                  :loading="syncLoading"
+                  icon="Refresh"
+                  size="small"
+                  style="float: right; padding: 6px 9px;"
+                  type="info"
+                  @click="sync"
+                >{{ $t('codegen.synchronizeBtn') }}</el-button>
+              </el-tooltip>
+            </div>
+          </template>
           <el-form size="small" label-width="90px">
             <el-table v-loading="loading" :data="data" :max-height="tableHeight" size="small" style="width: 100%;margin-bottom: 15px">
               <el-table-column prop="columnName" :label="$t('genConfig.fieldName')" />
@@ -143,17 +145,19 @@
       </el-col>
       <el-col>
         <el-card class="box-card" shadow="never">
-          <div slot="header" class="clearfix">
-            <span class="role-span">{{ $t('genConfig.generateConfigure') }}</span>
-            <el-button
-              :loading="configLoading"
-              icon="Check"
-              size="small"
-              style="float: right; padding: 6px 9px"
-              type="primary"
-              @click="doSubmit"
-            >{{ $t('crud.save') }}</el-button>
-          </div>
+          <template #header>
+            <div class="clearfix">
+              <span class="role-span">{{ $t('genConfig.generateConfigure') }}</span>
+              <el-button
+                :loading="configLoading"
+                icon="Check"
+                size="small"
+                style="float: right; padding: 6px 9px"
+                type="primary"
+                @click="doSubmit"
+              >{{ $t('crud.save') }}</el-button>
+            </div>
+          </template>
           <el-form ref="form" :model="form" :rules="rules" size="small" label-width="150px">
             <el-form-item :label="$t('genConfig.author')" prop="author">
               <el-input v-model="form.author" style="width: 40%" />

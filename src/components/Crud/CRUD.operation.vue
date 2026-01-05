@@ -28,7 +28,6 @@
       </el-button>
       <el-button
         v-if="crud && crud.optShow && crud.optShow.del && permission"
-        slot="reference"
         v-permission="permission.del"
         class="filter-item"
         type="danger"

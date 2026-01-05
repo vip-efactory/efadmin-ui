@@ -56,18 +56,22 @@
           <el-input v-model="crud.form.remark" style="width: 430px;" rows="5" type="textarea" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <el-row :gutter="15">
       <!--角色管理-->
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="17" style="margin-bottom: 10px">
         <el-card class="box-card" shadow="never">
-          <div slot="header" class="clearfix">
-            <span class="role-span">{{ $t('role.roleList') }}</span>
-          </div>
+          <template #header>
+            <div class="clearfix">
+              <span class="role-span">{{ $t('role.roleList') }}</span>
+            </div>
+          </template>
           <el-table
             ref="table"
             v-loading="crud?.loading"
@@ -106,21 +110,23 @@
       <!-- 菜单授权 -->
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="7">
         <el-card class="box-card" shadow="never">
-          <div slot="header" class="clearfix">
-            <el-tooltip class="item" effect="dark" :content="$t('role.menuTips')" placement="top">
-              <span class="role-span">{{ $t('role.menuAssignment') }}</span>
-            </el-tooltip>
-            <el-button
-              v-permission="['admin','roles:edit']"
-              :disabled="!showButton"
-              :loading="menuLoading"
-              icon="Check"
-              size="small"
-              style="float: right; padding: 6px 9px"
-              type="primary"
-              @click="saveMenu"
-            >{{ $t('crud.save') }}</el-button>
-          </div>
+          <template #header>
+            <div class="clearfix">
+              <el-tooltip class="item" effect="dark" :content="$t('role.menuTips')" placement="top">
+                <span class="role-span">{{ $t('role.menuAssignment') }}</span>
+              </el-tooltip>
+              <el-button
+                v-permission="['admin','roles:edit']"
+                :disabled="!showButton"
+                :loading="menuLoading"
+                icon="Check"
+                size="small"
+                style="float: right; padding: 6px 9px"
+                type="primary"
+                @click="saveMenu"
+              >{{ $t('crud.save') }}</el-button>
+            </div>
+          </template>
           <el-tree
             ref="menu"
             :data="menus"
