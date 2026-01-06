@@ -205,19 +205,12 @@ export default defineComponent({
       gap: 8px;
     }
 
-    .card-panel-num,
-    .count-to-component {
-      font-size: 28px;
-      color: #1890ff;
+    .card-panel-num, .debug-num {
+      font-size: 20px;
+      color: #666;
       font-weight: 700;
       line-height: 1;
       white-space: nowrap;
-    }
-
-    .debug-num {
-      font-size: 14px;
-      color: #666;
-      font-weight: normal;
     }
   }
 }
