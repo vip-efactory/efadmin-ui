@@ -118,7 +118,7 @@ export default {
           { required: true, message: i18n.global.t('dictDetail.labelRequired'), trigger: 'blur' }
         ],
         sort: [
-          { required: true, message: i18n.global.t('dictDetail.sortRequired'), trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.global.t('dictDetail.sortRequired'), trigger: 'blur', type: 'number', transform: val => Number(val) }
         ]
       }
     }
