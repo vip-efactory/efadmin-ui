@@ -78,12 +78,16 @@ export default {
       }
     },
     handleError(e, file, fileList) {
-      const msg = JSON.parse(e.message)
-      this.$notify({
-        title: msg.message,
-        type: 'error',
-        duration: 0
-      })
+      try { // 新增：捕获JSON解析异常
+        const msg = JSON.parse(e.message)
+        this.$notify({
+          title: msg.message,
+          type: 'error',
+          duration: 0
+        })
+      } catch (err) {
+        // 空catch块，静默处理解析失败的情况
+      }
     }
   }
 }
