@@ -211,8 +211,12 @@ export default {
     },
     // 监听上传失败
     handleError(e, file, fileList) {
-      const msg = JSON.parse(e.message)
-      this.crud.notify(msg.message, CRUD.NOTIFICATION_TYPE.ERROR)
+      try { // 新增：捕获JSON解析异常
+        const msg = JSON.parse(e.message)
+        this.crud.notify(msg.message, CRUD.NOTIFICATION_TYPE.ERROR)
+      } catch (err) { // 新增：解析失败时静默处理，避免控制台报错
+        // 空catch块，仅捕获异常不做额外操作
+      }
     },
     // 下载文件
     download(id) {
