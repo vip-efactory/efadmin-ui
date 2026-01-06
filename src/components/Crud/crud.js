@@ -87,7 +87,7 @@ function CRUD(options) {
       del: i18n.global.t('crud.delSuccess')
     },
     page: {
-      page: 1, // 修复初始页码0导致接口page=-1的问题
+      page: 0,
       size: 10,
       total: 0
     },
@@ -143,7 +143,7 @@ function CRUD(options) {
           this.loading = false
           if (r.code === 0) {
             const resData = r.data || {}
-            this.page.total = resData.totalCount || 0
+            this.page.total = resData.totalElements || resData.totalCount || 0
             this.data = resData.content || []
             this.resetDataStatus()
             setTimeout(() => callVmHook(this, CRUD.HOOK.afterRefresh), this.time)
