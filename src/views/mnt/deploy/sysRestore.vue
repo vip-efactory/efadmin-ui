@@ -3,6 +3,7 @@
     <!--工具栏-->
     <div class="head-container">
       <el-date-picker
+        v-if="crud"
         v-model="crud.query.createTime"
         type="daterange"
         range-separator=":"
@@ -68,7 +69,8 @@ export default {
       history: [],
       radio: '',
       appNames: '',
-      selectIndex: ''
+      selectIndex: '',
+      crud: { query: {}}
     }
   },
   created() {
