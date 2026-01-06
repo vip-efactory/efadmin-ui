@@ -125,10 +125,11 @@
             v-permission="['admin','timing:del']"
             placement="top"
             width="200"
+            trigger="click"
           >
             <p>{{ $t('task.deleteTips') }}</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="small" type="text" @click="$refs[scope.row.id].doClose()">{{ $t('crud.cancel') }}</el-button>
+              <el-button size="small" type="text" @click="$refs[scope.row.id].hide()">{{ $t('crud.cancel') }}</el-button>
               <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
             </div>
             <template #reference>
