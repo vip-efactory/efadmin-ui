@@ -93,15 +93,6 @@ export default {
     toGen(tableName) {
       // 生成代码
       generator(tableName, 0).then(r => {
-        if (r.code === 0) {
-          this.$notify({
-            title: i18n.global.t('codegen.generateOK'),
-            type: 'success',
-            duration: 2500
-          })
-        } else {
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-        }
       })
     },
     toDownload(tableName) {
@@ -123,7 +114,7 @@ export default {
           this.syncLoading = false
         } else {
           this.syncLoading = false
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          this.crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).then(() => {
         this.syncLoading = false
