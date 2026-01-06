@@ -179,12 +179,16 @@ export default {
     },
     // 监听上传失败
     handleError(e, file, fileList) {
-      const msg = JSON.parse(e.message)
-      this.$notify({
-        title: msg.message,
-        type: 'error',
-        duration: 2500
-      })
+      try { // 新增：包裹解析逻辑
+        const msg = JSON.parse(e.message)
+        this.$notify({
+          title: msg.message,
+          type: 'error',
+          duration: 2500
+        })
+      } catch (err) { // 新增：解析失败时不做任何操作（不报错、不提示）
+        // 空catch，静默处理解析失败，无任何提示
+      }
     },
     sync() {
       this.syncLoading = true
