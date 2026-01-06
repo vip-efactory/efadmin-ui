@@ -4,7 +4,7 @@
     <div class="head-container">
       <el-input v-model="query.jobName" clearable size="small" :placeholder="$t('task.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter="toQuery" />
       <el-date-picker
-        v-model="crud.query.createTime"
+        v-model="query.createTime"
         type="daterange"
         range-separator=":"
         size="small"
