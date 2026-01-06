@@ -242,17 +242,18 @@ export default {
       crudJob.del([id]).then(res => {
         if (res.code === 0) {
           this.delLoading = false
-          this.$refs[id].doClose()
+          this.$refs[id].hide()
           this.crud.dleChangePage(1)
           this.crud.delSuccessNotify()
           this.crud.toQuery()
         } else {
           this.delLoading = false
+          this.$refs[id].hide()
           crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
       }).catch(() => {
         this.delLoading = false
-        this.$refs[id].doClose()
+        this.$refs[id].hide()
       })
     },
     // 显示日志
