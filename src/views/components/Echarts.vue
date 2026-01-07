@@ -34,21 +34,21 @@
         </el-col>
       </el-row>
       <el-row :gutter="32">
-        <el-col :xs="24" :sm="24" :lg="8">
+        <el-col :xs="24" :sm="24" :lg="12">
           <div class="chart-wrapper">
             <graph />
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="8">
+        <el-col :xs="24" :sm="24" :lg="12">
           <div class="chart-wrapper">
             <sankey />
           </div>
         </el-col>
-        <el-col :xs="24" :sm="24" :lg="8">
-          <div class="chart-wrapper">
-            <line3-d />
-          </div>
-        </el-col>
+        <!--        <el-col :xs="24" :sm="24" :lg="8">-->
+        <!--          <div class="chart-wrapper">-->
+        <!--            <line3-d />-->
+        <!--          </div>-->
+        <!--        </el-col>-->
       </el-row>
       <el-row :gutter="12">
         <el-col :span="12">
@@ -62,11 +62,11 @@
           </div>
         </el-col>
       </el-row>
-      <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-        <div class="chart-wrapper">
-          <word-cloud />
-        </div>
-      </el-row>
+      <!--      <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">-->
+      <!--        <div class="chart-wrapper">-->
+      <!--          <word-cloud />-->
+      <!--        </div>-->
+      <!--      </el-row>-->
       <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
         <div class="chart-wrapper">
           <category />
@@ -86,10 +86,10 @@ import Sunburst from '@/components/Echarts/Sunburst'
 import Graph from '@/components/Echarts/Graph'
 import Sankey from '@/components/Echarts/Sankey'
 import Scatter from '@/components/Echarts/Scatter'
-import Line3D from '@/components/Echarts/Line3D'
+// import Line3D from '@/components/Echarts/Line3D'
 import Category from '@/components/Echarts/Category'
 import Point from '@/components/Echarts/Point'
-import WordCloud from '@/components/Echarts/WordCloud'
+// import WordCloud from '@/components/Echarts/WordCloud'
 
 export default {
   name: 'Echarts',
@@ -104,21 +104,31 @@ export default {
     Rich,
     ThemeRiver,
     Sankey,
-    Line3D,
-    Scatter,
-    WordCloud
+    // Line3D,
+    Scatter
+    // WordCloud
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .dashboard-editor-container {
-    padding: 18px 22px 22px 22px;
-    background-color: rgb(240, 242, 245);
-    .chart-wrapper {
-      background: #fff;
-      padding: 16px 16px 0;
-      margin-bottom: 32px;
-    }
+.dashboard-editor-container {
+  padding: 18px 22px 22px 22px;
+  background-color: rgb(240, 242, 245);
+
+  .chart-wrapper {
+    background: #fff;
+    padding: 16px 16px 0;
+    margin-bottom: 32px;
+    /* 关键修改2：确保容器宽度100%，避免被内容挤压 */
+    width: 100%;
+    box-sizing: border-box;
   }
+
+  /* 关键修改3：优化最后一个图表的内边距，充分利用宽度 */
+  .full-width-chart {
+    padding: 16px; /* 上下左右统一内边距，避免底部空白 */
+    margin-bottom: 16px; /* 适度减少底部margin，视觉更协调 */
+  }
+}
 </style>

@@ -3,8 +3,8 @@
 </template>
 
 <script>
-// 1. 替换安全的 ECharts 初始化方法（核心修复）
-import { initEcharts } from '@/utils/echartsFix'
+import * as echarts from 'echarts'
+
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
 
@@ -32,13 +32,12 @@ export default {
     this.initChart()
     this.__resizeHandler = debounce(() => {
       if (this.chart) {
-        this.chart.resize() // 保持原有缩放逻辑
+        this.chart.resize()
       }
     }, 100)
     window.addEventListener('resize', this.__resizeHandler)
   },
-  // 2. 生命周期兼容 Vue2/Vue3（可选，规范统一）
-  beforeUnmount() {
+  beforeDestroy() {
     if (!this.chart) {
       return
     }
@@ -48,13 +47,8 @@ export default {
   },
   methods: {
     initChart() {
-      // 3. 安全初始化：避免 DOM 未挂载或工具函数未导入的报错
-      if (!initEcharts || !this.$el) return
+      this.chart = echarts.init(this.$el, 'macarons')
 
-      // 替换原始 echarts.init 为安全初始化方法
-      this.chart = initEcharts(this.$el, 'macarons')
-
-      // 原有配置完全保留，无任何修改
       this.chart.setOption({
         title: {
           text: '漏斗图',
@@ -78,11 +72,12 @@ export default {
         series: [
           {
             name: '漏斗图',
-            type: 'funnel', // 已自带 type，无需额外补充
+            type: 'funnel',
             left: '10%',
             top: 60,
             bottom: 60,
             width: '80%',
+            // height: {totalHeight} - y - y2,
             min: 0,
             max: 100,
             minSize: '0%',

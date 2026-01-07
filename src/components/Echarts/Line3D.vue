@@ -5,7 +5,6 @@
 <script>
 // 1. 替换为安全的 ECharts 初始化工具（核心修复），保留 echarts-gl 依赖（3D图表必需）
 import { initEcharts } from '@/utils/echartsFix'
-import 'echarts-gl' // 保留3D依赖，不能删除！
 require('echarts/theme/macarons') // 保留原有主题
 import { debounce } from '@/utils'
 
