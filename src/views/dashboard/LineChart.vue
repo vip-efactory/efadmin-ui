@@ -3,8 +3,6 @@
 </template>
 
 <script>
-// 1. 替换为安全初始化工具，保留核心库用于校验
-import { initEcharts } from '@/utils/echartsFix'
 import * as echarts from 'echarts'
 require('echarts/theme/macarons')
 import { debounce } from '@/utils'
@@ -12,31 +10,16 @@ import { getChartData } from '@/api/monitor/visits'
 
 export default {
   props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '350px'
-    },
-    autoResize: {
-      type: Boolean,
-      default: true
-    }
+    className: { type: String, default: 'chart' },
+    width: { type: String, default: '100%' },
+    height: { type: String, default: '350px' },
+    autoResize: { type: Boolean, default: true }
   },
   data() {
     return {
       chart: null,
       sidebarElm: null,
-      chartData: {
-        visitsData: [],
-        ipData: []
-      },
+      chartData: { visitsData: [], ipData: [] },
       weekDays: []
     }
   },
@@ -48,43 +31,35 @@ export default {
         this.weekDays = res.data.weekDays
         this.initChart()
       } else {
-        // 2. 修复变量名（假设CRUD是全局变量，保持原有逻辑）
-        crud.notify(res.msg, crud.NOTIFICATION_TYPE.ERROR)
+        // 替换掉不存在的 crud.notify，避免报错
+        console.error('数据加载失败：', res.msg || '未知错误')
       }
     })
     if (this.autoResize) {
-      // 3. 修复变量名（去掉下划线，避免ESLint保留键报错）
-      this.resizeHandler = debounce(() => {
-        // 4. 强化实例校验
-        if (this.chart && echarts.getInstanceByDom(this.$el) === this.chart) {
+      this.__resizeHandler = debounce(() => {
+        if (this.chart) {
           this.chart.resize()
         }
       }, 100)
-      window.addEventListener('resize', this.resizeHandler)
+      window.addEventListener('resize', this.__resizeHandler)
     }
 
     this.sidebarElm = document.getElementsByClassName('sidebar-container')[0]
     this.sidebarElm && this.sidebarElm.addEventListener('transitionend', this.sidebarResizeHandler)
   },
   beforeDestroy() {
-    if (this.autoResize && this.resizeHandler) {
-      window.removeEventListener('resize', this.resizeHandler)
+    if (!this.chart) return
+    if (this.autoResize) {
+      window.removeEventListener('resize', this.__resizeHandler)
     }
-
     this.sidebarElm && this.sidebarElm.removeEventListener('transitionend', this.sidebarResizeHandler)
-
-    // 5. 强化实例销毁（通过DOM查找确保彻底清除）
-    if (this.$el) {
-      const instance = echarts.getInstanceByDom(this.$el)
-      if (instance) instance.dispose()
-    }
+    this.chart.dispose()
     this.chart = null
   },
   methods: {
     sidebarResizeHandler(e) {
       if (e.propertyName === 'width') {
-        // 同步修改变量名
-        this.resizeHandler && this.resizeHandler()
+        this.__resizeHandler()
       }
     },
     setOptions({ visitsData, ipData } = {}) {
@@ -92,41 +67,36 @@ export default {
         xAxis: {
           data: this.weekDays,
           boundaryGap: false,
-          axisTick: {
-            show: false
-          }
+          axisTick: { show: false }
         },
+        // 关键改动1：增大grid的top，给上方图例留空间
         grid: {
           left: 10,
           right: 10,
           bottom: 20,
-          top: 30,
+          top: 40, // 从30→40，避免图例和图表重叠
           containLabel: true
         },
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
-          },
+          axisPointer: { type: 'cross' },
           padding: [5, 10]
         },
-        yAxis: {
-          axisTick: {
-            show: false
-          }
-        },
+        yAxis: { axisTick: { show: false }},
+        // 关键改动2：指定图例在上方居中
         legend: {
           data: ['pv', 'ip'],
-          selectedMode: false
+          top: 5,
+          left: 'center',
+          orient: 'horizontal',
+          textStyle: { fontSize: 12 }
         },
         series: [{
-          name: 'pv', itemStyle: {
+          name: 'pv',
+          itemStyle: {
             normal: {
               color: '#FF005A',
-              lineStyle: {
-                color: '#FF005A',
-                width: 2
-              }
+              lineStyle: { color: '#FF005A', width: 2 }
             }
           },
           smooth: true,
@@ -142,13 +112,8 @@ export default {
           itemStyle: {
             normal: {
               color: '#3888fa',
-              lineStyle: {
-                color: '#3888fa',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
-              }
+              lineStyle: { color: '#3888fa', width: 2 },
+              areaStyle: { color: '#f3f8ff' }
             }
           },
           data: ipData,
@@ -158,8 +123,7 @@ export default {
       })
     },
     initChart() {
-      // 6. 用安全初始化工具替代原init，确保实例唯一
-      this.chart = initEcharts(this.$el, 'macarons')
+      this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     }
   }
