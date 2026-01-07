@@ -700,7 +700,7 @@ export default {
   },
   editor: {
     baseOn: '富文本基于',
-    mdBaseOn: 'Markdown基于',
+    mdBaseOn: 'Markdown基于 @kangc/v-md-editor（Vue3适配版）',
     yamlBaseOn: 'Yaml编辑器基于',
     themePreview: '主题预览地址',
     imgUpUse: '图片上传使用',
