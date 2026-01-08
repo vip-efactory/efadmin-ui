@@ -118,7 +118,7 @@ export default {
 
   .chart-wrapper {
     background: #fff;
-    padding: 16px 16px 0;
+    padding: 0;
     margin-bottom: 32px;
     /* 关键修改2：确保容器宽度100%，避免被内容挤压 */
     width: 100%;
