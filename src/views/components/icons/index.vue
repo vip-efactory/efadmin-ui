@@ -19,7 +19,7 @@
           </el-tooltip>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="Element-UI Icons">
+      <el-tab-pane label="Element-Plus Icons">
         <div v-for="item of elementIcons" :key="item" @click="handleClipboard(generateElementIconCode(item),$event)">
           <el-tooltip placement="top">
             <template #content>
@@ -27,7 +27,8 @@
             </template>
             <div class="icon-item">
               <!-- 【可选】空值容错 + Element Plus图标类名兼容 -->
-              <i v-if="item" :class="`el-icon-${item}`" />
+              <!--              <i v-if="item" :class="`el-icon-${item}`" />-->
+              <component :is="createIcon(item)" />
               <span>{{ item }}</span>
             </div>
           </el-tooltip>
@@ -41,6 +42,7 @@
 import clipboard from '@/utils/clipboard'
 import svgIcons from './svg-icons'
 import elementIcons from './element-icons'
+import { h, resolveComponent } from 'vue'
 
 export default {
   name: 'Icons',
@@ -50,12 +52,21 @@ export default {
       elementIcons
     }
   },
+  computed: {
+    createIcon() {
+      return (item) => {
+        return h(
+          resolveComponent('el-icon'), null, () => [h(resolveComponent(item))]
+        )
+      }
+    }
+  },
   methods: {
     generateIconCode(symbol) {
       return `<svg-icon icon-class="${symbol}" />`
     },
     generateElementIconCode(symbol) {
-      return `<i class="el-icon-${symbol}" />`
+      return ` <el-icon><${symbol} /></el-icon>`
     },
     handleClipboard(text, event) {
       // 【可选】Vue3下阻止事件冒泡，避免触发无关行为
