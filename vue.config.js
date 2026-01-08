@@ -32,10 +32,7 @@ module.exports = {
     // overlay: { warnings: false, errors: true },
     // 核心修改2：把overlay移到client配置里（Webpack5正确写法）
     client: {
-      overlay: {
-        warnings: false,
-        errors: true
-      }
+      overlay: false
     },
     proxy: {
       '/api': {
