@@ -128,7 +128,6 @@
                   <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.cpuUsedRateMonitor') }}</span>
                 </div>
               </template>
-              <!-- 🔥 替换 v-chart 为原生 DOM 容器 -->
               <div id="cpuMonitorChart" class="chart-container" />
             </el-card>
           </el-col>
@@ -139,7 +138,6 @@
                   <span style="font-weight: bold;color: #666;font-size: 15px">{{ $t('system.memUsedRateMonitor') }}</span>
                 </div>
               </template>
-              <!-- 🔥 替换 v-chart 为原生 DOM 容器 -->
               <div id="memoryMonitorChart" class="chart-container" />
             </el-card>
           </el-col>
@@ -151,128 +149,56 @@
 </template>
 
 <script>
-// 🔥 移除 vue-echarts 相关导入（已卸载，Vue3 不兼容）
-// import ECharts from 'vue-echarts'
-// import 'echarts/lib/chart/line'
-// import 'echarts/lib/component/polar'
-
+import * as echarts from 'echarts'
 import { initData } from '@/api/data'
 import Disk from './disk'
 import { debounce } from '@/utils'
 
 export default {
   name: 'ServerMonitor',
-  components: {
-    // 🔥 移除 vue-echarts 组件注册
-    Disk
-  },
+  components: { Disk },
   data() {
     return {
       show: false,
       monitor: null,
       url: 'api/monitor',
       data: {},
-      // 图表实例（存储全局，避免重复初始化）
       cpuChart: null,
       memoryChart: null,
-      // 图表配置项（保留原有逻辑不变）
       cpuInfo: {
-        tooltip: {
-          trigger: 'axis'
-        },
-        grid: {
-          left: 10,
-          right: 30,
-          top: 10,
-          bottom: 10,
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: []
-        },
-        yAxis: {
-          type: 'value',
-          min: 0,
-          max: 100,
-          interval: 20
-        },
+        tooltip: { trigger: 'axis' },
+        grid: { left: 10, right: 30, top: 10, bottom: 10, containLabel: true },
+        xAxis: { type: 'category', boundaryGap: false, data: [] },
+        yAxis: { type: 'value', min: 0, max: 100, interval: 20 },
         series: [{
           data: [],
           type: 'line',
-          areaStyle: {
-            normal: {
-              color: 'rgb(32, 160, 255)' // 改变区域颜色
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: '#6fbae1',
-              lineStyle: {
-                color: '#6fbae1' // 改变折线颜色
-              }
-            }
-          }
+          areaStyle: { color: 'rgb(32, 160, 255)' },
+          itemStyle: { color: '#6fbae1', lineStyle: { color: '#6fbae1' }}
         }]
       },
       memoryInfo: {
-        tooltip: {
-          trigger: 'axis'
-        },
-        grid: {
-          left: 10,
-          right: 30,
-          top: 10,
-          bottom: 10,
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: []
-        },
-        yAxis: {
-          type: 'value',
-          min: 0,
-          max: 100,
-          interval: 20
-        },
+        tooltip: { trigger: 'axis' },
+        grid: { left: 10, right: 30, top: 10, bottom: 10, containLabel: true },
+        xAxis: { type: 'category', boundaryGap: false, data: [] },
+        yAxis: { type: 'value', min: 0, max: 100, interval: 20 },
         series: [{
           data: [],
           type: 'line',
-          areaStyle: {
-            normal: {
-              color: 'rgb(32, 160, 255)' // 改变区域颜色
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: '#6fbae1',
-              lineStyle: {
-                color: '#6fbae1' // 改变折线颜色
-              }
-            }
-          }
+          areaStyle: { color: 'rgb(32, 160, 255)' },
+          itemStyle: { color: '#6fbae1', lineStyle: { color: '#6fbae1' }}
         }]
       }
     }
   },
   created() {
     this.init()
-    // 定时刷新数据（保留原有逻辑）
     this.monitor = window.setInterval(() => {
-      setTimeout(() => {
-        this.init()
-      }, 2)
+      setTimeout(() => { this.init() }, 2)
     }, 3500)
   },
   mounted() {
-    // 初始化图表（确保DOM加载完成）
-    this.$nextTick(() => {
-      this.initCharts()
-    })
-    // 窗口resize自适应
+    this.$nextTick(() => { this.initCharts() })
     this.__resizeHandler = debounce(() => {
       this.cpuChart?.resize()
       this.memoryChart?.resize()
@@ -280,51 +206,41 @@ export default {
     window.addEventListener('resize', this.__resizeHandler)
   },
   beforeUnmount() {
-    // 清理定时器 + 销毁图表 + 移除事件监听
     clearInterval(this.monitor)
     window.removeEventListener('resize', this.__resizeHandler)
     this.cpuChart?.dispose()
     this.memoryChart?.dispose()
   },
   methods: {
-    // 🔥 初始化图表实例（原生ECharts）
+    // 🔥 关键2：替换 this.$echarts 为局部引入的 echarts
     initCharts() {
-      if (!this.$echarts) {
-        console.error('ECharts 全局挂载失败！请检查是否引入CDN')
-        return
-      }
-
-      // 避免重复初始化图表
+      // 避免重复初始化
       if (this.cpuChart && this.memoryChart) return
 
-      // CPU监控图表（现在容器已渲染）
+      // CPU监控图表
       const cpuDom = document.getElementById('cpuMonitorChart')
       if (cpuDom) {
-        this.cpuChart = this.$echarts.init(cpuDom)
+        this.cpuChart = echarts.init(cpuDom) // 改用局部引入的echarts
         this.cpuChart.setOption(this.cpuInfo)
       }
 
       // 内存监控图表
       const memoryDom = document.getElementById('memoryMonitorChart')
       if (memoryDom) {
-        this.memoryChart = this.$echarts.init(memoryDom)
+        this.memoryChart = echarts.init(memoryDom) // 改用局部引入的echarts
         this.memoryChart.setOption(this.memoryInfo)
       }
     },
 
-    // 加载数据（保留原有逻辑，新增图表更新）
     init() {
       initData(this.url, {}).then(res => {
         if (res.code === 0) {
           this.data = res.data
           this.show = true
 
-          // 🔥 新增：show为true后，等DOM渲染完成再初始化图表
-          this.$nextTick(() => {
-            this.initCharts()
-          })
+          this.$nextTick(() => { this.initCharts() })
 
-          // 数据长度控制（保留原有逻辑）
+          // 数据长度控制
           if (this.cpuInfo.xAxis.data.length >= 8) {
             this.cpuInfo.xAxis.data.shift()
             this.memoryInfo.xAxis.data.shift()
@@ -332,13 +248,13 @@ export default {
             this.memoryInfo.series[0].data.shift()
           }
 
-          // 🔥 修复CPU数据来源笔误（之前用了memory的数）
+          // 更新数据
           this.cpuInfo.xAxis.data.push(res.data.time)
           this.memoryInfo.xAxis.data.push(res.data.time)
-          this.cpuInfo.series[0].data.push(parseFloat(res.data.cpu.used)) // 改为cpu.used
+          this.cpuInfo.series[0].data.push(parseFloat(res.data.cpu.used))
           this.memoryInfo.series[0].data.push(parseFloat(res.data.memory.usageRate))
 
-          // 更新图表数据
+          // 更新图表
           this.cpuChart?.setOption(this.cpuInfo)
           this.memoryChart?.setOption(this.memoryInfo)
         } else {
@@ -347,7 +263,6 @@ export default {
       })
     },
 
-    // 查看磁盘的详细信息（保留原有功能）
     viewDiskDetail() {
       this.$refs.disk.dialog = true
       this.$refs.disk.doInit(this.data.disk.disks)
@@ -359,21 +274,8 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 :deep(.box-card) {
   margin-bottom: 5px;
-  span {
-    margin-right: 28px;
-  }
-  .el-icon-refresh {
-    margin-right: 10px;
-    float: right;
-    cursor: pointer;
-  }
-}
-
-.cpu, .memory, .swap, .disk {
-  width: 20%;
-  float: left;
-  padding-bottom: 20px;
-  margin-right: 5%;
+  span { margin-right: 28px; }
+  .el-icon-refresh { margin-right: 10px; float: right; cursor: pointer; }
 }
 
 .title, .footer {
@@ -385,16 +287,11 @@ export default {
   line-height: 25px;
 }
 
-.content {
-  text-align: center;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
+.content { text-align: center; margin-top: 5px; margin-bottom: 5px; }
 
-// 🔥 图表容器样式（确保图表正常显示）
 .chart-container {
   width: 100%;
-  height: 250px; // 匹配原有 v-chart 高度
+  height: 250px;
   padding: 5px;
 }
 </style>
