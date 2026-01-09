@@ -61,16 +61,33 @@
         <el-form-item :label="$t('task.params')">
           <el-input v-model="crud.form.params" style="width: 460px;" />
         </el-form-item>
-        <el-form-item :label="$t('task.cronExpression')">
-          <div class="cron">
-            <el-popover v-model="cronPopover">
-              <!-- 模板标签不变，仍为 <cron> -->
-              <cron :i18n="cronLocale" @change="changeCron" @close="cronPopover=false" />
-              <template #reference>
-                <el-input v-model="crud.form.cronExpression" placeholder="请输入定时策略" @click="cronPopover=true" />
-              </template>
-            </el-popover>
-          </div>
+        <el-form-item :label="$t('task.cronExpression')" prop="cronExpression">
+          <el-popover
+            ref="cronPopoverRef"
+            v-model="cronPopover"
+            placement="bottom"
+            width="auto"
+            trigger="click"
+            append-to-body
+            @click-outside="cronPopover = false"
+          >
+            <vue3-cron-plus
+              v-model="cronValue"
+              :locale="cronLocale"
+              style="width: 650px; height: auto;"
+              @change="changeCron"
+              @close="handleCronClose"
+              @confirm="cronPopover = false"
+            />
+            <template #reference>
+              <el-input
+                v-model="crud.form.cronExpression"
+                placeholder="请输入定时策略"
+                style="width: 460px;"
+                @input="handleInputCron"
+              />
+            </template>
+          </el-popover>
         </el-form-item>
         <el-form-item :label="$t('task.isPause')">
           <el-radio v-model="crud.form.isPause" :label="false">{{ $t('bool.true') }}</el-radio>
@@ -154,9 +171,8 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
 import i18n, { getLocale } from '../../../lang'
-
-// 🔥 关键修改：获取 Vue3 原生 Cron 组件（CDN 暴露的全局变量为 VueCronNext）
-const CronComponent = window.VueCronNext
+import { vue3CronPlus } from 'vue3-cron-plus'
+import 'vue3-cron-plus/dist/index.css'
 
 // crud交由presenter持有
 const adSearchFields = [{ fieldName: 'jobName', labelName: i18n.global.t('task.jobName') }, { fieldName: 'beanName', labelName: i18n.global.t('task.beanName') }, { fieldName: 'methodName', labelName: i18n.global.t('task.methodName') }, { fieldName: 'remark', labelName: i18n.global.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
@@ -164,11 +180,11 @@ const defaultCrud = CRUD({ title: i18n.global.t('task.TITLE'), url: 'api/jobs/pa
 const defaultForm = { id: null, jobName: null, beanName: null, methodName: null, params: null, cronExpression: null, isPause: false, remark: null }
 export default {
   name: 'Timing',
-  // 🔥 关键修改：注册组件（名称仍为 cron，与模板 <cron> 对应，无需改模板）
-  components: { Log, pagination, crudOperation, rrOperation, cron: CronComponent },
+  components: { Log, pagination, crudOperation, rrOperation, vue3CronPlus },
   mixins: [presenter(defaultCrud), header(), form(defaultForm), crud()],
   data() {
     return {
+      cronValue: '* * * * * ?',
       delLoading: false,
       permission: {
         add: ['admin', 'timing:add'],
@@ -186,28 +202,33 @@ export default {
           { required: true, message: i18n.global.t('task.methodNameRequired'), trigger: 'blur' }
         ],
         cronExpression: [
-          { required: true, message: i18n.global.t('task.cronExpressionRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('task.cronExpressionRequired'), trigger: 'submit' }
         ]
       },
-      cronPopover: false
+      cronPopover: false // 控制popover显示隐藏
     }
   },
   computed: {
-    // 🔥 关键修改：适配 VueCronNext 的 i18n 格式（中文：zh-CN，英文：en-US）
     cronLocale: function() {
       return getLocale().indexOf('zh') > -1 ? 'zh-CN' : 'en-US'
     },
     dialogVisible: {
       get() {
-        // 用可选链确保crud、status存在，空值时兜底返回false
         return this.crud?.status?.cu > 0 ?? false
       },
       set(newVal) {
-        // 仅当newVal为false，且crud、status都存在时，才修改cu
         if (!newVal && this.crud?.status) {
           this.crud.status.add = CRUD.STATUS.NORMAL
           this.crud.status.edit = CRUD.STATUS.NORMAL
         }
+      }
+    }
+  },
+  // 最小改动4：新增watch，编辑时反向同步cron值（确保回显正常）
+  watch: {
+    dialogVisible(newVal) {
+      if (newVal && this.crud.form.cronExpression) {
+        this.cronValue = this.crud.form.cronExpression
       }
     }
   },
@@ -264,8 +285,21 @@ export default {
     checkboxT(row, rowIndex) {
       return row.id !== 1
     },
-    changeCron(val) {
-      this.form.cronExpression = val
+    handleCronClose() {
+      this.cronPopover = false
+      this.$refs.cronPopoverRef?.hide()
+    },
+    changeCron(cronVal) {
+      const realVal = cronVal?.detail || cronVal
+      if (realVal && realVal !== '[object Event]' && typeof realVal !== 'object') {
+        this.cronValue = realVal
+        this.crud.form.cronExpression = realVal
+      }
+    },
+    handleInputCron(inputVal) {
+      if (inputVal) {
+        this.cronValue = inputVal
+      }
     }
   }
 }
