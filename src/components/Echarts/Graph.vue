@@ -1,6 +1,6 @@
 <template>
   <!-- 仅保留容器，不添加任何额外样式，宽高适配原生展示效果 -->
-  <div ref="chartRef" style="width: 800px; height: 300px;" />
+  <div ref="chartRef" style="width: 100%; height: 300px;" />
 </template>
 
 <script setup>

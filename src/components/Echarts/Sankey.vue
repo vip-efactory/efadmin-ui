@@ -1,6 +1,6 @@
 <template>
   <!-- 仅设置容器宽高（匹配原生桑基图默认展示尺寸），无任何额外样式 -->
-  <div ref="chartRef" style="width: 800px; height: 300px;" />
+  <div ref="chartRef" style="width: 100%; height: 300px;" />
 </template>
 
 <script setup>

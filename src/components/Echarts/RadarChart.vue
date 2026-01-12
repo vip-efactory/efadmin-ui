@@ -1,117 +1,75 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <!-- ECharts 容器，设置明确宽高保证图表正常渲染，兼容你现有父组件布局 -->
+  <div id="basic-radar-chart" style="width: 100%; height: 300px;" />
 </template>
 
-<script>
+<script setup>
+import { onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import { debounce } from '@/utils'
-export default {
-  props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '300px'
-    }
-  },
-  data() {
-    return {
-      chart: null
-    }
-  },
-  mounted() {
-    this.initChart()
-    this.__resizeHandler = debounce(() => {
-      if (this.chart) {
-        this.chart.resize()
-      }
-    }, 100)
-    window.addEventListener('resize', this.__resizeHandler)
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    window.removeEventListener('resize', this.__resizeHandler)
-    this.chart.dispose()
-    this.chart = null
-  },
-  methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
 
-      this.chart.setOption({
-        // 修正 tooltip：适配雷达图的触发方式
-        tooltip: {
-          trigger: 'item', // 雷达图用item触发（替代axis）
-          // 移除无用的axisPointer（雷达图不需要）
-          formatter: '{b}: {c}' // 可选：优化提示框显示格式
-        },
-        radar: {
-          radius: '66%',
-          center: ['50%', '42%'],
-          splitNumber: 4, // 进一步减少刻度数量（从5→4，更稀疏）
-          alignTicks: false,
-          // 新增：缩小刻度文字，避免拥挤
-          axisName: {
-            fontSize: 10 // 刻度名称文字大小
+// 声明持久化变量：存储ECharts实例，用于组件销毁时释放内存
+let myChart = null
+
+onMounted(() => {
+  // 1. 初始化ECharts实例：DOM挂载完成后获取容器元素，避免DOM获取失败
+  const chartDom = document.getElementById('basic-radar-chart')
+  myChart = echarts.init(chartDom)
+
+  // 2. 构建ECharts配置项（与原代码option完全一致，保证图表样式、数据不变）
+  const option = {
+    title: {
+      text: 'Basic Radar Chart'
+    },
+    legend: {
+      data: ['Allocated Budget', 'Actual Spending']
+    },
+    radar: {
+      // shape: 'circle', // 注释保留，如需圆形雷达图可取消注释
+      indicator: [
+        { name: 'Sales', max: 6500 },
+        { name: 'Administration', max: 16000 },
+        { name: 'Information Technology', max: 30000 },
+        { name: 'Customer Support', max: 38000 },
+        { name: 'Development', max: 52000 },
+        { name: 'Marketing', max: 25000 }
+      ]
+    },
+    series: [
+      {
+        name: 'Budget vs spending',
+        type: 'radar',
+        data: [
+          {
+            value: [4200, 3000, 20000, 35000, 50000, 18000],
+            name: 'Allocated Budget'
           },
-          splitLine: {
-            lineStyle: {
-              fontSize: 8 // 刻度线文字大小
-            }
-          },
-          splitArea: {
-            areaStyle: {
-              color: 'rgba(127,95,132,.3)',
-              opacity: 1,
-              shadowBlur: 45,
-              shadowColor: 'rgba(0,0,0,.5)',
-              shadowOffsetX: 0,
-              shadowOffsetY: 15
-            }
-          },
-          indicator: [
-            { name: 'Sales', max: 20000 },
-            { name: 'Administration', max: 20000 },
-            { name: 'Information Techology', max: 20000 },
-            { name: 'Customer Support', max: 20000 },
-            { name: 'Development', max: 20000 },
-            { name: 'Marketing', max: 20000 }
-          ]
-        },
-        legend: {
-          left: 'center',
-          bottom: '10',
-          textStyle: { fontSize: 10 }, // 缩小图例文字
-          data: ['Allocated Budget', 'Expected Spending', 'Actual Spending']
-        },
-        series: [{
-          type: 'radar',
-          symbolSize: 0,
-          areaStyle: {
-            shadowBlur: 13,
-            shadowColor: 'rgba(0,0,0,.2)',
-            shadowOffsetX: 0,
-            shadowOffsetY: 10,
-            opacity: 1
-          },
-          data: [
-            { value: [5000, 7000, 12000, 11000, 15000, 14000], name: 'Allocated Budget' },
-            { value: [4000, 9000, 15000, 15000, 13000, 11000], name: 'Expected Spending' },
-            { value: [5500, 11000, 12000, 15000, 12000, 12000], name: 'Actual Spending' }
-          ],
-          animationDuration: 3000
-        }]
-      })
-    }
+          {
+            value: [5000, 14000, 28000, 26000, 42000, 21000],
+            name: 'Actual Spending'
+          }
+        ]
+      }
+    ]
   }
-}
+
+  // 3. 渲染图表：将配置项设置到ECharts实例中
+  myChart.setOption(option)
+})
+
+onUnmounted(() => {
+  // 4. 组件销毁时清理资源，避免内存泄漏（关键！）
+  if (myChart) {
+    myChart.dispose() // 销毁ECharts实例，释放内存
+    myChart = null // 清空变量，避免残留引用
+  }
+})
 </script>
+
+<style scoped>
+/* 补充容器样式，兼容你现有父组件的.chart-wrapper布局，无样式冲突 */
+#basic-radar-chart {
+  margin: 0 auto;
+  width: 100%;
+  height: 600px;
+}
+</style>
