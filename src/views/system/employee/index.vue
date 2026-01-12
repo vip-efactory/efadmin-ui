@@ -249,7 +249,7 @@ export default {
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {
-      if (!crud.form.status) {
+      if (crud.form.status === null || crud.form.status === undefined) {
         this.$message({
           message: i18n.global.t('employee.statusSelectChk'),
           type: 'warning'
