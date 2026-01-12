@@ -5,7 +5,7 @@
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
         <el-input
-          v-model="query.jobName"
+          v-model="crud.query.jobName"
           clearable
           size="small"
           :placeholder="$t('task.searchPlaceholder')"
