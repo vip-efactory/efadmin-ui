@@ -31,6 +31,8 @@ import dialogDrag from './utils/dialog-drag'
 import { registerSvgIcon } from './assets/icons/index'
 import CountTo from 'vue3-count-to'
 
+import VueUeditorWrap from 'vue-ueditor-wrap'
+
 // 🔥 移除 ECharts 模块化导入，只使用 CDN 全局变量
 // import * as echarts from 'echarts'
 
@@ -46,6 +48,7 @@ app.config.globalProperties.$echarts = window.echarts || {}
 app.directive('dialog-drag', dialogDrag)
 registerSvgIcon(app)
 app.component('CountTo', CountTo)
+app.component('VueUeditorWrap', VueUeditorWrap)
 
 // 9. 高亮指令（补充 updated 钩子，抽离复用函数）
 // 9. 高亮指令（补充 updated 钩子，修复 ESLint 报错）
