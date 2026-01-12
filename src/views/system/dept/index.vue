@@ -24,7 +24,7 @@
           :start-placeholder="$t('common.startTime')"
           :end-placeholder="$t('common.endTime')"
         />
-        <el-select v-model="query.enabled" clearable size="small" :placeholder="$t('dept.enabled')" class="filter-item" style="width: 90px" @change="crud.toQuery">
+        <el-select v-model="crud.query.enabled" clearable size="small" :placeholder="$t('dept.enabled')" class="filter-item" style="width: 90px" @change="crud.toQuery">
           <el-option v-for="item in enabledTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
         </el-select>
         <rrOperation :crud="crud" />
