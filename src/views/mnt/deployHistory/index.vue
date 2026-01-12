@@ -13,7 +13,7 @@
           @keyup.enter="crud.toQuery"
         />
         <el-date-picker
-          v-model="query.deployDate"
+          v-model="crud.query.deployDate"
           type="daterange"
           range-separator=":"
           size="small"
