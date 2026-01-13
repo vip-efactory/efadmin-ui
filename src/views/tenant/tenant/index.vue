@@ -35,13 +35,11 @@
           </el-form-item>
           <el-form-item :label="$t('tenant.status')" prop="status">
             <el-radio-group v-model="crud.form.status">
-              <el-radio
-                v-for="item in dict.tenant_status"
-                :key="item.id"
-                :label="item.value"
-              >{{ item.label }}</el-radio>
+              <el-radio :label="0">禁用</el-radio>
+              <el-radio :label="1">启用</el-radio>
             </el-radio-group>
           </el-form-item>
+
           <el-form-item :label="$t('be.remark')">
             <el-input v-model="crud.form.remark" style="width: 370px;" />
           </el-form-item>
