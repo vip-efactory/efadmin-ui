@@ -21,35 +21,37 @@ const permission = {
   }
 }
 
-// 🌟 核心修复：创建视图上下文，让Webpack静态分析所有.vue组件
+// 创建视图上下文，让Webpack静态分析所有.vue组件
 const viewContext = require.context('@/views', true, /\.vue$/)
 
-export const filterAsyncRouter = (routers) => { // 遍历后台传来的路由字符串，转换为组件对象
-  return routers.filter(router => {
-    // 新增：过滤掉 hidden 为 true 的路由（核心逻辑）
-    if (router.hidden === true) {
-      return false // 直接过滤，不保留该路由
-    }
-
-    // 原有组件加载逻辑保留
+export const filterAsyncRouter = (routers) => {
+  return routers.map(router => {
     if (router.component) {
-      if (router.component === 'Layout') { // Layout组件特殊处理
+      if (router.component === 'Layout') {
         router.component = Layout
       } else {
-        const component = router.component
-        router.component = loadView(component)
+        router.component = loadView(router.component)
       }
     }
 
-    // 新增：递归过滤子路由中的 hidden:true 项
     if (router.children && router.children.length) {
-      router.children = filterAsyncRouter(router.children) // 子路由也执行相同过滤逻辑
-      // 可选：如果父路由过滤后无子路由，也隐藏父路由（根据需求选）
-      // if (router.children.length === 0) return false;
+      router.children = filterAsyncRouter(router.children)
     }
 
-    return true // 保留 hidden 为 false 的路由
+    return router // 🚀 不过滤，全部保留
   })
+}
+// 过滤掉隐藏的菜单
+export function filterMenuRouters(routes) {
+  return routes
+    .filter(route => route.hidden !== true)
+    .map(route => {
+      const r = { ...route }
+      if (r.children && r.children.length) {
+        r.children = filterMenuRouters(r.children)
+      }
+      return r
+    })
 }
 
 // 🌟 核心修复：去掉多余的views层级

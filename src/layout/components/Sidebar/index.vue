@@ -14,7 +14,7 @@
         :router="true"
       >
         <sidebar-item
-          v-for="route in permission_routers.filter(route => !route.hidden && route.path && (route.meta?.title || route.children?.length))"
+          v-for="route in menuRouters"
           :key="route.path"
           :item="route"
           :base-path="route.path"
@@ -29,6 +29,7 @@ import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/assets/styles/variables.scss'
+import { filterMenuRouters } from '@/store/modules/permission'
 
 export default {
   components: { SidebarItem, Logo },
@@ -37,6 +38,9 @@ export default {
       'permission_routers',
       'sidebar'
     ]),
+    menuRouters() {
+      return filterMenuRouters(this.permission_routers)
+    },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
