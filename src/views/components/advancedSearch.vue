@@ -6,12 +6,9 @@
         <el-col :span="16">
           <el-form-item :label="$t('advanceSearch.globalTypeLabel')" :label-width="formLabelWidth">
             <el-radio-group v-model="globalType">
-              <el-radio :label="0" :title="$t('advanceSearch.globalTypeTitle0')">{{ $t('advanceSearch.typeSingle') }}
-              </el-radio>
-              <el-radio :label="1" :title="$t('advanceSearch.globalTypeTitle1')">{{ $t('advanceSearch.typeMulti') }}
-              </el-radio>
-              <el-radio :label="2" :title="$t('advanceSearch.globalTypeTitle2')">{{ $t('advanceSearch.typeGroup') }}
-              </el-radio>
+              <el-radio :value="0" :title="$t('advanceSearch.globalTypeTitle0')">{{ $t('advanceSearch.typeSingle') }}</el-radio>
+              <el-radio :value="1" :title="$t('advanceSearch.globalTypeTitle1')">{{ $t('advanceSearch.typeMulti') }}</el-radio>
+              <el-radio :value="2" :title="$t('advanceSearch.globalTypeTitle2')">{{ $t('advanceSearch.typeGroup') }}</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
