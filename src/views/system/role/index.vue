@@ -53,7 +53,7 @@
           <treeselect v-model="crud.form.depts" :options="depts" multiple style="width: 430px" :placeholder="$t('role.selectPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('role.remark')" prop="remark">
-          <el-input v-model="crud.form.remark" style="width: 430px;" rows="5" type="textarea" />
+          <el-input v-model="crud.form.remark" style="width: 430px;" :rows="5" type="textarea" />
         </el-form-item>
       </el-form>
       <template #footer>
