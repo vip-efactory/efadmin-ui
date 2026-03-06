@@ -9,7 +9,7 @@ export default {
     warningTitle: '提示'
   },
   login: {
-    title: 'EF-ADMIN 后台系统登录',
+    title: 'AMCS系统登录',
     logIn: '登录',
     username: '账号',
     password: '密码',
@@ -21,7 +21,7 @@ export default {
     verificationCodeChk: '验证码名不能为空'
   },
   sidebar: {
-    title: 'EF-ADMIN 后台系统'
+    title: 'AMCS系统'
   },
   navbar: {
     dashboard: '首页',
@@ -46,6 +46,7 @@ export default {
     edit: '编辑',
     delete: '删除',
     export: '导出',
+    import: '导入',
     selectAll: '全选',
     search: '搜索',
     fuzzySearch: '模糊搜索',
@@ -614,9 +615,6 @@ export default {
     helpPaySettingsTitle: '支付设置',
     applyAddress: '\n测试所用参数都是沙箱环境，仅供测试使用，申请地址：',
     aliPayDevPlatform: '支付宝开发平台',
-    payTestTips: '\n如需付款测试，请使用\n' +
-      '账号：uuxesw9745@sandbox.com\n' +
-      '密码与支付密码：111111',
     codeRemark: '\n// 支付提供两个接口，\n' +
       '// PC端与手机端，并且在前端使用代码识别',
     ifIsAndroid: '判断是否为Android手机',
