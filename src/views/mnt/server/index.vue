@@ -122,7 +122,7 @@ export default {
         ],
         ip: [
           { required: true, message: i18n.global.t('mserver.ipRequired'), trigger: 'blur' },
-          { validator: validateIP, trigger: 'change' }
+          { validator: validateIP, trigger: 'blur' }
         ],
         port: [
           { required: true, message: i18n.global.t('mserver.portRequired'), trigger: 'blur', type: 'number' }
