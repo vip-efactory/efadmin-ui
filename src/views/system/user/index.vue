@@ -113,8 +113,8 @@
             </el-form-item>
             <el-form-item :label="$t('user.sex')">
               <el-radio-group v-model="crud.form.sex" style="width: 178px">
-                <el-radio label="男">{{ $t('sex.male') }}</el-radio>
-                <el-radio label="女">{{ $t('sex.female') }}</el-radio>
+                <el-radio value="男">{{ $t('sex.male') }}</el-radio>
+                <el-radio value="女">{{ $t('sex.female') }}</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item :label="$t('user.enabled')">
@@ -122,7 +122,7 @@
                 <el-radio
                   v-for="item in (dict.user_status || defaultUserStatus)"
                   :key="item.id"
-                  :label="item.value + ''"
+                  :value="item.value + ''"
                 >{{ item.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
