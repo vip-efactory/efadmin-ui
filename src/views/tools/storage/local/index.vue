@@ -148,7 +148,7 @@ import i18n from '../../../../lang'
 
 // crud交由presenter持有
 const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.global.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.global.t('storage.type') }, { fieldName: 'operate', labelName: i18n.global.t('storage.operate') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: '文件', url: 'api/localStorage/page', crudMethod: { ...crudFile }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: '文件', url: 'api/localStorage/page', exportUrl: 'api/localStorage/download', crudMethod: { ...crudFile }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: '' }
 export default {
   components: { pagination, crudOperation, rrOperation },
