@@ -10,7 +10,7 @@ export function add(data) {
 
 export function del(ids) {
   return request({
-    url: 'api/localStorage/',
+    url: 'api/localStorage',
     method: 'delete',
     data: ids
   })
