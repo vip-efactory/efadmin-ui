@@ -11,7 +11,6 @@
     />
     <el-popover
       v-model="pop"
-      v-permission="permission.del"
       placement="top"
       width="180"
       trigger="click"
@@ -30,6 +29,7 @@
       </div>
       <template #reference>
         <el-button
+          v-permission="permission.del"
           :disabled="disabledDel"
           type="danger"
           :title="$t('crud.delete')"
