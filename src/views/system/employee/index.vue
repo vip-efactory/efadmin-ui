@@ -23,7 +23,6 @@
         </el-select>
         <rrOperation :crud="crud" />
       </div>
-      <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
       <!--表单组件-->
       <el-dialog
@@ -119,7 +118,7 @@
         <el-table-column v-if="columns.visible('phone')" prop="phone" :label="$t('employee.phone')" sortable="custom" />
         <el-table-column v-if="columns.visible('status')" prop="status" :label="$t('employee.status')" sortable="custom">
           <template #default="scope">
-            {{ dict.label.employee_status[scope.row.status] }}
+            {{ defaultUserStatus.find(i=>i.value===scope.row.status)?.label }}
           </template>
         </el-table-column>
         <el-table-column v-if="columns.visible('dept')" prop="dept" :label="$t('employee.dept')" sortable="custom">
