@@ -224,6 +224,7 @@ export default {
       this.dialog = true
       // 赋值表单（编辑状态）
       this.form = JSON.parse(JSON.stringify(row))
+      this.form.sort = Number(this.form.sort)
       // 确保dict.id存在
       if (!this.form.dict) {
         this.form.dict = { id: this.form.dictId || null }
