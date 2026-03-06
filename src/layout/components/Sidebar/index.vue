@@ -110,4 +110,7 @@ export default {
 
   color: #409EFF !important;
 }
+:deep(.el-menu-item.is-active) {
+  color: #409EFF !important;
+}
 </style>
