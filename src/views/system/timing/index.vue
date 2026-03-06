@@ -139,7 +139,6 @@
           </el-button>
           <el-popover
             :ref="scope.row.id"
-            v-permission="['admin','timing:del']"
             placement="top"
             width="200"
             trigger="click"
@@ -150,7 +149,11 @@
               <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
             </div>
             <template #reference>
-              <el-button link size="small">
+              <el-button
+                v-permission="['admin','timing:del']"
+                link
+                size="small"
+              >
                 {{ $t('crud.delete') }}
               </el-button>
             </template>
