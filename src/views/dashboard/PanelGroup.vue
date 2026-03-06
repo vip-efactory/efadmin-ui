@@ -112,7 +112,6 @@ export default defineComponent({
     async fetchDashboardData() {
       try {
         const res = await get()
-        console.log('接口数据：', res.data)
 
         if (res?.code === 0 && res?.data) {
           const { newIp = 0, newVisits = 0, recentIp = 0, recentVisits = 0 } = res.data
@@ -120,13 +119,10 @@ export default defineComponent({
           this.count.newVisits = newVisits
           this.count.recentIp = recentIp
           this.count.recentVisits = recentVisits
-
-          console.log('赋值后count：', this.count)
         } else {
           ElMessage.error(`数据获取失败：${res?.msg || '未知错误'}`)
         }
       } catch (err) {
-        console.error('请求异常：', err)
         ElMessage.error(`请求失败：${err.message || '网络错误'}`)
       }
     }
