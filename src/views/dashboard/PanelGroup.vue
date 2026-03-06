@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="40" class="panel-group">
-    <!-- 日流量（修复count-to闭合标签） -->
+    <!-- 日流量 -->
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-people">
@@ -8,24 +8,12 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">{{ $t('dashboard.dayFlow') }}</div>
-          <div class="card-panel-num-container">
-            <!-- 🔴 修复：count-to改为自闭合标签 /> -->
-            <count-to
-              :key="count.newVisits"
-              :start-val="0"
-              :end-val="count.newVisits"
-              :duration="2600"
-              :autoplay="true"
-              :decimal-places="0"
-              class="count-to-component"
-            />
-            <span class="debug-num">{{ count.newVisits }}</span>
-          </div>
+          <div class="count-to-component">{{ count.newVisits }}</div>
         </div>
       </div>
     </el-col>
 
-    <!-- 日IP（静态显示，无count-to） -->
+    <!-- 日IP -->
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-message">
@@ -33,14 +21,12 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">{{ $t('dashboard.dayIP') }}</div>
-          <div class="card-panel-num">
-            {{ count.newIp }}
-          </div>
+          <div class="card-panel-num">{{ count.newIp }}</div>
         </div>
       </div>
     </el-col>
 
-    <!-- 周流量（修复count-to闭合标签） -->
+    <!-- 周流量 -->
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-money">
@@ -48,24 +34,12 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">{{ $t('dashboard.weekFlow') }}</div>
-          <div class="card-panel-num-container">
-            <!-- 🔴 修复：count-to改为自闭合标签 /> -->
-            <count-to
-              :key="count.recentVisits"
-              :start-val="0"
-              :end-val="count.recentVisits"
-              :duration="3200"
-              :autoplay="true"
-              :decimal-places="0"
-              class="count-to-component"
-            />
-            <span class="debug-num">{{ count.recentVisits }}</span>
-          </div>
+          <div class="count-to-component">{{ count.recentVisits }}</div>
         </div>
       </div>
     </el-col>
 
-    <!-- 周IP（静态显示，无count-to） -->
+    <!-- 周IP -->
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-shopping">
@@ -84,7 +58,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { CountTo } from 'vue3-count-to' // 确保安装正确
 import { get } from '@/api/monitor/visits'
 import { ElMessage } from 'element-plus'
 import SvgIcon from '@/components/SvgIcon/index.vue'
@@ -92,8 +65,7 @@ import SvgIcon from '@/components/SvgIcon/index.vue'
 export default defineComponent({
   name: 'PanelGroup',
   components: {
-    SvgIcon,
-    CountTo
+    SvgIcon
   },
   data() {
     return {
@@ -195,13 +167,7 @@ export default defineComponent({
       white-space: nowrap;
     }
 
-    .card-panel-num-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .card-panel-num, .debug-num {
+    .card-panel-num, .count-to-component {
       font-size: 20px;
       color: #666;
       font-weight: 700;
