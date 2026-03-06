@@ -56,7 +56,6 @@
         <template #default="scope">
           <el-popover
             :ref="`pop_${scope.$index}`"
-            v-permission="['admin']"
             placement="top"
             width="180"
             trigger="click"
@@ -80,7 +79,12 @@
               </el-button>
             </div>
             <template #reference>
-              <el-button size="small" link style="margin-left: -10px">
+              <el-button
+                v-permission="['admin']"
+                size="small"
+                link
+                style="margin-left: -10px"
+              >
                 {{ $t('online.forceOut') }}
               </el-button>
             </template>
