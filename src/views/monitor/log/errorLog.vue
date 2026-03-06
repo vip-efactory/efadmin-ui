@@ -49,7 +49,7 @@
       </el-table-column>
     </el-table>
     <el-dialog v-model="dialog" :title="$t('log.exceptionDetail')" append-to-body top="30px" width="85%">
-      <pre v-highlightjs="errorInfo"><code class="java" /></pre>
+      <pre><code class="java hljs">{{ errorInfo }}</code></pre>
     </el-dialog>
     <!--分页组件-->
     <pagination />
