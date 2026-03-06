@@ -157,8 +157,6 @@
               style="width: 190px;"
             />
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
           <!-- 多个条件查询额外需要显示的字段 -->
           <el-form-item
             v-show="globalType !== 0"
