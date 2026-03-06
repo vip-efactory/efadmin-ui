@@ -165,7 +165,6 @@ function CRUD(options) {
       if (!(callVmHook(this, CRUD.HOOK.beforeToAdd, this.form) && callVmHook(this, CRUD.HOOK.beforeToCU, this.form))) return
       this.resetForm()
       this.status.add = CRUD.STATUS.PREPARED
-      console.log('toAdd', this.form, this.status.add)
       callVmHook(this, CRUD.HOOK.afterToAdd, this.form)
       callVmHook(this, CRUD.HOOK.afterToCU, this.form)
     },
