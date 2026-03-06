@@ -30,7 +30,7 @@
     </el-form>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="text" @click="dialog = false">{{ $t('crud.cancel') }}</el-button>
+        <el-button link @click="dialog = false">{{ $t('crud.cancel') }}</el-button>
         <el-button :loading="loading" type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
       </div>
     </template>

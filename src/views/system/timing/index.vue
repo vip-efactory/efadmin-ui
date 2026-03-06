@@ -99,7 +99,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
           <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
         </div>
       </template>
@@ -132,9 +132,9 @@
       </el-table-column>
       <el-table-column v-permission="['admin','timing:edit','timing:del']" :label="$t('be.operate')" width="180px" align="center" fixed="right">
         <template #default="scope">
-          <el-button v-permission="['admin','timing:edit']" size="small" style="margin-right: 3px;" type="text" @click="crud.toEdit(scope.row)">{{ $t('crud.edit') }}</el-button>
-          <el-button v-permission="['admin','timing:edit']" style="margin-left: -2px" type="text" size="small" @click="execute(scope.row.id)">{{ $t('task.execBtn') }}</el-button>
-          <el-button v-permission="['admin','timing:edit']" style="margin-left: 3px" type="text" size="small" @click="updateStatus(scope.row.id,scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn'))">
+          <el-button v-permission="['admin','timing:edit']" size="small" style="margin-right: 3px;" link @click="crud.toEdit(scope.row)">{{ $t('crud.edit') }}</el-button>
+          <el-button v-permission="['admin','timing:edit']" style="margin-left: -2px" link size="small" @click="execute(scope.row.id)">{{ $t('task.execBtn') }}</el-button>
+          <el-button v-permission="['admin','timing:edit']" style="margin-left: 3px" link size="small" @click="updateStatus(scope.row.id,scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn'))">
             {{ scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn') }}
           </el-button>
           <el-popover
@@ -146,11 +146,11 @@
           >
             <p>{{ $t('task.deleteTips') }}</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="small" type="text" @click="$refs[scope.row.id].hide()">{{ $t('crud.cancel') }}</el-button>
+              <el-button size="small" link @click="$refs[scope.row.id].hide()">{{ $t('crud.cancel') }}</el-button>
               <el-button :loading="delLoading" type="primary" size="small" @click="delMethod(scope.row.id)">{{ $t('crud.confirm') }}</el-button>
             </div>
             <template #reference>
-              <el-button type="text" size="small">
+              <el-button link size="small">
                 {{ $t('crud.delete') }}
               </el-button>
             </template>

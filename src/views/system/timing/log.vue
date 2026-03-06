@@ -38,7 +38,7 @@
       <el-table-column :show-overflow-tooltip="true" prop="cronExpression" :label="$t('task.cronExpression')" />
       <el-table-column prop="createTime" :label="$t('task.logExceptionDetails')" width="140px">
         <template #default="scope">
-          <el-button v-show="scope.row.exceptionDetail" size="small" type="text" @click="info(scope.row.exceptionDetail)">{{ $t('task.viewExceptionDetails') }}</el-button>
+          <el-button v-show="scope.row.exceptionDetail" size="small" link @click="info(scope.row.exceptionDetail)">{{ $t('task.viewExceptionDetails') }}</el-button>
         </template>
       </el-table-column>
       <el-table-column :show-overflow-tooltip="true" align="center" prop="time" width="140px" :label="$t('task.logConsumeTime')" />
@@ -108,11 +108,11 @@ export default {
 </script>
 
 <style scoped>
-  .java.hljs{
-    color: #444;
-    background: #ffffff !important;
-  }
-  :deep(.el-dialog__body){
-    padding: 0 20px 10px 20px !important;
-  }
+.java.hljs{
+  color: #444;
+  background: #ffffff !important;
+}
+:deep(.el-dialog__body){
+  padding: 0 20px 10px 20px !important;
+}
 </style>

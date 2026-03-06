@@ -66,7 +66,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
           <el-button v-if="crud.status.add" :loading="loading" type="primary" @click="upload">{{ $t('crud.confirm') }}</el-button>
           <el-button v-else :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
         </div>
@@ -233,6 +233,6 @@ export default {
   background: none;
 }
 :deep(el-image-viewer__wrapper) {
-    top: 55px;
-  }
+  top: 55px;
+}
 </style>

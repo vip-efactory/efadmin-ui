@@ -17,7 +17,7 @@
     >
       <p>{{ msg }}</p>
       <div style="text-align: right; margin: 0">
-        <el-button size="small" type="text" @click="doCancel">{{ $t('crud.cancel') }}</el-button>
+        <el-button size="small" link @click="doCancel">{{ $t('crud.cancel') }}</el-button>
         <el-button
           :loading="crud.dataStatus[data.id].delete === 2"
           type="primary"

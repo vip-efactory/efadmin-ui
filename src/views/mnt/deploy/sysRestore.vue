@@ -35,7 +35,7 @@
     </el-form>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="text" @click="cancel">取消</el-button>
+        <el-button link @click="cancel">取消</el-button>
         <el-button v-permission="['admin','deploy:add']" :loading="submitLoading" type="primary" @click="doSubmit">确认</el-button>
       </div>
     </template>

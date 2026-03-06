@@ -7,7 +7,7 @@
         </h3>
       </div>
       <el-form-item prop="username">
-        <el-input v-model="loginForm.username" type="text" auto-complete="off" :placeholder="$t('login.username')">
+        <el-input v-model="loginForm.username" link auto-complete="off" :placeholder="$t('login.username')">
           <template #prefix>
             <svg-icon icon-class="user" class="el-input__icon input-icon" />
           </template>

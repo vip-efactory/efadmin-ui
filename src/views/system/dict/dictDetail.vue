@@ -25,7 +25,7 @@
         </el-form>
         <template #footer>
           <div class="dialog-footer">
-            <el-button type="text" @click="cancel">{{ $t('crud.cancel') }}</el-button>
+            <el-button link @click="cancel">{{ $t('crud.cancel') }}</el-button>
             <el-button :loading="loading" type="primary" @click="submitMethod">{{ $t('crud.confirm') }}</el-button>
           </div>
         </template>
@@ -65,7 +65,7 @@
                 <div style="text-align: right; margin: 0">
                   <el-button
                     size="small"
-                    type="text"
+                    link
                     @click.stop="closeRowPopover(scope.row.id)"
                   >{{ $t('crud.cancel') }}</el-button>
                   <el-button

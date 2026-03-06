@@ -65,7 +65,7 @@
             <div style="text-align: right; margin: 0">
               <el-button
                 size="small"
-                type="text"
+                link
                 @click="$refs[`pop_${scope.$index}`]?.hide?.()"
               >
                 {{ $t('crud.cancel') }}
@@ -80,7 +80,7 @@
               </el-button>
             </div>
             <template #reference>
-              <el-button size="small" type="text" style="margin-left: -10px">
+              <el-button size="small" link style="margin-left: -10px">
                 {{ $t('online.forceOut') }}
               </el-button>
             </template>

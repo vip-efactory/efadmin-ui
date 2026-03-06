@@ -67,7 +67,7 @@
         class="dialog-footer"
       >
         <el-button
-          type="text"
+          link
           @click="crud.cancelCU"
         >
           {{ $t('crud.cancel') }}
@@ -172,6 +172,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 :deep(.el-input-number .el-input__inner) {
-    text-align: left;
-  }
+  text-align: left;
+}
 </style>

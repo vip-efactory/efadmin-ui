@@ -110,7 +110,7 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
           <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
         </div>
       </template>
@@ -276,6 +276,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 :deep(.el-input-number .el-input__inner) {
-    text-align: left;
-  }
+  text-align: left;
+}
 </style>
