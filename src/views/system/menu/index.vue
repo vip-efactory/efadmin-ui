@@ -105,7 +105,7 @@
           <el-input v-model="crud.form.component" style="width: 178px;" :placeholder="$t('menu.componentPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('menu.pid')" prop="pid">
-          <treeselect v-model="crud.form.pid" :options="menus" style="width: 450px;" :placeholder="$t('menu.pidPlaceholder')" />
+          <treeselect :key="`tree-${crud.status.cu}`" v-model="crud.form.pid" :options="menus" style="width: 450px;" :placeholder="$t('menu.pidPlaceholder')" />
         </el-form-item>
       </el-form>
       <template #footer>

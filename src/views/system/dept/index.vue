@@ -48,7 +48,7 @@
           <el-radio v-for="item in (dict.user_status || defaultUserStatus)" :key="item.id" v-model="crud.form.enabled" :label="item.value + ''">{{ item.label }}</el-radio>
         </el-form-item>
         <el-form-item v-if="crud.form.pid !== 0" :label="$t('dept.pid')" prop="pid">
-          <treeselect v-model="crud.form.pid" :options="depts" style="width: 370px;" :placeholder="$t('dept.selectSuperTips')" />
+          <treeselect :key="`tree-${crud.status.cu}`" v-model="crud.form.pid" :options="depts" style="width: 370px;" :placeholder="$t('dept.selectSuperTips')" />
         </el-form-item>
         <el-form-item :label="$t('dept.sort')" prop="sort">
           <el-input v-model="crud.form.sort" type="number" style="width: 370px;" :placeholder="$t('dept.sortInputPlaceholder')" />

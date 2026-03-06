@@ -69,6 +69,7 @@
           </el-form-item>
           <el-form-item :label="$t('employee.dept')" prop="dept.id">
             <treeselect
+              :key="`tree-${crud.status.cu}`"
               v-model="crud.form.dept.id"
               :options="depts"
               style="width: 178px"

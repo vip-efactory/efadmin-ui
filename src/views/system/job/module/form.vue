@@ -55,6 +55,7 @@
         :rules="rules.dept"
       >
         <treeselect
+          :key="`tree-${crud.status.cu}`"
           v-model="crud.form.dept.id"
           :options="depts"
           style="width: 370px"
