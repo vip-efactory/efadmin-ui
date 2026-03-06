@@ -197,9 +197,7 @@ export default {
     .lang-select-wrapper {
       position: relative; // 作为下拉的定位基准
       // 覆盖默认尺寸，适配语言组件
-      width: auto;
       padding: 0 8px;
-      height: 40px;
     }
 
     // 头像容器：单独调整尺寸，适配头像
