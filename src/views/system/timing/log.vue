@@ -72,8 +72,32 @@
 <script>
 import crud from '@/mixins/crud'
 import i18n from '../../../lang'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/default.css'
 
 export default {
+  directives: {
+    highlightjs: {
+      mounted(el, binding) {
+        // 指令逻辑：高亮显示绑定的文本
+        const block = el.querySelector('code')
+        if (block) {
+          // 设置代码内容
+          block.textContent = binding.value || ''
+          // 执行高亮
+          hljs.highlightElement(block)
+        }
+      },
+      updated(el, binding) {
+        // 内容更新时重新高亮
+        const block = el.querySelector('code')
+        if (block) {
+          block.textContent = binding.value || ''
+          hljs.highlightElement(block)
+        }
+      }
+    }
+  },
   mixins: [crud],
   data() {
     return {
