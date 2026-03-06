@@ -33,8 +33,12 @@ import CountTo from 'vue3-count-to'
 
 import VueUeditorWrap from 'vue-ueditor-wrap'
 
+import { TransitionGroup } from 'vue'
+
 // 7. 创建Vue3实例
 const app = createApp(App)
+
+app.component('TransitionGroup', TransitionGroup)
 
 // 全局注册小写transition组件（加ESLint忽略注释，消除警告）
 // eslint-disable-next-line vue/component-definition-name-casing
@@ -88,6 +92,12 @@ app.use(ElementPlus, {
 app.use(store)
 app.use(router)
 app.use(i18n)
+
+// 忽略crud注入重名警告
+app.config.warnHandler = (msg, instance, trace) => {
+  if (msg.includes('Data property "crud" is already defined in Inject')) return
+  console.warn(`[Vue warn]: ${msg}`, instance, trace)
+}
 
 // 移除 Vue3 废弃的 productionTip
 // app.config.productionTip = false
