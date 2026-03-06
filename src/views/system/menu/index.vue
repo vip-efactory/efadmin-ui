@@ -39,9 +39,9 @@
       <el-form ref="form" :inline="true" :model="crud.form" :rules="rules" size="small" label-width="120px">
         <el-form-item :label="$t('menu.type')" prop="type">
           <el-radio-group v-model="crud.form.type" size="small" style="width: 300px">
-            <el-radio-button :label="0">{{ $t('menuType.dir') }}</el-radio-button>
-            <el-radio-button :label="1">{{ $t('menuType.menu') }}</el-radio-button>
-            <el-radio-button :label="2">{{ $t('menuType.button') }}</el-radio-button>
+            <el-radio-button :value="0">{{ $t('menuType.dir') }}</el-radio-button>
+            <el-radio-button :value="1">{{ $t('menuType.menu') }}</el-radio-button>
+            <el-radio-button :value="2">{{ $t('menuType.button') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item v-show="crud.form.type !== 2" :label="$t('menu.icon')" prop="icon">
@@ -65,22 +65,22 @@
         <!-- 已修复：是否外链 - 布尔值label -->
         <el-form-item v-show="crud.form.type !== 2" :label="$t('menu.iFrame')" prop="iframe">
           <el-radio-group v-model="crud.form.iframe" size="small">
-            <el-radio-button :label="true">{{ $t('bool.true') }}</el-radio-button>
-            <el-radio-button :label="false">{{ $t('bool.false') }}</el-radio-button>
+            <el-radio-button :value="true">{{ $t('bool.true') }}</el-radio-button>
+            <el-radio-button :value="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <!-- 已修复：是否缓存 - 布尔值label -->
         <el-form-item v-show="crud.form.type === 1" :label="$t('menu.cache')" prop="cache">
           <el-radio-group v-model="crud.form.cache" size="small">
-            <el-radio-button :label="true">{{ $t('bool.true') }}</el-radio-button>
-            <el-radio-button :label="false">{{ $t('bool.false') }}</el-radio-button>
+            <el-radio-button :value="true">{{ $t('bool.true') }}</el-radio-button>
+            <el-radio-button :value="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <!-- 已修复：是否可见 - 布尔值label -->
         <el-form-item v-show="crud.form.type !== 2" :label="$t('menu.hidden')" prop="hidden">
           <el-radio-group v-model="crud.form.hidden" size="small">
-            <el-radio-button :label="false">{{ $t('bool.true') }}</el-radio-button>
-            <el-radio-button :label="true">{{ $t('bool.false') }}</el-radio-button>
+            <el-radio-button :value="false">{{ $t('bool.true') }}</el-radio-button>
+            <el-radio-button :value="true">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item v-show="crud.form.type !== 2" :label="$t('menuType.menuTitle')" prop="name">
