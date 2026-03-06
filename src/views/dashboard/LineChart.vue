@@ -80,12 +80,8 @@ const initChart = () => {
     },
     series: [{
       name: 'pv',
-      itemStyle: {
-        normal: {
-          color: '#FF005A',
-          lineStyle: { color: '#FF005A', width: 2 }
-        }
-      },
+      itemStyle: { color: '#FF005A' },
+      lineStyle: { color: '#FF005A', width: 2 },
       smooth: true,
       type: 'line',
       data: chartData.value.visitsData,
@@ -96,13 +92,9 @@ const initChart = () => {
       name: 'ip',
       smooth: true,
       type: 'line',
-      itemStyle: {
-        normal: {
-          color: '#3888fa',
-          lineStyle: { color: '#3888fa', width: 2 },
-          areaStyle: { color: '#f3f8ff' }
-        }
-      },
+      itemStyle: { color: '#3888fa' },
+      lineStyle: { color: '#3888fa', width: 2 },
+      areaStyle: { color: '#f3f8ff' },
       data: chartData.value.ipData,
       animationDuration: 2800,
       animationEasing: 'quadraticOut'
