@@ -23,10 +23,9 @@ export default {
   data() {
     return {
       sizeOptions: [
+        { label: 'Large', value: 'large' },
         { label: 'Default', value: 'default' },
-        { label: 'Medium', value: 'medium' },
-        { label: 'Small', value: 'small' },
-        { label: 'Mini', value: 'mini' }
+        { label: 'Small', value: 'small' }
       ]
     }
   },
@@ -46,8 +45,11 @@ export default {
         const storedSize = this.$store.getters.size
         const globalSize = window.ELEMENT.size
         if (storedSize === size && globalSize === size) {
-          this.$forceUpdate()
-          this.$message({ message: '布局设置成功', type: 'success' })
+          this.$message({ message: '布局大小设置成功，页面正在刷新', type: 'success' })
+          // 刷新浏览器使配置生效
+          this.$nextTick(() => {
+            window.location.reload()
+          })
         } else {
           this.$message({ message: '布局设置失败', type: 'error' })
         }
