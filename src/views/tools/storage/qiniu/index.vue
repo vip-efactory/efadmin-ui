@@ -32,7 +32,7 @@
           <!-- 上传 -->
           <el-button class="filter-item" size="small" type="primary" icon="Upload" @click="dialog = true">{{ $t('storage.uploadBtn') }}</el-button>
           <!-- 同步 -->
-          <el-button :icon="icon" class="filter-item" size="small" type="warning" @click="synchronize">{{ $t('storage.synchronizeBtn') }}</el-button>
+          <el-button icon="Refresh" class="filter-item" size="small" type="warning" @click="synchronize">{{ $t('storage.synchronizeBtn') }}</el-button>
           <!-- 配置 -->
           <el-button
             class="filter-item"
