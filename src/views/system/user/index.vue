@@ -318,8 +318,6 @@ export default {
   },
   created() {
     this.getDeptDatas()
-    // 加日志2：查看组件中this.crud是否注入成功
-    console.log('组件中this.crud：', this.crud)
     if (this.crud) {
       this.crud.toQuery()
       this.crud.msg.add = this.$t('user.userAddOKMsg')
