@@ -79,25 +79,12 @@
           >
             <el-input v-model="item.val" :type="currentFieldType" :title="$t('advanceSearch.val1Title')" style="width: 190px;" />
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <!-- 类型为8和9是不需要值的 -->
+          <!--   日期类型选择     -->
           <el-form-item
-            v-if="item.searchType === 2 && (currentFieldType === 'text' || currentFieldType === 'number')"
-            :label="$t('advanceSearch.val2Label')"
+            v-else-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='date'"
+            :label="$t('advanceSearch.valLabel')"
             :label-width="formLabelWidth"
           >
-            <el-input
-              v-model="item.val2"
-              :type="currentFieldType"
-              :title="$t('advanceSearch.val2Title')"
-              style="width: 190px;"
-            />
-          </el-form-item>
-        </el-col>
-        <!--   日期类型选择     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='date'" :span="8">
-          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
             <el-date-picker
               v-model="item.val"
               type="date"
@@ -106,10 +93,12 @@
               style="width: 190px;"
             />
           </el-form-item>
-        </el-col>
-        <!--   日期时间类型选择     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='datetime'" :span="8">
-          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
+          <!--   日期时间类型选择     -->
+          <el-form-item
+            v-else-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='datetime'"
+            :label="$t('advanceSearch.valLabel')"
+            :label-width="formLabelWidth"
+          >
             <el-date-picker
               v-model="item.val"
               type="datetime"
@@ -118,10 +107,12 @@
               style="width: 190px;"
             />
           </el-form-item>
-        </el-col>
-        <!--   日期类型区间筛选     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 &&item.searchType ===2 && (currentFieldType ==='date' || currentFieldType ==='datetime')" :span="20">
-          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
+          <!--   日期类型区间筛选     -->
+          <el-form-item
+            v-else-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 &&item.searchType ===2 && (currentFieldType ==='date' || currentFieldType ==='datetime')"
+            :label="$t('advanceSearch.valLabel')"
+            :label-width="formLabelWidth"
+          >
             <el-date-picker
               v-model="item.val"
               type="daterange"
@@ -136,10 +127,12 @@
               style="width: 508px;"
             />
           </el-form-item>
-        </el-col>
-        <!--   字典下拉选择     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && currentFieldType ==='dict'" :span="20">
-          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
+          <!--   字典下拉选择     -->
+          <el-form-item
+            v-else-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && currentFieldType ==='dict'"
+            :label="$t('advanceSearch.valLabel')"
+            :label-width="formLabelWidth"
+          >
             <el-select v-model="item.val" filterable :placeholder="$t('advanceSearch.pleaseSelect')" style="width: 190px;">
               <el-option
                 v-for="(d, index) in dicts"
@@ -148,6 +141,21 @@
                 :value="d.value"
               />
             </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <!-- 类型为8和9是不需要值的 -->
+          <el-form-item
+            v-if="item.searchType === 2 && (currentFieldType === 'text' || currentFieldType === 'number')"
+            :label="$t('advanceSearch.val2Label')"
+            :label-width="formLabelWidth"
+          >
+            <el-input
+              v-model="item.val2"
+              :type="currentFieldType"
+              :title="$t('advanceSearch.val2Title')"
+              style="width: 190px;"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="8">
