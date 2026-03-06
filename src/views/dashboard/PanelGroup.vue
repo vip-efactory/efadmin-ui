@@ -84,7 +84,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import CountTo from 'vue3-count-to' // 确保安装正确
+import { CountTo } from 'vue3-count-to' // 确保安装正确
 import { get } from '@/api/monitor/visits'
 import { ElMessage } from 'element-plus'
 import SvgIcon from '@/components/SvgIcon/index.vue'
