@@ -56,7 +56,6 @@ export const loadMenus = async(router, next, to) => {
 
     const res = await buildMenus()
     const menuData = res?.data || []
-    console.log('🚨 接口原始菜单数据：', menuData)
     const asyncRouter = filterAsyncRouter(menuData)
 
     // 404路由最后添加（避免优先匹配）
@@ -76,7 +75,6 @@ export const loadMenus = async(router, next, to) => {
       // 注册父路由
       if (route.component && !router.hasRoute(route.name)) {
         router.addRoute(route)
-        console.log('✅ 注册父路由：', route.name, '路径：', route.path)
       }
       // 注册子路由（挂载到父路由下）
       if (route.children && Array.isArray(route.children)) {
@@ -92,15 +90,6 @@ export const loadMenus = async(router, next, to) => {
         })
       }
     })
-
-    // 打印所有已注册路由（排查用）
-    console.log('🚨 所有已注册路由：', router.getRoutes().map(item => ({
-      name: item.name,
-      path: item.path,
-      parentName: item.parentName, // 检查子路由的父路由是否正确
-      component: item.component?.name || '未知组件'
-    })))
-
     await store.dispatch('GenerateRoutes', asyncRouter)
     next({ ...to, replace: true })
   } catch (err) {

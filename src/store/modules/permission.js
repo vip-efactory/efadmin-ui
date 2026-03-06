@@ -59,7 +59,6 @@ export const loadView = (view) => {
   try {
     // 正确路径：view = "system/user/index" → "./system/user/index.vue"（相对于@/views）
     const componentPath = `./${view}.vue`
-    console.log('🚀 加载组件路径：', componentPath, '所有可用组件：', viewContext.keys())
 
     // 前置校验：组件路径是否存在
     if (!viewContext.keys().includes(componentPath)) {
@@ -70,7 +69,6 @@ export const loadView = (view) => {
     // 返回Vue3异步组件格式
     return () => Promise.resolve(matchedComponent.default || matchedComponent)
   } catch (err) {
-    console.warn(`🚨 视图组件 ${view} 加载失败`, err)
     return () => Promise.resolve(NotFound)
   }
 }

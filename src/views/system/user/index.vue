@@ -231,9 +231,6 @@ let userRoles = []
 // crud交由presenter持有
 const adSearchFields = [{ fieldName: 'username', labelName: i18n.global.t('user.username') }, { fieldName: 'nickName', labelName: i18n.global.t('user.nickName') }, { fieldName: 'sex', labelName: i18n.global.t('user.sex') }, { fieldName: 'phone', labelName: i18n.global.t('user.phone') }, { fieldName: 'email', labelName: i18n.global.t('user.email') }, { fieldName: 'enabled', labelName: i18n.global.t('user.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const defaultCrud = CRUD({ title: i18n.global.t('user.TITLE'), url: 'api/users/page', exportUrl: 'api/users/download', crudMethod: { ...crudUser }, adSearchFields: adSearchFields })
-// 加日志1：查看CRUD函数是否返回有效实例
-console.log('defaultCrud创建结果：', defaultCrud)
-console.log('CRUD函数本身是否存在：', CRUD)
 const defaultForm = { id: null, username: null, nickName: null, sex: '男', email: null, enabled: 'false', roles: [], job: { id: null }, dept: { id: null }, phone: null }
 export default {
   name: 'User',
