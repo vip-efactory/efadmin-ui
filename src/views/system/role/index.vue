@@ -2,10 +2,9 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <!-- 把 v-if="crud.props.searchToggle" 改成先判断crud存在 -->
       <div v-if="crud && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="crud.query.blurry" size="small" clearable :placeholder="$t('role.searchPlaceholder')" :title="$t('role.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter="crud.toQuery" />
+        <el-input v-model="crud.query.blurry" size="small" clearable :placeholder="$t('role.searchPlaceholder')" :title="$t('role.searchPlaceholder')" style="width: 150px;" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-date-picker
           v-model="crud.query.createTime"
           type="daterange"

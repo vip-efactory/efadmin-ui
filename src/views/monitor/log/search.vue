@@ -5,7 +5,7 @@
       clearable
       size="small"
       :placeholder="$t('log.simpleSearchPlaceholder')"
-      style="width: 200px;"
+      style="width: 150px;"
       class="filter-item"
     />
     <el-date-picker

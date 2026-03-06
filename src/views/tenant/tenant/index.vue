@@ -4,13 +4,12 @@
     <div class="head-container">
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="crud.query.value" clearable placeholder="输入搜索内容" style="width: 200px;" class="filter-item" @keyup.enter="crud.toQuery" />
+        <el-input v-model="crud.query.value" clearable placeholder="输入搜索内容" style="width: 150px;" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-select v-model="crud.query.type" clearable placeholder="类型" class="filter-item" style="width: 130px">
           <el-option v-for="item in queryTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
         </el-select>
         <rrOperation :crud="crud" />
       </div>
-      <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
       <!--表单组件-->
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :before-close="crud.cancelCU" :title="crud.status.title" width="500px">
@@ -58,7 +57,6 @@
         <el-table-column v-if="columns.visible('tenantName')" prop="tenantName" :label="$t('tenant.tenantName')" sortable="custom" />
         <el-table-column v-if="columns.visible('tenantCode')" prop="tenantCode" :label="$t('tenant.tenantCode')" sortable="custom" />
         <el-table-column v-if="columns.visible('dbUsername')" prop="dbUsername" :label="$t('tenant.dbUsername')" sortable="custom" />
-        <!--<el-table-column v-if="columns.visible('dbPassword')" prop="dbPassword" :label="$t('tenant.dbPassword')" sortable="custom" />-->
         <el-table-column v-if="columns.visible('driverClassName')" :show-overflow-tooltip="true" prop="driverClassName" :label="$t('tenant.driverClassName')" sortable="custom" />
         <el-table-column v-if="columns.visible('jdbcUrl')" :show-overflow-tooltip="true" prop="jdbcUrl" :label="$t('tenant.jdbcUrl')" sortable="custom" />
         <el-table-column v-if="columns.visible('status')" prop="status" :label="$t('tenant.status')" sortable="custom">

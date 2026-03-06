@@ -8,7 +8,7 @@
           v-model="crud.query.blurry"
           clearable
           :placeholder="$t('deployHistory.searchPlaceholder')"
-          style="width: 200px"
+          style="width: 150px"
           class="filter-item"
           @keyup.enter="crud.toQuery"
         />
@@ -19,7 +19,6 @@
           size="small"
           class="date-item"
           value-format="YYYY-MM-DD HH:mm:ss"
-          style="width: 240px"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />

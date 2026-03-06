@@ -2,7 +2,7 @@
   <div
     v-if="crud.props.searchToggle"
   >
-    <el-input v-model="query.name" clearable size="small" :placeholder="$t('job.jobSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter="crud.toQuery" />
+    <el-input v-model="query.name" clearable size="small" :placeholder="$t('job.jobSearchPlaceholder')" style="width: 150px;" class="filter-item" @keyup.enter="crud.toQuery" />
     <el-date-picker
       v-model="crud.query.createTime"
       type="daterange"

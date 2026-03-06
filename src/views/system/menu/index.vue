@@ -9,7 +9,7 @@
           clearable
           size="small"
           :placeholder="$t('menu.searchPlaceholder')"
-          style="width: 200px;"
+          style="width: 150px;"
           class="filter-item"
           @keyup.enter="crud.toQuery"
         />

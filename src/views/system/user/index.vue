@@ -33,7 +33,7 @@
               clearable
               size="small"
               :placeholder="$t('user.userSearchPlaceholder')"
-              style="width: 200px;"
+              style="width: 150px;"
               class="filter-item"
               @keyup.enter="crud.toQuery"
             />

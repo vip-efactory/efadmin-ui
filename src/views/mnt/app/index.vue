@@ -4,7 +4,7 @@
     <div class="head-container">
       <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="crud.query.name" clearable :placeholder="$t('mapp.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter="crud.toQuery" />
+        <el-input v-model="crud.query.name" clearable :placeholder="$t('mapp.searchPlaceholder')" style="width: 150px" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-date-picker
           v-model="crud.query.createTime"
           type="daterange"
