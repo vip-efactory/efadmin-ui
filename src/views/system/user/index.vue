@@ -167,7 +167,7 @@
           <el-table-column v-if="columns.visible('sex')" prop="sex" :label="$t('user.sex')" sortable="custom" />
           <el-table-column v-if="columns.visible('phone')" :show-overflow-tooltip="true" prop="phone" width="100" :label="$t('user.phone')" sortable="custom" />
           <el-table-column v-if="columns.visible('email')" :show-overflow-tooltip="true" width="125" prop="email" :label="$t('user.email')" sortable="custom" />
-          <el-table-column v-if="columns.visible('dept')" :show-overflow-tooltip="true" width="110" prop="dept" :label="$t('user.job')" sortable="custom">
+          <el-table-column v-if="columns.visible('dept')" :show-overflow-tooltip="true" width="110" :label="$t('user.dept')" sortable="custom">
             <template #default="scope">
               <div>{{ scope.row?.dept?.name || '-' }} / {{ scope.row?.job?.name || '-' }}</div>
             </template>
