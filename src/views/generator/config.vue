@@ -189,8 +189,8 @@
             </el-form-item>
             <el-form-item :label="$t('genConfig.cover')" prop="cover">
               <el-radio-group v-model="form.cover" size="small" style="width: 40%">
-                <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
-                <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
+                <el-radio-button :value="true">{{ $t('bool.true') }}</el-radio-button>
+                <el-radio-button :value="false">{{ $t('bool.false') }}</el-radio-button>
               </el-radio-group>
               <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.coverTips') }}</span>
             </el-form-item>
@@ -342,15 +342,15 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .edit-input {
-    .el-input__inner {
-      border: 1px solid #e5e6e7;
-    }
+.edit-input {
+  .el-input__inner {
+    border: 1px solid #e5e6e7;
   }
+}
 </style>
 
 <style scoped>
 :deep(.input-with-select .el-input-group__prepend) {
-    background-color: #fff;
-  }
+  background-color: #fff;
+}
 </style>
