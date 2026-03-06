@@ -374,7 +374,7 @@ export default {
     },
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
-      this.getJobs(this.form?.dept?.id || null)
+      this.getJobs(crud.form?.dept?.id || null)
       userRoles = []
       const roles = []
       crud.form.roles.forEach(function(role, index) {
