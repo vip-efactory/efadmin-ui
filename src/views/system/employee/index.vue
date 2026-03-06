@@ -45,7 +45,7 @@
             <el-input v-model="crud.form.avatar" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.birthday')" prop="birthday">
-            <el-date-picker v-model="crud.form.birthday" type="date" value-format="yyyy-MM-dd" style="width: 370px;" />
+            <el-date-picker v-model="crud.form.birthday" type="date" value-format="YYYY-MM-DD" style="width: 370px;" />
           </el-form-item>
           <el-form-item :label="$t('employee.code')" prop="code">
             <el-input v-model="crud.form.code" style="width: 370px;" />
