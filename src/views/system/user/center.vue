@@ -222,7 +222,7 @@ export default defineComponent({
   methods: {
     parseTime,
     handleClick(tab) {
-      if (tab.name === 'second') {
+      if (tab.props.name === 'second') {
         this.init()
       }
     },
