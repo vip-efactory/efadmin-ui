@@ -103,7 +103,7 @@ import i18n from '../../../lang'
 
 // crud交由presenter持有
 const adSearchFields = [{ fieldName: 'remark', labelName: i18n.global.t('be.remark') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }, { fieldName: 'updateTime', labelName: i18n.global.t('be.updateTime'), type: 'datetime' }, { fieldName: 'creatorNum', labelName: i18n.global.t('be.creatorNum') }, { fieldName: 'updaterNum', labelName: i18n.global.t('be.updaterNum') }] // 需要高级搜索的字段，此处只是通用的字段，实体自己的需要手动添加！
-const defaultCrud = CRUD({ title: i18n.global.t('tenant.TITLE'), url: 'api/tenant/page', sort: 'id,desc', crudMethod: { ...crudTenant }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: i18n.global.t('tenant.TITLE'), url: 'api/tenant/page', exportUrl: 'api/tenant/download', sort: 'id,desc', crudMethod: { ...crudTenant }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, tenantName: null, tenantCode: null, dbUsername: null, dbPassword: null, driverClassName: null, jdbcUrl: null, status: null, remark: null, createTime: null, creatorNum: null, updateTime: null, updaterNum: null }
 export default {
   name: 'Tenant',
