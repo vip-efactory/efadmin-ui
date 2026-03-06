@@ -9,7 +9,7 @@
         <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.priceRangeTips') }}</span>
       </el-form-item>
       <el-form-item :label="$t('aliPay.commodityDesc')" prop="body">
-        <el-input v-model="form.body" style="width: 35%" rows="8" type="textarea" />
+        <el-input v-model="form.body" style="width: 35%" :rows="8" type="textarea" />
       </el-form-item>
       <el-form-item label="">
         <el-button :loading="loading" size="large" type="primary" @click="doSubmit">{{ $t('aliPay.toPayBtn') }}</el-button>
