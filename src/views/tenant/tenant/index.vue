@@ -114,6 +114,8 @@ export default {
   dicts: ['tenant_status'],
   data() {
     return {
+      // eslint-disable-next-line vue/no-reserved-keys
+      _columnsInited: false,
       permission: {
         add: ['admin', 'tenant:add'],
         edit: ['admin', 'tenant:edit'],
@@ -158,6 +160,25 @@ export default {
     }
   },
   methods: {
+    // 显隐列设置
+    [CRUD.HOOK.afterRefresh]() {
+      if (this._columnsInited) return
+      const columns = this.crud?.props?.tableColumns
+      if (!columns) return
+      const hiddenKeys = [
+        'createTime',
+        'creatorNum',
+        'updateTime',
+        'updaterNum'
+      ]
+      hiddenKeys.forEach(key => {
+        if (columns[key]) {
+          columns[key].visible = false
+        }
+      })
+      this._columnsInited = true
+      this.$forceUpdate()
+    },
     // 获取数据前设置好接口地址
     [CRUD.HOOK.beforeRefresh]() {
       const query = this.crud.query
