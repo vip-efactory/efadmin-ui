@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, h, Transition } from 'vue'
 import Cookies from 'js-cookie'
 import 'normalize.css/normalize.css'
 
@@ -33,11 +33,16 @@ import CountTo from 'vue3-count-to'
 
 import VueUeditorWrap from 'vue-ueditor-wrap'
 
-// 🔥 移除 ECharts 模块化导入，只使用 CDN 全局变量
-// import * as echarts from 'echarts'
-
 // 7. 创建Vue3实例
 const app = createApp(App)
+
+// 全局注册小写transition组件（加ESLint忽略注释，消除警告）
+// eslint-disable-next-line vue/component-definition-name-casing
+app.component('transition', Transition)
+
+// 核心改动2：挂载 $createElement 兼容 vue3-treeselect 内部调用
+app.config.globalProperties.$createElement = h
+
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
