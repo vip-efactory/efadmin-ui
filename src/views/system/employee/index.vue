@@ -64,7 +64,7 @@
               <el-radio
                 v-for="item in (dict.employee_status || defaultUserStatus)"
                 :key="item.value"
-                :label="item.value"
+                :value="item.value"
               >{{ item.label }}</el-radio>
             </el-radio-group>
           </el-form-item>
