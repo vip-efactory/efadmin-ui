@@ -57,7 +57,7 @@
             :on-error="handleError"
             :action="fileUploadApi + '?name=' + crud.form.name"
           >
-            <div class="eladmin-upload"><i class="el-icon-upload" /> {{ $t('storage.addFile') }}</div>
+            <div class="eladmin-upload"><el-icon><Upload /></el-icon> {{ $t('storage.addFile') }}</div>
             <template #tip>
               <div class="el-upload__tip">{{ $t('storage.localUploadTips') }}</div>
             </template>
@@ -235,4 +235,5 @@ export default {
 :deep(el-image-viewer__wrapper) {
   top: 55px;
 }
+.eladmin-upload { display: flex; align-items: center; justify-content: center; }
 </style>
