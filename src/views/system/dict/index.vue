@@ -98,7 +98,6 @@
                   />
                   <el-popover
                     :ref="`popover_${scope.row.id}`"
-                    v-permission="['admin','dict:del']"
                     placement="top"
                     width="230px"
                     trigger="click"
@@ -118,7 +117,12 @@
                       >{{ $t('crud.confirm') }}</el-button>
                     </div>
                     <template #reference>
-                      <el-button type="danger" icon="Delete" size="small" />
+                      <el-button
+                        v-permission="['admin','dict:del']"
+                        type="danger"
+                        icon="Delete"
+                        size="small"
+                      />
                     </template>
                   </el-popover>
                 </div>
