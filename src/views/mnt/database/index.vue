@@ -165,7 +165,17 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true
-          testDbConnect(this.form).then((res) => {
+          // 手动过滤，只保留测试连接需要的字段
+          const cleanParams = {
+            id: this.crud.form.id,
+            name: this.crud.form.name,
+            jdbcUrl: this.crud.form.jdbcUrl,
+            userName: this.crud.form.userName,
+            createTime: this.crud.form.createTime,
+            pwd: this.crud.form.pwd
+          }
+          // 传递过滤后的参数，而非完整的crud.form
+          testDbConnect(cleanParams).then((res) => {
             this.loading = false
             if (res.code === 0) {
               this.crud.notify(res.data ? i18n.global.t('common.connectOK') : i18n.global.t('common.connectFailed'), res.data ? 'success' : 'error')
