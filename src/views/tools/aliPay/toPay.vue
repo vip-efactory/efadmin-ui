@@ -42,49 +42,53 @@ export default {
       }
     }
   },
-  watch: {
-    url(newVal, oldVal) {
-      if (newVal && this.newWin) {
-        this.newWin.sessionStorage.clear()
-        this.newWin.location.href = newVal
-        // 重定向后把url和newWin重置
-        this.url = ''
-        this.newWin = null
-      }
-    }
-  },
   methods: {
-    doSubmit() {
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          // 先打开一个空的新窗口，再请求
-          this.newWin = window.open()
-          let url = ''
-          if (/(Android)/i.test(navigator.userAgent)) { // 判断是否为Android手机
-            url = 'aliPay/toPayAsWeb'
-          } else if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { // 判断是否为苹果手机
-            url = 'aliPay/toPayAsWeb'
-          } else {
-            url = 'aliPay/toPayAsPC'
-          }
-          toAliPay(url, this.form).then(res => {
-            // if (res.code === 0) {
-            this.loading = false
-            this.url = res
-            // }
-          }).catch(err => {
-            this.loading = false
-            console.log(err.response.data.message)
-          })
-        } else {
-          return false
+    async doSubmit() {
+      try {
+        // 1. 表单验证
+        const valid = await this.$refs.form.validate()
+        if (!valid) return
+
+        this.loading = true
+
+        // 2. 确定请求地址
+        const apiUrl = /(Android|iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)
+          ? 'aliPay/toPayAsWeb'
+          : 'aliPay/toPayAsPC'
+
+        // 3. 调用后端接口（关键：提取res.data）
+        const res = await toAliPay(apiUrl, this.form)
+        if (res.code !== 0 || !res.data) {
+          this.$message.error(res.msg || '支付链接生成失败')
+          return
         }
-      })
+
+        // 4. 处理后端返回内容（核心修复：区分URL和表单）
+        const payContent = res.data
+        // 判断是否是URL（包含http/https），否则是表单
+        if (payContent.startsWith('http')) {
+          // 是URL：直接新窗口跳转
+          window.open(payContent, '_blank')
+        } else {
+          // 是表单：渲染并自动提交
+          const formContainer = this.$refs.payForm
+          formContainer.innerHTML = payContent
+          const form = formContainer.querySelector('form')
+          if (form) {
+            form.target = '_blank' // 新窗口打开
+            form.submit()
+          } else {
+            this.$message.error('支付表单解析失败')
+          }
+        }
+      } catch (err) {
+        // 异常处理
+        this.$message.error(err.response?.data?.message || '支付请求失败')
+        console.error('支付请求异常：', err)
+      } finally {
+        this.loading = false
+      }
     }
   }
 }
 </script>
-
-<style scoped>
-</style>
