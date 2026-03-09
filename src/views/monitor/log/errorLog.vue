@@ -44,7 +44,7 @@
       </el-table-column>
       <el-table-column :label="$t('log.exceptionDetail')" width="120px">
         <template #default="scope">
-          <el-button size="small" link @click="info(scope.row.id)">{{ $t('log.viewDetail') }}</el-button>
+          <el-button size="small" link type="primary" @click="info(scope.row.id)">{{ $t('log.viewDetail') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
