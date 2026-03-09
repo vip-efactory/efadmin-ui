@@ -83,7 +83,7 @@
                 v-permission="['admin']"
                 size="small"
                 link
-                style="margin-left: -10px"
+                type="danger"
               >
                 {{ $t('online.forceOut') }}
               </el-button>
