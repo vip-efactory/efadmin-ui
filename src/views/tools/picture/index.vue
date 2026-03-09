@@ -57,7 +57,11 @@
         :action="imagesUploadApi"
         list-type="picture-card"
       >
-        <i class="el-icon-plus" />
+        <!-- 核心：清空按钮所有默认样式，只留图标，无任何外围框 -->
+        <el-button
+          icon="Plus"
+          style="border: none; background: transparent; color: #8c939d; font-size: 25px;"
+        />
       </el-upload>
       <el-dialog v-model="dialogVisible" append-to-body>
         <img :src="dialogImageUrl" width="100%" alt="">
