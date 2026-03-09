@@ -1,84 +1,85 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div ref="chartRef" class="echarts-container" style="width: 100%; height: 300px;" />
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import { debounce } from '@/utils'
 
-export default {
-  props: {
-    className: {
-      type: String,
-      default: 'chart'
+const chartRef = ref(null)
+let myChart = null
+
+const initChart = () => {
+  const chartDom = chartRef.value
+  if (!chartDom) return
+
+  myChart = echarts.init(chartDom)
+
+  const option = {
+    tooltip: {
+      trigger: 'axis'
     },
-    width: {
-      type: String,
-      default: '100%'
+    legend: {
+      // 关键1：删除图例中的 Step End 选项
+      data: ['Step Start', 'Step Middle']
     },
-    height: {
-      type: String,
-      default: '300px'
-    }
-  },
-  data() {
-    return {
-      chart: null
-    }
-  },
-  mounted() {
-    this.initChart()
-    this.__resizeHandler = debounce(() => {
-      if (this.chart) {
-        this.chart.resize()
+    grid: {
+      left: 10,
+      right: 20,
+      top: 40,
+      bottom: 50,
+      containLabel: true
+    },
+    toolbox: {
+      feature: {
+        saveAsImage: {}
       }
-    }, 100)
-    window.addEventListener('resize', this.__resizeHandler)
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    window.removeEventListener('resize', this.__resizeHandler)
-    this.chart.dispose()
-    this.chart = null
-  },
-  methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
+    },
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        name: 'Step Start',
+        type: 'line',
+        smooth: true,
+        color: '#5ab1ef',
+        data: [120, 132, 101, 134, 90, 230, 210]
+      },
+      {
+        name: 'Step Middle',
+        type: 'line',
+        smooth: true,
+        color: '#d87a80',
+        data: [220, 282, 201, 234, 290, 430, 410]
+      }
+      // 关键2：删除 Step End 对应的系列配置（整段移除）
+    ]
+  }
 
-      this.chart.setOption({
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          left: 'center',
-          bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
-        },
-        calculable: true,
-        series: [
-          {
-            name: 'WEEKLY WRITE ARTICLES',
-            type: 'pie',
-            roseType: 'radius',
-            radius: [15, 95],
-            center: ['50%', '38%'],
-            data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
-            animationEasing: 'cubicInOut',
-            animationDuration: 2600
-          }
-        ]
-      })
-    }
+  myChart.setOption(option)
+}
+
+const resizeChart = () => {
+  if (myChart) {
+    myChart.resize()
   }
 }
+
+onMounted(() => {
+  initChart()
+  window.addEventListener('resize', resizeChart)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', resizeChart)
+  if (myChart) {
+    myChart.dispose()
+    myChart = null
+  }
+})
 </script>

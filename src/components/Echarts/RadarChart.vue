@@ -1,75 +1,67 @@
 <template>
-  <!-- ECharts 容器，设置明确宽高保证图表正常渲染，兼容你现有父组件布局 -->
-  <div id="basic-radar-chart" style="width: 100%; height: 300px;" />
+  <div ref="chartRef" style="width: 100%; height: 300px;" />
 </template>
 
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 
-// 声明持久化变量：存储ECharts实例，用于组件销毁时释放内存
+const chartRef = ref(null)
 let myChart = null
 
 onMounted(() => {
-  // 1. 初始化ECharts实例：DOM挂载完成后获取容器元素，避免DOM获取失败
-  const chartDom = document.getElementById('basic-radar-chart')
-  myChart = echarts.init(chartDom)
+  if (chartRef.value) {
+    myChart = echarts.init(chartRef.value)
 
-  // 2. 构建ECharts配置项（与原代码option完全一致，保证图表样式、数据不变）
-  const option = {
-    title: {
-      text: 'Basic Radar Chart'
-    },
-    legend: {
-      data: ['Allocated Budget', 'Actual Spending']
-    },
-    radar: {
-      // shape: 'circle', // 注释保留，如需圆形雷达图可取消注释
-      indicator: [
-        { name: 'Sales', max: 6500 },
-        { name: 'Administration', max: 16000 },
-        { name: 'Information Technology', max: 30000 },
-        { name: 'Customer Support', max: 38000 },
-        { name: 'Development', max: 52000 },
-        { name: 'Marketing', max: 25000 }
-      ]
-    },
-    series: [
-      {
-        name: 'Budget vs spending',
-        type: 'radar',
-        data: [
-          {
-            value: [4200, 3000, 20000, 35000, 50000, 18000],
-            name: 'Allocated Budget'
+    const option = {
+      legend: {
+      },
+      toolbox: {
+        show: false,
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      series: [
+        {
+          name: 'Nightingale Chart',
+          type: 'pie',
+          radius: [20, 90],
+          // ✅ 核心修改：垂直位置从50%改为40%（数值越小越往上，可微调）
+          center: ['50%', '40%'],
+          roseType: 'area',
+          itemStyle: {
+            borderRadius: 8
           },
-          {
-            value: [5000, 14000, 28000, 26000, 42000, 21000],
-            name: 'Actual Spending'
-          }
-        ]
-      }
-    ]
-  }
+          data: [
+            { value: 36, name: 'rose 1', itemStyle: { color: '#2ec7c9' }},
+            { value: 33, name: 'rose 2', itemStyle: { color: '#b6a2de' }},
+            { value: 30, name: 'rose 3', itemStyle: { color: '#5ab1ef' }},
+            { value: 27, name: 'rose 4', itemStyle: { color: '#ffb980' }},
+            { value: 24, name: 'rose 5', itemStyle: { color: '#d87a80' }},
+            { value: 21, name: 'rose 6', itemStyle: { color: '#8d98b3' }}
+          ]
+        }
+      ]
+    }
 
-  // 3. 渲染图表：将配置项设置到ECharts实例中
-  myChart.setOption(option)
+    option && myChart.setOption(option)
+  }
 })
 
 onUnmounted(() => {
-  // 4. 组件销毁时清理资源，避免内存泄漏（关键！）
   if (myChart) {
-    myChart.dispose() // 销毁ECharts实例，释放内存
-    myChart = null // 清空变量，避免残留引用
+    myChart.dispose()
+    myChart = null
   }
 })
 </script>
 
 <style scoped>
-/* 补充容器样式，兼容你现有父组件的.chart-wrapper布局，无样式冲突 */
-#basic-radar-chart {
+div[ref="chartRef"] {
   margin: 0 auto;
-  width: 100%;
-  height: 600px;
 }
 </style>
