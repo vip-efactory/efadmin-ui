@@ -9,7 +9,7 @@ export default {
     warningTitle: '提示'
   },
   login: {
-    title: 'AMCS系统登录',
+    title: 'EF-ADMIN 后台系统登录',
     logIn: '登录',
     username: '账号',
     password: '密码',
@@ -21,7 +21,7 @@ export default {
     verificationCodeChk: '验证码名不能为空'
   },
   sidebar: {
-    title: 'AMCS系统'
+    title: 'EF-ADMIN 后台系统'
   },
   navbar: {
     dashboard: '首页',
