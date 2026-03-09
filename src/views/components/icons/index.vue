@@ -8,24 +8,27 @@
       <el-tab-pane label="Icons">
         <div v-for="item of svgIcons" :key="item" @click="handleClipboard(generateIconCode(item),$event)">
           <el-tooltip placement="top">
-            <div slot="content">
+            <template #content>
               {{ generateIconCode(item) }}
-            </div>
+            </template>
             <div class="icon-item">
-              <svg-icon :icon-class="item" class-name="disabled" />
+              <!-- 【可选】加空值容错，避免item为空时渲染报错 -->
+              <svg-icon v-if="item" :icon-class="item" class-name="disabled" />
               <span>{{ item }}</span>
             </div>
           </el-tooltip>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="Element-UI Icons">
+      <el-tab-pane label="Element-Plus Icons">
         <div v-for="item of elementIcons" :key="item" @click="handleClipboard(generateElementIconCode(item),$event)">
           <el-tooltip placement="top">
-            <div slot="content">
+            <template #content>
               {{ generateElementIconCode(item) }}
-            </div>
+            </template>
             <div class="icon-item">
-              <i :class="'el-icon-' + item" />
+              <!-- 【可选】空值容错 + Element Plus图标类名兼容 -->
+              <!--              <i v-if="item" :class="`el-icon-${item}`" />-->
+              <component :is="createIcon(item)" />
               <span>{{ item }}</span>
             </div>
           </el-tooltip>
@@ -39,6 +42,7 @@
 import clipboard from '@/utils/clipboard'
 import svgIcons from './svg-icons'
 import elementIcons from './element-icons'
+import { h, resolveComponent } from 'vue'
 
 export default {
   name: 'Icons',
@@ -48,14 +52,25 @@ export default {
       elementIcons
     }
   },
+  computed: {
+    createIcon() {
+      return (item) => {
+        return h(
+          resolveComponent('el-icon'), null, () => [h(resolveComponent(item))]
+        )
+      }
+    }
+  },
   methods: {
     generateIconCode(symbol) {
       return `<svg-icon icon-class="${symbol}" />`
     },
     generateElementIconCode(symbol) {
-      return `<i class="el-icon-${symbol}" />`
+      return ` <el-icon><${symbol} /></el-icon>`
     },
     handleClipboard(text, event) {
+      // 【可选】Vue3下阻止事件冒泡，避免触发无关行为
+      event.stopPropagation()
       clipboard(text, event)
     }
   }

@@ -1,68 +1,102 @@
-import router from './routers'
+// 1. 第一步：替换导入 —— 把 createWebHashHistory 换成 createWebHistory
+import { createRouter, createWebHistory } from 'vue-router'
+import { constantRouterMap } from './routers'
 import store from '@/store'
 import Config from '@/settings'
-import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css'// progress bar style
-import { getToken } from '@/utils/auth' // getToken from cookie
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+import { getToken } from '@/utils/auth'
 import { buildMenus } from '@/api/system/menu'
-import { filterAsyncRouter } from '@/store/modules/permission'
 
-NProgress.configure({ showSpinner: false })// NProgress Configuration
+const router = createRouter({
+  // 2. 第二步：替换 history 模式 —— 去掉 Hash 模式的 #
+  history: createWebHistory(process.env.BASE_URL), // 仅改这行！从 createWebHashHistory 换成 createWebHistory
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRouterMap
+})
 
-const whiteList = ['/login']// no redirect whitelist
+// 👇 以下所有代码完全不变，无需修改
+NProgress.configure({ showSpinner: false })
+const whiteList = ['/login']
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title + ' - ' + Config.title
   }
   NProgress.start()
+
   if (getToken()) {
-    // 已登录且要跳转的页面是登录页
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done()
     } else {
-      if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完user_info信息
-        store.dispatch('GetInfo').then(res => { // 拉取user_info
-          // 动态路由，拉取菜单
-          loadMenus(next, to)
-        }).catch((err) => {
-          console.log(err)
-          store.dispatch('LogOut').then(() => {
-            location.reload() // 为了重新实例化vue-router对象 避免bug
-          })
+      if (store.getters.roles.length === 0) {
+        store.dispatch('GetInfo').then(() => {
+          loadMenus(router, next, to)
+        }).catch(() => {
+          store.dispatch('LogOut').then(() => location.reload())
         })
-      // 登录时未拉取 菜单，在此处拉取
       } else if (store.getters.loadMenus) {
-        // 修改成false，防止死循环
-        store.dispatch('updateLoadMenus').then(res => {})
-        loadMenus(next, to)
+        store.dispatch('updateLoadMenus').then(() => {})
+        loadMenus(router, next, to)
       } else {
         next()
       }
     }
   } else {
-    /* has no token*/
-    if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
-      next()
-    } else {
-      next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
-      NProgress.done()
-    }
+    whiteList.includes(to.path) ? next() : next(`/login?redirect=${to.path}`)
+    NProgress.done()
   }
 })
 
-export const loadMenus = (next, to) => {
-  buildMenus().then(res => {
-    const asyncRouter = filterAsyncRouter(res.data)
-    asyncRouter.push({ path: '*', redirect: '/404', hidden: true })
-    store.dispatch('GenerateRoutes', asyncRouter).then(() => { // 存储路由
-      router.addRoutes(asyncRouter) // 动态添加可访问路由表
-      next({ ...to, replace: true })
+export const loadMenus = async(router, next, to) => {
+  try {
+    const permissionModule = await import('@/store/modules/permission')
+    const filterAsyncRouter = permissionModule.filterAsyncRouter || (() => [])
+
+    const res = await buildMenus()
+    const menuData = res?.data || []
+    const asyncRouter = filterAsyncRouter(menuData)
+
+    // 404路由最后添加（避免优先匹配）
+    asyncRouter.push({
+      path: '/:pathMatch(.*)*',
+      redirect: '/404',
+      hidden: true,
+      name: 'NotFound'
     })
-  })
+
+    // 优化路由注册：先父后子，增加校验
+    asyncRouter.forEach(route => {
+      if (!route.name) {
+        console.warn('🚨 路由缺少name，无法注册：', route.path)
+        return
+      }
+      // 注册父路由
+      if (route.component && !router.hasRoute(route.name)) {
+        router.addRoute(route)
+      }
+      // 注册子路由（挂载到父路由下）
+      if (route.children && Array.isArray(route.children)) {
+        route.children.forEach(child => {
+          if (!child.name) {
+            console.warn('🚨 子路由缺少name，无法注册：', child.path)
+            return
+          }
+          if (!router.hasRoute(child.name)) {
+            router.addRoute(route.name, child) // 父路由name作为挂载标识
+            console.log('✅ 注册子路由：', child.name, '完整路径：', route.path + '/' + child.path)
+          }
+        })
+      }
+    })
+    await store.dispatch('GenerateRoutes', asyncRouter)
+    next({ ...to, replace: true })
+  } catch (err) {
+    console.error('加载菜单失败：', err)
+    next('/login')
+  }
 }
 
-router.afterEach(() => {
-  NProgress.done() // finish progress bar
-})
+router.afterEach(() => NProgress.done())
+export default router

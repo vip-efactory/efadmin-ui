@@ -2,17 +2,16 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" size="small" clearable :placeholder="$t('role.searchPlaceholder')" :title="$t('role.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.blurry" size="small" clearable :placeholder="$t('role.searchPlaceholder')" :title="$t('role.searchPlaceholder')" style="width: 150px;" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startTime')"
           :end-placeholder="$t('common.endTime')"
         />
@@ -21,16 +20,23 @@
       <crudOperation :permission="permission" />
     </div>
     <!-- 表单渲染 -->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="630px">
-      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="130px">
+    <el-dialog
+      v-model="dialogVisible"
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud && crud.cancelCU()"
+      :title="crud?.status?.title"
+      width="630px"
+    >
+      <el-form ref="form" :inline="true" :model="crud.form" :rules="rules" size="small" label-width="130px">
         <el-form-item :label="$t('role.name')" prop="name">
-          <el-input v-model="form.name" style="width: 145px;" />
+          <el-input v-model="crud.form.name" style="width: 145px;" />
         </el-form-item>
         <el-form-item :label="$t('role.permission')" prop="permission">
-          <el-input v-model="form.permission" style="width: 145px;" />
+          <el-input v-model="crud.form.permission" style="width: 145px;" />
         </el-form-item>
         <el-form-item :label="$t('role.dataScope')" prop="dataScope">
-          <el-select v-model="form.dataScope" style="width: 145px" :placeholder="$t('role.dataScopePlaceholder')" @change="changeScope">
+          <el-select v-model="crud.form.dataScope" style="width: 145px" :placeholder="$t('role.dataScopePlaceholder')" @change="changeScope">
             <el-option
               v-for="item in dateScopes"
               :key="item"
@@ -40,28 +46,41 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('role.level')" prop="level">
-          <el-input-number v-model.number="form.level" :min="1" controls-position="right" style="width: 145px;" />
+          <el-input-number v-model.number="crud.form.level" :min="1" controls-position="right" style="width: 145px;" />
         </el-form-item>
-        <el-form-item v-if="form.dataScope === '自定义'" :label="$t('role.dataPermission')" prop="depts">
-          <treeselect v-model="form.depts" :options="depts" multiple style="width: 430px" :placeholder="$t('role.selectPlaceholder')" />
+        <el-form-item v-if="crud.form.dataScope === '自定义'" :label="$t('role.dataPermission')" prop="depts">
+          <treeselect v-model="crud.form.depts" :options="depts" multiple style="width: 430px" :placeholder="$t('role.selectPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('role.remark')" prop="remark">
-          <el-input v-model="form.remark" style="width: 430px;" rows="5" type="textarea" />
+          <el-input v-model="crud.form.remark" style="width: 430px;" :rows="5" type="textarea" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <el-row :gutter="15">
       <!--角色管理-->
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="17" style="margin-bottom: 10px">
         <el-card class="box-card" shadow="never">
-          <div slot="header" class="clearfix">
-            <span class="role-span">{{ $t('role.roleList') }}</span>
-          </div>
-          <el-table ref="table" v-loading="crud.loading" highlight-current-row style="width: 100%;" :data="crud.data" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
+          <template #header>
+            <div class="clearfix">
+              <span class="role-span">{{ $t('role.roleList') }}</span>
+            </div>
+          </template>
+          <el-table
+            ref="table"
+            v-loading="crud?.loading"
+            highlight-current-row
+            style="width: 100%;"
+            :data="crud?.data"
+            @selection-change="crud?.selectionChangeHandler"
+            @current-change="handleCurrentChange"
+            @sort-change="crud?.doTitleOrder"
+          >
             <el-table-column :selectable="checkboxT" type="selection" width="55" />
             <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('role.name')" sortable="custom" />
             <el-table-column v-if="columns.visible('dataScope')" prop="dataScope" :label="$t('role.dataScope')" sortable="custom" />
@@ -69,12 +88,12 @@
             <el-table-column v-if="columns.visible('level')" prop="level" :label="$t('role.level')" sortable="custom" />
             <el-table-column v-if="columns.visible('remark')" :show-overflow-tooltip="true" prop="remark" :label="$t('role.remark')" sortable="custom" />
             <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" width="135px" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-              <template slot-scope="scope">
+              <template #default="scope">
                 <span>{{ parseTime(scope.row.createTime) }}</span>
               </template>
             </el-table-column>
             <el-table-column v-permission="['admin','roles:edit','roles:del']" :label="$t('be.operate')" width="130px" align="center" fixed="right">
-              <template slot-scope="scope">
+              <template #default="scope">
                 <udOperation
                   v-if="scope.row.level >= level"
                   :data="scope.row"
@@ -90,21 +109,23 @@
       <!-- 菜单授权 -->
       <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="7">
         <el-card class="box-card" shadow="never">
-          <div slot="header" class="clearfix">
-            <el-tooltip class="item" effect="dark" :content="$t('role.menuTips')" placement="top">
-              <span class="role-span">{{ $t('role.menuAssignment') }}</span>
-            </el-tooltip>
-            <el-button
-              v-permission="['admin','roles:edit']"
-              :disabled="!showButton"
-              :loading="menuLoading"
-              icon="el-icon-check"
-              size="mini"
-              style="float: right; padding: 6px 9px"
-              type="primary"
-              @click="saveMenu"
-            >{{ $t('crud.save') }}</el-button>
-          </div>
+          <template #header>
+            <div class="clearfix">
+              <el-tooltip class="item" effect="dark" :content="$t('role.menuTips')" placement="top">
+                <span class="role-span">{{ $t('role.menuAssignment') }}</span>
+              </el-tooltip>
+              <el-button
+                v-permission="['admin','roles:edit']"
+                :disabled="!showButton"
+                :loading="menuLoading"
+                icon="Check"
+                size="small"
+                style="float: right; padding: 6px 9px"
+                type="primary"
+                @click="saveMenu"
+              >{{ $t('crud.save') }}</el-button>
+            </div>
+          </template>
           <el-tree
             ref="menu"
             :data="menus"
@@ -129,13 +150,13 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('role.name') }, { fieldName: 'dataScope', labelName: i18n.t('role.dataScope') }, { fieldName: 'permission', labelName: i18n.t('role.permission') }, { fieldName: 'level', labelName: i18n.t('role.level'), type: 'number' }, { fieldName: 'remark', labelName: i18n.t('role.remark') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('role.TITLE'), url: 'api/roles/page', exportUrl: 'api/roles/download', sort: 'level,asc', crudMethod: { ...crudRoles }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('role.name') }, { fieldName: 'dataScope', labelName: i18n.global.t('role.dataScope') }, { fieldName: 'permission', labelName: i18n.global.t('role.permission') }, { fieldName: 'level', labelName: i18n.global.t('role.level'), type: 'number' }, { fieldName: 'remark', labelName: i18n.global.t('role.remark') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('role.TITLE'), url: 'api/roles/page', exportUrl: 'api/roles/download', sort: 'level,asc', crudMethod: { ...crudRoles }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, depts: [], remark: null, dataScope: '全部', level: 3, permission: null }
 export default {
   name: 'Role',
@@ -154,11 +175,28 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('role.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('role.nameRequired'), trigger: 'blur' }
         ],
         permission: [
-          { required: true, message: i18n.t('role.permissionRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('role.permissionRequired'), trigger: 'blur' }
         ]
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 先判断crud和status是否存在，不存在则返回默认false
+        return this.crud && this.crud.status && this.crud.status.cu > 0
+        // 也可以用可选链（更简洁，需确保项目支持ES2020+）：
+        // return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 只有crud和status存在时，才修改cu的值
+        if (!newVal && this.crud && this.crud.status) {
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
+        }
       }
     }
   },
@@ -172,8 +210,14 @@ export default {
         crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
       }
     })
+  },
+  // 新增mounted钩子，执行crud相关操作
+  mounted() {
     this.$nextTick(() => {
-      this.crud.toQuery()
+      // 加安全判断，避免crud未初始化的情况
+      if (this.crud) {
+        this.crud.toQuery()
+      }
     })
   },
   methods: {
@@ -182,20 +226,20 @@ export default {
     },
     // 编辑前
     [CRUD.HOOK.beforeToEdit](crud, form) {
-      if (form.dataScope === '自定义') {
+      if (crud.form.dataScope === '自定义') {
         this.getDepts()
       }
       const depts = []
-      form.depts.forEach(function(dept, index) {
+      crud.form.depts.forEach(function(dept, index) {
         depts.push(dept.id)
       })
-      form.depts = depts
+      crud.form.depts = depts
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {
       if (crud.form.dataScope === '自定义' && crud.form.depts.length === 0) {
         this.$message({
-          message: i18n.t('role.customChk'),
+          message: i18n.global.t('role.customChk'),
           type: 'warning'
         })
         return false
@@ -267,7 +311,7 @@ export default {
       })
       crudRoles.editMenu(role).then(res => {
         if (res.code === 0) {
-          this.crud.notify(i18n.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(i18n.global.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.menuLoading = false
           this.update()
         } else {
@@ -307,7 +351,7 @@ export default {
     },
     // 如果数据权限为自定义则获取部门数据
     changeScope() {
-      if (this.form.dataScope === '自定义') {
+      if (this.crud.form.dataScope === '自定义') {
         this.getDepts()
       }
     },
@@ -319,14 +363,14 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .role-span {
-    font-weight: bold;color: #303133;
-    font-size: 15px;
-  }
+.role-span {
+  font-weight: bold;color: #303133;
+  font-size: 15px;
+}
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
-    text-align: left;
-  }
+:deep(.el-input-number .el-input__inner) {
+  text-align: left;
+}
 </style>

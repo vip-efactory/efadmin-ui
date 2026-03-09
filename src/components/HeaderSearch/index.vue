@@ -159,15 +159,18 @@ export default {
     display: inline-block;
     vertical-align: middle;
 
-    /deep/ .el-input__inner {
+    :deep(.el-select__wrapper) {
       border-radius: 0;
       border: 0;
+      border-bottom: 1px solid #1890ff;
+      box-shadow: none !important;
+    }
+
+    :deep(.el-select__input) {
       padding-left: 0;
       padding-right: 0;
-      box-shadow: none !important;
-      border-bottom: 1px solid #d9d9d9;
-      vertical-align: middle;
     }
+
   }
 
   &.show {

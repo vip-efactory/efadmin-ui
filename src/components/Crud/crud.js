@@ -1,663 +1,503 @@
 import { download, initData } from '@/api/data'
 import { downloadFile, parseTime } from '@/utils/index'
-import Vue from 'vue'
+import { reactive } from 'vue'
 import i18n from '../../lang'
+import { ElNotification } from 'element-plus'
 
 /**
- * CRUD配置
- * @author moxun
- * @param {*} options <br>
- * @return crud instance.
- * @example
+ * CRUD核心配置（Vue3 适配版）
+ * @param {Object} options 自定义配置项
+ * @return {Object} 响应式CRUD实例
  */
 function CRUD(options) {
+  // 默认配置（兜底所有属性，避免undefined）
   const defaultOptions = {
-    // 标题
     title: '',
-    // 请求数据的url
     url: '',
-    // export excel url
     exportUrl: '',
-    // 表格数据
     data: [],
-    // 选择项
     selections: [],
-    // 待查询的对象
     query: {},
-    // 查询数据的参数
     params: {},
-    // 是否显示高级搜索按钮,有些场景不需要显示
     showAdSearchBtn: true,
-    // 需要高级搜索的字段信息,例如:[{fieldName: 'userName', labelName: '用户名', type: 'text', dists: [{label:'user_status',value: 1 }]}]
-    // type 支持text,number,date,datetime,dict
     adSearchFields: [],
-    // 高级查询的参数集合,使用Post方法传递的data
     adSearchConditions: [],
-    // Form 表单
     form: {},
-    // 重置表单
-    defaultForm: () => {
-    },
-    // 排序规则，默认 id 降序， 支持多字段排序 ['id,desc', 'createTime,asc']
+    defaultForm: () => ({}),
     sort: ['createTime,desc'],
-    // 等待时间
     time: 50,
-    // CRUD Method
     crudMethod: {
-      add: (form) => {
-      },
-      delete: (id) => {
-      },
-      edit: (form) => {
-      },
-      get: (id) => {
-      }
+      add: (form) => Promise.resolve({ code: 0 }),
+      delete: (id) => Promise.resolve({ code: 0 }),
+      edit: (form) => Promise.resolve({ code: 0 }),
+      get: (id) => Promise.resolve({ code: 0 })
     },
-    // 主页操作栏显示哪些按钮
     optShow: {
       add: true,
       edit: true,
       del: true,
       download: true
     },
-    // 自定义一些扩展属性
     props: {},
-    // 在主页准备
     queryOnPresenterCreated: true,
-    // 调试开关
     debug: false
   }
-  options = mergeOptions(defaultOptions, options)
-  const data = {
+
+  // 深度合并配置（解决嵌套对象未初始化问题）
+  const mergeDeep = (target, source) => {
+    const result = { ...target }
+    for (const key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        if (typeof source[key] === 'object' && source[key] !== null && !Array.isArray(source[key])) {
+          result[key] = mergeDeep(target[key] || {}, source[key])
+        } else {
+          result[key] = source[key]
+        }
+      }
+    }
+    return result
+  }
+  options = mergeDeep(defaultOptions, options || {})
+
+  // 初始化响应式核心数据
+  const data = reactive({
     ...options,
-    // 记录数据状态
     dataStatus: {},
     status: {
       add: CRUD.STATUS.NORMAL,
       edit: CRUD.STATUS.NORMAL,
-      // 添加或编辑状态
       get cu() {
-        if (this.add === CRUD.STATUS.NORMAL && this.edit === CRUD.STATUS.NORMAL) {
-          return CRUD.STATUS.NORMAL
-        } else if (this.add === CRUD.STATUS.PREPARED || this.edit === CRUD.STATUS.PREPARED) {
-          return CRUD.STATUS.PREPARED
-        } else if (this.add === CRUD.STATUS.PROCESSING || this.edit === CRUD.STATUS.PROCESSING) {
-          return CRUD.STATUS.PROCESSING
-        }
+        if (this.add === CRUD.STATUS.NORMAL && this.edit === CRUD.STATUS.NORMAL) return CRUD.STATUS.NORMAL
+        if (this.add === CRUD.STATUS.PREPARED || this.edit === CRUD.STATUS.PREPARED) return CRUD.STATUS.PREPARED
+        if (this.add === CRUD.STATUS.PROCESSING || this.edit === CRUD.STATUS.PROCESSING) return CRUD.STATUS.PROCESSING
         throw new Error('wrong crud\'s cu status')
       },
-      // 标题
       get title() {
-        return this.add > CRUD.STATUS.NORMAL ? i18n.t('crud.new') + ` ${crud.title}` : this.edit > CRUD.STATUS.NORMAL ? i18n.t('crud.edit') + ` ${crud.title}` : crud.title
+        return this.add > CRUD.STATUS.NORMAL
+          ? i18n.global.t('crud.new') + ` ${data.title}`
+          : this.edit > CRUD.STATUS.NORMAL
+            ? i18n.global.t('crud.edit') + ` ${data.title}`
+            : data.title
       }
     },
     msg: {
-      submit: i18n.t('crud.submitSuccess'),
-      add: i18n.t('crud.addSuccess'),
-      edit: i18n.t('crud.editSuccess'),
-      del: i18n.t('crud.delSuccess')
+      submit: i18n.global.t('crud.submitSuccess'),
+      add: i18n.global.t('crud.addSuccess'),
+      edit: i18n.global.t('crud.editSuccess'),
+      del: i18n.global.t('crud.delSuccess')
     },
     page: {
-      // 页码
       page: 0,
-      // 每页数据条数
       size: 10,
-      // 总数据条数
       total: 0
     },
-    // 高级搜索弹框
     showAdSearchDialog: false,
-    // 整体loading
     loading: true,
-    // 导出的 Loading
     downloadLoading: false,
-    // 删除的 Loading
-    delAllLoading: false
-  }
-  const methods = {
-    /**
-     * 通用的提示
-     */
-    submitSuccessNotify() {
-      crud.notify(crud.msg.submit, CRUD.NOTIFICATION_TYPE.SUCCESS)
-    },
-    addSuccessNotify() {
-      crud.notify(crud.msg.add, CRUD.NOTIFICATION_TYPE.SUCCESS)
-    },
-    editSuccessNotify() {
-      crud.notify(crud.msg.edit, CRUD.NOTIFICATION_TYPE.SUCCESS)
-    },
-    delSuccessNotify() {
-      crud.notify(crud.msg.del, CRUD.NOTIFICATION_TYPE.SUCCESS)
-    },
-    // 搜索
-    toQuery() {
-      crud.page.page = 1
-      crud.refresh()
-    },
-    // 高级搜索
-    dialogSearch() {
-      // console.log(crud)
-      crud.showAdSearchDialog = true // 显示高级搜索弹框
-      // console.log(crud.show)
-    },
-    // 刷新
-    refresh() {
-      if (!callVmHook(crud, CRUD.HOOK.beforeRefresh)) {
-        return
-      }
-      return new Promise((resolve, reject) => {
-        crud.loading = true
-        // 判断是否存在高级查询的条件，有则走高级查询的接口
-        let method = 'get'
-        if (crud.adSearchConditions.length > 0) {
-          method = 'post' // 走高级搜索的接口
-        }
-        // 请求数据,
-        initData(crud.url, crud.getQueryParams(), method).then(r => {
-          // http通信正常，检查业务逻辑是否正常
-          if (r.code === 0) { // 业务逻辑正常
-            const data = r.data
-            crud.page.total = data.totalCount
-            crud.data = data.content
-            crud.resetDataStatus()
-            // time 毫秒后显示表格
-            setTimeout(() => {
-              crud.loading = false
-              callVmHook(crud, CRUD.HOOK.afterRefresh)
-            }, crud.time)
-            resolve(data)
-          } else { // 业务逻辑不正常
-            crud.loading = false
-            crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-            console.error(r.toString())
-          }
-        }).catch(err => { // 此处的错误为Http错误通信码
-          crud.loading = false
-          reject(err)
-        })
-      })
-    },
-    /**
-     * 启动添加
-     */
-    toAdd() {
-      if (!(callVmHook(crud, CRUD.HOOK.beforeToAdd, crud.form) && callVmHook(crud, CRUD.HOOK.beforeToCU, crud.form))) {
-        return
-      }
-      crud.status.add = CRUD.STATUS.PREPARED
-      callVmHook(crud, CRUD.HOOK.afterToAdd, crud.form)
-      callVmHook(crud, CRUD.HOOK.afterToCU, crud.form)
-    },
-    /**
-     * 启动编辑
-     * @param {*} data 数据项
-     */
-    toEdit(data) {
-      crud.resetForm(JSON.parse(JSON.stringify(data)))
-      if (!(callVmHook(crud, CRUD.HOOK.beforeToEdit, crud.form) && callVmHook(crud, CRUD.HOOK.beforeToCU, crud.form))) {
-        return
-      }
-      crud.status.edit = CRUD.STATUS.PREPARED
-      crud.getDataStatus(data.id).edit = CRUD.STATUS.PREPARED
-      callVmHook(crud, CRUD.HOOK.afterToEdit, crud.form)
-      callVmHook(crud, CRUD.HOOK.afterToCU, crud.form)
-    },
-    /**
-     * 启动删除
-     * @param {*} data 数据项
-     */
-    toDelete(data) {
-      crud.getDataStatus(data.id).delete = CRUD.STATUS.PREPARED
-    },
-    /**
-     * 取消删除
-     * @param {*} data 数据项
-     */
-    cancelDelete(data) {
-      if (!callVmHook(crud, CRUD.HOOK.beforeDeleteCancel, data)) {
-        return
-      }
-      crud.getDataStatus(data.id).delete = CRUD.STATUS.NORMAL
-      callVmHook(crud, CRUD.HOOK.afterDeleteCancel, data)
-    },
-    /**
-     * 取消新增/编辑
-     */
-    cancelCU() {
-      const addStatus = crud.status.add
-      const editStatus = crud.status.edit
-      if (addStatus === CRUD.STATUS.PREPARED) {
-        if (!callVmHook(crud, CRUD.HOOK.beforeAddCancel, crud.form)) {
-          return
-        }
-        crud.status.add = CRUD.STATUS.NORMAL
-      }
-      if (editStatus === CRUD.STATUS.PREPARED) {
-        if (!callVmHook(crud, CRUD.HOOK.beforeEditCancel, crud.form)) {
-          return
-        }
-        crud.status.edit = CRUD.STATUS.NORMAL
-        crud.getDataStatus(crud.form.id).edit = CRUD.STATUS.NORMAL
-      }
-      crud.resetForm()
-      if (addStatus === CRUD.STATUS.PREPARED) {
-        callVmHook(crud, CRUD.HOOK.afterAddCancel, crud.form)
-      }
-      if (editStatus === CRUD.STATUS.PREPARED) {
-        callVmHook(crud, CRUD.HOOK.afterEditCancel, crud.form)
-      }
-      // 清除表单验证
-      if (crud.findVM('form').$refs['form']) {
-        crud.findVM('form').$refs['form'].clearValidate()
-      }
-    },
-    /**
-     * 提交新增/编辑
-     */
-    submitCU() {
-      if (!callVmHook(crud, CRUD.HOOK.beforeValidateCU)) {
-        return
-      }
-      crud.findVM('form').$refs['form'].validate(valid => {
-        if (!valid) {
-          return
-        }
-        if (!callVmHook(crud, CRUD.HOOK.afterValidateCU)) {
-          return
-        }
-        if (crud.status.add === CRUD.STATUS.PREPARED) {
-          crud.doAdd()
-        } else if (crud.status.edit === CRUD.STATUS.PREPARED) {
-          crud.doEdit()
-        }
-      })
-    },
-    /**
-     * 执行添加
-     */
-    doAdd() {
-      if (!callVmHook(crud, CRUD.HOOK.beforeSubmit)) {
-        return
-      }
-      crud.crudMethod.add(crud.form).then(r => {
-        if (r.code === 0) {
-          crud.status.add = CRUD.STATUS.NORMAL
-          crud.resetForm()
-          crud.addSuccessNotify()
-          callVmHook(crud, CRUD.HOOK.afterSubmit)
-          crud.toQuery()
-        } else if (r.code === 1020400) {
-          // 显示所有的检查出错的信息
-          Object.keys(r.data).forEach(function(key) {
-            console.info(key + '-----------' + r.data[key])
-            crud.notify(r.data[key], CRUD.NOTIFICATION_TYPE.ERROR)
-          })
-        } else {
-          // 总的校验信息
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-        }
-      }).catch(() => {
-        callVmHook(crud, CRUD.HOOK.afterAddError)
-      })
-    },
-    /**
-     * 执行编辑
-     */
-    doEdit() {
-      if (!callVmHook(crud, CRUD.HOOK.beforeSubmit)) {
-        return
-      }
-      crud.crudMethod.edit(crud.form).then(r => {
-        if (r.code === 0) {
-          crud.status.edit = CRUD.STATUS.NORMAL
-          crud.getDataStatus(crud.form.id).edit = CRUD.STATUS.NORMAL
-          crud.editSuccessNotify()
-          crud.resetForm()
-          callVmHook(crud, CRUD.HOOK.afterSubmit)
-          crud.refresh()
-        } else if (r.code === 1020400) {
-          // 显示所有的检查出错的信息
-          Object.keys(r.data).forEach(function(key) {
-            console.info(key + '-----------' + r.data[key])
-            crud.notify(r.data[key], CRUD.NOTIFICATION_TYPE.ERROR)
-          })
-        } else {
-          // 总的校验信息
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-        }
-      }).catch(() => {
-        callVmHook(crud, CRUD.HOOK.afterEditError)
-      })
-    },
-    /**
-     * 执行删除
-     * @param {*} data 数据项
-     */
-    doDelete(data) {
-      let delAll = false
-      let dataStatus
-      const ids = []
-      if (data instanceof Array) {
-        delAll = true
-        data.forEach(val => {
-          ids.push(val.id)
-        })
-      } else {
-        ids.push(data.id)
-        dataStatus = crud.getDataStatus(data.id)
-      }
-      if (!callVmHook(crud, CRUD.HOOK.beforeDelete, data)) {
-        return
-      }
-      if (!delAll) {
-        dataStatus.delete = CRUD.STATUS.PROCESSING
-      }
-      return crud.crudMethod.del(ids).then(r => {
-        if (r.code === 0) { // 接口正常处理
-          if (delAll) {
-            crud.delAllLoading = false
-          } else dataStatus.delete = CRUD.STATUS.PREPARED
-          crud.dleChangePage(1)
-          crud.delSuccessNotify()
-          callVmHook(crud, CRUD.HOOK.afterDelete, data)
-          crud.refresh()
-        } else { // 处理出错！
-          // 显示错误信息
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-        }
-      }).catch(() => {
-        if (delAll) {
-          crud.delAllLoading = false
-        } else dataStatus.delete = CRUD.STATUS.PREPARED
-      })
-    },
-    /**
-     * 通用导出
-     */
-    doExport() {
-      crud.downloadLoading = true
-      download(crud.exportUrl, crud.getQueryParams()).then(result => {
-        downloadFile(result, crud.title + i18n.t('crud.exportData'), 'xlsx')
-        crud.downloadLoading = false
-      }).catch(() => {
-        crud.downloadLoading = false
-      })
-    },
-    /**
-     * 获取查询参数
-     */
-    getQueryParams() {
-      return {
-        page: crud.page.page - 1,
-        size: crud.page.size,
-        conditions: crud.adSearchConditions,
-        sort: crud.sort,
-        ...crud.query,
-        ...crud.params
-      }
-    },
-    // 当前页改变
-    pageChangeHandler(e) {
-      crud.page.page = e
-      crud.refresh()
-    },
-    // 每页条数改变
-    sizeChangeHandler(e) {
-      crud.page.size = e
-      crud.page.page = 1
-      crud.refresh()
-    },
-    // 预防删除第二页最后一条数据时，或者多选删除第二页的数据时，页码错误导致请求无数据
-    dleChangePage(size) {
-      if (crud.data.length === size && crud.page.page !== 1) {
-        crud.page.page -= 1
-      }
-    },
-    // 选择改变
-    selectionChangeHandler(val) {
-      crud.selections = val
-    },
-    removeArrayItem(array, val) {
-      const index = array.indexOf(val)
-      if (index > -1) {
-        array.splice(index, 1)
-      }
-    },
-    // 单击列头触发后端排序
-    doTitleOrder(column) {
-      // 设定排序参数,支持多字段排序
-      // if (column.order != null) {
-      //   if (column.order.indexOf('descending') > -1) {
-      //     crud.sort.push(column.prop + ',desc')
-      //     crud.removeArrayItem(crud.sort, column.prop + ',asc')
-      //   } else if (column.order.indexOf('ascending') > -1) {
-      //     crud.sort.push(column.prop + ',asc')
-      //     crud.removeArrayItem(crud.sort, column.prop + ',desc')
-      //   }
-      // } else {
-      //   crud.removeArrayItem(crud.sort, column.prop + ',asc')
-      //   crud.removeArrayItem(crud.sort, column.prop + ',desc')
-      // }
+    delAllLoading: false,
+    defaultQuery: JSON.parse(JSON.stringify(options.query || {})),
+    vms: Array(4).fill(null),
 
-      // 单个字段排序
-      // 清除旧排序
-      crud.sort = []
-      if (column.order != null) {
-        if (column.order.indexOf('descending') > -1) {
-          crud.sort.push(column.prop + ',desc')
-        } else if (column.order.indexOf('ascending') > -1) {
-          crud.sort.push(column.prop + ',asc')
-        }
-      }
-      // 调用分页接口
-      crud.page.page = 1
-      crud.refresh()
-    },
-    /**
-     * 重置查询参数
-     * @param {Boolean} toQuery 重置后进行查询操作
-     */
-    resetQuery(toQuery = true) {
-      const defaultQuery = JSON.parse(JSON.stringify(crud.defaultQuery))
-      // 清除所有的查询参数
-      crud.params = {}
-      crud.adSearchConditions = [] // 清空crud里面的保存的高级查询条件！
-      const query = crud.query
-      Object.keys(query).forEach(key => {
-        query[key] = defaultQuery[key]
-      })
-      if (toQuery) {
-        crud.toQuery()
-      }
-    },
-    /**
-     * 重置表单
-     * @param {Array} data 数据
-     */
-    resetForm(data) {
-      const form = data || (typeof crud.defaultForm === 'object' ? JSON.parse(JSON.stringify(crud.defaultForm)) : crud.defaultForm())
-      const crudFrom = crud.form
-      for (const key in form) {
-        if (crudFrom.hasOwnProperty(key)) {
-          crudFrom[key] = form[key]
-        } else {
-          Vue.set(crudFrom, key, form[key])
-        }
-      }
-    },
-    /**
-     * 重置数据状态
-     */
-    resetDataStatus() {
-      const dataStatus = {}
-
-      function resetStatus(datas) {
-        datas.forEach(e => {
-          dataStatus[e.id] = {
-            delete: 0,
-            edit: 0
-          }
-          if (e.children) {
-            resetStatus(e.children)
-          }
-        })
-      }
-
-      resetStatus(crud.data)
-      crud.dataStatus = dataStatus
-    },
-    /**
-     * 获取数据状态
-     * @param {Number | String} id 数据项id
-     */
-    getDataStatus(id) {
-      return crud.dataStatus[id]
-    },
-    /**
-     * 用于树形表格多选, 选中所有
-     * @param selection
-     */
-    selectAllChange(selection) {
-      // 如果选中的数目与请求到的数目相同就选中子节点，否则就清空选中
-      if (selection && selection.length === crud.data.length) {
-        selection.forEach(val => {
-          crud.selectChange(selection, val)
-        })
-      } else {
-        crud.findVM('presenter').$refs['table'].clearSelection()
-      }
-    },
-    /**
-     * 用于树形表格多选，单选的封装
-     * @param selection
-     * @param row
-     */
-    selectChange(selection, row) {
-      // 如果selection中存在row代表是选中，否则是取消选中
-      if (selection.find(val => {
-        return val.id === row.id
-      })) {
-        if (row.children) {
-          row.children.forEach(val => {
-            crud.findVM('presenter').$refs['table'].toggleRowSelection(val, true)
-            selection.push(val)
-            if (val.children) {
-              crud.selectChange(selection, val)
-            }
-          })
-        }
-      } else {
-        crud.toggleRowSelection(selection, row)
-      }
-    },
-    /**
-     * 切换选中状态
-     * @param selection
-     * @param data
-     */
-    toggleRowSelection(selection, data) {
-      if (data.children) {
-        data.children.forEach(val => {
-          crud.findVM('presenter').$refs['table'].toggleRowSelection(val, false)
-          if (val.children) {
-            crud.toggleRowSelection(selection, val)
-          }
-        })
-      }
-    },
-    findVM(type) {
-      return crud.vms.find(vm => vm && vm.type === type).vm
-    },
-    notify(title, type = CRUD.NOTIFICATION_TYPE.INFO) {
-      crud.vms[0].vm.$notify({
-        title,
-        type,
-        duration: 2500
-      })
-    },
-    updateProp(name, value) {
-      Vue.set(crud.props, name, value)
-    }
-  }
-  const crud = Object.assign({}, data)
-  // 可观测化
-  Vue.observable(crud)
-  // 附加方法
-  Object.assign(crud, methods)
-  // 记录初始默认的查询参数，后续重置查询时使用
-  Object.assign(crud, {
-    defaultQuery: JSON.parse(JSON.stringify(data.query)),
-    // 预留4位存储：组件 主页、头部、分页、表单，调试查看也方便找
-    vms: Array(4),
-    /**
-     * 注册组件实例
-     * @param {String} type 类型
-     * @param {*} vm 组件实例
-     * @param {Number} index 该参数内部使用
-     */
+    // 注册组件实例（增强空值校验）
     registerVM(type, vm, index = -1) {
-      const vmObj = {
-        type,
-        vm: vm
-      }
+      if (!vm) return
+      const vmObj = { type, vm }
       if (index < 0) {
         this.vms.push(vmObj)
         return
       }
-      this.vms.length = Math.max(this.vms.length, index)
+      this.vms.length = Math.max(this.vms.length, index + 1)
       this.vms.splice(index, 1, vmObj)
     },
-    /**
-     * 取消注册组件实例
-     * @param {*} vm 组件实例
-     */
+
+    // 取消注册组件实例
     unregisterVM(vm) {
-      this.vms.splice(this.vms.findIndex(e => e && e.vm === vm), 1)
+      if (!vm) return
+      const index = this.vms.findIndex(e => e && e.vm === vm)
+      if (index > -1) this.vms.splice(index, 1)
     }
   })
-  // 冻结处理，需要扩展数据的话，使用crud.updateProp(name, value)，以crud.props.name形式访问，这个是响应式的，可以做数据绑定
-  Object.freeze(crud)
-  return crud
+
+  // 核心方法定义（全量空值校验 + Vue3 适配）
+  const methods = {
+    // 提示语封装
+    submitSuccessNotify() { this.notify(this.msg.submit, CRUD.NOTIFICATION_TYPE.SUCCESS) },
+    addSuccessNotify() { this.notify(this.msg.add, CRUD.NOTIFICATION_TYPE.SUCCESS) },
+    editSuccessNotify() { this.notify(this.msg.edit, CRUD.NOTIFICATION_TYPE.SUCCESS) },
+    delSuccessNotify() { this.notify(this.msg.del, CRUD.NOTIFICATION_TYPE.SUCCESS) },
+
+    // 搜索/刷新
+    toQuery() {
+      this.page.page = 1
+      this.refresh()
+    },
+    dialogSearch() {
+      this.showAdSearchDialog = true
+    },
+    refresh() {
+      if (!callVmHook(this, CRUD.HOOK.beforeRefresh)) return Promise.reject('beforeRefresh rejected')
+      return new Promise((resolve, reject) => {
+        this.loading = true
+        const method = this.adSearchConditions?.length > 0 ? 'post' : 'get'
+        initData(this.url, this.getQueryParams(), method).then(r => {
+          this.loading = false
+          if (r.code === 0) {
+            const resData = r.data || {}
+            this.page.total = resData.totalElements || resData.totalCount || 0
+            this.data = resData.content || []
+            this.resetDataStatus()
+            setTimeout(() => callVmHook(this, CRUD.HOOK.afterRefresh), this.time)
+            resolve(resData)
+          } else {
+            this.notify(r.msg || i18n.global.t('common.requestFail'), CRUD.NOTIFICATION_TYPE.ERROR)
+            reject(r)
+          }
+        }).catch(err => {
+          this.loading = false
+          this.notify(i18n.global.t('common.networkError'), CRUD.NOTIFICATION_TYPE.ERROR)
+          reject(err)
+        })
+      })
+    },
+
+    // 新增/编辑/删除 操作
+    toAdd() {
+      if (!(callVmHook(this, CRUD.HOOK.beforeToAdd, this.form) && callVmHook(this, CRUD.HOOK.beforeToCU, this.form))) return
+      this.resetForm()
+      this.status.add = CRUD.STATUS.PREPARED
+      callVmHook(this, CRUD.HOOK.afterToAdd, this.form)
+      callVmHook(this, CRUD.HOOK.afterToCU, this.form)
+    },
+    toEdit(data) {
+      if (!data?.id) return
+      // 【改动】先重置表单，再执行钩子
+      this.resetForm(JSON.parse(JSON.stringify(data)))
+      if (!(callVmHook(this, CRUD.HOOK.beforeToEdit, this.form) && callVmHook(this, CRUD.HOOK.beforeToCU, this.form))) return
+      this.status.edit = CRUD.STATUS.PREPARED
+      const dataStatus = this.getDataStatus(data.id)
+      dataStatus.edit = CRUD.STATUS.PREPARED
+      callVmHook(this, CRUD.HOOK.afterToEdit, this.form)
+      callVmHook(this, CRUD.HOOK.afterToCU, this.form)
+    },
+    toDelete(data) {
+      if (!data?.id) return
+      const dataStatus = this.getDataStatus(data.id)
+      dataStatus.delete = CRUD.STATUS.PREPARED
+    },
+    cancelDelete(data) {
+      if (!data?.id || !callVmHook(this, CRUD.HOOK.beforeDeleteCancel, data)) return
+      const dataStatus = this.getDataStatus(data.id)
+      dataStatus.delete = CRUD.STATUS.NORMAL
+      callVmHook(this, CRUD.HOOK.afterDeleteCancel, data)
+    },
+    cancelCU() {
+      const addStatus = this.status.add
+      const editStatus = this.status.edit
+      const formVm = this.findVM('form')
+
+      // 取消新增
+      if (addStatus === CRUD.STATUS.PREPARED) {
+        if (!callVmHook(this, CRUD.HOOK.beforeAddCancel, this.form)) return
+        this.status.add = CRUD.STATUS.NORMAL
+      }
+
+      // 取消编辑
+      if (editStatus === CRUD.STATUS.PREPARED) {
+        if (!callVmHook(this, CRUD.HOOK.beforeEditCancel, this.form)) return
+        this.status.edit = CRUD.STATUS.NORMAL
+        const dataStatus = this.getDataStatus(this.form?.id)
+        dataStatus.edit = CRUD.STATUS.NORMAL
+      }
+
+      // 重置表单 + 清除验证
+      this.resetForm()
+      if (formVm?.$refs?.form) formVm.$refs.form.clearValidate?.()
+
+      // 触发钩子
+      if (addStatus === CRUD.STATUS.PREPARED) callVmHook(this, CRUD.HOOK.afterAddCancel, this.form)
+      if (editStatus === CRUD.STATUS.PREPARED) callVmHook(this, CRUD.HOOK.afterEditCancel, this.form)
+    },
+
+    // 提交新增/编辑
+    submitCU() {
+      if (!callVmHook(this, CRUD.HOOK.beforeValidateCU)) return
+      const formVm = this.findVM('form')
+      if (!formVm?.$refs?.form) {
+        this.notify(i18n.global.t('common.formNotFound'), CRUD.NOTIFICATION_TYPE.ERROR)
+        return
+      }
+      formVm.$refs.form.validate((valid) => {
+        if (!valid) return
+        if (!callVmHook(this, CRUD.HOOK.afterValidateCU)) return
+        this.status.add === CRUD.STATUS.PREPARED ? this.doAdd() : this.doEdit()
+      })
+    },
+    doAdd() {
+      if (!callVmHook(this, CRUD.HOOK.beforeSubmit)) return
+      this.crudMethod.add(this.form).then(r => {
+        if (r.code === 0) {
+          this.status.add = CRUD.STATUS.NORMAL
+          this.resetForm()
+          this.addSuccessNotify()
+          callVmHook(this, CRUD.HOOK.afterSubmit)
+          this.toQuery()
+        } else if (r.code === 1020400) {
+          Object.keys(r.data || {}).forEach(key => this.notify(r.data[key], CRUD.NOTIFICATION_TYPE.ERROR))
+        } else {
+          this.notify(r.msg || i18n.global.t('crud.addFail'), CRUD.NOTIFICATION_TYPE.ERROR)
+        }
+      }).catch(() => callVmHook(this, CRUD.HOOK.afterAddError))
+    },
+    doEdit() {
+      if (!callVmHook(this, CRUD.HOOK.beforeSubmit)) return
+      this.crudMethod.edit(this.form).then(r => {
+        if (r.code === 0) {
+          this.status.edit = CRUD.STATUS.NORMAL
+          const dataStatus = this.getDataStatus(this.form?.id)
+          dataStatus.edit = CRUD.STATUS.NORMAL
+          this.editSuccessNotify()
+          this.resetForm()
+          callVmHook(this, CRUD.HOOK.afterSubmit)
+          this.refresh()
+        } else if (r.code === 1020400) {
+          Object.keys(r.data || {}).forEach(key => this.notify(r.data[key], CRUD.NOTIFICATION_TYPE.ERROR))
+        } else {
+          this.notify(r.msg || i18n.global.t('crud.editFail'), CRUD.NOTIFICATION_TYPE.ERROR)
+        }
+      }).catch(() => callVmHook(this, CRUD.HOOK.afterEditError))
+    },
+    doDelete(data) {
+      if (!data) return Promise.reject('data is empty')
+      // 修复ESLint：拆分let声明 + ids改const
+      let delAll = false
+      let dataStatus
+      const ids = []
+
+      if (Array.isArray(data)) {
+        delAll = true
+        data.forEach(val => val.id && ids.push(val.id))
+      } else {
+        if (!data.id) return Promise.reject('id is empty')
+        ids.push(data.id)
+        dataStatus = this.getDataStatus(data.id)
+      }
+      if (ids.length === 0) {
+        this.notify(i18n.global.t('crud.noDeleteData'), CRUD.NOTIFICATION_TYPE.WARNING)
+        return Promise.reject('ids is empty')
+      }
+      if (!callVmHook(this, CRUD.HOOK.beforeDelete, data)) return Promise.reject('beforeDelete rejected')
+
+      // 执行删除
+      if (!delAll && dataStatus) dataStatus.delete = CRUD.STATUS.PROCESSING
+      if (delAll) this.delAllLoading = true
+      return this.crudMethod.del(ids).then(r => {
+        if (r.code === 0) {
+          delAll ? this.delAllLoading = false : dataStatus.delete = CRUD.STATUS.PREPARED
+          this.dleChangePage(1)
+          this.delSuccessNotify()
+          callVmHook(this, CRUD.HOOK.afterDelete, data)
+          this.refresh()
+        } else {
+          this.notify(r.msg || i18n.global.t('crud.deleteFail'), CRUD.NOTIFICATION_TYPE.ERROR)
+          delAll ? this.delAllLoading = false : dataStatus.delete = CRUD.STATUS.PREPARED
+        }
+        return r
+      }).catch(() => {
+        delAll ? this.delAllLoading = false : dataStatus.delete = CRUD.STATUS.PREPARED
+        return Promise.reject('delete failed')
+      })
+    },
+
+    // 导出
+    doExport() {
+      this.downloadLoading = true
+      download(this.exportUrl, this.getQueryParams()).then(result => {
+        downloadFile(result, this.title + i18n.global.t('crud.exportData'), 'xlsx')
+        this.downloadLoading = false
+      }).catch(() => {
+        this.downloadLoading = false
+        this.notify(i18n.global.t('crud.exportFail'), CRUD.NOTIFICATION_TYPE.ERROR)
+      })
+    },
+
+    // 分页/排序/查询参数
+    getQueryParams() {
+      return {
+        page: this.page.page - 1,
+        size: this.page.size,
+        conditions: this.adSearchConditions || [],
+        sort: this.sort || [],
+        ...this.query,
+        ...this.params
+      }
+    },
+    pageChangeHandler(e) {
+      this.page.page = e
+      this.refresh()
+    },
+    sizeChangeHandler(e) {
+      this.page.size = e
+      this.page.page = 1
+      this.refresh()
+    },
+    dleChangePage(size = 1) {
+      if (this.data?.length === size && this.page.page !== 1) {
+        this.page.page -= 1
+      }
+    },
+    selectionChangeHandler(val) {
+      this.selections = val || []
+    },
+    removeArrayItem(array, val) {
+      if (!Array.isArray(array)) return
+      const index = array.indexOf(val)
+      index > -1 && array.splice(index, 1)
+    },
+    doTitleOrder(column) {
+      this.sort = []
+      if (column?.order) {
+        this.sort.push(column.prop + (column.order.includes('descending') ? ',desc' : ',asc'))
+      }
+      this.page.page = 1
+      this.refresh()
+    },
+
+    // 重置查询/表单
+    resetQuery(toQuery = true) {
+      const defaultQuery = JSON.parse(JSON.stringify(this.defaultQuery || {}))
+      this.params = {}
+      this.adSearchConditions = []
+      // 修复ESLint：箭头函数加{}，避免返回赋值
+      Object.keys(this.query || {}).forEach(key => {
+        this.query[key] = defaultQuery[key]
+      })
+      toQuery && this.toQuery()
+    },
+    resetForm(data) {
+      const formData = data || (typeof this.defaultForm === 'function' ? this.defaultForm() : this.defaultForm || {})
+      // Vue3 reactive 对象直接赋值（无需 vueSet）
+      Object.keys(this.form).forEach(key => delete this.form[key])
+      Object.assign(this.form, formData)
+      // 【核心改动】强制兜底 dept 和 job
+      this.form.dept = this.form.dept || { id: null }
+      this.form.job = this.form.job || { id: null }
+    },
+
+    // 数据状态管理
+    resetDataStatus() {
+      const dataStatus = {}
+      const resetStatus = (datas) => {
+        if (!Array.isArray(datas)) return
+        datas.forEach(e => {
+          if (e?.id) {
+            dataStatus[e.id] = { delete: CRUD.STATUS.NORMAL, edit: CRUD.STATUS.NORMAL }
+            e.children && resetStatus(e.children)
+          }
+        })
+      }
+      resetStatus(this.data)
+      this.dataStatus = dataStatus
+    },
+    getDataStatus(id) {
+      return this.dataStatus?.[id] || { delete: CRUD.STATUS.NORMAL, edit: CRUD.STATUS.NORMAL }
+    },
+
+    // 树形表格选中逻辑
+    selectAllChange(selection) {
+      const presenterVm = this.findVM('presenter')
+      if (!presenterVm?.$refs?.table) return
+      if (selection?.length === (this.data?.length || 0)) {
+        selection.forEach(val => this.selectChange(selection, val))
+      } else {
+        presenterVm.$refs.table.clearSelection()
+      }
+    },
+    selectChange(selection, row) {
+      if (!row || !selection) return
+      const presenterVm = this.findVM('presenter')
+      if (!presenterVm?.$refs?.table) return
+      const isSelected = selection.findIndex(val => val?.id === row.id) > -1
+      if (isSelected) {
+        const recursiveSelect = (parentRow) => {
+          if (!parentRow?.children) return
+          parentRow.children.forEach(val => {
+            if (!val?.id) return
+            presenterVm.$refs.table.toggleRowSelection(val, true)
+            !selection.find(item => item.id === val.id) && selection.push(val)
+            recursiveSelect(val)
+          })
+        }
+        recursiveSelect(row)
+      } else {
+        this.toggleRowSelection(selection, row)
+      }
+    },
+    toggleRowSelection(selection, data) {
+      if (!data) return
+      const presenterVm = this.findVM('presenter')
+      if (!presenterVm?.$refs?.table) return
+      const recursiveUnselect = (parentData) => {
+        if (!parentData?.children) return
+        parentData.children.forEach(val => {
+          if (!val?.id) return
+          presenterVm.$refs.table.toggleRowSelection(val, false)
+          const idx = selection.findIndex(item => item.id === val.id)
+          idx > -1 && selection.splice(idx, 1)
+          recursiveUnselect(val)
+        })
+      }
+      recursiveUnselect(data)
+    },
+
+    // 辅助方法
+    findVM(type) {
+      if (!this.vms || !Array.isArray(this.vms)) return null
+      return this.vms.find(vm => vm?.type === type)?.vm || null
+    },
+    notify(title, type = CRUD.NOTIFICATION_TYPE.INFO) {
+      ElNotification({
+        title: title || i18n.global.t('common.tip'),
+        type: ['success', 'warning', 'info', 'error'].includes(type) ? type : 'info',
+        duration: 2500
+      })
+    },
+    updateProp(name, value) {
+      if (!name) return
+      if (!this.props) this.props = {}
+      this.props[name] = value // Vue3 直接赋值响应式
+    }
+  }
+
+  // 绑定方法到响应式对象（确保this指向CRUD实例）
+  Object.keys(methods).forEach(key => {
+    data[key] = methods[key].bind(data)
+  })
+
+  return data
 }
 
-// hook VM
+// 钩子调用工具函数
 function callVmHook(crud, hook) {
-  if (crud.debug) {
-    console.log('callVmHook: ' + hook)
-  }
+  if (!crud || !hook) return true
+  if (crud.debug) console.log('callVmHook: ' + hook)
   let ret = true
-  const nargs = [crud]
-  for (let i = 2; i < arguments.length; ++i) {
-    nargs.push(arguments[i])
-  }
-  // 有些组件扮演了多个角色，调用钩子时，需要去重
+  const nargs = [crud, ...Array.from(arguments).slice(2)]
   const vmSet = new Set()
-  crud.vms.forEach(vm => vm && vmSet.add(vm.vm))
+  crud.vms?.forEach(vm => vm?.vm && vmSet.add(vm.vm))
   vmSet.forEach(vm => {
-    if (vm[hook]) {
+    if (vm && typeof vm[hook] === 'function') {
       ret = vm[hook].apply(vm, nargs) !== false && ret
     }
   })
   return ret
 }
 
-function mergeOptions(src, opts) {
-  const optsRet = {
-    ...src
+// crud.js 中的 presenter 函数
+function presenter(crudInstance) {
+  if (!crudInstance) {
+    console.error('presenter 必须传入 CRUD 实例')
+    return {}
   }
-  for (const key in src) {
-    if (opts.hasOwnProperty(key)) {
-      optsRet[key] = opts[key]
-    }
-  }
-  return optsRet
-}
-
-/**
- * crud主页
- */
-function presenter(crud) {
   function obColumns(columns) {
     return {
       visible(col) {
@@ -665,217 +505,148 @@ function presenter(crud) {
       }
     }
   }
-
   return {
-    inject: ['crud'],
-    beforeCreate() {
-      // 由于initInjections在initProvide之前执行，如果该组件自己就需要crud，需要在initInjections前准备好crud
-      this._provided = {
-        crud,
-        'crud.query': crud.query,
-        'crud.page': crud.page,
-        'crud.form': crud.form
-      }
-    },
+    // 关键修改：直接把 crudInstance 作为组件的 data 属性（不再用 inject）
     data() {
       return {
+        crud: crudInstance, // 直接挂载传入的 CRUD 实例到组件
         searchToggle: true,
-        columns: obColumns()
+        columns: obColumns({})
       }
     },
-    methods: {
-      parseTime
+    // 提供给子组件的依赖（保持不变）
+    provide() {
+      return {
+        crud: crudInstance,
+        'crud.query': crudInstance.query,
+        'crud.page': crudInstance.page,
+        'crud.form': crudInstance.form
+      }
     },
+    methods: { parseTime },
     created() {
+      // 现在 this.crud 就是有效的 crudInstance，无需判空
       this.crud.registerVM('presenter', this, 0)
-      if (crud.queryOnPresenterCreated) {
-        crud.toQuery()
-      }
+      this.crud.queryOnPresenterCreated && this.crud.toQuery()
     },
-    beforeDestroy() {
-      this.crud.unregisterVM(this)
+    beforeUnmount() {
+      this.crud?.unregisterVM(this)
     },
     mounted() {
-      const columns = {}
-      this.$refs.table.columns.forEach(e => {
-        if (!e.property || e.type !== 'default') {
-          return
-        }
-        columns[e.property] = {
-          label: e.label,
-          visible: true
-        }
+      this.$nextTick(() => {
+        if (!this.$refs?.table || !this.crud) return
+        const columns = {}
+        this.$refs.table.columns?.forEach(e => {
+          if (e?.property && e.type === 'default') {
+            columns[e.property] = { label: e.label, visible: true }
+          }
+        })
+        this.columns = obColumns(columns)
+        this.crud.updateProp('tableColumns', columns)
       })
-      this.columns = obColumns(columns)
-      this.crud.updateProp('tableColumns', columns)
     }
   }
 }
 
-/**
- * 头部
- */
+// 组件配置：Header（头部）
 function header() {
   return {
     inject: {
-      crud: {
-        from: 'crud'
-      },
-      query: {
-        from: 'crud.query'
-      }
+      crud: { from: 'crud', default: () => null },
+      query: { from: 'crud.query', default: () => ({}) }
     },
     created() {
-      this.crud.registerVM('header', this, 1)
+      this.crud?.registerVM('header', this, 1)
     },
-    beforeDestroy() {
-      this.crud.unregisterVM(this)
+    beforeUnmount() {
+      this.crud?.unregisterVM(this)
     }
   }
 }
 
-/**
- * 分页
- */
+// 组件配置：Pagination（分页）
 function pagination() {
   return {
     inject: {
-      crud: {
-        from: 'crud'
-      },
-      page: {
-        from: 'crud.page'
-      }
+      crud: { from: 'crud', default: () => null },
+      page: { from: 'crud.page', default: () => ({ page: 1, size: 10, total: 0 }) }
     },
     created() {
-      this.crud.registerVM('pagination', this, 2)
+      this.crud?.registerVM('pagination', this, 2)
     },
-    beforeDestroy() {
-      this.crud.unregisterVM(this)
+    beforeUnmount() {
+      this.crud?.unregisterVM(this)
     }
   }
 }
 
-/**
- * 表单
- */
+// 组件配置：Form（表单）- 修复后
 function form(defaultForm) {
   return {
     inject: {
-      crud: {
-        from: 'crud'
-      },
-      form: {
-        from: 'crud.form'
-      }
+      crud: { from: 'crud', default: () => null },
+      form: { from: 'crud.form', default: () => ({}) }
     },
     created() {
-      this.crud.registerVM('form', this, 3)
-      this.crud.defaultForm = defaultForm
-      this.crud.resetForm()
+      if (this.crud) {
+        this.crud.registerVM('form', this, 3)
+        // 修复：强制转为函数，避免引用共享
+        this.crud.defaultForm = typeof defaultForm === 'function' ? defaultForm : () => ({ ...defaultForm })
+        this.crud.resetForm()
+        // 兜底 form.dept 和 form.job
+        if (!this.form.dept) this.form.dept = { id: null }
+        if (!this.form.job) this.form.job = { id: null }
+      }
     },
-    beforeDestroy() {
-      this.crud.unregisterVM(this)
+    beforeUnmount() {
+      this.crud?.unregisterVM(this)
     }
   }
 }
 
-/**
- * crud
- */
-function crud(options = {}) {
-  const defaultOptions = {
-    type: undefined
-  }
-  options = mergeOptions(defaultOptions, options)
+// 组件配置：通用CRUD
+function crudExt(options = {}) {
+  const opts = { ...{ type: undefined }, ...options }
   return {
-    inject: {
-      crud: {
-        from: 'crud'
-      }
-    },
+    inject: { crud: { from: 'crud', default: () => null }},
     created() {
-      this.crud.registerVM(options.type, this)
+      this.crud?.registerVM(opts.type, this)
     },
-    beforeDestroy() {
-      this.crud.unregisterVM(this)
+    beforeUnmount() {
+      this.crud?.unregisterVM(this)
     }
   }
 }
 
-/**
- * CRUD钩子
- */
+// 常量定义
 CRUD.HOOK = {
-  /** 刷新 - 之前 */
   beforeRefresh: 'beforeCrudRefresh',
-  /** 刷新 - 之后 */
   afterRefresh: 'afterCrudRefresh',
-  /** 删除 - 之前 */
   beforeDelete: 'beforeCrudDelete',
-  /** 删除 - 之后 */
   afterDelete: 'afterCrudDelete',
-  /** 删除取消 - 之前 */
   beforeDeleteCancel: 'beforeCrudDeleteCancel',
-  /** 删除取消 - 之后 */
   afterDeleteCancel: 'afterCrudDeleteCancel',
-  /** 新建 - 之前 */
   beforeToAdd: 'beforeCrudToAdd',
-  /** 新建 - 之后 */
   afterToAdd: 'afterCrudToAdd',
-  /** 编辑 - 之前 */
   beforeToEdit: 'beforeCrudToEdit',
-  /** 编辑 - 之后 */
   afterToEdit: 'afterCrudToEdit',
-  /** 开始 "新建/编辑" - 之前 */
   beforeToCU: 'beforeCrudToCU',
-  /** 开始 "新建/编辑" - 之后 */
   afterToCU: 'afterCrudToCU',
-  /** "新建/编辑" 验证 - 之前 */
   beforeValidateCU: 'beforeCrudValidateCU',
-  /** "新建/编辑" 验证 - 之后 */
   afterValidateCU: 'afterCrudValidateCU',
-  /** 添加取消 - 之前 */
   beforeAddCancel: 'beforeCrudAddCancel',
-  /** 添加取消 - 之后 */
   afterAddCancel: 'afterCrudAddCancel',
-  /** 编辑取消 - 之前 */
   beforeEditCancel: 'beforeCrudEditCancel',
-  /** 编辑取消 - 之后 */
   afterEditCancel: 'afterCrudEditCancel',
-  /** 提交 - 之前 */
   beforeSubmit: 'beforeCrudSubmitCU',
-  /** 提交 - 之后 */
   afterSubmit: 'afterCrudSubmitCU',
   afterAddError: 'afterCrudAddError',
   afterEditError: 'afterCrudEditError'
 }
 
-/**
- * CRUD状态
- */
-CRUD.STATUS = {
-  NORMAL: 0,
-  PREPARED: 1,
-  PROCESSING: 2
-}
+CRUD.STATUS = { NORMAL: 0, PREPARED: 1, PROCESSING: 2 }
+CRUD.NOTIFICATION_TYPE = { SUCCESS: 'success', WARNING: 'warning', INFO: 'info', ERROR: 'error' }
 
-/**
- * CRUD通知类型
- */
-CRUD.NOTIFICATION_TYPE = {
-  SUCCESS: 'success',
-  WARNING: 'warning',
-  INFO: 'info',
-  ERROR: 'error'
-}
-
+// 导出
 export default CRUD
-
-export {
-  presenter,
-  header,
-  form,
-  pagination,
-  crud
-}
+export { presenter, header, form, pagination, crudExt as crud }

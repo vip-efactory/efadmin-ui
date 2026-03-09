@@ -1,120 +1,67 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div ref="chartRef" style="width: 100%; height: 300px;" />
 </template>
 
-<script>
-import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import { debounce } from '@/utils'
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import * as echarts from 'echarts'
 
-const animationDuration = 3000
+const chartRef = ref(null)
+let myChart = null
 
-export default {
-  props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '300px'
-    }
-  },
-  data() {
-    return {
-      chart: null
-    }
-  },
-  mounted() {
-    this.initChart()
-    this.__resizeHandler = debounce(() => {
-      if (this.chart) {
-        this.chart.resize()
-      }
-    }, 100)
-    window.addEventListener('resize', this.__resizeHandler)
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    window.removeEventListener('resize', this.__resizeHandler)
-    this.chart.dispose()
-    this.chart = null
-  },
-  methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
+onMounted(() => {
+  if (chartRef.value) {
+    myChart = echarts.init(chartRef.value)
 
-      this.chart.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        radar: {
-          radius: '66%',
-          center: ['50%', '42%'],
-          splitNumber: 8,
-          splitArea: {
-            areaStyle: {
-              color: 'rgba(127,95,132,.3)',
-              opacity: 1,
-              shadowBlur: 45,
-              shadowColor: 'rgba(0,0,0,.5)',
-              shadowOffsetX: 0,
-              shadowOffsetY: 15
-            }
-          },
-          indicator: [
-            { name: 'Sales', max: 10000 },
-            { name: 'Administration', max: 20000 },
-            { name: 'Information Techology', max: 20000 },
-            { name: 'Customer Support', max: 20000 },
-            { name: 'Development', max: 20000 },
-            { name: 'Marketing', max: 20000 }
-          ]
-        },
-        legend: {
-          left: 'center',
-          bottom: '10',
-          data: ['Allocated Budget', 'Expected Spending', 'Actual Spending']
-        },
-        series: [{
-          type: 'radar',
-          symbolSize: 0,
-          areaStyle: {
-            normal: {
-              shadowBlur: 13,
-              shadowColor: 'rgba(0,0,0,.2)',
-              shadowOffsetX: 0,
-              shadowOffsetY: 10,
-              opacity: 1
-            }
+    const option = {
+      legend: {
+      },
+      toolbox: {
+        show: false,
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      series: [
+        {
+          name: 'Nightingale Chart',
+          type: 'pie',
+          radius: [20, 90],
+          // ✅ 核心修改：垂直位置从50%改为40%（数值越小越往上，可微调）
+          center: ['50%', '40%'],
+          roseType: 'area',
+          itemStyle: {
+            borderRadius: 8
           },
           data: [
-            {
-              value: [5000, 7000, 12000, 11000, 15000, 14000],
-              name: 'Allocated Budget'
-            },
-            {
-              value: [4000, 9000, 15000, 15000, 13000, 11000],
-              name: 'Expected Spending'
-            },
-            {
-              value: [5500, 11000, 12000, 15000, 12000, 12000],
-              name: 'Actual Spending'
-            }
-          ],
-          animationDuration: animationDuration
-        }]
-      })
+            { value: 36, name: 'rose 1', itemStyle: { color: '#2ec7c9' }},
+            { value: 33, name: 'rose 2', itemStyle: { color: '#b6a2de' }},
+            { value: 30, name: 'rose 3', itemStyle: { color: '#5ab1ef' }},
+            { value: 27, name: 'rose 4', itemStyle: { color: '#ffb980' }},
+            { value: 24, name: 'rose 5', itemStyle: { color: '#d87a80' }},
+            { value: 21, name: 'rose 6', itemStyle: { color: '#8d98b3' }}
+          ]
+        }
+      ]
     }
+
+    option && myChart.setOption(option)
   }
-}
+})
+
+onUnmounted(() => {
+  if (myChart) {
+    myChart.dispose()
+    myChart = null
+  }
+})
 </script>
+
+<style scoped>
+div[ref="chartRef"] {
+  margin: 0 auto;
+}
+</style>

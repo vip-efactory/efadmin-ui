@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :title="$t('storage.qiniuConfigTitle')" append-to-body width="600px">
+  <el-dialog v-model="dialog" :close-on-click-modal="false" :title="$t('storage.qiniuConfigTitle')" append-to-body width="600px">
     <el-form ref="form" :model="form" :rules="rules" style="margin-top: 6px;" size="small" label-width="120px">
       <el-form-item label="Access Key" prop="accessKey">
         <el-input v-model="form.accessKey" style="width: 95%" :placeholder="$t('storage.accessKeyPlaceholder')" />
@@ -28,10 +28,12 @@
         <el-radio v-model="form.type" label="私有">{{ $t('storage.typePrivate') }}</el-radio>
       </el-form-item>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="text" @click="dialog = false">{{ $t('crud.cancel') }}</el-button>
-      <el-button :loading="loading" type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
-    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button link @click="dialog = false">{{ $t('crud.cancel') }}</el-button>
+        <el-button :loading="loading" type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
+      </div>
+    </template>
   </el-dialog>
 </template>
 
@@ -46,19 +48,19 @@ export default {
       loading: false, form: { accessKey: '', secretKey: '', bucket: '', host: '', zone: '', type: '' },
       rules: {
         accessKey: [
-          { required: true, message: i18n.t('storage.accessKeyRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.accessKeyRequired'), trigger: 'blur' }
         ],
         secretKey: [
-          { required: true, message: i18n.t('storage.secretKeyRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.secretKeyRequired'), trigger: 'blur' }
         ],
         bucket: [
-          { required: true, message: i18n.t('storage.bucketRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.bucketRequired'), trigger: 'blur' }
         ],
         host: [
-          { required: true, message: i18n.t('storage.hostRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.hostRequired'), trigger: 'blur' }
         ],
         type: [
-          { required: true, message: i18n.t('storage.bucketTypeRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('storage.bucketTypeRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -78,7 +80,7 @@ export default {
           update(this.form).then(res => {
             if (res.code === 0) {
               this.$notify({
-                title: i18n.t('crud.editSuccess'),
+                title: i18n.global.t('crud.editSuccess'),
                 type: 'success',
                 duration: 2500
               })

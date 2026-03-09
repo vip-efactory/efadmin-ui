@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import * as echarts from 'echarts'
 
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
@@ -87,12 +87,10 @@ export default {
             return [item[1], item[0], item[2] || '-']
           }),
           label: {
-            normal: {
-              show: true
-            }
+            show: true
           },
-          itemStyle: {
-            emphasis: {
+          emphasis: {
+            itemStyle: {
               shadowBlur: 10,
               shadowColor: 'rgba(0, 0, 0, 0.5)'
             }

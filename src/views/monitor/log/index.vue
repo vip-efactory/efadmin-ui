@@ -3,23 +3,24 @@
     <div class="head-container">
       <Search />
       <crudOperation>
-        <el-button
-          slot="left"
-          class="filter-item"
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          :loading="crud.delAllLoading"
-          @click="confirmDelAll()"
-        >
-          {{ $t('log.clearLog') }}
-        </el-button>
+        <template #left>
+          <el-button
+            class="filter-item"
+            type="danger"
+            icon="Delete"
+            size="small"
+            :loading="crud.delAllLoading"
+            @click="confirmDelAll()"
+          >
+            {{ $t('log.clearLog') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template #default="props">
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item :label="$t('log.method')" label-width="130px">
               <span>{{ props.row.method }}</span>
@@ -36,14 +37,14 @@
       <el-table-column v-if="columns.visible('description')" prop="description" :label="$t('log.description')" sortable="custom" />
       <el-table-column v-if="columns.visible('browser')" prop="browser" :label="$t('log.browser')" sortable="custom" />
       <el-table-column v-if="columns.visible('time')" prop="time" :label="$t('log.time')" align="center" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tag v-if="scope.row.time <= 300">{{ scope.row.time }}ms</el-tag>
           <el-tag v-else-if="scope.row.time <= 1000" type="warning">{{ scope.row.time }}ms</el-tag>
           <el-tag v-else type="danger">{{ scope.row.time }}ms</el-tag>
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" width="180px" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
@@ -64,8 +65,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'username', labelName: i18n.t('log.username'), type: 'text' }, { fieldName: 'requestIp', labelName: i18n.t('log.requestIp'), type: 'text' }, { fieldName: 'address', labelName: i18n.t('log.address'), type: 'text' }, { fieldName: 'description', labelName: i18n.t('log.description'), type: 'text' }, { fieldName: 'browser', labelName: i18n.t('log.browser'), type: 'text' }, { fieldName: 'time', labelName: i18n.t('log.time'), type: 'number' }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('log.TITLE'), url: 'api/logs', exportUrl: 'api/logs/download', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'username', labelName: i18n.global.t('log.username'), type: 'text' }, { fieldName: 'requestIp', labelName: i18n.global.t('log.requestIp'), type: 'text' }, { fieldName: 'address', labelName: i18n.global.t('log.address'), type: 'text' }, { fieldName: 'description', labelName: i18n.global.t('log.description'), type: 'text' }, { fieldName: 'browser', labelName: i18n.global.t('log.browser'), type: 'text' }, { fieldName: 'time', labelName: i18n.global.t('log.time'), type: 'number' }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('log.TITLE'), url: 'api/logs', exportUrl: 'api/logs/download', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
 export default {
   name: 'Log',
   components: { Search, crudOperation, pagination },
@@ -89,9 +90,9 @@ export default {
   },
   methods: {
     confirmDelAll() {
-      this.$confirm(i18n.t('log.deleteTips'), i18n.t('log.deleteTitle'), {
-        confirmButtonText: i18n.t('crud.confirm'),
-        cancelButtonText: i18n.t('crud.cancel'),
+      this.$confirm(i18n.global.t('log.deleteTips'), i18n.global.t('log.deleteTitle'), {
+        confirmButtonText: i18n.global.t('crud.confirm'),
+        cancelButtonText: i18n.global.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         this.crud.delAllLoading = true

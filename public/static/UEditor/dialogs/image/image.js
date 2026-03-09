@@ -704,18 +704,12 @@
             uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
                 header['X_Requested_With'] = 'XMLHttpRequest';
-                // 携带token信息
-                var list = window.document.cookie.split(";")
-                var token = '';
-                let filterList = list.filter(item => {
-                  if (item.indexOf("Bearer") > -1 && item.indexOf("EFADMIN-TOKEN") > -1) { // 含有Token
-                    // 取到Token并将%20替换为空格字符串
-                    token = item.substring(item.indexOf("Bearer")).replace("%20", " ");
-                    return token
-                  }
-                })
-                header['Authorization']=token;
-                header['TENANT_ID']= 1;
+                // HaoChuan9421
+                if(editor.options.headers && Object.prototype.toString.apply(editor.options.headers) === "[object Object]"){
+                    for(var key in editor.options.headers){
+                        header[key] = editor.options.headers[key]
+                    }
+                }
             });
 
             uploader.on('uploadProgress', function (file, percentage) {

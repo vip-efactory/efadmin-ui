@@ -9,7 +9,7 @@
             clearable
             size="small"
             :placeholder="$t('dept.deptSearchPlaceholder')"
-            prefix-icon="el-icon-search"
+            prefix-icon="Search"
             class="filter-item"
             @input="getDeptDatas"
           />
@@ -26,30 +26,29 @@
       <el-col :xs="15" :sm="18" :md="20" :lg="20" :xl="20">
         <!--工具栏-->
         <div class="head-container">
-          <div v-if="crud.props.searchToggle">
+          <div v-if="crud && crud.props && crud.props.searchToggle">
             <!-- 搜索 -->
             <el-input
-              v-model="query.blurry"
+              v-model="crud.query.blurry"
               clearable
               size="small"
               :placeholder="$t('user.userSearchPlaceholder')"
-              style="width: 200px;"
+              style="width: 150px;"
               class="filter-item"
-              @keyup.enter.native="crud.toQuery"
+              @keyup.enter="crud.toQuery"
             />
             <el-date-picker
-              v-model="query.createTime"
-              :default-time="['00:00:00','23:59:59']"
+              v-model="crud.query.createTime"
               type="daterange"
               range-separator=":"
               size="small"
               class="date-item"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
               :start-placeholder="$t('common.startTime')"
               :end-placeholder="$t('common.endTime')"
             />
             <el-select
-              v-model="query.enabled"
+              v-model="crud.query.enabled"
               clearable
               size="small"
               :placeholder="$t('user.enabled')"
@@ -69,31 +68,42 @@
           <crudOperation show="" :permission="permission" />
         </div>
         <!--表单渲染-->
-        <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="630px">
-          <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="96px">
+        <!-- 1. :before-close 加可选链+函数包裹，避免crud为null时调用方法 -->
+        <!-- 2. :title 加可选链判空，避免crud.status不存在时报错 -->
+        <el-dialog
+          v-model="dialogVisible"
+          append-to-body
+          :close-on-click-modal="false"
+          :before-close="() => crud?.cancelCU()"
+          :title="crud?.status?.title || ''"
+          width="630px"
+        >
+          <el-form ref="form" :inline="true" :model="crud.form" :rules="rules" size="small" label-width="96px">
             <el-form-item :label="$t('user.username')" prop="username">
-              <el-input v-model="form.username" />
+              <el-input v-model="crud.form.username" />
             </el-form-item>
             <el-form-item :label="$t('user.phone')" prop="phone">
-              <el-input v-model.number="form.phone" />
+              <el-input v-model.number="crud.form.phone" />
             </el-form-item>
             <el-form-item :label="$t('user.nickName')" prop="nickName">
-              <el-input v-model="form.nickName" />
+              <el-input v-model="crud.form.nickName" />
             </el-form-item>
             <el-form-item :label="$t('user.email')" prop="email">
-              <el-input v-model="form.email" />
+              <el-input v-model="crud.form.email" />
             </el-form-item>
             <el-form-item :label="$t('user.dept')" prop="dept.id">
               <treeselect
-                v-model="form.dept.id"
+                :key="`tree-${crud.status.cu}`"
+                v-model="crud.form.dept.id"
                 :options="depts"
                 style="width: 178px"
                 :placeholder="$t('user.selectDept')"
+                :required="true"
                 @select="selectFun"
               />
             </el-form-item>
             <el-form-item :label="$t('user.job')" prop="job.id">
-              <el-select v-model="form.job.id" style="width: 178px" :placeholder="$t('user.selectJob')" :title="$t('user.selectJob')">
+              <el-select v-model="crud.form.job.id" style="width: 178px" :placeholder="$t('user.selectJob')" :title="$t('user.selectJob')" :disabled="!crud.form.dept.id" :empty-text="!jobs.length ? '请先选择所属部门' : '暂无岗位数据'">
                 <el-option
                   v-for="(item, index) in jobs"
                   :key="item.name + index"
@@ -103,23 +113,23 @@
               </el-select>
             </el-form-item>
             <el-form-item :label="$t('user.sex')">
-              <el-radio-group v-model="form.sex" style="width: 178px">
-                <el-radio label="男">{{ $t('sex.male') }}</el-radio>
-                <el-radio label="女">{{ $t('sex.female') }}</el-radio>
+              <el-radio-group v-model="crud.form.sex" style="width: 178px">
+                <el-radio value="男">{{ $t('sex.male') }}</el-radio>
+                <el-radio value="女">{{ $t('sex.female') }}</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item :label="$t('user.enabled')">
-              <el-radio-group v-model="form.enabled" :disabled="form.id === user.id">
+              <el-radio-group v-model="crud.form.enabled" :disabled="crud.form.id === user.id">
                 <el-radio
-                  v-for="item in dict.user_status"
+                  v-for="item in (dict.user_status || defaultUserStatus)"
                   :key="item.id"
-                  :label="item.value"
+                  :value="item.value + ''"
                 >{{ item.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item style="margin-bottom: 0;" :label="$t('user.roles')" prop="roles">
               <el-select
-                v-model="form.roles"
+                v-model="crud.form.roles"
                 style="width: 437px"
                 multiple
                 :placeholder="$t('user.selectRole')"
@@ -136,26 +146,35 @@
               </el-select>
             </el-form-item>
           </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-            <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-          </div>
+          <template #footer>
+            <div class="dialog-footer">
+              <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+              <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+            </div>
+          </template>
         </el-dialog>
         <!--表格渲染-->
-        <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+        <el-table
+          ref="table"
+          v-loading="crud?.loading"
+          :data="crud?.data || []"
+          style="width: 100%;"
+          @selection-change="val => crud?.selectionChangeHandler(val)"
+          @sort-change="val => crud?.doTitleOrder(val)"
+        >
           <el-table-column :selectable="checkboxT" type="selection" width="55" />
           <el-table-column v-if="columns.visible('username')" :show-overflow-tooltip="true" prop="username" :label="$t('user.username')" sortable="custom" />
           <el-table-column v-if="columns.visible('nickName')" :show-overflow-tooltip="true" prop="nickName" :label="$t('user.nickName')" sortable="custom" />
           <el-table-column v-if="columns.visible('sex')" prop="sex" :label="$t('user.sex')" sortable="custom" />
           <el-table-column v-if="columns.visible('phone')" :show-overflow-tooltip="true" prop="phone" width="100" :label="$t('user.phone')" sortable="custom" />
           <el-table-column v-if="columns.visible('email')" :show-overflow-tooltip="true" width="125" prop="email" :label="$t('user.email')" sortable="custom" />
-          <el-table-column v-if="columns.visible('dept')" :show-overflow-tooltip="true" width="110" prop="dept" :label="$t('user.job')" sortable="custom">
-            <template slot-scope="scope">
-              <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
+          <el-table-column v-if="columns.visible('dept')" :show-overflow-tooltip="true" width="110" :label="$t('user.dept')" sortable="custom">
+            <template #default="scope">
+              <div>{{ scope.row?.dept?.name || '-' }} / {{ scope.row?.job?.name || '-' }}</div>
             </template>
           </el-table-column>
           <el-table-column v-if="columns.visible('enabled')" :label="$t('user.enabled')" align="center" prop="enabled" sortable="custom">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-switch
                 v-model="scope.row.enabled"
                 :disabled="user.id === scope.row.id"
@@ -166,8 +185,8 @@
             </template>
           </el-table-column>
           <el-table-column v-if="columns.visible('createTime')" :show-overflow-tooltip="true" prop="createTime" width="140" :label="$t('be.createTime')" sortable="custom">
-            <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.createTime) }}</span>
+            <template #default="scope">
+              <span>{{ parseTime(scope.row?.createTime || '') }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -177,7 +196,7 @@
             align="center"
             fixed="right"
           >
-            <template slot-scope="scope">
+            <template #default="scope">
               <udOperation
                 :data="scope.row"
                 :permission="permission"
@@ -204,15 +223,15 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
-import Treeselect from '@riophae/vue-treeselect'
+import Treeselect from 'vue3-treeselect'
 import { mapGetters } from 'vuex'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import i18n from '../../../lang'
 
 let userRoles = []
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'username', labelName: i18n.t('user.username') }, { fieldName: 'nickName', labelName: i18n.t('user.nickName') }, { fieldName: 'sex', labelName: i18n.t('user.sex') }, { fieldName: 'phone', labelName: i18n.t('user.phone') }, { fieldName: 'email', labelName: i18n.t('user.email') }, { fieldName: 'enabled', labelName: i18n.t('user.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('user.TITLE'), url: 'api/users/page', exportUrl: 'api/users/download', crudMethod: { ...crudUser }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'username', labelName: i18n.global.t('user.username') }, { fieldName: 'nickName', labelName: i18n.global.t('user.nickName') }, { fieldName: 'sex', labelName: i18n.global.t('user.sex') }, { fieldName: 'phone', labelName: i18n.global.t('user.phone') }, { fieldName: 'email', labelName: i18n.global.t('user.email') }, { fieldName: 'enabled', labelName: i18n.global.t('user.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('user.TITLE'), url: 'api/users/page', exportUrl: 'api/users/download', crudMethod: { ...crudUser }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, username: null, nickName: null, sex: '男', email: null, enabled: 'false', roles: [], job: { id: null }, dept: { id: null }, phone: null }
 export default {
   name: 'User',
@@ -224,16 +243,23 @@ export default {
     // 自定义验证
     const validPhone = (rule, value, callback) => {
       if (!value) {
-        callback(new Error(i18n.t('user.phoneEmptyChk')))
+        callback(new Error(i18n.global.t('user.phoneEmptyChk')))
       } else if (!isvalidPhone(value)) {
-        callback(new Error(i18n.t('user.phoneFormatChk')))
+        callback(new Error(i18n.global.t('user.phoneFormatChk')))
       } else {
         callback()
       }
     }
     return {
+      defaultUserStatus: [
+        { id: 1, label: this.$t('common.enable'), value: 'true' },
+        { id: 2, label: this.$t('common.disable'), value: 'false' }
+      ],
       height: document.documentElement.clientHeight - 180 + 'px;',
-      deptName: '', depts: [], deptDatas: [], jobs: [], level: 3, roles: [],
+      deptName: '', depts: [], deptDatas: [],
+      // 改动点3：初始化岗位列表为空
+      jobs: [],
+      level: 3, roles: [],
       defaultProps: { children: 'children', label: 'name' },
       permission: {
         add: ['admin', 'user:add'],
@@ -246,19 +272,26 @@ export default {
       ],
       rules: {
         username: [
-          { required: true, message: i18n.t('user.usernameEmptyChk'), trigger: 'blur' },
-          { min: 2, max: 20, message: i18n.t('user.usernameLengthRangeChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('user.usernameEmptyChk'), trigger: 'blur' },
+          { min: 2, max: 20, message: i18n.global.t('user.usernameLengthRangeChk'), trigger: 'blur' }
         ],
         nickName: [
-          { required: true, message: i18n.t('user.nickNameEmptyChk'), trigger: 'blur' },
-          { min: 2, max: 20, message: i18n.t('user.nickNameLengthRangeChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('user.nickNameEmptyChk'), trigger: 'blur' },
+          { min: 2, max: 20, message: i18n.global.t('user.nickNameLengthRangeChk'), trigger: 'blur' }
         ],
         email: [
-          { required: true, message: i18n.t('user.emailEmptyChk'), trigger: 'blur' },
-          { type: 'email', message: i18n.t('user.emailFormatChk'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('user.emailEmptyChk'), trigger: 'blur' },
+          { type: 'email', message: i18n.global.t('user.emailFormatChk'), trigger: 'blur' }
         ],
         phone: [
           { required: true, trigger: 'blur', validator: validPhone }
+        ],
+        // 改动点4：新增部门和岗位的必选验证
+        'dept.id': [
+          { required: true, message: i18n.global.t('user.deptEmptyChk'), trigger: 'change' }
+        ],
+        'job.id': [
+          { required: true, message: i18n.global.t('user.jobEmptyChk'), trigger: 'change' }
         ]
       }
     }
@@ -266,14 +299,27 @@ export default {
   computed: {
     ...mapGetters([
       'user'
-    ])
+    ]),
+    dialogVisible: {
+      get() {
+        // 用可选链逐层判空，若crud/status/cu不存在，默认cu为0，返回false
+        return this.crud?.status?.cu > 0
+      },
+      set(newVal) {
+        // 当弹窗关闭（newVal 为 false）时，重置新增/编辑状态
+        if (!newVal && this.crud && this.crud.status) {
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
+        }
+      }
+    }
   },
   created() {
-    this.$nextTick(() => {
-      this.getDeptDatas()
+    this.getDeptDatas()
+    if (this.crud) {
       this.crud.toQuery()
-      this.crud.msg.add = i18n.t('user.userAddOKMsg')
-    })
+      this.crud.msg.add = this.$t('user.userAddOKMsg')
+    }
   },
   mounted: function() {
     const that = this
@@ -306,7 +352,7 @@ export default {
     deleteTag(value) {
       userRoles.forEach(function(data, index) {
         if (data.id === value) {
-          userRoles.splice(index, value)
+          userRoles.splice(index, 1)
         }
       })
     },
@@ -315,38 +361,45 @@ export default {
       this.getDepts()
       this.getRoles()
       this.getRoleLevel()
-      form.enabled = form.enabled.toString()
+      crud.form.enabled = crud.form.enabled.toString()
+      // 新增：编辑时若有部门ID，加载对应岗位；新增时清空岗位
+      if (crud.form.dept.id) {
+        this.getJobs(crud.form.dept.id)
+      } else {
+        this.jobs = [] // 新增时默认清空岗位列表
+        crud.form.job.id = null // 清空岗位选中值
+      }
     },
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
-      this.getJobs(this.form.dept.id)
+      this.getJobs(crud.form?.dept?.id || null)
       userRoles = []
       const roles = []
-      form.roles.forEach(function(role, index) {
+      crud.form.roles.forEach(function(role, index) {
         roles.push(role.id)
         // 初始化编辑时候的角色
         const rol = { id: role.id }
         userRoles.push(rol)
       })
-      form.roles = roles
+      crud.form.roles = roles
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {
       if (!crud.form.dept.id) {
         this.$message({
-          message: i18n.t('user.deptEmptyChk'),
+          message: i18n.global.t('user.deptEmptyChk'),
           type: 'warning'
         })
         return false
       } else if (!crud.form.job.id) {
         this.$message({
-          message: i18n.t('user.jobEmptyChk'),
+          message: i18n.global.t('user.jobEmptyChk'),
           type: 'warning'
         })
         return false
       } else if (this.roles.length === 0) {
         this.$message({
-          message: i18n.t('user.rolesEmptyChk'),
+          message: i18n.global.t('user.rolesEmptyChk'),
           type: 'warning'
         })
         return false
@@ -388,14 +441,14 @@ export default {
     },
     // 改变状态
     changeEnabled(data, val) {
-      this.$confirm(i18n.t('crud.thisOperate') + this.dict.label.user_status[val] + '" ' + data.username + i18n.t('crud.continueTxt'), i18n.t('crud.dialogTitleHint'), {
-        confirmButtonText: i18n.t('crud.confirm'),
-        cancelButtonText: i18n.t('crud.cancel'),
+      this.$confirm(i18n.global.t('crud.thisOperate') + this.dict.label.user_status[val] + '" ' + data.username + i18n.global.t('crud.continueTxt'), i18n.global.t('crud.dialogTitleHint'), {
+        confirmButtonText: i18n.global.t('crud.confirm'),
+        cancelButtonText: i18n.global.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         crudUser.edit(data).then(res => {
           if (res.code === 0) {
-            this.crud.notify(this.dict.label.user_status[val] + i18n.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+            this.crud.notify(this.dict.label.user_status[val] + i18n.global.t('common.success'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           } else {
             this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
           }
@@ -418,18 +471,27 @@ export default {
     },
     // 获取弹窗内岗位数据
     getJobs(id) {
+      if (!id) {
+        this.jobs = []
+        this.crud.form.job.id = null
+        return
+      }
       getAllJob(id).then(res => {
         if (res.code === 0) {
           this.jobs = res.data.content
         } else {
           this.crud.notify(res.msg, CRUD.NOTIFICATION_TYPE.ERROR)
         }
-      }).catch(() => { })
+      }).catch(() => {
+        this.jobs = []
+      })
     },
     // 点击部门搜索对应的岗位
     selectFun(node, instanceId) {
+      // 选部门后加载对应岗位
       this.getJobs(node.id)
-      this.form.job.id = null
+      // 清空原有岗位选中值，强制重新选择
+      this.crud.form.job.id = null
     },
     // 获取权限级别
     getRoleLevel() {

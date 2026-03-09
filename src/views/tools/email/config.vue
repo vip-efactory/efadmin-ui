@@ -16,7 +16,7 @@
       <el-input v-model="form.port" style="width: 40%;" :placeholder="$t('email.portTips')" />
     </el-form-item>
     <el-form-item label="">
-      <el-button :loading="loading" size="medium" type="primary" @click="doSubmit">{{ $t('crud.save') }}</el-button>
+      <el-button :loading="loading" size="large" type="primary" @click="doSubmit">{{ $t('crud.save') }}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -32,20 +32,20 @@ export default {
       loading: false, form: { id: 1, fromUser: '', user: '', pass: '', host: '', port: '', sslEnable: '' },
       rules: {
         fromUser: [
-          { required: true, message: i18n.t('email.fromUserRequired'), trigger: 'blur' },
-          { type: 'email', message: i18n.t('email.emailFormatError'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('email.fromUserRequired'), trigger: 'blur' },
+          { type: 'email', message: i18n.global.t('email.emailFormatError'), trigger: 'blur' }
         ],
         user: [
-          { required: true, message: i18n.t('email.userRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('email.userRequired'), trigger: 'blur' }
         ],
         pass: [
-          { required: true, message: i18n.t('email.passRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('email.passRequired'), trigger: 'blur' }
         ],
         host: [
-          { required: true, message: i18n.t('email.hostRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('email.hostRequired'), trigger: 'blur' }
         ],
         port: [
-          { required: true, message: i18n.t('email.portRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('email.portRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -70,7 +70,7 @@ export default {
           update(this.form).then(res => {
             if (res.code === 0) {
               this.$notify({
-                title: i18n.t('crud.editSuccess'),
+                title: i18n.global.t('crud.editSuccess'),
                 type: 'success',
                 duration: 2500
               })

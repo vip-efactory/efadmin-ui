@@ -1,21 +1,20 @@
 <template>
   <div v-if="crud.props.searchToggle">
     <el-input
-      v-model="query.blurry"
+      v-model="crud.query.blurry"
       clearable
       size="small"
       :placeholder="$t('log.simpleSearchPlaceholder')"
-      style="width: 200px;"
+      style="width: 150px;"
       class="filter-item"
     />
     <el-date-picker
-      v-model="query.createTime"
-      :default-time="['00:00:00','23:59:59']"
+      v-model="crud.query.createTime"
       type="daterange"
       range-separator=":"
       size="small"
       class="date-item"
-      value-format="yyyy-MM-dd HH:mm:ss"
+      value-format="YYYY-MM-DD HH:mm:ss"
       :start-placeholder="$t('common.startTime')"
       :end-placeholder="$t('common.endTime')"
     />

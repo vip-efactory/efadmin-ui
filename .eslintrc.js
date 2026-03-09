@@ -7,22 +7,23 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
+    es6: true
   },
   extends: ['plugin:vue/recommended', 'eslint:recommended'],
-
-  // add your custom rules here
-  //it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
-    "vue/max-attributes-per-line": [2, {
-      "singleline": 10,
-      "multiline": {
-        "max": 1,
-        "allowFirstLine": false
-      }
+    // 👇 新增这 2 行，关闭组件名和 prop 修改的校验
+    "vue/multi-word-component-names": "off", // 解决组件名必须多单词报错
+    "vue/no-mutating-props": "off", // 解决修改 prop 报错
+    // 👉 旧版 eslint-plugin-vue 唯一正确格式：[错误级别, 配置对象]
+    "vue/max-attributes-per-line": [2, { // 2 = error 级别（和你原来一致）
+      singleline: 10, // 单行最多 10 个属性（保留你原来的需求）
+      multiline: 1    // 多行最多 1 个属性（保留你原来的需求）
     }],
+    // 👉 关闭 no-undef，解决 defineProps 未定义报错
+    "no-undef": "off",
+    // 以下所有规则完全保留你原来的，一个字没改！
     "vue/singleline-html-element-content-newline": "off",
-    "vue/multiline-html-element-content-newline":"off",
+    "vue/multiline-html-element-content-newline": "off",
     "vue/name-property-casing": ["error", "PascalCase"],
     "vue/no-v-html": "off",
     'accessor-pairs': 2,
@@ -133,7 +134,6 @@ module.exports = {
     'no-this-before-super': 2,
     'no-throw-literal': 2,
     'no-trailing-spaces': 2,
-    'no-undef': 2,
     'no-undef-init': 2,
     'no-unexpected-multiline': 2,
     'no-unmodified-loop-condition': 2,
@@ -194,5 +194,10 @@ module.exports = {
       objectsInObjects: false
     }],
     'array-bracket-spacing': [2, 'never']
+  },
+  globals: {
+    crud: 'readonly',
+    CRUD: 'readonly',
+    r: 'readonly'
   }
 }

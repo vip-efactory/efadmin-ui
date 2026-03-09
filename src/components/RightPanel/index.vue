@@ -54,23 +54,13 @@ export default {
   },
   mounted() {
     this.insertToBody()
-    this.addEventClick()
   },
   beforeDestroy() {
     const elx = this.$refs.rightPanel
     elx.remove()
   },
   methods: {
-    addEventClick() {
-      window.addEventListener('click', this.closeSidebar)
-    },
-    closeSidebar(evt) {
-      const parent = evt.target.closest('.rightPanel')
-      if (!parent) {
-        this.show = false
-        window.removeEventListener('click', this.closeSidebar)
-      }
-    },
+
     insertToBody() {
       const elx = this.$refs.rightPanel
       const body = document.querySelector('body')
@@ -97,6 +87,7 @@ export default {
     transition: opacity .3s cubic-bezier(.7, .3, .1, 1);
     background: rgba(0, 0, 0, .2);
     z-index: -1;
+    pointer-events: none;
   }
 
   .rightPanel {

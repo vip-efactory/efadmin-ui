@@ -2,17 +2,16 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!--搜索-->
-        <el-input v-model="query.filename" clearable size="small" :placeholder="$t('picture.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.filename" clearable size="small" :placeholder="$t('picture.searchPlaceholder')" style="width: 150px;" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />
@@ -20,30 +19,34 @@
       </div>
       <crudOperation :permission="permission">
         <!-- 上传 -->
-        <el-button
-          slot="left"
-          v-permission="['admin','pictures:add']"
-          class="filter-item"
-          size="mini"
-          type="primary"
-          icon="el-icon-upload"
-          @click="dialog = true"
-        >{{ $t('picture.uploadBtn') }}</el-button>
-        <el-tooltip slot="right" class="item" effect="dark" :content="$t('picture.syncTips')" placement="top-start">
+        <template #left>
           <el-button
             v-permission="['admin','pictures:add']"
             class="filter-item"
-            size="mini"
-            type="success"
-            icon="el-icon-refresh"
-            :loading="syncLoading"
-            @click="sync"
-          >{{ $t('picture.synchronizeBtn') }}</el-button>
-        </el-tooltip>
+            size="small"
+            type="primary"
+            icon="Upload"
+            @click="dialog = true"
+          >{{ $t('picture.uploadBtn') }}
+          </el-button>
+        </template>
+        <template #right>
+          <el-tooltip class="item" effect="dark" :content="$t('picture.syncTips')" placement="top-start">
+            <el-button
+              v-permission="['admin','pictures:add']"
+              class="filter-item"
+              size="small"
+              type="success"
+              icon="Refresh"
+              :loading="syncLoading"
+              @click="sync"
+            >{{ $t('picture.synchronizeBtn') }}</el-button>
+          </el-tooltip>
+        </template>
       </crudOperation>
     </div>
     <!--上传图片-->
-    <el-dialog :visible.sync="dialog" :close-on-click-modal="false" append-to-body width="600px" @close="doSubmit">
+    <el-dialog v-model="dialog" :close-on-click-modal="false" append-to-body width="600px" @close="doSubmit">
       <el-upload
         :on-preview="handlePictureCardPreview"
         :before-remove="handleBeforeRemove"
@@ -54,22 +57,35 @@
         :action="imagesUploadApi"
         list-type="picture-card"
       >
-        <i class="el-icon-plus" />
+        <!-- 核心：清空按钮所有默认样式，只留图标，无任何外围框 -->
+        <el-button
+          icon="Plus"
+          style="border: none; background: transparent; color: #8c939d; font-size: 25px;"
+        />
       </el-upload>
-      <el-dialog append-to-body :visible.sync="dialogVisible">
+      <el-dialog v-model="dialogVisible" append-to-body>
         <img :src="dialogImageUrl" width="100%" alt="">
       </el-dialog>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="doSubmit">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      style="width: 100%;"
+      @selection-change="crud?.selectionChangeHandler"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('filename')" width="200" prop="filename" :label="$t('picture.filename')" sortable="custom" />
       <el-table-column v-if="columns.visible('username')" prop="username" :label="$t('picture.username')" sortable="custom" />
       <el-table-column v-if="columns.visible('url')" ref="table" :show-overflow-tooltip="true" prop="url" :label="$t('picture.url')">
-        <template slot-scope="{row}">
+        <template #default="{row}">
           <el-image
             :src="row.url"
             :preview-src-list="[row.url]"
@@ -83,7 +99,7 @@
       <el-table-column v-if="columns.visible('height')" prop="height" :label="$t('picture.height')" sortable="custom" />
       <el-table-column v-if="columns.visible('width')" prop="width" :label="$t('picture.width')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
@@ -104,8 +120,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'filename', labelName: i18n.t('picture.filename') }, { fieldName: 'username', labelName: i18n.t('picture.username') }, { fieldName: 'width', labelName: i18n.t('picture.width') }, { fieldName: 'height', labelName: i18n.t('picture.height') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('picture.TITLE'), url: 'api/pictures/page', exportUrl: 'api/pictures/download', crudMethod: { ...crudPic }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'filename', labelName: i18n.global.t('picture.filename') }, { fieldName: 'username', labelName: i18n.global.t('picture.username') }, { fieldName: 'width', labelName: i18n.global.t('picture.width') }, { fieldName: 'height', labelName: i18n.global.t('picture.height') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('picture.TITLE'), url: 'api/pictures/page', exportUrl: 'api/pictures/download', crudMethod: { ...crudPic }, adSearchFields: adSearchFields })
 export default {
   name: 'Pictures',
   components: { pagination, crudOperation, rrOperation },
@@ -133,8 +149,11 @@ export default {
     ])
   },
   created() {
-    this.crud.optShow.add = false
-    this.crud.optShow.edit = false
+    // 先确认crud已初始化，再修改optShow的属性
+    if (this.crud) {
+      this.crud.optShow.add = false
+      this.crud.optShow.edit = false
+    }
   },
   methods: {
     handleSuccess(response, file, fileList) {
@@ -164,18 +183,22 @@ export default {
     },
     // 监听上传失败
     handleError(e, file, fileList) {
-      const msg = JSON.parse(e.message)
-      this.$notify({
-        title: msg.message,
-        type: 'error',
-        duration: 2500
-      })
+      try { // 新增：包裹解析逻辑
+        const msg = JSON.parse(e.message)
+        this.$notify({
+          title: msg.message,
+          type: 'error',
+          duration: 2500
+        })
+      } catch (err) { // 新增：解析失败时不做任何操作（不报错、不提示）
+        // 空catch，静默处理解析失败，无任何提示
+      }
     },
     sync() {
       this.syncLoading = true
       crudPic.sync().then(res => {
         if (res.code === 0) {
-          this.crud.notify(i18n.t('picture.syncOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+          this.crud.notify(i18n.global.t('picture.syncOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
           this.crud.toQuery()
           this.syncLoading = false
         } else {

@@ -7,18 +7,24 @@
         </h3>
       </div>
       <el-form-item prop="username">
-        <el-input v-model="loginForm.username" type="text" auto-complete="off" :placeholder="$t('login.username')">
-          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
+        <el-input v-model="loginForm.username" link auto-complete="off" :placeholder="$t('login.username')">
+          <template #prefix>
+            <svg-icon icon-class="user" class="el-input__icon input-icon" />
+          </template>
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input v-model="loginForm.password" type="password" auto-complete="off" :placeholder="$t('login.password')" @keyup.enter.native="handleLogin">
-          <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
+        <el-input v-model="loginForm.password" type="password" auto-complete="off" :placeholder="$t('login.password')" @keyup.enter="handleLogin">
+          <template #prefix>
+            <svg-icon icon-class="password" class="el-input__icon input-icon" />
+          </template>
         </el-input>
       </el-form-item>
       <el-form-item prop="code">
-        <el-input v-model="loginForm.code" auto-complete="off" :placeholder="$t('login.verificationCode')" style="width: 63%" @keyup.enter.native="handleLogin">
-          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
+        <el-input v-model="loginForm.code" auto-complete="off" :placeholder="$t('login.verificationCode')" style="width: 63%" @keyup.enter="handleLogin">
+          <template #prefix>
+            <svg-icon icon-class="validCode" class="el-input__icon input-icon" />
+          </template>
         </el-input>
         <div class="login-code">
           <img :src="codeUrl" @click="getCode">
@@ -32,7 +38,7 @@
       </el-form-item>
 
       <el-form-item style="width:100%;">
-        <el-button :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+        <el-button :loading="loading" size="large" type="primary" style="width:100%;" @click.prevent="handleLogin">
           <span v-if="!loading">{{ $t('login.logIn') }}</span>
           <span v-else>{{ $t('login.LoggingIn') }}</span>
         </el-button>
@@ -74,9 +80,9 @@ export default {
         uuid: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', message: i18n.t('login.usernameChk') }],
-        password: [{ required: true, trigger: 'blur', message: i18n.t('login.passwordChk') }],
-        code: [{ required: true, trigger: 'change', message: i18n.t('login.verificationCodeChk') }]
+        username: [{ required: true, trigger: 'blur', message: i18n.global.t('login.usernameChk') }],
+        password: [{ required: true, trigger: 'blur', message: i18n.global.t('login.passwordChk') }],
+        code: [{ required: true, trigger: 'change', message: i18n.global.t('login.verificationCodeChk') }]
       },
       loading: false,
       redirect: undefined

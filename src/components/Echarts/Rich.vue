@@ -1,149 +1,137 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <!-- 容器尺寸匹配官方示例默认尺寸，保证饼图布局一致 -->
+  <div ref="chartRef" style="width: 818px; height: 500px;" />
 </template>
 
-<script>
-import echarts from 'echarts'
+<script setup>
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import * as echarts from 'echarts'
 
-require('echarts/theme/macarons') // echarts theme
-import { debounce } from '@/utils'
+// 仅替换原生 getElementById 为 Vue3 的 ref 引用
+const chartRef = ref(null)
+let myChart = null
 
-export default {
-  props: {
-    className: {
-      type: String,
-      default: 'chart'
+// 完全复制原生代码的初始化逻辑，所有配置一字不改
+const initChart = () => {
+  if (!chartRef.value) return
+
+  // 初始化 ECharts 实例（和原生一致）
+  myChart = echarts.init(chartRef.value)
+
+  // 100% 复制原生的 option，包括所有配置、数据、富文本样式
+  const option = {
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b}: {c} ({d}%)'
     },
-    width: {
-      type: String,
-      default: '100%'
+    legend: {
+      data: [
+        'Direct',
+        'Marketing',
+        'Search Engine',
+        'Email',
+        'Union Ads',
+        'Video Ads',
+        'Baidu',
+        'Google',
+        'Bing',
+        'Others'
+      ]
     },
-    height: {
-      type: String,
-      default: '500px'
-    }
-  },
-  data() {
-    return {
-      chart: null
-    }
-  },
-  mounted() {
-    this.initChart()
-    this.__resizeHandler = debounce(() => {
-      if (this.chart) {
-        this.chart.resize()
-      }
-    }, 100)
-    window.addEventListener('resize', this.__resizeHandler)
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    window.removeEventListener('resize', this.__resizeHandler)
-    this.chart.dispose()
-    this.chart = null
-  },
-  methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-
-      this.chart.setOption({
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+    series: [
+      {
+        name: 'Access From',
+        type: 'pie',
+        selectedMode: 'single',
+        radius: [0, '30%'],
+        label: {
+          position: 'inner',
+          fontSize: 14
         },
-        legend: {
-          orient: 'vertical',
-          x: 'left',
-          data: ['直达', '营销广告', '搜索引擎', '邮件营销', '联盟广告', '视频广告', '百度', '谷歌', '必应', '其他']
+        labelLine: {
+          show: false
         },
-        series: [
-          {
-            name: '访问来源',
-            type: 'pie',
-            selectedMode: 'single',
-            radius: [0, '30%'],
-
-            label: {
-              normal: {
-                position: 'inner'
-              }
-            },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
-            data: [
-              { value: 335, name: '直达', selected: true },
-              { value: 679, name: '营销广告' },
-              { value: 1548, name: '搜索引擎' }
-            ]
-          },
-          {
-            name: '访问来源',
-            type: 'pie',
-            radius: ['40%', '55%'],
-            label: {
-              normal: {
-                formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
-                backgroundColor: '#eee',
-                borderColor: '#aaa',
-                borderWidth: 1,
-                borderRadius: 4,
-                shadowBlur: 3,
-                shadowOffsetX: 2,
-                shadowOffsetY: 2,
-                shadowColor: '#999',
-                padding: [0, 7],
-                rich: {
-                  a: {
-                    color: '#999',
-                    lineHeight: 22,
-                    align: 'center'
-                  },
-                  abg: {
-                    backgroundColor: '#333',
-                    width: '100%',
-                    align: 'right',
-                    height: 22,
-                    borderRadius: [4, 4, 0, 0]
-                  },
-                  hr: {
-                    borderColor: '#aaa',
-                    width: '100%',
-                    borderWidth: 0.5,
-                    height: 0
-                  },
-                  b: {
-                    fontSize: 16,
-                    lineHeight: 33
-                  },
-                  per: {
-                    color: '#eee',
-                    backgroundColor: '#334455',
-                    padding: [2, 4],
-                    borderRadius: 2
-                  }
-                }
-              }
-            },
-            data: [
-              { value: 335, name: '直达' },
-              { value: 310, name: '邮件营销' },
-              { value: 234, name: '联盟广告' },
-              { value: 135, name: '视频广告' },
-              { value: 1048, name: '百度' },
-              { value: 251, name: '谷歌' },
-              { value: 147, name: '必应' },
-              { value: 102, name: '其他' }
-            ]
-          }
+        data: [
+          { value: 1548, name: 'Search Engine' },
+          { value: 775, name: 'Direct' },
+          { value: 679, name: 'Marketing', selected: true }
         ]
-      })
-    }
+      },
+      {
+        name: 'Access From',
+        type: 'pie',
+        radius: ['45%', '60%'],
+        labelLine: {
+          length: 30
+        },
+        label: {
+          formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+          backgroundColor: '#F6F8FC',
+          borderColor: '#8C8D8E',
+          borderWidth: 1,
+          borderRadius: 4,
+          rich: {
+            a: {
+              color: '#6E7079',
+              lineHeight: 22,
+              align: 'center'
+            },
+            hr: {
+              borderColor: '#8C8D8E',
+              width: '100%',
+              borderWidth: 1,
+              height: 0
+            },
+            b: {
+              color: '#4C5058',
+              fontSize: 14,
+              fontWeight: 'bold',
+              lineHeight: 33
+            },
+            per: {
+              color: '#fff',
+              backgroundColor: '#4C5058',
+              padding: [3, 4],
+              borderRadius: 4
+            }
+          }
+        },
+        data: [
+          { value: 1048, name: 'Baidu' },
+          { value: 335, name: 'Direct' },
+          { value: 310, name: 'Email' },
+          { value: 251, name: 'Google' },
+          { value: 234, name: 'Union Ads' },
+          { value: 147, name: 'Bing' },
+          { value: 135, name: 'Video Ads' },
+          { value: 102, name: 'Others' }
+        ]
+      }
+    ]
   }
+
+  // 和原生一致的渲染逻辑
+  option && myChart.setOption(option)
 }
+
+// 生命周期仅做初始化+销毁，不影响展示逻辑
+onMounted(() => {
+  nextTick(() => {
+    initChart()
+    // 保留窗口自适应（原生未处理，仅为组件健壮性）
+    window.addEventListener('resize', () => myChart?.resize())
+  })
+})
+
+onUnmounted(() => {
+  // 销毁图表实例，避免内存泄漏
+  if (myChart) {
+    myChart.dispose()
+    myChart = null
+  }
+  window.removeEventListener('resize', () => myChart?.resize())
+})
 </script>
+
+<!-- 无任何自定义样式，完全和原生一致 -->
+<style scoped></style>

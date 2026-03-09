@@ -2,17 +2,16 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.id" clearable :placeholder="$t('mserver.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.id" clearable :placeholder="$t('mserver.searchPlaceholder')" style="width: 150px" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />
@@ -21,44 +20,60 @@
       <crudOperation :permission="permission" />
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="550px">
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="100px">
+    <el-dialog
+      v-model="dialogVisible"
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU()"
+      :title="crud?.status?.title"
+      width="550px"
+    >
+      <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="100px">
         <el-form-item :label="$t('mserver.name')" prop="name">
-          <el-input v-model="form.name" style="width: 370px" />
+          <el-input v-model="crud.form.name" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('mserver.ip')" prop="ip">
-          <el-input v-model="form.ip" style="width: 370px" />
+          <el-input v-model="crud.form.ip" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('mserver.port')" prop="port">
-          <el-input-number v-model.number="form.port" controls-position="right" style="width: 370px;" />
+          <el-input-number v-model.number="crud.form.port" controls-position="right" style="width: 370px;" />
         </el-form-item>
         <el-form-item :label="$t('mserver.account')" prop="account">
-          <el-input v-model="form.account" style="width: 370px" />
+          <el-input v-model="crud.form.account" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('mserver.password')" prop="password">
-          <el-input v-model="form.password" type="password" style="width: 200px" />
+          <el-input v-model="crud.form.password" type="password" style="width: 200px" />
           <el-button :loading="loading" type="success" style="align: right;" @click="testConnectServer">{{ $t('common.testConnect') }}</el-button>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      style="width: 100%"
+      @selection-change="crud?.selectionChangeHandler"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('mserver.name')" sortable="custom" />
       <el-table-column v-if="columns.visible('ip')" prop="ip" :label="$t('mserver.ip')" sortable="custom" />
       <el-table-column v-if="columns.visible('port')" prop="port" :label="$t('mserver.port')" sortable="custom" />
       <el-table-column v-if="columns.visible('account')" prop="account" :label="$t('mserver.account')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','serverDeploy:edit','serverDeploy:del']" :label="$t('be.operate')" width="150px" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"
@@ -84,8 +99,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('mserver.name') }, { fieldName: 'ip', labelName: i18n.t('mserver.ip') }, { fieldName: 'port', labelName: i18n.t('mserver.port'), type: 'number' }, { fieldName: 'account', labelName: i18n.t('mserver.account') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('mserver.TITLE'), url: 'api/serverDeploy/page', exportUrl: 'api/serverDeploy/download', crudMethod: { ...crudServer }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('mserver.name') }, { fieldName: 'ip', labelName: i18n.global.t('mserver.ip') }, { fieldName: 'port', labelName: i18n.global.t('mserver.port'), type: 'number' }, { fieldName: 'account', labelName: i18n.global.t('mserver.account') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('mserver.TITLE'), url: 'api/serverDeploy/page', exportUrl: 'api/serverDeploy/download', crudMethod: { ...crudServer }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, ip: null, port: 22, account: 'root', password: null }
 export default {
   name: 'Server',
@@ -103,21 +118,36 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('mserver.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('mserver.nameRequired'), trigger: 'blur' }
         ],
         ip: [
-          { required: true, message: i18n.t('mserver.ipRequired'), trigger: 'blur' },
-          { validator: validateIP, trigger: 'change' }
+          { required: true, message: i18n.global.t('mserver.ipRequired'), trigger: 'blur' },
+          { validator: validateIP, trigger: 'blur' }
         ],
         port: [
-          { required: true, message: i18n.t('mserver.portRequired'), trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.global.t('mserver.portRequired'), trigger: 'blur', type: 'number' }
         ],
         account: [
-          { required: true, message: i18n.t('mserver.accountRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('mserver.accountRequired'), trigger: 'blur' }
         ],
         password: [
-          { required: true, message: i18n.t('mserver.passwordRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('mserver.passwordRequired'), trigger: 'blur' }
         ]
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 用可选链确保crud、status存在，空值时兜底返回false
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 仅当newVal为false，且crud、status都存在时，才修改cu
+        if (!newVal && this.crud?.status) {
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
+        }
       }
     }
   },
@@ -130,13 +160,13 @@ export default {
             this.loading = false
             if (res.code === 0) {
               this.$notify({
-                title: i18n.t('common.connectOK'),
+                title: i18n.global.t('common.connectOK'),
                 type: 'success',
                 duration: 2500
               })
             } else {
               this.$notify({
-                title: i18n.t('common.connectFailed'),
+                title: i18n.global.t('common.connectFailed'),
                 type: 'error',
                 message: res.msg,
                 duration: 5000
@@ -153,7 +183,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
-    text-align: left;
-  }
+:deep(.el-input-number .el-input__inner) {
+  text-align: left;
+}
 </style>

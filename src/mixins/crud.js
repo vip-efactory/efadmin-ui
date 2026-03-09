@@ -165,26 +165,29 @@ export default {
     /**
      * 通用的删除
      */
+    // dictDetail.vue 中的 delMethod 方法（优化后，若未自定义可忽略，仅步骤1即可解决报错）
     delMethod(id) {
-      if (!this.beforeDelMethod()) {
-        return
-      }
+      // 兜底：id 无效直接返回
+      if (!id) return
+
+      if (!this.beforeDelMethod()) return
       this.delLoading = true
+
       this.crudMethod.del(id).then(r => {
-        if (r.code === 0) {
-          this.delLoading = false
-          this.$refs[id].doClose()
+        this.delLoading = false
+        if (r && r.code === 0) {
+          this.closeRowPopover(id)
           this.dleChangePage()
           this.delSuccessNotify()
           this.afterDelMethod()
           this.init()
         } else {
-          this.loading = false
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
+          const msg = r && r.msg ? r.msg : '删除失败'
+          this.$message.error(msg)
         }
       }).catch(() => {
         this.delLoading = false
-        this.$refs[id].doClose()
+        this.closeRowPopover(id)
       })
     },
     afterDelMethod() {},
@@ -346,7 +349,7 @@ export default {
      * 获取弹窗的标题
      */
     getFormTitle() {
-      return this.isAdd ? i18n.t('crud.new') + ` ${this.title}` : i18n.t('crud.edit') + ` ${this.title}`
+      return this.isAdd ? i18n.global.t('crud.new') + ` ${this.title}` : i18n.global.t('crud.edit') + ` ${this.title}`
     },
     /**
      * 通用导出

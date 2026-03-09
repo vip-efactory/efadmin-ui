@@ -3,23 +3,25 @@
     <div class="head-container">
       <Search />
       <crudOperation>
-        <el-button
-          slot="left"
-          class="filter-item"
-          type="danger"
-          icon="el-icon-delete"
-          size="mini"
-          :loading="crud.delAllLoading"
-          @click="confirmDelAll()"
-        >
-          {{ $t('log.clearLog') }}
-        </el-button> v-if="columns.visible('username')"
+        <template #left>
+          <el-button
+            v-if="columns.visible('username')"
+            class="filter-item"
+            type="danger"
+            icon="Delete"
+            size="small"
+            :loading="crud.delAllLoading"
+            @click="confirmDelAll()"
+          >
+            {{ $t('log.clearLog') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表格渲染-->
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template #default="props">
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item :label="$t('log.method')" label-width="130px">
               <span>{{ props.row.method }}</span>
@@ -36,18 +38,18 @@
       <el-table-column v-if="columns.visible('description')" prop="description" :label="$t('log.description')" sortable="custom" />
       <el-table-column v-if="columns.visible('browser')" prop="browser" :label="$t('log.browser')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('log.exceptionDetail')" width="120px">
-        <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="info(scope.row.id)">{{ $t('log.viewDetail') }}</el-button>
+        <template #default="scope">
+          <el-button size="small" link type="primary" @click="info(scope.row.id)">{{ $t('log.viewDetail') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="dialog" :title="$t('log.exceptionDetail')" append-to-body top="30px" width="85%">
-      <pre v-highlightjs="errorInfo"><code class="java" /></pre>
+    <el-dialog v-model="dialog" :title="$t('log.exceptionDetail')" append-to-body top="30px" width="85%">
+      <pre><code class="java hljs">{{ errorInfo }}</code></pre>
     </el-dialog>
     <!--分页组件-->
     <pagination />
@@ -64,8 +66,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'username', labelName: i18n.t('log.username'), type: 'text' }, { fieldName: 'requestIp', labelName: i18n.t('log.requestIp'), type: 'text' }, { fieldName: 'address', labelName: i18n.t('log.address'), type: 'text' }, { fieldName: 'description', labelName: i18n.t('log.description'), type: 'text' }, { fieldName: 'browser', labelName: i18n.t('log.browser'), type: 'text' }, { fieldName: 'time', labelName: i18n.t('log.time'), type: 'number' }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('log.ERROR_TITLE'), url: 'api/logs/error', exportUrl: 'api/logs/error/download', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'username', labelName: i18n.global.t('log.username'), type: 'text' }, { fieldName: 'requestIp', labelName: i18n.global.t('log.requestIp'), type: 'text' }, { fieldName: 'address', labelName: i18n.global.t('log.address'), type: 'text' }, { fieldName: 'description', labelName: i18n.global.t('log.description'), type: 'text' }, { fieldName: 'browser', labelName: i18n.global.t('log.browser'), type: 'text' }, { fieldName: 'time', labelName: i18n.global.t('log.time'), type: 'number' }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('log.ERROR_TITLE'), url: 'api/logs/error', exportUrl: 'api/logs/error/download', crudMethod: { ...crudLog }, adSearchFields: adSearchFields })
 export default {
   name: 'ErrorLog',
   components: { Search, crudOperation, pagination },
@@ -96,9 +98,9 @@ export default {
       })
     },
     confirmDelAll() {
-      this.$confirm(i18n.t('log.deleteErrorTips'), i18n.t('log.deleteTitle'), {
-        confirmButtonText: i18n.t('crud.confirm'),
-        cancelButtonText: i18n.t('crud.cancel'),
+      this.$confirm(i18n.global.t('log.deleteErrorTips'), i18n.global.t('log.deleteTitle'), {
+        confirmButtonText: i18n.global.t('crud.confirm'),
+        cancelButtonText: i18n.global.t('crud.cancel'),
         type: 'warning'
       }).then(() => {
         this.crud.delAllLoading = true
@@ -139,7 +141,7 @@ export default {
 .demo-table-expand .el-form-item__content {
   font-size: 12px;
 }
-/deep/ .el-dialog__body {
+:deep(el-dialog__body) {
   padding: 0 20px 10px 20px !important;
 }
 .java.hljs {

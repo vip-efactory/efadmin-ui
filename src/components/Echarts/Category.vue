@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import * as echarts from 'echarts'
 
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
@@ -188,7 +188,8 @@ export default {
           },
           tooltip: {},
           legend: {
-            x: 'right',
+            right: 10,
+            top: 10,
             data: ['第一产业', '第二产业', '第三产业', 'GDP', '金融', '房地产'],
             selected: {
               'GDP': false, '金融': false, '房地产': false

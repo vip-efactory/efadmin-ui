@@ -10,18 +10,24 @@
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('job.name')" sortable="custom" />
       <el-table-column v-if="columns.visible('dept')" prop="dept" :label="$t('job.dept')" sortable="custom">
-        <template slot-scope="scope">
-          <div>{{ scope.row.deptSuperiorName ? scope.row.deptSuperiorName + ' / ' : '' }}{{ scope.row.dept.name }}</div>
+        <template #default="scope"> <!-- 替换slot-scope为v-slot -->
+          <div>
+            <!-- 给row、dept加可选链，避免空值报错 -->
+            {{ scope.row?.deptSuperiorName ? scope.row.deptSuperiorName + ' / ' : '' }}
+            {{ scope.row?.dept?.name }}
+          </div>
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('sort')" prop="sort" :label="$t('job.sort')" sortable="custom">
-        <template slot-scope="scope">
-          {{ scope.row.sort }}
+        <!-- 替换slot-scope为v-slot（或#default），并给row加可选链 -->
+        <template #default="scope">
+          {{ scope.row?.sort }}
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('status')" prop="status" :label="$t('job.enabled')" align="center" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-switch
+            v-if="scope.row"
             v-model="scope.row.enabled"
             active-color="#409EFF"
             inactive-color="#F56C6C"
@@ -30,8 +36,11 @@
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+        <template #default="scope">
+          <span v-if="scope.row">
+            {{ parseTime(scope.row.createTime) }}
+          </span>
+          <span v-else>-</span>
         </template>
       </el-table-column>
       <!--   编辑与删除   -->
@@ -42,8 +51,9 @@
         align="center"
         fixed="right"
       >
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
+            v-if="scope.row"
             :data="scope.row"
             :permission="permission"
           />
@@ -68,9 +78,9 @@ import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('job.name') }, { fieldName: 'sort', labelName: i18n.t('job.sort'), type: 'number' }, { fieldName: 'status', labelName: i18n.t('job.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('job.name') }, { fieldName: 'sort', labelName: i18n.global.t('job.sort'), type: 'number' }, { fieldName: 'status', labelName: i18n.global.t('job.enabled'), type: 'dict', dicts: [{ label: '启用(Active)', value: 1 }, { label: '停用(Disable)', value: 0 }] }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
 const crud = CRUD({
-  title: i18n.t('job.TITLE'),
+  title: i18n.global.t('job.TITLE'),
   url: 'api/job/page',
   exportUrl: 'api/job/download',
   sort: ['sort,asc', 'id,desc'],
@@ -94,23 +104,22 @@ export default {
     }
   },
   methods: {
+    [CRUD.HOOK.afterToCU](crud, form) {
+      form.enabled = `${form.enabled}`
+    },
     // 改变状态
     changeEnabled(data, val) {
-      this.$confirm(i18n.t('crud.thisOperate') + this.dict.label.job_status[val] + '" ' + data.name + i18n.t('crud.continueTxt'), i18n.t('crud.dialogTitleHint'), {
-        confirmButtonText: i18n.t('crud.confirm'),
-        cancelButtonText: i18n.t('crud.cancel'),
+      this.$confirm(i18n.global.t('crud.thisOperate') + this.dict.label.job_status[val] + '" ' + data.name + i18n.global.t('crud.continueTxt'), i18n.global.t('crud.dialogTitleHint'), {
+        confirmButtonText: i18n.global.t('crud.confirm'),
+        cancelButtonText: i18n.global.t('crud.cancel'),
         type: 'warning'
-      }).then(r => {
-        if (r.code === 0) {
-          crud.crudMethod.edit(data).then(() => {
-            crud.notify(this.dict.label.job_status[val] + '成功', 'success')
-          }).catch(err => {
-            data.enabled = !data.enabled
-            console.log(err.data.message)
-          })
-        } else {
-          crud.notify(r.msg, CRUD.NOTIFICATION_TYPE.ERROR)
-        }
+      }).then(() => {
+        crud.crudMethod.edit(data).then(() => {
+          crud.notify(this.dict.label.job_status[val] + '成功', 'success')
+        }).catch(err => {
+          data.enabled = !data.enabled
+          console.log(err.data?.message)
+        })
       }).catch(() => {
         data.enabled = !data.enabled
       })
@@ -120,7 +129,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
-    text-align: left;
-  }
+:deep(.el-input-number .el-input__inner) {
+  text-align: left;
+}
 </style>

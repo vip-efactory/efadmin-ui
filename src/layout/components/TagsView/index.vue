@@ -5,20 +5,34 @@
         v-for="tag in visitedViews"
         ref="tag"
         :key="tag.path"
-        :class="isActive(tag)?'active':''"
+        v-slot="{ navigate, isActive: isTagActive }"
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        tag="span"
-        class="tags-view-item"
-        @click.middle.native="closeSelectedTag(tag)"
-        @contextmenu.prevent.native="openMenu(tag,$event)"
+        custom
       >
-        {{ tag.title }}
-        <span v-if="!tag.meta.affix" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
+        <span
+          class="tags-view-item"
+          :class="{ active: isTagActive }"
+          @click="navigate"
+          @auxclick.middle.prevent="closeSelectedTag(tag)"
+          @contextmenu.prevent="openMenu(tag, $event)"
+        >
+          <span class="tags-view-title">{{ tag.title }}</span>
+          <span
+            v-if="!tag.meta?.affix"
+            class="tags-view-close"
+            role="button"
+            tabindex="0"
+            aria-label="close tag"
+            @click.stop.prevent="closeSelectedTag(tag)"
+            @keydown.enter.stop.prevent="closeSelectedTag(tag)"
+          >×</span>
+        </span>
       </router-link>
     </scroll-pane>
-    <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
+
+    <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
       <li @click="refreshSelectedTag(selectedTag)">{{ $t('tagsView.refresh') }}</li>
-      <li v-if="!(selectedTag.meta&&selectedTag.meta.affix)" @click="closeSelectedTag(selectedTag)">{{ $t('tagsView.close') }}</li>
+      <li v-if="!(selectedTag.meta && selectedTag.meta.affix)" @click="closeSelectedTag(selectedTag)">{{ $t('tagsView.close') }}</li>
       <li @click="closeOthersTags">{{ $t('tagsView.closeOthers') }}</li>
       <li @click="closeAllTags(selectedTag)">{{ $t('tagsView.closeAll') }}</li>
     </ul>
@@ -169,10 +183,10 @@ export default {
     },
     openMenu(tag, e) {
       const menuMinWidth = 105
-      const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
-      const offsetWidth = this.$el.offsetWidth // container width
-      const maxLeft = offsetWidth - menuMinWidth // left boundary
-      const left = e.clientX - offsetLeft + 15 // 15: margin right
+      const offsetLeft = this.$el.getBoundingClientRect().left
+      const offsetWidth = this.$el.offsetWidth
+      const maxLeft = offsetWidth - menuMinWidth
+      const left = e.clientX - offsetLeft + 15
 
       if (left > maxLeft) {
         this.left = maxLeft
@@ -200,7 +214,8 @@ export default {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
   .tags-view-wrapper {
     .tags-view-item {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       position: relative;
       cursor: pointer;
       height: 26px;
@@ -212,12 +227,39 @@ export default {
       font-size: 12px;
       margin-left: 5px;
       margin-top: 4px;
+      vertical-align: middle;
+
       &:first-of-type {
         margin-left: 15px;
       }
       &:last-of-type {
         margin-right: 15px;
       }
+
+      .tags-view-title {
+        user-select: none;
+      }
+
+      /* 关闭按钮 */
+      .tags-view-close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        margin-left: 6px;
+        border-radius: 50%;
+        font-size: 12px;
+        line-height: 1;
+        cursor: pointer;
+        transition: background .2s, color .2s;
+        z-index: 5;
+      }
+      .tags-view-close:hover {
+        background: #b4bccc;
+        color: #fff;
+      }
+
       &.active {
         background-color: #42b983;
         color: #fff;
@@ -253,32 +295,6 @@ export default {
       cursor: pointer;
       &:hover {
         background: #eee;
-      }
-    }
-  }
-}
-</style>
-
-<style lang="scss">
-//reset element css of el-icon-close
-.tags-view-wrapper {
-  .tags-view-item {
-    .el-icon-close {
-      width: 16px;
-      height: 16px;
-      vertical-align: 2px;
-      border-radius: 50%;
-      text-align: center;
-      transition: all .3s cubic-bezier(.645, .045, .355, 1);
-      transform-origin: 100% 50%;
-      &:before {
-        transform: scale(.6);
-        display: inline-block;
-        vertical-align: -3px;
-      }
-      &:hover {
-        background-color: #b4bccc;
-        color: #fff;
       }
     }
   }

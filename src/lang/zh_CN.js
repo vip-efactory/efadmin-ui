@@ -9,7 +9,7 @@ export default {
     warningTitle: '提示'
   },
   login: {
-    title: 'EF-ADMIN 后台系统登录',
+    title: 'AMCS系统登录',
     logIn: '登录',
     username: '账号',
     password: '密码',
@@ -21,7 +21,7 @@ export default {
     verificationCodeChk: '验证码名不能为空'
   },
   sidebar: {
-    title: 'EF-ADMIN 后台系统'
+    title: 'AMCS系统'
   },
   navbar: {
     dashboard: '首页',
@@ -46,6 +46,7 @@ export default {
     edit: '编辑',
     delete: '删除',
     export: '导出',
+    import: '导入',
     selectAll: '全选',
     search: '搜索',
     fuzzySearch: '模糊搜索',
@@ -414,12 +415,13 @@ export default {
     methodName: '方法名称',
     params: '方法参数',
     cronExpression: 'cron表达式',
-    isPause: '已暂停',
+    isPause: '任务状态',
     logBtn: '日志',
     searchPlaceholder: '输入任务名称搜索',
     execBtn: '执行',
     resumeBtn: '恢复',
     pauseBtn: '暂停',
+    run: '运行',
     paused: '已暂停',
     running: '运行中',
     deleteTips: '确定停止并删除该任务吗？',
@@ -614,9 +616,6 @@ export default {
     helpPaySettingsTitle: '支付设置',
     applyAddress: '\n测试所用参数都是沙箱环境，仅供测试使用，申请地址：',
     aliPayDevPlatform: '支付宝开发平台',
-    payTestTips: '\n如需付款测试，请使用\n' +
-      '账号：uuxesw9745@sandbox.com\n' +
-      '密码与支付密码：111111',
     codeRemark: '\n// 支付提供两个接口，\n' +
       '// PC端与手机端，并且在前端使用代码识别',
     ifIsAndroid: '判断是否为Android手机',
@@ -674,7 +673,7 @@ export default {
     searchTypeTitle9: '非空值',
     searchTypeTitle10: '左模糊查询',
     searchTypeTitle11: '右模糊查询',
-    searchTypeTitle12: '包含于(IN)查询,例如:年龄值为{34,36,40,45}的数据',
+    searchTypeTitle12: '包含于(IN)查询,例如:年龄值为[34,36,40,45]的数据',
     andTitle: '必须满足本条件，逻辑意义为与',
     orTitle: '当前条件可不满足，逻辑意义为或',
     defaultGroupTitle: '使用默认组',
@@ -700,7 +699,7 @@ export default {
   },
   editor: {
     baseOn: '富文本基于',
-    mdBaseOn: 'Markdown基于',
+    mdBaseOn: 'Markdown基于 @kangc/v-md-editor（Vue3适配版）',
     yamlBaseOn: 'Yaml编辑器基于',
     themePreview: '主题预览地址',
     imgUpUse: '图片上传使用',
@@ -819,5 +818,93 @@ export default {
     fixedHeader: '固定头部',
     sidebarLogo: '显示侧边栏Logo',
     menuUniqueOpened: '菜单单一打开'
+  },
+  materialLog: {
+    TITLE: '物料操作记录',
+    id: 'id',
+    operationInfo: '操作信息',
+    materialId: '操作人',
+    // 属性非空的国际化信息
+    idRequired: 'id不能为空',
+    operationInfoRequired: '操作信息不能为空',
+    materialIdRequired: '操作人不能为空'
+  },
+  materialInfo: {
+    import: '导入',
+    TITLE: '物料信息',
+    id: 'id',
+    code: '物料编码',
+    oldCode: '旧编码',
+    category: '物料类别',
+    categoryCode: '类别编码',
+    codeName: '代号',
+    name: '名称',
+    norms: '规格',
+    material: '材料',
+    unitName: '单位',
+    // 属性非空的国际化信息
+    idRequired: 'id不能为空',
+    codeRequired: '物料编码不能为空',
+    categoryRequired: '物料类别不能为空',
+    categoryCodeRequired: '类别编码不能为空',
+    codeNameRequired: '代号不能为空',
+    nameRequired: '名称不能为空',
+    normsRequired: '规格不能为空',
+    materialRequired: '材料不能为空',
+    unitNameRequired: '单位不能为空'
+  },
+  materialRules: {
+    TITLE: '统一物料编码规则',
+    id: 'Id',
+    name: '分类名称',
+    code: '分类代码',
+    parentId: '上级分类',
+    level: '分类层级',
+    categoryCode: '类别代码',
+    serialNumber: '起始流水号',
+    maxSerialNumber: '未用最大流水号',
+    erpVersion: '版本(ERP)',
+    erpProcess: '工序(ERP)',
+    erpRemark: '备注(ERP)',
+    materialUnitPrimary: '物料主单位',
+    materialUnitSub: '物料次单位',
+    enabled: '状态',
+    sort: '显示排序',
+    // 属性非空的国际化信息
+    idRequired: 'Id不能为空',
+    nameRequired: '分类名称不能为空',
+    codeRequired: '分类代码不能为空',
+    parentIdRequired: '上级分类不能为空',
+    levelRequired: '分类层级不能为空',
+    categoryCodeRequired: '类别代码不能为空',
+    serialNumberRequired: '新编起始流水号不能为空',
+    erpVersionRequired: 'ERP补充-版本不能为空',
+    erpProcessRequired: 'ERP补充-工序不能为空',
+    erpRemarkRequired: '备注不能为空',
+    materialUnitPrimaryRequired: '物料主单位不能为空',
+    materialUnitSubRequired: '物料次单位不能为空',
+    enabledRequired: '状态不能为空',
+    sortRequired: '显示排序不能为空'
+  },
+  materialInfoImport: {
+    TITLE: '物料信息',
+    id: 'id',
+    name: '名称',
+    code: '物料编码',
+    oldCode: '旧编码',
+    categoryCode: '类别编码',
+    codeName: '代号',
+    norms: '规格',
+    material: '材料',
+    unitName: '单位',
+    // 属性非空的国际化信息
+    idRequired: 'id不能为空',
+    nameRequired: '名称不能为空',
+    codeRequired: '物料编码不能为空',
+    categoryCodeRequired: '类别编码不能为空',
+    codeNameRequired: '代号不能为空',
+    normsRequired: '规格不能为空',
+    materialRequired: '材料不能为空',
+    unitNameRequired: '单位不能为空'
   }
 }

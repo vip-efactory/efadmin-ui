@@ -1,106 +1,77 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div ref="chartRef" class="echarts-container" style="width: 100%; height: 300px;" />
 </template>
 
-<script>
-import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import { debounce } from '@/utils'
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import * as echarts from 'echarts'
 
-const animationDuration = 6000
+const chartRef = ref(null)
+let myChart = null
 
-export default {
-  props: {
-    className: {
-      type: String,
-      default: 'chart'
+const initChart = () => {
+  const chartDom = chartRef.value
+  if (!chartDom) return
+
+  myChart = echarts.init(chartDom)
+
+  const option = {
+    legend: {
+      // 调整图例位置，减少顶部留白
+      top: 5
     },
-    width: {
-      type: String,
-      default: '100%'
+    color: ['#2ec7c9', '#b6a2de', '#5ab1ef'],
+    tooltip: {},
+    dataset: {
+      source: [
+        ['product', '2015', '2016', '2017'],
+        ['Matcha Latte', 43.3, 85.8, 93.7],
+        ['Milk Tea', 83.1, 73.4, 55.1],
+        ['Cheese Cocoa', 86.4, 65.2, 82.5],
+        ['Walnut Brownie', 72.4, 53.9, 39.1]
+      ]
     },
-    height: {
-      type: String,
-      default: '300px'
-    }
-  },
-  data() {
-    return {
-      chart: null
-    }
-  },
-  mounted() {
-    this.initChart()
-    this.__resizeHandler = debounce(() => {
-      if (this.chart) {
-        this.chart.resize()
+    // 核心：调整grid（绘图区域）边距，大幅减少留白
+    grid: {
+      left: 10,
+      right: 20,
+      top: 40,
+      bottom: 20,
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      axisLabel: {
+        interval: 0,
+        fontSize: 11,
+        margin: 10
       }
-    }, 100)
-    window.addEventListener('resize', this.__resizeHandler)
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    window.removeEventListener('resize', this.__resizeHandler)
-    this.chart.dispose()
-    this.chart = null
-  },
-  methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-
-      this.chart.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {
-          top: 10,
-          left: '2%',
-          right: '2%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [{
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          axisTick: {
-            alignWithLabel: true
-          }
-        }],
-        yAxis: [{
-          type: 'value',
-          axisTick: {
-            show: false
-          }
-        }],
-        series: [{
-          name: 'pageA',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageB',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageC',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }]
-      })
-    }
+    },
+    yAxis: {
+      axisLabel: {
+        margin: 10
+      }
+    },
+    series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }]
   }
+
+  myChart.setOption(option)
 }
+
+const resizeChart = () => {
+  if (myChart) myChart.resize()
+}
+
+onMounted(() => {
+  initChart()
+  window.addEventListener('resize', resizeChart)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', resizeChart)
+  if (myChart) {
+    myChart.dispose()
+    myChart = null
+  }
+})
 </script>

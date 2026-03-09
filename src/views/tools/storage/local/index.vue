@@ -2,17 +2,16 @@
   <div class="app-container" style="padding: 8px;">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" clearable size="small" :placeholder="$t('storage.localSearchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.blurry" clearable size="small" :placeholder="$t('storage.localSearchPlaceholder')" style="width: 150px;" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />
@@ -20,23 +19,31 @@
       </div>
       <crudOperation :permission="permission">
         <!-- 新增 -->
-        <el-button
-          slot="left"
-          v-permission="['admin','storage:add']"
-          class="filter-item"
-          size="mini"
-          type="primary"
-          icon="el-icon-upload"
-          @click="crud.toAdd"
-        >{{ $t('storage.uploadBtn') }}
-        </el-button>
+        <template #left>
+          <el-button
+            v-permission="['admin','storage:add']"
+            class="filter-item"
+            size="small"
+            type="primary"
+            icon="Upload"
+            @click="crud.toAdd"
+          >{{ $t('storage.uploadBtn') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.add ? $t('storage.fileUpload') : $t('storage.editFile')" width="500px">
-      <el-form ref="form" :model="form" size="small" label-width="80px">
+    <el-dialog
+      v-model="dialogVisible"
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU?.()"
+      :title="crud?.status?.add ? $t('storage.fileUpload') : $t('storage.editFile')"
+      width="500px"
+    >
+      <el-form ref="form" :model="crud.form" size="small" label-width="80px">
         <el-form-item :label="$t('storage.name')">
-          <el-input v-model="form.name" style="width: 370px;" />
+          <el-input v-model="crud.form.name" style="width: 370px;" />
         </el-form-item>
         <!--   上传文件   -->
         <el-form-item v-if="crud.status.add" :label="$t('storage.uploadBtn')">
@@ -48,24 +55,35 @@
             :headers="headers"
             :on-success="handleSuccess"
             :on-error="handleError"
-            :action="fileUploadApi + '?name=' + form.name"
+            :action="fileUploadApi + '?name=' + crud.form.name"
           >
-            <div class="eladmin-upload"><i class="el-icon-upload" /> {{ $t('storage.addFile') }}</div>
-            <div slot="tip" class="el-upload__tip">{{ $t('storage.localUploadTips') }}</div>
+            <div class="eladmin-upload"><el-icon><Upload /></el-icon> {{ $t('storage.addFile') }}</div>
+            <template #tip>
+              <div class="el-upload__tip">{{ $t('storage.localUploadTips') }}</div>
+            </template>
           </el-upload>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button v-if="crud.status.add" :loading="loading" type="primary" @click="upload">{{ $t('crud.confirm') }}</el-button>
-        <el-button v-else :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button v-if="crud.status.add" :loading="loading" type="primary" @click="upload">{{ $t('crud.confirm') }}</el-button>
+          <el-button v-else :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      style="width: 100%;"
+      @selection-change="crud?.selectionChangeHandler"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('storage.name')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-popover
             :content="'file/' + scope.row.realName"
             placement="top-start"
@@ -73,20 +91,21 @@
             width="200"
             trigger="hover"
           >
-            <a
-              slot="reference"
-              :href="baseApi + '/file/' + scope.row.realName"
-              class="el-link--primary"
-              style="word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color: #1890ff;font-size: 13px;"
-              target="_blank"
-            >
-              {{ scope.row.name }}
-            </a>
+            <template #reference>
+              <a
+                :href="baseApi + '/file/' + scope.row.realName"
+                class="el-link--primary"
+                style="word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color: #1890ff;font-size: 13px;"
+                target="_blank"
+              >
+                {{ scope.row.name }}
+              </a>
+            </template>
           </el-popover>
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('path')" prop="path" :label="$t('storage.thumbnail')">
-        <template slot-scope="{row}">
+        <template #default="{row}">
           <el-image
             :src=" baseApi + '/file/' + row.realName"
             :preview-src-list="[baseApi + '/file/' + row.realName]"
@@ -94,9 +113,11 @@
             lazy
             class="el-avatar"
           >
-            <div slot="error">
-              <i class="el-icon-document" />
-            </div>
+            <template #error>
+              <div>
+                <i class="el-icon-document" />
+              </div>
+            </template>
           </el-image>
         </template>
       </el-table-column>
@@ -105,7 +126,7 @@
       <el-table-column v-if="columns.visible('size')" prop="size" :label="$t('storage.size')" />
       <el-table-column v-if="columns.visible('operate')" prop="operate" :label="$t('storage.operate')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
@@ -126,8 +147,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.t('storage.type') }, { fieldName: 'operate', labelName: i18n.t('storage.operate') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: '文件', url: 'api/localStorage/page', crudMethod: { ...crudFile }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.global.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.global.t('storage.type') }, { fieldName: 'operate', labelName: i18n.global.t('storage.operate') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: '文件', url: 'api/localStorage/page', exportUrl: 'api/localStorage/download', crudMethod: { ...crudFile }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: '' }
 export default {
   components: { pagination, crudOperation, rrOperation },
@@ -150,10 +171,26 @@ export default {
     ...mapGetters([
       'baseApi',
       'fileUploadApi'
-    ])
+    ]),
+    dialogVisible: {
+      get() {
+        // 用可选链防护crud、status的访问，默认cu为0
+        return (this.crud?.status?.cu ?? 0) > 0
+      },
+      set(newVal) {
+        // 先确认crud、status存在，再修改cu
+        if (!newVal && this.crud?.status) {
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
+        }
+      }
+    }
   },
   created() {
-    this.crud.optShow.add = false
+    // 先确认crud已初始化，再修改optShow属性
+    if (this.crud) {
+      this.crud.optShow.add = false
+    }
   },
   methods: {
     // 上传文件
@@ -165,13 +202,13 @@ export default {
       isLt2M = file.size / 1024 / 1024 < 100
       if (!isLt2M) {
         this.loading = false
-        this.$message.error(i18n.t('storage.sizeLimit'))
+        this.$message.error(i18n.global.t('storage.sizeLimit'))
       }
       this.form.name = file.name
       return isLt2M
     },
     handleSuccess(response, file, fileList) {
-      this.crud.notify(i18n.t('storage.uploadOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
+      this.crud.notify(i18n.global.t('storage.uploadOK'), CRUD.NOTIFICATION_TYPE.SUCCESS)
       this.$refs.upload.clearFiles()
       this.crud.status.add = CRUD.STATUS.NORMAL
       this.crud.resetForm()
@@ -192,10 +229,11 @@ export default {
 </script>
 
 <style scoped>
-  /deep/ .el-image__error, .el-image__placeholder{
-    background: none;
-  }
-  /deep/ .el-image-viewer__wrapper{
-    top: 55px;
-  }
+:deep(.el-image__error, .el-image__placeholder) {
+  background: none;
+}
+:deep(el-image-viewer__wrapper) {
+  top: 55px;
+}
+.eladmin-upload { display: flex; align-items: center; justify-content: center; }
 </style>

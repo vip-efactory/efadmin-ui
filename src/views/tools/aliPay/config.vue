@@ -25,7 +25,7 @@
       <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('aliPay.notifyUrlSpan') }}</span>
     </el-form-item>
     <el-form-item label="">
-      <el-button :loading="loading" size="medium" type="primary" @click="doSubmit">{{ $t('crud.save') }}</el-button>
+      <el-button :loading="loading" size="large" type="primary" @click="doSubmit">{{ $t('crud.save') }}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -42,22 +42,22 @@ export default {
       form: { appId: '', sysServiceProviderId: '', privateKey: '', publicKey: '', returnUrl: '', notifyUrl: '' },
       rules: {
         appId: [
-          { required: true, message: i18n.t('aliPay.appIdRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('aliPay.appIdRequired'), trigger: 'blur' }
         ],
         sysServiceProviderId: [
-          { required: true, message: i18n.t('aliPay.sysServiceProviderIdRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('aliPay.sysServiceProviderIdRequired'), trigger: 'blur' }
         ],
         privateKey: [
-          { required: true, message: i18n.t('aliPay.privateKeyRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('aliPay.privateKeyRequired'), trigger: 'blur' }
         ],
         publicKey: [
-          { required: true, message: i18n.t('aliPay.publicKeyRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('aliPay.publicKeyRequired'), trigger: 'blur' }
         ],
         returnUrl: [
-          { required: true, message: i18n.t('aliPay.returnUrlRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('aliPay.returnUrlRequired'), trigger: 'blur' }
         ],
         notifyUrl: [
-          { required: true, message: i18n.t('aliPay.notifyUrlRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('aliPay.notifyUrlRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -82,7 +82,7 @@ export default {
           update(this.form).then(res => {
             if (res.code === 0) {
               this.$notify({
-                title: i18n.t('crud.editSuccess'),
+                title: i18n.global.t('crud.editSuccess'),
                 type: 'success',
                 duration: 2500
               })

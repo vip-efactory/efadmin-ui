@@ -2,17 +2,24 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud?.props?.searchToggle">  <!-- 用可选链防护空值 -->
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" clearable size="small" :placeholder="$t('menu.searchPlaceholder')" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+        <el-input
+          v-model="crud.query.blurry"
+          clearable
+          size="small"
+          :placeholder="$t('menu.searchPlaceholder')"
+          style="width: 150px;"
+          class="filter-item"
+          @keyup.enter="crud.toQuery"
+        />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startTime')"
           :end-placeholder="$t('common.endTime')"
         />
@@ -21,16 +28,23 @@
       <crudOperation :permission="permission" />
     </div>
     <!--表单渲染-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="670px">
-      <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="120px">
+    <el-dialog
+      v-model="dialogVisible"
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU()"
+      :title="crud?.status?.title"
+      width="670px"
+    >
+      <el-form ref="form" :inline="true" :model="crud.form" :rules="rules" size="small" label-width="120px">
         <el-form-item :label="$t('menu.type')" prop="type">
-          <el-radio-group v-model="form.type" size="mini" style="width: 300px">
-            <el-radio-button label="0">{{ $t('menuType.dir') }}</el-radio-button>
-            <el-radio-button label="1">{{ $t('menuType.menu') }}</el-radio-button>
-            <el-radio-button label="2">{{ $t('menuType.button') }}</el-radio-button>
+          <el-radio-group v-model="crud.form.type" size="small" style="width: 300px">
+            <el-radio-button :value="0">{{ $t('menuType.dir') }}</el-radio-button>
+            <el-radio-button :value="1">{{ $t('menuType.menu') }}</el-radio-button>
+            <el-radio-button :value="2">{{ $t('menuType.button') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.icon')" prop="icon">
+        <el-form-item v-show="crud.form.type !== 2" :label="$t('menu.icon')" prop="icon">
           <el-popover
             placement="bottom-start"
             width="450"
@@ -38,71 +52,89 @@
             @show="$refs['iconSelect'].reset()"
           >
             <IconSelect ref="iconSelect" @selected="selected" />
-            <el-input slot="reference" v-model="form.icon" style="width: 450px;" :placeholder="$t('menu.iconPlaceholder')" readonly>
-              <svg-icon v-if="form.icon" slot="prefix" :icon-class="form.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
-              <i v-else slot="prefix" class="el-icon-search el-input__icon" />
-            </el-input>
+            <template #reference>
+              <el-input v-model="crud.form.icon" style="width: 450px;" :placeholder="$t('menu.iconPlaceholder')" readonly>
+                <template #prefix>
+                  <svg-icon v-if="crud.form.icon" :icon-class="crud.form.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
+                  <i v-else class="el-icon-search el-input__icon" />
+                </template>
+              </el-input>
+            </template>
           </el-popover>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.iFrame')" prop="iframe">
-          <el-radio-group v-model="form.iframe" size="mini">
-            <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
-            <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
+        <!-- 已修复：是否外链 - 布尔值label -->
+        <el-form-item v-show="crud.form.type !== 2" :label="$t('menu.iFrame')" prop="iframe">
+          <el-radio-group v-model="crud.form.iframe" size="small">
+            <el-radio-button :value="true">{{ $t('bool.true') }}</el-radio-button>
+            <el-radio-button :value="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() === '1'" :label="$t('menu.cache')" prop="cache">
-          <el-radio-group v-model="form.cache" size="mini">
-            <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
-            <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
+        <!-- 已修复：是否缓存 - 布尔值label -->
+        <el-form-item v-show="crud.form.type === 1" :label="$t('menu.cache')" prop="cache">
+          <el-radio-group v-model="crud.form.cache" size="small">
+            <el-radio-button :value="true">{{ $t('bool.true') }}</el-radio-button>
+            <el-radio-button :value="false">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menu.hidden')" prop="hidden">
-          <el-radio-group v-model="form.hidden" size="mini">
-            <el-radio-button label="false">{{ $t('bool.true') }}</el-radio-button>
-            <el-radio-button label="true">{{ $t('bool.false') }}</el-radio-button>
+        <!-- 已修复：是否可见 - 布尔值label -->
+        <el-form-item v-show="crud.form.type !== 2" :label="$t('menu.hidden')" prop="hidden">
+          <el-radio-group v-model="crud.form.hidden" size="small">
+            <el-radio-button :value="false">{{ $t('bool.true') }}</el-radio-button>
+            <el-radio-button :value="true">{{ $t('bool.false') }}</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '2'" :label="$t('menuType.menuTitle')" prop="name">
-          <el-input v-model="form.name" :style=" form.type.toString() === '0' ? 'width: 450px' : 'width: 178px'" :placeholder="$t('menuType.menuTitle')" />
+        <el-form-item v-show="crud.form.type !== 2" :label="$t('menuType.menuTitle')" prop="name">
+          <el-input v-model="crud.form.name" :style="crud.form.type === 0 ? 'width: 450px' : 'width: 178px'" :placeholder="$t('menuType.menuTitle')" />
         </el-form-item>
-        <el-form-item v-show="form.type.toString() === '2'" :label="$t('menuType.btnName')" prop="name">
-          <el-input v-model="form.name" :placeholder="$t('menuType.btnName')" style="width: 178px;" />
+        <el-form-item v-show="crud.form.type === 2" :label="$t('menuType.btnName')" prop="name">
+          <el-input v-model="crud.form.name" :placeholder="$t('menuType.btnName')" style="width: 178px;" />
         </el-form-item>
-        <el-form-item v-show="form.type.toString() !== '0'" :label="$t('menu.permission')" prop="permission">
-          <el-input v-model="form.permission" :disabled="form.iframe" :placeholder="$t('menu.permission')" style="width: 178px;" />
+        <el-form-item v-show="crud.form.type !== 0" :label="$t('menu.permission')" prop="permission">
+          <el-input v-model="crud.form.permission" :disabled="crud.form.iframe" :placeholder="$t('menu.permission')" style="width: 178px;" />
         </el-form-item>
-        <el-form-item v-if="form.type.toString() !== '2'" :label="$t('menu.path')" prop="path">
-          <el-input v-model="form.path" :placeholder="$t('menu.path')" style="width: 178px;" />
+        <el-form-item v-if="crud.form.type !== 2" :label="$t('menu.path')" prop="path">
+          <el-input v-model="crud.form.path" :placeholder="$t('menu.path')" style="width: 178px;" />
         </el-form-item>
         <el-form-item :label="$t('menu.sort')" prop="sort">
-          <el-input-number v-model.number="form.sort" :min="0" :max="999" controls-position="right" style="width: 140px;" />
+          <el-input-number v-model.number="crud.form.sort" :min="0" :max="999" controls-position="right" style="width: 140px;" />
         </el-form-item>
-        <el-form-item v-show="!form.iframe && form.type.toString() === '1'" :label="$t('menu.componentName')" prop="componentName">
-          <el-input v-model="form.componentName" style="width: 178px;" :placeholder="$t('menu.componentNamePlaceholder')" />
+        <el-form-item v-show="!crud.form.iframe && crud.form.type === 1" :label="$t('menu.componentName')" prop="componentName">
+          <el-input v-model="crud.form.componentName" style="width: 178px;" :placeholder="$t('menu.componentNamePlaceholder')" />
         </el-form-item>
-        <el-form-item v-show="!form.iframe && form.type.toString() === '1'" :label="$t('menu.component')" prop="component">
-          <el-input v-model="form.component" style="width: 178px;" :placeholder="$t('menu.componentPlaceholder')" />
+        <el-form-item v-show="!crud.form.iframe && crud.form.type === 1" :label="$t('menu.component')" prop="component">
+          <el-input v-model="crud.form.component" style="width: 178px;" :placeholder="$t('menu.componentPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('menu.pid')" prop="pid">
-          <treeselect v-model="form.pid" :options="menus" style="width: 450px;" :placeholder="$t('menu.pidPlaceholder')" />
+          <treeselect :key="`tree-${crud.status.cu}`" v-model="crud.form.pid" :options="menus" style="width: 450px;" :placeholder="$t('menu.pidPlaceholder')" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="id" @select="crud.selectChange" @select-all="crud.selectAllChange" @selection-change="crud.selectionChangeHandler">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      row-key="id"
+      @select="crud?.selectChange"
+      @select-all="crud?.selectAllChange"
+      @selection-change="crud?.selectionChangeHandler"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" :show-overflow-tooltip="true" :label="$t('menu.name')" width="125px" prop="name" />
       <el-table-column v-if="columns.visible('icon')" prop="icon" :label="$t('menu.icon')" align="center" width="60px">
-        <template slot-scope="scope">
+        <template #default="scope">
           <svg-icon :icon-class="scope.row.icon" />
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('sort')" prop="sort" align="center" :label="$t('menu.sort')">
-        <template slot-scope="scope">
+        <template #default="scope">
           {{ scope.row.sort }}
         </template>
       </el-table-column>
@@ -110,37 +142,54 @@
       <el-table-column v-if="columns.visible('permission')" :show-overflow-tooltip="true" prop="permission" :label="$t('menu.permission')" />
       <el-table-column v-if="columns.visible('component')" :show-overflow-tooltip="true" prop="component" :label="$t('menu.component')" />
       <el-table-column v-if="columns.visible('iframe')" prop="iframe" :label="$t('menu.iFrame')" width="75px">
-        <template slot-scope="scope">
-          <!--若为true,显示对号-->
-          <i v-if="scope.row.iframe" class="el-icon-check" />
-          <!--          <span v-if="scope.row.iframe">{{ $t('bool.true') }}</span>-->
-          <!--          <span v-else>{{ $t('bool.false') }}</span>-->
+        <template #default="scope">
+          <template v-if="scope.row.iframe">
+            <div style="display: flex;align-items: center;justify-content: center">
+              <el-icon><Check /></el-icon>
+            </div>
+          </template>
+          <template v-else>
+            <div style="display: flex;align-items: center;justify-content: center">
+              <el-icon><Close /></el-icon>
+            </div>
+          </template>
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('cache')" prop="cache" :label="$t('menu.cache')" width="75px">
-        <template slot-scope="scope">
-          <!--若为true,显示对号-->
-          <i v-if="scope.row.cache" class="el-icon-check" />
-          <!--          <span v-if="scope.row.cache">{{ $t('bool.true') }}</span>-->
-          <!--          <span v-else>{{ $t('bool.false') }}</span>-->
+        <template #default="scope">
+          <template v-if="!scope.row.cache">
+            <div style="display: flex;align-items: center;justify-content: center">
+              <el-icon><Close /></el-icon>
+            </div>
+          </template>
+          <template v-else>
+            <div style="display: flex;align-items: center;justify-content: center">
+              <el-icon><Check /></el-icon>
+            </div>
+          </template>
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('hidden')" prop="hidden" :label="$t('menu.hidden')" width="75px">
-        <template slot-scope="scope">
-          <!--若为true,显示对号-->
-          <i v-if="scope.row.hidden" />
-          <i v-else class="el-icon-check" />
-          <!--          <span v-if="scope.row.hidden">{{ $t('bool.false') }}</span>-->
-          <!--          <span v-else>{{ $t('bool.true') }}</span>-->
+        <template #default="scope">
+          <template v-if="!scope.row.hidden">
+            <div style="display: flex;align-items: center;justify-content: center">
+              <el-icon><Check /></el-icon>
+            </div>
+          </template>
+          <template v-else>
+            <div style="display: flex;align-items: center;justify-content: center">
+              <el-icon><Close /></el-icon>
+            </div>
+          </template>
         </template>
       </el-table-column>
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" width="135px">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','menu:edit','menu:del']" :label="$t('be.operate')" width="130px" align="center" fixed="right">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"
@@ -155,17 +204,16 @@
 <script>
 import crudMenu from '@/api/system/menu'
 import IconSelect from '@/components/IconSelect'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import Treeselect from 'vue3-treeselect'
+import 'vue3-treeselect/dist/vue3-treeselect.css'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import i18n from '../../../lang'
 
-// crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('menu.name') }, { fieldName: 'sort', labelName: i18n.t('menu.sort'), type: 'number' }, { fieldName: 'path', labelName: i18n.t('menu.path') }, { fieldName: 'permission', labelName: i18n.t('menu.permission') }, { fieldName: 'component', labelName: i18n.t('menu.component') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('menu.TITLE'), url: 'api/menus/all', exportUrl: 'api/menus/download', crudMethod: { ...crudMenu }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('menu.name') }, { fieldName: 'sort', labelName: i18n.global.t('menu.sort'), type: 'number' }, { fieldName: 'path', labelName: i18n.global.t('menu.path') }, { fieldName: 'permission', labelName: i18n.global.t('menu.permission') }, { fieldName: 'component', labelName: i18n.global.t('menu.component') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }]
+const defaultCrud = CRUD({ title: i18n.global.t('menu.TITLE'), url: 'api/menus/all', exportUrl: 'api/menus/download', crudMethod: { ...crudMenu }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, sort: 999, path: null, component: null, componentName: null, iframe: false, roles: [], pid: 0, icon: null, cache: false, hidden: false, type: 0, permission: null }
 export default {
   name: 'Menu',
@@ -181,11 +229,26 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('menu.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('menu.nameRequired'), trigger: 'blur' }
         ],
         path: [
-          { required: true, message: i18n.t('menu.pathRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('menu.pathRequired'), trigger: 'blur' }
         ]
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 用可选链防护：crud、status存在时才判断cu，否则返回false
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 仅当newVal为false，且crud、status存在时，才修改cu的值
+        if (!newVal && this.crud?.status) {
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
+        }
       }
     }
   },
@@ -205,14 +268,14 @@ export default {
     },
     // 选中图标
     selected(name) {
-      this.form.icon = name
+      this.crud.form.icon = name
     }
   }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  /deep/ .el-input-number .el-input__inner {
-    text-align: left;
-  }
+:deep(.el-input-number .el-input__inner) {
+  text-align: left;
+}
 </style>

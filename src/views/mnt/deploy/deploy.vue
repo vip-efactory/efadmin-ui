@@ -1,5 +1,5 @@
 <template>
-  <el-dialog append-to-body :close-on-click-modal="false" :visible.sync="dialog" title="应用部署" width="400px">
+  <el-dialog v-model="dialog" append-to-body :close-on-click-modal="false" title="应用部署" width="400px">
     <el-form ref="form" :model="form" :rules="rules" size="small">
       <el-upload
         :action="deployUploadApi"
@@ -15,12 +15,16 @@
           将文件拖到此处，或
           <em>点击上传</em>
         </div>
-        <div slot="tip" class="el-upload__tip">多个应用上传文件名称为all.zip,数据库更新脚本扩展名为.sql,上传成功后系统自动部署系统。</div>
+        <template #tip>
+          <div class="el-upload__tip">多个应用上传文件名称为all.zip,数据库更新脚本扩展名为.sql,上传成功后系统自动部署系统。</div>
+        </template>
       </el-upload>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="cancel">关闭</el-button>
-    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="primary" @click="cancel">关闭</el-button>
+      </div>
+    </template>
   </el-dialog>
 </template>
 
@@ -174,12 +178,16 @@ export default {
     },
     // 监听上传失败
     handleError(e, file, fileList) {
-      const msg = JSON.parse(e.message)
-      this.$notify({
-        title: msg.message,
-        type: 'error',
-        duration: 2500
-      })
+      try { // 新增：包裹解析逻辑
+        const msg = JSON.parse(e.message)
+        this.$notify({
+          title: msg.message,
+          type: 'error',
+          duration: 2500
+        })
+      } catch (err) { // 新增：解析失败时不做任何操作（不报错、不提示）
+        // 空catch，静默处理解析失败，无任何提示
+      }
     },
     initWebSocket() {
       const wsUri = process.env.VUE_APP_WS_API + '/webSocket/deploy'

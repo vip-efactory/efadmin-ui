@@ -1,5 +1,5 @@
 <template>
-  <el-dialog append-to-body :close-on-click-modal="false" :visible.sync="dialog" :title="$t('db.execScript')" width="420px">
+  <el-dialog v-model="dialog" append-to-body :close-on-click-modal="false" :title="$t('db.execScript')" width="420px">
     <el-form ref="form" :rules="rules" size="small">
       <el-upload
         :action="databaseUploadApi"
@@ -15,12 +15,16 @@
           {{ $t('common.dragFileUpload') }}
           <em>{{ $t('common.clickUpload') }}</em>
         </div>
-        <div slot="tip" class="el-upload__tip">{{ $t('db.execSqlTips') }}</div>
+        <template #tip>
+          <div class="el-upload__tip">{{ $t('db.execSqlTips') }}</div>
+        </template>
       </el-upload>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="cancel">{{ $t('common.close') }}</el-button>
-    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="primary" @click="cancel">{{ $t('common.close') }}</el-button>
+      </div>
+    </template>
   </el-dialog>
 </template>
 
@@ -61,7 +65,7 @@ export default {
     handleSuccess(response, file, fileList) {
       if (response === 'success') {
         this.$notify({
-          title: i18n.t('common.execOK'),
+          title: i18n.global.t('common.execOK'),
           type: 'success',
           duration: 2500
         })
@@ -74,12 +78,16 @@ export default {
       }
     },
     handleError(e, file, fileList) {
-      const msg = JSON.parse(e.message)
-      this.$notify({
-        title: msg.message,
-        type: 'error',
-        duration: 0
-      })
+      try { // 新增：捕获JSON解析异常
+        const msg = JSON.parse(e.message)
+        this.$notify({
+          title: msg.message,
+          type: 'error',
+          duration: 0
+        })
+      } catch (err) {
+        // 空catch块，静默处理解析失败的情况
+      }
     }
   }
 }

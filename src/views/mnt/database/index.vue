@@ -2,72 +2,91 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.blurry" clearable :placeholder="$t('crud.fuzzySearch')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.blurry" clearable :placeholder="$t('crud.fuzzySearch')" style="width: 150px" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission">
-        <el-button
-          slot="right"
-          v-permission="['admin','database:add']"
-          :disabled="!selectIndex"
-          class="filter-item"
-          size="mini"
-          type="warning"
-          icon="el-icon-upload"
-          @click="execute"
-        >{{ $t('db.execScript') }}
-        </el-button>
+        <template #right>
+          <el-button
+            v-permission="['admin','database:add']"
+            :disabled="!selectIndex"
+            class="filter-item"
+            size="small"
+            type="warning"
+            icon="Upload"
+            @click="execute"
+          >{{ $t('db.execScript') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表单组件-->
     <eForm ref="execute" :database-info="currentRow" />
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="570px">
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="130px">
+    <el-dialog
+      v-model="dialogVisible"
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU()"
+      :title="crud?.status?.title"
+      width="570px"
+    >
+      <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="130px">
         <el-form-item :label="$t('db.name')" prop="name">
-          <el-input v-model="form.name" style="width: 370px" />
+          <el-input v-model="crud.form.name" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('db.jdbcUrl')" prop="jdbcUrl">
-          <el-input v-model="form.jdbcUrl" style="width: 300px" />
+          <el-input v-model="crud.form.jdbcUrl" style="width: 300px" />
           <el-button :loading="loading" type="success" @click="testConnectDatabase">{{ $t('common.testConnect') }}</el-button>
         </el-form-item>
         <el-form-item :label="$t('db.userName')" prop="userName">
-          <el-input v-model="form.userName" style="width: 370px" />
+          <el-input v-model="crud.form.userName" style="width: 370px" />
         </el-form-item>
         <el-form-item :label="$t('db.pwd')" prop="pwd">
-          <el-input v-model="form.pwd" type="password" style="width: 370px" />
+          <el-input v-model="crud.form.pwd" type="password" style="width: 370px" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row stripe style="width: 100%" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      highlight-current-row
+      stripe
+      style="width: 100%"
+      @selection-change="crud?.selectionChangeHandler"
+      @current-change="handleCurrentChange"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" prop="name" width="140px" :label="$t('db.name')" sortable="custom" />
       <el-table-column v-if="columns.visible('jdbcUrl')" prop="jdbcUrl" :label="$t('db.jdbcUrl')" sortable="custom" />
       <el-table-column v-if="columns.visible('userName')" prop="userName" width="200px" :label="$t('db.userName')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" width="200px" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','database:edit','database:del']" :label="$t('be.operate')" width="150px" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"
@@ -92,8 +111,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('db.name') }, { fieldName: 'jdbcUrl', labelName: i18n.t('db.jdbcUrl') }, { fieldName: 'userName', labelName: i18n.t('db.userName') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('db.TITLE'), url: 'api/database/page', exportUrl: 'api/database/download', crudMethod: { ...crudDatabase }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('db.name') }, { fieldName: 'jdbcUrl', labelName: i18n.global.t('db.jdbcUrl') }, { fieldName: 'userName', labelName: i18n.global.t('db.userName') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('db.TITLE'), url: 'api/database/page', exportUrl: 'api/database/download', crudMethod: { ...crudDatabase }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, jdbcUrl: 'jdbc:mysql://', userName: null, pwd: null }
 export default {
   name: 'DataBase',
@@ -112,17 +131,32 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('db.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('db.nameRequired'), trigger: 'blur' }
         ],
         jdbcUrl: [
-          { required: true, message: i18n.t('db.jdbcUrlRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('db.jdbcUrlRequired'), trigger: 'blur' }
         ],
         userName: [
-          { required: true, message: i18n.t('db.userNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('db.userNameRequired'), trigger: 'blur' }
         ],
         pwd: [
-          { required: true, message: i18n.t('db.pwdRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('db.pwdRequired'), trigger: 'blur' }
         ]
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 用可选链确保crud、status存在，空值时兜底返回false
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 仅当newVal为false，且crud、status都存在时，才修改cu
+        if (!newVal && this.crud?.status) {
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
+        }
       }
     }
   },
@@ -131,10 +165,20 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true
-          testDbConnect(this.form).then((res) => {
+          // 手动过滤，只保留测试连接需要的字段
+          const cleanParams = {
+            id: this.crud.form.id,
+            name: this.crud.form.name,
+            jdbcUrl: this.crud.form.jdbcUrl,
+            userName: this.crud.form.userName,
+            createTime: this.crud.form.createTime,
+            pwd: this.crud.form.pwd
+          }
+          // 传递过滤后的参数，而非完整的crud.form
+          testDbConnect(cleanParams).then((res) => {
             this.loading = false
             if (res.code === 0) {
-              this.crud.notify(res.data ? i18n.t('common.connectOK') : i18n.t('common.connectFailed'), res.data ? 'success' : 'error')
+              this.crud.notify(res.data ? i18n.global.t('common.connectOK') : i18n.global.t('common.connectFailed'), res.data ? 'success' : 'error')
             } else {
               this.crud.notify(res.msg, 'error')
             }

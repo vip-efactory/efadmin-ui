@@ -1,20 +1,15 @@
 <!--高级搜索组件-->
 <template>
-  <el-dialog v-dialogDrag :title="modalObj.title" :visible.sync="showAdSearchDialog" width="1000px" center :before-close="modalClose">
+  <el-dialog v-model="showAdSearchDialog" draggable :title="modalObj.title" width="1000px" center :before-close="modalClose">
     <el-form :model="item">
       <el-row>
         <el-col :span="16">
           <el-form-item :label="$t('advanceSearch.globalTypeLabel')" :label-width="formLabelWidth">
-            <template>
-              <el-radio-group v-model="globalType">
-                <el-radio :label="0" :title="$t('advanceSearch.globalTypeTitle0')">{{ $t('advanceSearch.typeSingle') }}
-                </el-radio>
-                <el-radio :label="1" :title="$t('advanceSearch.globalTypeTitle1')">{{ $t('advanceSearch.typeMulti') }}
-                </el-radio>
-                <el-radio :label="2" :title="$t('advanceSearch.globalTypeTitle2')">{{ $t('advanceSearch.typeGroup') }}
-                </el-radio>
-              </el-radio-group>
-            </template>
+            <el-radio-group v-model="globalType">
+              <el-radio :value="0" :title="$t('advanceSearch.globalTypeTitle0')">{{ $t('advanceSearch.typeSingle') }}</el-radio>
+              <el-radio :value="1" :title="$t('advanceSearch.globalTypeTitle1')">{{ $t('advanceSearch.typeMulti') }}</el-radio>
+              <el-radio :value="2" :title="$t('advanceSearch.globalTypeTitle2')">{{ $t('advanceSearch.typeGroup') }}</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="4">
@@ -57,7 +52,7 @@
           <el-form-item v-show="globalType !== 0" :label="$t('advanceSearch.orderLabel')" :label-width="formLabelWidth">
             <el-input
               v-model.number="item.order"
-              type="Number"
+              type="number"
               width="120px"
               :title="$t('advanceSearch.orderTitle')"
               style="width: 190px;"
@@ -84,6 +79,69 @@
           >
             <el-input v-model="item.val" :type="currentFieldType" :title="$t('advanceSearch.val1Title')" style="width: 190px;" />
           </el-form-item>
+          <!--   日期类型选择     -->
+          <el-form-item
+            v-else-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='date'"
+            :label="$t('advanceSearch.valLabel')"
+            :label-width="formLabelWidth"
+          >
+            <el-date-picker
+              v-model="item.val"
+              type="date"
+              value-format="yyyy-MM-dd"
+              :placeholder="$t('advanceSearch.selectDate')"
+              style="width: 190px;"
+            />
+          </el-form-item>
+          <!--   日期时间类型选择     -->
+          <el-form-item
+            v-else-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='datetime'"
+            :label="$t('advanceSearch.valLabel')"
+            :label-width="formLabelWidth"
+          >
+            <el-date-picker
+              v-model="item.val"
+              type="datetime"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              :placeholder="$t('advanceSearch.selectDate')"
+              style="width: 190px;"
+            />
+          </el-form-item>
+          <!--   日期类型区间筛选     -->
+          <el-form-item
+            v-else-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 &&item.searchType ===2 && (currentFieldType ==='date' || currentFieldType ==='datetime')"
+            :label="$t('advanceSearch.valLabel')"
+            :label-width="formLabelWidth"
+          >
+            <el-date-picker
+              v-model="item.val"
+              type="daterange"
+              align="right"
+              unlink-panels
+              :range-separator="$t('advanceSearch.to')"
+              :start-placeholder="$t('advanceSearch.startDate')"
+              :end-placeholder="$t('advanceSearch.endDate')"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              :default-time="['00:00:00', '23:59:59']"
+              :picker-options="pickerOptions"
+              style="width: 508px;"
+            />
+          </el-form-item>
+          <!--   字典下拉选择     -->
+          <el-form-item
+            v-else-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && currentFieldType ==='dict'"
+            :label="$t('advanceSearch.valLabel')"
+            :label-width="formLabelWidth"
+          >
+            <el-select v-model="item.val" filterable :placeholder="$t('advanceSearch.pleaseSelect')" style="width: 190px;">
+              <el-option
+                v-for="(d, index) in dicts"
+                :key="d.label + index"
+                :label="d.label"
+                :value="d.value"
+              />
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="8">
           <!-- 类型为8和9是不需要值的 -->
@@ -99,66 +157,9 @@
               style="width: 190px;"
             />
           </el-form-item>
-        </el-col>
-        <!--   日期类型选择     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='date'" :span="8">
-          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
-            <el-date-picker
-              v-model="item.val"
-              type="date"
-              value-format="yyyy-MM-dd"
-              :placeholder="$t('advanceSearch.selectDate')"
-              style="width: 190px;"
-            />
-          </el-form-item>
-        </el-col>
-        <!--   日期时间类型选择     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && item.searchType !== 2 && currentFieldType ==='datetime'" :span="8">
-          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
-            <el-date-picker
-              v-model="item.val"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              :placeholder="$t('advanceSearch.selectDate')"
-              style="width: 190px;"
-            />
-          </el-form-item>
-        </el-col>
-        <!--   日期类型区间筛选     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 &&item.searchType ===2 && (currentFieldType ==='date' || currentFieldType ==='datetime')" :span="20">
-          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
-            <el-date-picker
-              v-model="item.val"
-              type="daterange"
-              align="right"
-              unlink-panels
-              :range-separator="$t('advanceSearch.to')"
-              :start-placeholder="$t('advanceSearch.startDate')"
-              :end-placeholder="$t('advanceSearch.endDate')"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              :default-time="['00:00:00', '23:59:59']"
-              :picker-options="pickerOptions"
-              style="width: 508px;"
-            />
-          </el-form-item>
-        </el-col>
-        <!--   字典下拉选择     -->
-        <el-col v-if="item.searchType !== 8 && item.searchType !== 9 && item.searchType !== 12 && currentFieldType ==='dict'" :span="20">
-          <el-form-item :label="$t('advanceSearch.valLabel')" :label-width="formLabelWidth">
-            <el-select v-model="item.val" filterable :placeholder="$t('advanceSearch.pleaseSelect')" style="width: 190px;">
-              <el-option
-                v-for="(d, index) in dicts"
-                :key="d.label + index"
-                :label="d.label"
-                :value="d.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
           <!-- 多个条件查询额外需要显示的字段 -->
           <el-form-item
-            v-show="globalType != 0"
+            v-show="globalType !== 0"
             :label="$t('advanceSearch.logicalTypeLabel')"
             :label-width="formLabelWidth"
           >
@@ -174,7 +175,7 @@
         <!-- 分组条件查询额外需要显示的字段开始 -->
         <el-col :span="8">
           <el-form-item
-            v-show="globalType == 2"
+            v-show="globalType === 2"
             :label="$t('advanceSearch.bracketsGroupLabel')"
             :label-width="formLabelWidth"
           >
@@ -194,7 +195,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item
-            v-show="globalType == 2"
+            v-show="globalType === 2"
             :label="$t('advanceSearch.logicalTypeGroupLabel')"
             :label-width="formLabelWidth"
           >
@@ -208,7 +209,7 @@
         <el-col>
           <el-col :span="8">
             <el-form-item label=" " :label-width="formLabelWidth">
-              <el-button size="mini" type="primary" @click="handleItemAdd(item)">{{ $t('advanceSearch.btnAddItem') }}</el-button>
+              <el-button size="small" type="primary" @click="handleItemAdd(item)">{{ $t('advanceSearch.btnAddItem') }}</el-button>
             </el-form-item>
           </el-col>
         </el-col>
@@ -223,20 +224,20 @@
     >
       <el-table-column :label="$t('advanceSearch.nameLabel')" prop="name" fixed width="120" />
       <el-table-column :label="$t('advanceSearch.searchTypeLabel')" width="100">
-        <template slot-scope="scope">
-          <span v-if="scope.row.searchType == 0">{{ '≈≈≈' }}</span>
-          <span v-else-if="scope.row.searchType == 1">{{ ' = ' }}</span>
-          <span v-else-if="scope.row.searchType == 2">{{ ' a ≤ x ≤ b ' }}</span>
-          <span v-else-if="scope.row.searchType == 3">{{ ' != ' }}</span>
-          <span v-else-if="scope.row.searchType == 4">{{ ' &lt; ' }}</span>
-          <span v-else-if="scope.row.searchType == 5">{{ ' &le; ' }}</span>
-          <span v-else-if="scope.row.searchType == 6">{{ ' > ' }}</span>
-          <span v-else-if="scope.row.searchType == 7">{{ ' >= ' }}</span>
-          <span v-else-if="scope.row.searchType == 8">{{ 'IS NULL' }}</span>
-          <span v-else-if="scope.row.searchType == 9">{{ 'NOT NULL' }}</span>
-          <span v-else-if="scope.row.searchType == 10">{{ '≈==' }}</span>
-          <span v-else-if="scope.row.searchType == 11">{{ '==≈' }}</span>
-          <span v-else-if="scope.row.searchType == 12">{{ ' ∈ ' }}</span>
+        <template #default="scope">
+          <span v-if="scope.row.searchType === 0">{{ '≈≈≈' }}</span>
+          <span v-else-if="scope.row.searchType === 1">{{ ' = ' }}</span>
+          <span v-else-if="scope.row.searchType === 2">{{ ' a ≤ x ≤ b ' }}</span>
+          <span v-else-if="scope.row.searchType === 3">{{ ' != ' }}</span>
+          <span v-else-if="scope.row.searchType === 4">{{ ' &lt; ' }}</span>
+          <span v-else-if="scope.row.searchType === 5">{{ ' &le; ' }}</span>
+          <span v-else-if="scope.row.searchType === 6">{{ ' > ' }}</span>
+          <span v-else-if="scope.row.searchType === 7">{{ ' >= ' }}</span>
+          <span v-else-if="scope.row.searchType === 8">{{ 'IS NULL' }}</span>
+          <span v-else-if="scope.row.searchType === 9">{{ 'NOT NULL' }}</span>
+          <span v-else-if="scope.row.searchType === 10">{{ '≈==' }}</span>
+          <span v-else-if="scope.row.searchType === 11">{{ '==≈' }}</span>
+          <span v-else-if="scope.row.searchType === 12">{{ ' ∈ ' }}</span>
           <span v-else>{{ '' }}</span>
         </template>
       </el-table-column>
@@ -244,39 +245,41 @@
       <el-table-column :label="$t('advanceSearch.val2Label')" prop="val2" width="140" />
       <el-table-column :label="$t('advanceSearch.orderLabel')" prop="order" width="80" />
       <el-table-column :label="$t('advanceSearch.logicalTypeLabel')" width="100">
-        <template slot-scope="scope">
-          <span v-if="scope.row.logicalType == 0">{{ $t('advanceSearch.orLabel') }}</span>
+        <template #default="scope">
+          <span v-if="scope.row.logicalType === 0">{{ $t('advanceSearch.orLabel') }}</span>
           <span v-else>{{ $t('advanceSearch.andLabel') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('advanceSearch.bracketsGroupLabel')" width="120">
-        <template slot-scope="scope">
-          <span v-if="scope.row.bracketsGroup == 'DEFAULT_NO_GROUP'">{{ $t('advanceSearch.GroupItemDefault') }}</span>
+        <template #default="scope">
+          <span v-if="scope.row.bracketsGroup === 'DEFAULT_NO_GROUP'">{{ $t('advanceSearch.GroupItemDefault') }}</span>
           <span v-else>{{ $t('advanceSearch.GroupItemOther') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('advanceSearch.logicalTypeGroupLabel')" width="90">
-        <template slot-scope="scope">
-          <span v-if="scope.row.logicalTypeGroup == 0">{{ $t('advanceSearch.orLabel') }}</span>
+        <template #default="scope">
+          <span v-if="scope.row.logicalTypeGroup === 0">{{ $t('advanceSearch.orLabel') }}</span>
           <span v-else>{{ $t('advanceSearch.andLabel') }}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="right" fixed="right" width="120">
-        <template slot="header">
-          <el-input v-model="search" size="mini" :placeholder="$t('advanceSearch.tbSearchPlaceholder')" />
+        <template #header>
+          <el-input v-model="search" size="small" :placeholder="$t('advanceSearch.tbSearchPlaceholder')" />
         </template>
-        <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="handleItemDelete(scope.$index, scope.row)">X</el-button>
+        <template #default="scope">
+          <el-button size="small" type="danger" @click="handleItemDelete(scope.$index, scope.row)">X</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="showAdSearchDialog = false">{{ $t('advanceSearch.btnCancel') }}</el-button>
-      <el-button type="danger" @click="handleItemsClear()">{{ $t('advanceSearch.btnReset') }}</el-button>
-      <el-button type="primary" @click="handleSearch()">{{ $t('advanceSearch.btnSearch') }}</el-button>
-    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showAdSearchDialog = false">{{ $t('advanceSearch.btnCancel') }}</el-button>
+        <el-button type="danger" @click="handleItemsClear()">{{ $t('advanceSearch.btnReset') }}</el-button>
+        <el-button type="primary" @click="handleSearch()">{{ $t('advanceSearch.btnSearch') }}</el-button>
+      </div>
+    </template>
   </el-dialog>
 </template>
 
@@ -285,8 +288,20 @@ import i18n from '../../lang'
 
 export default {
   name: 'Modal',
+  // 修复后的 props 定义（解决所有 3 个警告）
   props: {
-    modalObj: Object
+    // 1. 规范 modalObj 的定义（type + 默认值）
+    modalObj: {
+      type: Object, // 显式定义类型
+      required: false, // 非必传（可选，默认false）
+      default: () => ({}) // 对象默认值必须用函数返回
+    },
+    // 2. 若有 default 这个 prop（非笔误），规范定义；若无则删除这行！
+    default: {
+      type: [String, Number, Boolean, Object], // 根据实际用途定义类型（比如 String）
+      required: false,
+      default: '' // 给默认值（比如空字符串，根据类型调整）
+    }
   },
   data() {
     return {
@@ -311,7 +326,7 @@ export default {
       // 时间范围的默认选择项
       pickerOptions: {
         shortcuts: [{
-          text: i18n.t('advanceSearch.recentWeek'),
+          text: i18n.global.t('advanceSearch.recentWeek'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -319,7 +334,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: i18n.t('advanceSearch.recentMonth'),
+          text: i18n.global.t('advanceSearch.recentMonth'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -327,7 +342,7 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }, {
-          text: i18n.t('advanceSearch.recent3Month'),
+          text: i18n.global.t('advanceSearch.recent3Month'),
           onClick(picker) {
             const end = new Date()
             const start = new Date()
@@ -366,12 +381,12 @@ export default {
     handleItemChk(item) {
       // 条件名称不允许为空
       if (item.name === '') {
-        this.$message(i18n.t('advanceSearch.nameChk'), 'warning')
+        this.$message(i18n.global.t('advanceSearch.nameChk'), 'warning')
         return false
       }
       // 不是非空查询的时候，不允许值为空
       if (item.searchType !== 8 && item.searchType !== 9 && item.val === '') {
-        this.$message(i18n.t('advanceSearch.valueEmptyChk'), 'warning')
+        this.$message(i18n.global.t('advanceSearch.valueEmptyChk'), 'warning')
         return false
       }
       // 如果是范围查询
@@ -383,14 +398,14 @@ export default {
           item.val2 = value[1]
         }
         if (item.val2 === '') {
-          this.$message(i18n.t('advanceSearch.endValueEmptyChk'), 'warning')
+          this.$message(i18n.global.t('advanceSearch.endValueEmptyChk'), 'warning')
           return false
         }
       }
 
       // 检查是否为单条件查询
       if (this.globalType === 0 && this.conditions.length > 0) {
-        this.$message(i18n.t('advanceSearch.singleItemChk'), 'warning')
+        this.$message(i18n.global.t('advanceSearch.singleItemChk'), 'warning')
         return false
       }
 

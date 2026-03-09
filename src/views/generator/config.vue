@@ -3,62 +3,64 @@
     <el-row :gutter="15">
       <el-col style="margin-bottom: 10px">
         <el-card class="box-card" shadow="never">
-          <div slot="header" class="clearfix">
-            <span class="role-span">{{ $t('genConfig.tblFieldConfig') }}：{{ tableName }}</span>
-            <el-button
-              :loading="genLoading"
-              icon="el-icon-s-promotion"
-              size="mini"
-              style="float: right; padding: 6px 9px;"
-              type="success"
-              @click="toGen"
-            >{{ $t('genConfig.saveAndGenerate') }}</el-button>
-            <el-button
-              :loading="columnLoading"
-              icon="el-icon-check"
-              size="mini"
-              style="float: right; padding: 6px 9px;margin-right: 9px"
-              type="primary"
-              @click="saveColumnConfig"
-            >{{ $t('crud.save') }}</el-button>
-            <el-tooltip class="item" effect="dark" :content="$t('codegen.syncTips')" placement="top-start">
+          <template #header>
+            <div class="clearfix">
+              <span class="role-span">{{ $t('genConfig.tblFieldConfig') }}：{{ tableName }}</span>
               <el-button
-                :loading="syncLoading"
-                icon="el-icon-refresh"
-                size="mini"
+                :loading="genLoading"
+                icon="Promotion"
+                size="small"
                 style="float: right; padding: 6px 9px;"
-                type="info"
-                @click="sync"
-              >{{ $t('codegen.synchronizeBtn') }}</el-button>
-            </el-tooltip>
-          </div>
+                type="success"
+                @click="toGen"
+              >{{ $t('genConfig.saveAndGenerate') }}</el-button>
+              <el-button
+                :loading="columnLoading"
+                icon="Check"
+                size="small"
+                style="float: right; padding: 6px 9px;margin-right: 9px"
+                type="primary"
+                @click="saveColumnConfig"
+              >{{ $t('crud.save') }}</el-button>
+              <el-tooltip class="item" effect="dark" :content="$t('codegen.syncTips')" placement="top-start">
+                <el-button
+                  :loading="syncLoading"
+                  icon="Refresh"
+                  size="small"
+                  style="float: right; padding: 6px 9px;"
+                  type="info"
+                  @click="sync"
+                >{{ $t('codegen.synchronizeBtn') }}</el-button>
+              </el-tooltip>
+            </div>
+          </template>
           <el-form size="small" label-width="90px">
             <el-table v-loading="loading" :data="data" :max-height="tableHeight" size="small" style="width: 100%;margin-bottom: 15px">
               <el-table-column prop="columnName" :label="$t('genConfig.fieldName')" />
               <el-table-column prop="columnType" :label="$t('genConfig.fieldType')" />
               <el-table-column prop="remark" :label="$t('genConfig.fieldDescription')">
-                <template slot-scope="scope">
-                  <el-input v-model="data[scope.$index].remark" size="mini" class="edit-input" />
+                <template #default="scope">
+                  <el-input v-model="data[scope.$index].remark" size="small" class="edit-input" />
                 </template>
               </el-table-column>
               <el-table-column align="center" :label="$t('genConfig.isRequired')" width="80px">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-checkbox v-model="data[scope.$index].notNull" />
                 </template>
               </el-table-column>
               <el-table-column align="center" :label="$t('genConfig.inList')" width="70px">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-checkbox v-model="data[scope.$index].listShow" />
                 </template>
               </el-table-column>
               <el-table-column align="center" :label="$t('genConfig.inForm')" width="70px">
-                <template slot-scope="scope">
+                <template #default="scope">
                   <el-checkbox v-model="data[scope.$index].formShow" />
                 </template>
               </el-table-column>
               <el-table-column :label="$t('genConfig.inputType')">
-                <template slot-scope="scope">
-                  <el-select v-model="data[scope.$index].formType" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
+                <template #default="scope">
+                  <el-select v-model="data[scope.$index].formType" filterable class="edit-input" clearable size="small" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option
                       :label="$t('genConfig.formInput')"
                       value="Input"
@@ -83,8 +85,8 @@
                 </template>
               </el-table-column>
               <el-table-column :label="$t('genConfig.queryType')">
-                <template slot-scope="scope">
-                  <el-select v-model="data[scope.$index].queryType" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
+                <template #default="scope">
+                  <el-select v-model="data[scope.$index].queryType" filterable class="edit-input" clearable size="small" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option
                       label="="
                       value="="
@@ -117,8 +119,8 @@
                 </template>
               </el-table-column>
               <el-table-column :label="$t('genConfig.dateAnnotation')">
-                <template slot-scope="scope">
-                  <el-select v-model="data[scope.$index].dateAnnotation" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
+                <template #default="scope">
+                  <el-select v-model="data[scope.$index].dateAnnotation" filterable class="edit-input" clearable size="small" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option
                       :label="$t('genConfig.autoCreateTime')"
                       value="CreationTimestamp"
@@ -131,8 +133,8 @@
                 </template>
               </el-table-column>
               <el-table-column :label="$t('genConfig.linkDict')">
-                <template slot-scope="scope">
-                  <el-select v-model="data[scope.$index].dictName" filterable class="edit-input" clearable size="mini" :placeholder="$t('genConfig.selectPlaceholder')">
+                <template #default="scope">
+                  <el-select v-model="data[scope.$index].dictName" filterable class="edit-input" clearable size="small" :placeholder="$t('genConfig.selectPlaceholder')">
                     <el-option v-for="item in dicts" :key="item.id" :label="item.remark === '' ? item.name : item.remark" :value="item.name" />
                   </el-select>
                 </template>
@@ -143,17 +145,19 @@
       </el-col>
       <el-col>
         <el-card class="box-card" shadow="never">
-          <div slot="header" class="clearfix">
-            <span class="role-span">{{ $t('genConfig.generateConfigure') }}</span>
-            <el-button
-              :loading="configLoading"
-              icon="el-icon-check"
-              size="mini"
-              style="float: right; padding: 6px 9px"
-              type="primary"
-              @click="doSubmit"
-            >{{ $t('crud.save') }}</el-button>
-          </div>
+          <template #header>
+            <div class="clearfix">
+              <span class="role-span">{{ $t('genConfig.generateConfigure') }}</span>
+              <el-button
+                :loading="configLoading"
+                icon="Check"
+                size="small"
+                style="float: right; padding: 6px 9px"
+                type="primary"
+                @click="doSubmit"
+              >{{ $t('crud.save') }}</el-button>
+            </div>
+          </template>
           <el-form ref="form" :model="form" :rules="rules" size="small" label-width="150px">
             <el-form-item :label="$t('genConfig.author')" prop="author">
               <el-input v-model="form.author" style="width: 40%" />
@@ -184,9 +188,9 @@
               <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.prefixTips') }}</span>
             </el-form-item>
             <el-form-item :label="$t('genConfig.cover')" prop="cover">
-              <el-radio-group v-model="form.cover" size="mini" style="width: 40%">
-                <el-radio-button label="true">{{ $t('bool.true') }}</el-radio-button>
-                <el-radio-button label="false">{{ $t('bool.false') }}</el-radio-button>
+              <el-radio-group v-model="form.cover" size="small" style="width: 40%">
+                <el-radio-button :value="true">{{ $t('bool.true') }}</el-radio-button>
+                <el-radio-button :value="false">{{ $t('bool.false') }}</el-radio-button>
               </el-radio-group>
               <span style="color: #C0C0C0;margin-left: 10px;">{{ $t('genConfig.coverTips') }}</span>
             </el-form-item>
@@ -211,25 +215,25 @@ export default {
   data() {
     return {
       activeName: 'first', tableName: '', tableHeight: 550, columnLoading: false, configLoading: false, dicts: [], syncLoading: false, genLoading: false,
-      form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: 'false', apiPath: '', prefix: '', apiAlias: null },
+      form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: false, apiPath: '', prefix: '', apiAlias: null },
       rules: {
         author: [
-          { required: true, message: i18n.t('genConfig.authorRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.authorRequired'), trigger: 'blur' }
         ],
         pack: [
-          { required: true, message: i18n.t('genConfig.packRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.packRequired'), trigger: 'blur' }
         ],
         moduleName: [
-          { required: true, message: i18n.t('genConfig.moduleNameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.moduleNameRequired'), trigger: 'blur' }
         ],
         path: [
-          { required: true, message: i18n.t('genConfig.pathRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.pathRequired'), trigger: 'blur' }
         ],
         apiAlias: [
-          { required: true, message: i18n.t('genConfig.apiAliasRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.apiAliasRequired'), trigger: 'blur' }
         ],
         cover: [
-          { required: true, message: i18n.t('genConfig.coverRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('genConfig.coverRequired'), trigger: 'blur' }
         ]
       }
     }
@@ -238,10 +242,11 @@ export default {
     this.tableHeight = document.documentElement.clientHeight - 385
     this.tableName = this.$route.params.tableName
     this.$nextTick(() => {
-      this.init()
-      get(this.tableName).then(r => {
-        this.form = r.data
-        this.form.cover = this.form.cover.toString()
+      this.init().then(() => {
+        get(this.tableName).then(r => {
+          this.form = r.data
+          this.form.cover = this.form.cover === 'true' || this.form.cover === true
+        })
       })
       getDicts().then(r => {
         this.dicts = r.data
@@ -259,7 +264,7 @@ export default {
       this.columnLoading = true
       save(this.data).then(res => {
         if (res.code === 0) {
-          this.notify(i18n.t('genConfig.saveOK'), 'success')
+          this.notify(i18n.global.t('genConfig.saveOK'), 'success')
           this.columnLoading = false
         } else {
           this.columnLoading = false
@@ -276,7 +281,7 @@ export default {
           this.configLoading = true
           update(this.form).then(res => {
             if (res.code === 0) {
-              this.notify(i18n.t('genConfig.saveOK'), 'success')
+              this.notify(i18n.global.t('genConfig.saveOK'), 'success')
               this.form = res.data
               this.form.cover = this.form.cover.toString()
               this.configLoading = false
@@ -296,7 +301,7 @@ export default {
       sync([this.tableName]).then(r => {
         if (r.code === 0) {
           this.init()
-          this.notify(i18n.t('codegen.syncOK'), 'success')
+          this.notify(i18n.global.t('codegen.syncOK'), 'success')
           this.syncLoading = false
         } else {
           this.syncLoading = false
@@ -310,12 +315,12 @@ export default {
       this.genLoading = true
       save(this.data).then(res => {
         if (res.code === 0) {
-          this.notify(i18n.t('genConfig.saveOK'), 'success')
+          this.notify(i18n.global.t('genConfig.saveOK'), 'success')
           // 生成代码
           generator(this.tableName, 0).then(r => {
             if (r.code === 0) {
               this.genLoading = false
-              this.notify(i18n.t('codegen.generateOK'), 'success')
+              this.notify(i18n.global.t('codegen.generateOK'), 'success')
             } else {
               this.genLoading = false
               crud.notify(r.msg, 'error')
@@ -338,15 +343,15 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  .edit-input {
-    .el-input__inner {
-      border: 1px solid #e5e6e7;
-    }
+.edit-input {
+  .el-input__inner {
+    border: 1px solid #e5e6e7;
   }
+}
 </style>
 
 <style scoped>
-  /deep/ .input-with-select .el-input-group__prepend {
-    background-color: #fff;
-  }
+:deep(.input-with-select .el-input-group__prepend) {
+  background-color: #fff;
+}
 </style>

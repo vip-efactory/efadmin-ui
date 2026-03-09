@@ -39,7 +39,7 @@ export function updatePass(user) {
     newPass: encrypt(user.newPass)
   }
   return request({
-    url: 'api/users/updatePass/',
+    url: 'api/users/updatePass',
     method: 'post',
     data
   })

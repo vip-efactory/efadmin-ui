@@ -2,67 +2,86 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-      <div v-if="crud.props.searchToggle">
+      <div v-if="crud && crud.props && crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.name" clearable :placeholder="$t('mapp.searchPlaceholder')" style="width: 200px" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="crud.query.name" clearable :placeholder="$t('mapp.searchPlaceholder')" style="width: 150px" class="filter-item" @keyup.enter="crud.toQuery" />
         <el-date-picker
-          v-model="query.createTime"
-          :default-time="['00:00:00','23:59:59']"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
           class="date-item"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :start-placeholder="$t('common.startDate')"
           :end-placeholder="$t('common.endDate')"
         />
         <rrOperation :crud="crud" />
       </div>
       <crudOperation :permission="permission">
-        <el-button
-          slot="left"
-          v-permission="['admin','app:add']"
-          :disabled="!currentRow"
-          class="filter-item"
-          size="mini"
-          type="primary"
-          icon="el-icon-plus"
-          @click="copy"
-        >{{ $t('mapp.copyBtn') }}</el-button>
+        <template #left>
+          <el-button
+            v-permission="['admin','app:add']"
+            :disabled="!currentRow"
+            class="filter-item"
+            size="small"
+            type="primary"
+            icon="Plus"
+            @click="copy"
+          >{{ $t('mapp.copyBtn') }}
+          </el-button>
+        </template>
       </crudOperation>
     </div>
     <!--表单组件-->
-    <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="850px">
-      <el-form ref="form" :model="form" :rules="rules" size="small" label-width="140px">
+    <el-dialog
+      v-model="dialogVisible"
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="() => crud?.cancelCU()"
+      :title="crud?.status?.title"
+      width="850px"
+    >
+      <el-form ref="form" :model="crud.form" :rules="rules" size="small" label-width="140px">
         <el-form-item :label="$t('mapp.name')" prop="name">
-          <el-input v-model="form.name" style="width: 670px" :placeholder="$t('mapp.namePlaceholder')" />
+          <el-input v-model="crud.form.name" style="width: 670px" :placeholder="$t('mapp.namePlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.port')" prop="port">
-          <el-input-number v-model.number="form.port" :placeholder="$t('mapp.portPlaceholder')" />
+          <el-input-number v-model.number="crud.form.port" :placeholder="$t('mapp.portPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.uploadPath')" prop="uploadPath">
-          <el-input v-model="form.uploadPath" style="width: 670px" :placeholder="$t('mapp.uploadPathPlaceholder')" />
+          <el-input v-model="crud.form.uploadPath" style="width: 670px" :placeholder="$t('mapp.uploadPathPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.deployPath')" prop="deployPath">
-          <el-input v-model="form.deployPath" style="width: 670px" :placeholder="$t('mapp.deployPathPlaceholder')" />
+          <el-input v-model="crud.form.deployPath" style="width: 670px" :placeholder="$t('mapp.deployPathPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.backupPath')" prop="backupPath">
-          <el-input v-model="form.backupPath" style="width: 670px" :placeholder="$t('mapp.backupPathPlaceholder')" />
+          <el-input v-model="crud.form.backupPath" style="width: 670px" :placeholder="$t('mapp.backupPathPlaceholder')" />
         </el-form-item>
         <el-form-item :label="$t('mapp.deployScript')" prop="deployScript">
-          <el-input v-model="form.deployScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
+          <el-input v-model="crud.form.deployScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
         </el-form-item>
         <el-form-item :label="$t('mapp.startScript')" prop="startScript">
-          <el-input v-model="form.startScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
+          <el-input v-model="crud.form.startScript" :rows="3" type="textarea" autosize style="width: 670px" placeholder="" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="text" @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
-        <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button link @click="crud.cancelCU">{{ $t('crud.cancel') }}</el-button>
+          <el-button :loading="crud.cu === 2" type="primary" @click="crud.submitCU">{{ $t('crud.confirm') }}</el-button>
+        </div>
+      </template>
     </el-dialog>
     <!--表格渲染-->
-    <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row style="width: 100%" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange" @sort-change="crud.doTitleOrder">
+    <el-table
+      ref="table"
+      v-loading="crud?.loading"
+      :data="crud?.data || []"
+      highlight-current-row
+      style="width: 100%"
+      @selection-change="crud?.selectionChangeHandler"
+      @current-change="handleCurrentChange"
+      @sort-change="crud?.doTitleOrder"
+    >
       <el-table-column type="selection" width="55" />
       <el-table-column v-if="columns.visible('name')" prop="name" :label="$t('mapp.name')" sortable="custom" />
       <el-table-column v-if="columns.visible('port')" prop="port" :label="$t('mapp.port')" sortable="custom" />
@@ -70,12 +89,12 @@
       <el-table-column v-if="columns.visible('deployPath')" prop="deployPath" :label="$t('mapp.deployPath')" sortable="custom" />
       <el-table-column v-if="columns.visible('backupPath')" prop="backupPath" :label="$t('mapp.backupPath')" sortable="custom" />
       <el-table-column v-if="columns.visible('createTime')" prop="createTime" :label="$t('be.createTime')" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column v-permission="['admin','app:edit','app:del']" :label="$t('be.operate')" width="150px" align="center">
-        <template slot-scope="scope">
+        <template #default="scope">
           <udOperation
             :data="scope.row"
             :permission="permission"
@@ -98,8 +117,8 @@ import pagination from '@crud/Pagination'
 import i18n from '../../../lang'
 
 // crud交由presenter持有
-const adSearchFields = [{ fieldName: 'name', labelName: i18n.t('mapp.name') }, { fieldName: 'port', labelName: i18n.t('mapp.port'), type: 'number' }, { fieldName: 'uploadPath', labelName: i18n.t('mapp.uploadPath') }, { fieldName: 'deployPath', labelName: i18n.t('mapp.deployPath') }, { fieldName: 'backupPath', labelName: i18n.t('mapp.backupPath') }, { fieldName: 'createTime', labelName: i18n.t('be.createTime'), type: 'date' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: i18n.t('mapp.TITLE'), url: 'api/app/page', exportUrl: 'api/app/download', crudMethod: { ...crudApp }, adSearchFields: adSearchFields })
+const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('mapp.name') }, { fieldName: 'port', labelName: i18n.global.t('mapp.port'), type: 'number' }, { fieldName: 'uploadPath', labelName: i18n.global.t('mapp.uploadPath') }, { fieldName: 'deployPath', labelName: i18n.global.t('mapp.deployPath') }, { fieldName: 'backupPath', labelName: i18n.global.t('mapp.backupPath') }, { fieldName: 'createTime', labelName: i18n.global.t('be.createTime'), type: 'date' }] // 需要高级搜索的字段
+const defaultCrud = CRUD({ title: i18n.global.t('mapp.TITLE'), url: 'api/app/page', exportUrl: 'api/app/download', crudMethod: { ...crudApp }, adSearchFields: adSearchFields })
 const defaultForm = { id: null, name: null, port: 8080, uploadPath: '/opt/upload', deployPath: '/opt/app', backupPath: '/opt/backup', startScript: null, deployScript: null }
 export default {
   name: 'App',
@@ -115,37 +134,59 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: i18n.t('mapp.nameRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('mapp.nameRequired'), trigger: 'blur' }
         ],
         port: [
-          { required: true, message: i18n.t('mapp.portRequired'), trigger: 'blur', type: 'number' }
+          { required: true, message: i18n.global.t('mapp.portRequired'), trigger: 'blur', type: 'number' }
         ],
         uploadPath: [
-          { required: true, message: i18n.t('mapp.uploadPathRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('mapp.uploadPathRequired'), trigger: 'blur' }
         ],
         deployPath: [
-          { required: true, message: i18n.t('mapp.deployPathRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('mapp.deployPathRequired'), trigger: 'blur' }
         ],
         backupPath: [
-          { required: true, message: i18n.t('mapp.backupPathRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('mapp.backupPathRequired'), trigger: 'blur' }
         ],
         startScript: [
-          { required: true, message: i18n.t('mapp.startScriptRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('mapp.startScriptRequired'), trigger: 'blur' }
         ],
         deployScript: [
-          { required: true, message: i18n.t('mapp.deployScriptRequired'), trigger: 'blur' }
+          { required: true, message: i18n.global.t('mapp.deployScriptRequired'), trigger: 'blur' }
         ]
+      }
+    }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        // 用可选链确保crud、status存在，空值时兜底返回false
+        return this.crud?.status?.cu > 0 ?? false
+      },
+      set(newVal) {
+        // 仅当newVal为false，且crud、status都存在时，才修改cu
+        if (!newVal && this.crud?.status) {
+          this.crud.status.add = CRUD.STATUS.NORMAL
+          this.crud.status.edit = CRUD.STATUS.NORMAL
+        }
       }
     }
   },
   methods: {
     copy() {
-      for (const key in this.currentRow) {
-        this.form[key] = this.currentRow[key]
-      }
-      this.form.id = null
-      this.form.createTime = null
+      // 1. 先打开新增表单（toAdd会重置form为默认值）
       this.crud.toAdd()
+
+      // 2. 再深拷贝当前选中行的信息到crud.form（覆盖默认值）
+      // 排除id和createTime，保证是“新增”而非“编辑”
+      const copyData = JSON.parse(JSON.stringify(this.currentRow))
+      delete copyData.id
+      delete copyData.createTime
+
+      // 3. 赋值给crud.form（关键：要操作crud.form而非this.form）
+      for (const key in copyData) {
+        this.crud.form[key] = copyData[key]
+      }
     },
     handleCurrentChange(row) {
       this.currentRow = JSON.parse(JSON.stringify(row))

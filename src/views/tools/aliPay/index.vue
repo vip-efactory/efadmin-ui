@@ -11,7 +11,7 @@
         <blockquote class="my-blockquote">{{ $t('aliPay.helpWarningTitle') }}</blockquote>
         <pre class="my-code">
         {{ $t('aliPay.applyAddress') }}<a style="color: #00a0e9" href="https://openhome.alipay.com/platform/appDaily.htm?tab=info" target="_blank">{{ $t('aliPay.aliPayDevPlatform') }}</a>
-        {{ $t('aliPay.payTestTips') }}
+        {{ payTestTipsText }}
         </pre>
         <blockquote class="my-blockquote"> {{ $t('aliPay.helpPaySettingsTitle') }}</blockquote>
         <pre class="my-code">
@@ -36,7 +36,8 @@ export default {
   components: { Config, ToPay },
   data() {
     return {
-      activeName: 'second'
+      activeName: 'second',
+      payTestTipsText: '\n如需付款测试，请使用\n账号：uuxesw9745@sandbox.com\n密码与支付密码：111111'
     }
   }
 }
