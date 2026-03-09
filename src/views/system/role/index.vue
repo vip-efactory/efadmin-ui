@@ -351,7 +351,7 @@ export default {
     },
     // 如果数据权限为自定义则获取部门数据
     changeScope() {
-      if (this.form.dataScope === '自定义') {
+      if (this.crud.form.dataScope === '自定义') {
         this.getDepts()
       }
     },
