@@ -40,7 +40,7 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <a target="_blank" href="http://docs.efactory.vip/">
+            <a target="_blank" href="https://github.com/vip-efactory/efadmin-docs">
               <el-dropdown-item>{{ $t('navbar.projectDocs') }}</el-dropdown-item>
             </a>
             <!-- 仅改这里：加.stop阻止冒泡 + 手动触发状态更新，确保生效 -->
