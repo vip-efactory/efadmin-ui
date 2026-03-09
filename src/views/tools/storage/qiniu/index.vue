@@ -16,7 +16,7 @@
           @keyup.enter="crud.toQuery"
         />
         <el-date-picker
-          v-model="query.c"
+          v-model="crud.query.createTime"
           type="daterange"
           range-separator=":"
           size="small"
@@ -135,7 +135,7 @@ import i18n from '../../../../lang'
 
 // crud交由presenter持有
 const adSearchFields = [{ fieldName: 'name', labelName: i18n.global.t('storage.name') }, { fieldName: 'suffix', labelName: i18n.global.t('storage.suffix') }, { fieldName: 'type', labelName: i18n.global.t('storage.type') }, { fieldName: 'bucket', labelName: i18n.global.t('storage.bucket') }, { fieldName: 'updateTime', labelName: i18n.global.t('be.createTime'), type: 'datetime' }] // 需要高级搜索的字段
-const defaultCrud = CRUD({ title: '七牛云文件', url: 'api/qiNiuContent/page', crudMethod: { ...crudQiNiu }, adSearchFields: adSearchFields })
+const defaultCrud = CRUD({ title: '七牛云文件', url: 'api/qiNiuContent/page', exportUrl: 'api/localStorage/download', crudMethod: { ...crudQiNiu }, adSearchFields: adSearchFields })
 export default {
   components: { eForm, pagination, crudOperation, rrOperation },
   mixins: [presenter(defaultCrud), header(), crud()],
