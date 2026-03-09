@@ -90,8 +90,8 @@
           </el-popover>
         </el-form-item>
         <el-form-item :label="$t('task.isPause')">
-          <el-radio v-model="crud.form.isPause" :label="false">{{ $t('bool.true') }}</el-radio>
-          <el-radio v-model="crud.form.isPause" :label="true">{{ $t('bool.false') }}</el-radio>
+          <el-radio v-model="crud.form.isPause" :label="false">{{ $t('task.run') }}</el-radio>
+          <el-radio v-model="crud.form.isPause" :label="true">{{ $t('task.pauseBtn') }}</el-radio>
         </el-form-item>
         <el-form-item :label="$t('be.remark')">
           <el-input v-model="crud.form.remark" style="width: 460px;" :rows="2" type="textarea" />
