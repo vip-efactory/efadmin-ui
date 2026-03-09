@@ -132,9 +132,9 @@
       </el-table-column>
       <el-table-column v-permission="['admin','timing:edit','timing:del']" :label="$t('be.operate')" width="180px" align="center" fixed="right">
         <template #default="scope">
-          <el-button v-permission="['admin','timing:edit']" size="small" style="margin-right: 3px;" link @click="crud.toEdit(scope.row)">{{ $t('crud.edit') }}</el-button>
-          <el-button v-permission="['admin','timing:edit']" style="margin-left: -2px" link size="small" @click="execute(scope.row.id)">{{ $t('task.execBtn') }}</el-button>
-          <el-button v-permission="['admin','timing:edit']" style="margin-left: 3px" link size="small" @click="updateStatus(scope.row.id,scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn'))">
+          <el-button v-permission="['admin','timing:edit']" size="small" style="margin-right: 0;" link type="primary" @click="crud.toEdit(scope.row)">{{ $t('crud.edit') }}</el-button>
+          <el-button v-permission="['admin','timing:edit']" style="margin-left: 0" link size="small" type="primary" @click="execute(scope.row.id)">{{ $t('task.execBtn') }}</el-button>
+          <el-button v-permission="['admin','timing:edit']" style="margin-left: 0" link size="small" type="primary" @click="updateStatus(scope.row.id,scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn'))">
             {{ scope.row.isPause ? $t('task.resumeBtn') : $t('task.pauseBtn') }}
           </el-button>
           <el-popover
@@ -151,8 +151,10 @@
             <template #reference>
               <el-button
                 v-permission="['admin','timing:del']"
+                style="margin-left: 0"
                 link
                 size="small"
+                type="primary"
               >
                 {{ $t('crud.delete') }}
               </el-button>
