@@ -44,7 +44,7 @@
           v-for="item in (jobStatus || defaultUserStatus)"
           :key="item.id"
           v-model="crud.form.enabled"
-          :label="item.value === 'true'"
+          :label="item.value + ''"
         >
           {{ item.label }}
         </el-radio>

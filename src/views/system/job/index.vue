@@ -63,7 +63,7 @@
     <!--分页组件-->
     <pagination />
     <!--表单渲染-->
-    <eForm :job-status="dict?.job_status || []" />
+    <eForm :job-status="dict.job_status" />
   </div>
 </template>
 
@@ -104,6 +104,9 @@ export default {
     }
   },
   methods: {
+    [CRUD.HOOK.afterToCU](crud, form) {
+      form.enabled = `${form.enabled}`
+    },
     // 改变状态
     changeEnabled(data, val) {
       this.$confirm(i18n.global.t('crud.thisOperate') + this.dict.label.job_status[val] + '" ' + data.name + i18n.global.t('crud.continueTxt'), i18n.global.t('crud.dialogTitleHint'), {
@@ -127,6 +130,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 :deep(.el-input-number .el-input__inner) {
-    text-align: left;
-  }
+  text-align: left;
+}
 </style>
