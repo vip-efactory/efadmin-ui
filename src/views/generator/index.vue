@@ -42,18 +42,18 @@
       </el-table-column>
       <el-table-column :label="$t('be.operate')" width="250px" align="center" fixed="right">
         <template #default="scope">
-          <el-button size="small" style="margin-right: 2px" link>
+          <el-button size="small" type="primary" style="margin: 0" link>
             <router-link :to="'/sys-tools/generator/preview/' + scope.row.tableName">
               {{ $t('codegen.previewBtn') }}
             </router-link>
           </el-button>
-          <el-button size="small" style="margin-left: -1px;margin-right: 2px" link @click="toDownload(scope.row.tableName)">{{ $t('codegen.downloadBtn') }}</el-button>
-          <el-button size="small" style="margin-left: -1px;margin-right: 2px" link>
+          <el-button size="small" type="primary" style="margin: 0" link @click="toDownload(scope.row.tableName)">{{ $t('codegen.downloadBtn') }}</el-button>
+          <el-button size="small" type="primary" style="margin: 0" link>
             <router-link :to="'/sys-tools/generator/config/' + scope.row.tableName">
               {{ $t('crud.edit') }}
             </router-link>
           </el-button>
-          <el-button link style="margin-left: -1px" size="small" @click="toGen(scope.row.tableName)">{{ $t('codegen.generateBtn') }}</el-button>
+          <el-button link type="primary" style="margin: 0" size="small" @click="toGen(scope.row.tableName)">{{ $t('codegen.generateBtn') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
