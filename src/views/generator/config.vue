@@ -215,7 +215,7 @@ export default {
   data() {
     return {
       activeName: 'first', tableName: '', tableHeight: 550, columnLoading: false, configLoading: false, dicts: [], syncLoading: false, genLoading: false,
-      form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: 'false', apiPath: '', prefix: '', apiAlias: null },
+      form: { id: null, tableName: '', author: '', pack: '', path: '', moduleName: '', cover: false, apiPath: '', prefix: '', apiAlias: null },
       rules: {
         author: [
           { required: true, message: i18n.global.t('genConfig.authorRequired'), trigger: 'blur' }
@@ -242,10 +242,11 @@ export default {
     this.tableHeight = document.documentElement.clientHeight - 385
     this.tableName = this.$route.params.tableName
     this.$nextTick(() => {
-      this.init()
-      get(this.tableName).then(r => {
-        this.form = r.data
-        this.form.cover = this.form.cover.toString()
+      this.init().then(() => {
+        get(this.tableName).then(r => {
+          this.form = r.data
+          this.form.cover = this.form.cover === 'true' || this.form.cover === true
+        })
       })
       getDicts().then(r => {
         this.dicts = r.data
