@@ -103,7 +103,6 @@
         ref="table"
         v-loading="crud?.loading"
         :data="crud?.data"
-        size="small"
         style="width: 100%;"
         @selection-change="crud?.selectionChangeHandler"
         @sort-change="crud?.doTitleOrder"
